@@ -323,4 +323,8 @@
 .ab-root .nav-links{display:none}
 .ab-root .panel-top{grid-template-columns:1fr auto}}
 @media (prefers-reduced-motion: reduce){.ab-root .caret.blink,.ab-root .prompt .pc{animation:none}
-.ab-root .app{transition:none}}
+.ab-root .app{transition:none}}/* fixes after the Designer review */
+.ab-root [hidden]{display:none!important}
+.ab-root .xf-file>div{min-width:0}
+.ab-root .xf-file small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.ab-root .xf-log{max-height:160px}
