@@ -328,3 +328,8 @@
 .ab-root .xf-file>div{min-width:0}
 .ab-root .xf-file small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
 .ab-root .xf-log{max-height:160px}
+/* mobile overflow + app footer clearance */
+.ab-root>section{overflow-x:clip}
+.ab-root .app{padding-bottom:44px}
+@media (max-width:760px){.ab-root .typed .cycle{white-space:normal}.ab-root .xf-review{overflow-x:auto}.ab-root .xf-table{min-width:540px}.ab-root .xf-form-head b{white-space:normal}.ab-root .xf-plat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ab-root .act-top{gap:24px}.ab-root .feature{gap:16px}}
+@media (max-width:479px){.ab-root .tiers{grid-template-columns:1fr 1fr}.ab-root .chips{gap:6px}.ab-root .device{padding:6px;border-radius:14px}}
