@@ -159,9 +159,9 @@
 .ab-root .quote-card footer b{font-family:var(--display);font-weight:600;color:var(--ink)}
 .ab-root .quote-card footer span{font-size:.9375rem;color:var(--slate)}
 @media (max-width:900px){.ab-root .feature{grid-template-columns:1fr}}
-.ab-root .act{background:var(--white);padding-block:var(--section)}
+.ab-root .actsec{background:var(--white);padding-block:var(--section)}
 .ab-root .act-top{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.9fr);gap:40px;align-items:center}
-.ab-root .act .ctas{display:flex;gap:12px;margin-top:28px}
+.ab-root .actsec .ctas{display:flex;gap:12px;margin-top:28px}
 .ab-root .btn-orange{background:var(--orange);color:#fff}
 .ab-root .btn-orange:hover{background:#e64f10}
 .ab-root .media{border-radius:var(--radius-media);overflow:hidden;box-shadow:var(--shadow-float);background:#000}
@@ -230,7 +230,7 @@
 .ab-root .xf-t .rec.no{background:#ffe6d9;color:#9a3412}
 .ab-root .xf-t .rec small{display:inline;font-size:10px;font-weight:400;color:inherit;margin-left:2px}
 .ab-root .xf-t .ls{display:block;font-size:10px;font-weight:400;color:var(--grey-500)}
-.ab-root .act .device{margin:0;max-width:none}
+.ab-root .actsec .device{margin:0;max-width:none}
 .ab-root .xf-body{display:grid;grid-template-columns:minmax(0,270px) minmax(0,1fr);min-height:440px;font-family:var(--body)}
 .ab-root .xf-left{border-right:1px solid var(--divider);padding:16px;display:grid;align-content:start;gap:12px;position:relative;background:#fff}
 .ab-root .xf-drop{position:relative;height:64px}
