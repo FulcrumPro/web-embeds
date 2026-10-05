@@ -107,6 +107,8 @@ document.addEventListener("DOMContentLoaded",function(){
   var TYPE_MS=65, DELETE_MS=38, JITTER=45, GAP_MS=350;
   var out=document.getElementById('cycle'), caret=document.getElementById('caret');
   if(!out||!document.getElementById('guided')) return;
+  var st=document.getElementById('appStatic'); if(st) st.parentNode.removeChild(st);
+  document.getElementById('chips').innerHTML=''; document.getElementById('stepsLog').innerHTML=''; document.getElementById('stepsLog').hidden=true; document.getElementById('chatHint').hidden=false; document.getElementById('emptyState').classList.remove('hide'); document.getElementById('promptBox').value='';
   var promptBox=document.getElementById('promptBox'), sendBtn=document.getElementById('sendBtn'), nudge=document.getElementById('nudge');
   var pageName=document.getElementById('pageName'), canvas=document.getElementById('canvas'), emptyState=document.getElementById('emptyState'), working=document.getElementById('working'), workingPill=document.getElementById('workingPill');
   var stepsLog=document.getElementById('stepsLog'), chatHint=document.getElementById('chatHint'), chips=document.getElementById('chips'), demoNote=document.getElementById('demoNote');
