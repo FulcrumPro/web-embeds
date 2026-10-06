@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Archie Builder, build flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{--ink:#1b1f3b;--slate:#3d414a;--grey:#7f7f84;--line:#e2e2e6;--bg:#f0f1f3;--blue:#1d63ed;--blue-light:#e8effd;--green:#008455;--green-light:#d9ede6;--warn:#ff8a1d;--warn-light:#ffeddd;--rail:#15161c}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:transparent;font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden}
+#fit{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:center}
+#stage{width:770px;height:560px;position:relative;background:#fff;transform-origin:top left;overflow:hidden;display:grid;grid-template-columns:48px 1fr;grid-template-rows:52px 1fr}
+/* rail */
+.rail{grid-row:1/3;background:var(--rail);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:4px}
+.rail .logo{width:22px;height:22px;margin-bottom:12px}
+.rail i{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:#aab0bd}
+.rail i svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rail i.on{background:#2a2c36;color:#fff}
+.rail .av{margin-top:auto;width:28px;height:28px;border-radius:50%;background:var(--warn);color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center}
+/* top bar */
+.top{display:flex;align-items:center;padding:0 20px;border-bottom:1px solid var(--line);gap:14px}
+.mark{font-weight:700;font-size:19px;letter-spacing:-.4px;color:#1d1f2b;display:flex;align-items:center;gap:3px}
+.mark b{color:var(--blue);font-weight:700}
+.tab{margin-left:auto;margin-right:auto;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;background:#fff}
+.tab svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+.top .crumb{font-size:12px;color:var(--grey);min-width:120px;text-align:right}
+/* main */
+.main{position:relative;background:var(--bg);overflow:hidden}
+.screen{position:absolute;inset:0;opacity:0;transition:opacity .35s;pointer-events:none}
+.screen.show{opacity:1;pointer-events:auto}
+/* home */
+.home{padding:20px 22px}
+.hero{border-radius:14px;padding:30px 28px 26px;background:
+ radial-gradient(1200px 300px at 20% 0%,#dbeafe 0%,transparent 60%),
+ radial-gradient(900px 300px at 85% 100%,#d1fae5 0%,transparent 60%),#f5f7fb;
+ box-shadow:0 1px 0 rgba(27,31,59,.04);text-align:center}
+.hero h1{margin:0;font-size:30px;font-weight:700;letter-spacing:-.6px;line-height:1.15}
+.hero h1 span{color:var(--blue)}
+.hero p{margin:8px 0 18px;font-size:13.5px;color:var(--slate)}
+.inp{position:relative;max-width:560px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(27,31,59,.08);padding:12px 54px 12px 16px;min-height:56px;text-align:left;font-size:13.5px;line-height:1.45;color:var(--ink)}
+.inp .ph{color:#98a2b3}
+.inp .caret{display:inline-block;width:1px;height:1em;background:var(--ink);vertical-align:-2px;margin-left:1px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.send{position:absolute;right:8px;bottom:8px;width:40px;height:40px;border-radius:10px;border:0;background:var(--blue-light);color:var(--blue);display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s,transform .2s}
+.send svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.send.ready{background:var(--blue);color:#fff;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(29,99,237,.45)}60%{box-shadow:0 0 0 9px rgba(29,99,237,0)}}
+.prev{margin-top:20px}
+.prev h2{font-size:14px;margin:0 0 10px;font-weight:600}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.card b{display:block;font-size:13px;font-weight:600}
+.card small{display:block;color:var(--grey);font-size:11.5px;margin-top:3px}
+/* build */
+.build{display:grid;grid-template-columns:238px 1fr;height:100%}
+.steps{background:#fff;border-right:1px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.you{background:var(--blue-light);border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.45;color:var(--ink)}
+.log{display:grid;gap:9px;font-size:12px;color:var(--slate)}
+.ln{display:flex;gap:8px;align-items:flex-start;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s}
+.ln.show{opacity:1;transform:none}
+.ln i{flex:0 0 14px;width:14px;height:14px;border-radius:50%;border:2px solid #cfd3da;margin-top:1px;position:relative}
+.ln.live i{border-color:var(--blue);border-top-color:transparent;animation:spin .8s linear infinite}
+.ln.done i{border-color:var(--green);background:var(--green)}
+.ln.done i::after{content:"";position:absolute;left:3px;top:1px;width:3px;height:6px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.canvas{position:relative;padding:18px 20px;overflow:hidden}
+.skel{position:absolute;inset:18px 20px;display:grid;gap:10px;align-content:start;transition:opacity .3s}
+.skel div{height:14px;border-radius:6px;background:linear-gradient(90deg,#e6e7ea,#f3f4f6,#e6e7ea);background-size:200% 100%;animation:sh 1.2s linear infinite}
+.skel div:nth-child(1){width:46%;height:22px}.skel div:nth-child(2){width:70%}.skel div:nth-child(3){width:100%;height:120px}.skel div:nth-child(4){width:100%;height:90px}
+@keyframes sh{to{background-position:-200% 0}}
+.skel.off{opacity:0}
+.app{position:absolute;inset:18px 20px;background:#fff;border:1px solid var(--line);border-radius:12px;opacity:0;transition:opacity .4s;overflow:hidden;display:flex;flex-direction:column}
+.app.show{opacity:1}
+.app-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.app-h b{font-size:14px;font-weight:600}
+.app-h small{color:var(--grey);font-size:11.5px}
+.kpis{display:flex;gap:8px;margin-left:auto}
+.kpi{border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:11px;color:var(--slate)}
+.kpi b{display:block;font-size:14px;color:var(--ink)}
+.pub{border:0;border-radius:8px;background:var(--blue);color:#fff;font:600 12px Inter,sans-serif;padding:8px 12px;cursor:pointer;margin-left:8px}
+.pub.ready{animation:pulse 1.4s ease-in-out infinite}
+.tbl{flex:1;overflow:hidden;font-size:11.5px}
+.grp{display:flex;align-items:center;gap:8px;padding:7px 14px;background:#f7f8fa;border-bottom:1px solid var(--line);font-weight:600;font-size:11px;color:var(--slate);text-transform:uppercase;letter-spacing:.04em}
+.grp span{font-weight:500;text-transform:none;letter-spacing:0;color:var(--grey)}
+.row{display:grid;grid-template-columns:62px 92px 50px 1fr 1fr;gap:8px;padding:7px 14px;border-bottom:1px solid #eef0f3;align-items:center}
+.row.h{color:var(--grey);font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;background:#fff}
+.row b{font-weight:600}
+.late{color:#b42318;font-weight:600}
+.act{color:var(--blue);font-weight:500}
+.tag{display:inline-block;border-radius:999px;padding:1px 7px;font-size:10.5px;background:var(--warn-light);color:#9a4a00}
+/* modal */
+.modal{position:absolute;inset:0;background:rgba(27,31,59,.35);display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal.show{opacity:1;pointer-events:auto}
+.dlg{width:380px;background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(27,31,59,.25);padding:20px 22px}
+.dlg h3{margin:0 0 4px;font-size:16px}
+.dlg p{margin:0 0 14px;font-size:12px;color:var(--grey)}
+.fld{margin-bottom:12px}
+.fld label{display:block;font-size:11px;font-weight:600;color:var(--slate);margin-bottom:5px}
+.fld .v{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px}
+.roles{display:grid;gap:7px}
+.role{display:flex;align-items:center;gap:9px;font-size:13px}
+.role i{width:16px;height:16px;border-radius:4px;border:1.5px solid #c8ccd4;display:grid;place-items:center;transition:background .2s,border-color .2s}
+.role.on i{background:var(--blue);border-color:var(--blue)}
+.role.on i::after{content:"";width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-2px}
+.dlg .pub{margin:6px 0 0;width:100%;padding:10px}
+/* published */
+.done{display:grid;grid-template-columns:238px 1fr;height:100%}
+.menu{background:#fff;border-right:1px solid var(--line);padding:14px 0}
+.menu h4{margin:0 0 6px;padding:0 16px;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--grey)}
+.mi{padding:7px 16px;font-size:13px;color:var(--slate);display:flex;align-items:center;gap:8px}
+.mi.new{background:var(--blue-light);color:var(--blue);font-weight:600;border-right:3px solid var(--blue)}
+.mi .pill{margin-left:auto;font-size:10px;background:var(--green-light);color:var(--green);border-radius:999px;padding:1px 7px;font-weight:600}
+.toast{position:absolute;left:50%;bottom:18px;transform:translate(-50%,10px);background:var(--ink);color:#fff;font-size:12.5px;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast i{width:8px;height:8px;border-radius:50%;background:#3dc975}
+.replay{position:absolute;right:10px;top:8px;font-size:11px;color:var(--grey);background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px;cursor:pointer}
+.replay:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+<div id="fit"><div id="stage">
+  <div class="rail">
+    <svg class="logo" viewBox="0 0 24 24"><path d="M4 20 14 4h3L7 20H4zm7 0L21 4h-3L8 20h3z" fill="#fff"/></svg>
+    <i><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg></i>
+    <i><svg viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h12"/></svg></i>
+    <i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></i>
+    <i class="on"><svg viewBox="0 0 24 24"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg></i>
+    <i><svg viewBox="0 0 24 24"><path d="M4 19h16M4 15l4-4 4 3 8-8"/></svg></i>
+    <i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.5-2.4 1a7 7 0 0 0-1.7-1L14.5 3h-5l-.3 2.9a7 7 0 0 0-1.7 1l-2.4-1-2 3.5 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7 7 0 0 0 1.7 1l.3 2.9h5l.3-2.9a7 7 0 0 0 1.7-1l2.4 1 2-3.5-2-1.5c.1-.3.1-.7.1-1z"/></svg></i>
+    <span class="av">JB</span>
+  </div>
+  <div class="top">
+    <div class="mark">archie<b>+</b></div>
+    <div class="tab"><svg viewBox="0 0 24 24"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg>Build</div>
+    <div class="crumb" id="crumb">New build</div>
+  </div>
+  <div class="main">
+    <!-- A. home -->
+    <section class="screen home" id="sHome">
+      <div class="hero">
+        <h1>Build something for <span>your shop</span></h1>
+        <p>Describe a tool, dashboard, or report. Builder makes it on your live Fulcrum data.</p>
+        <div class="inp" id="inp"><span class="ph" id="ph">Describe what you want to build…</span><span id="typed"></span><span class="caret" id="caret" hidden></span>
+          <button class="send" id="send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+        </div>
+      </div>
+      <div class="prev">
+        <h2>Previous builds</h2>
+        <div class="cards">
+          <div class="card"><b>Quote turnaround by estimator</b><small>v3 · Harbor Dynamics quotes, last 90 days</small></div>
+          <div class="card"><b>Material shortages next 30 days</b><small>v2 · Open POs vs. released jobs</small></div>
+        </div>
+      </div>
+    </section>
+    <!-- B/C. build -->
+    <section class="screen build" id="sBuild">
+      <div class="steps">
+        <div class="you" id="you"></div>
+        <div class="log" id="log"></div>
+      </div>
+      <div class="canvas">
+        <div class="skel" id="skel"><div></div><div></div><div></div><div></div></div>
+        <div class="app" id="app">
+          <div class="app-h"><div><b>Late jobs by department</b><br><small>Live · 14 jobs behind schedule</small></div>
+            <div class="kpis"><div class="kpi">Machining<b>8</b></div><div class="kpi">Welding<b>4</b></div><div class="kpi">Finishing<b>2</b></div></div>
+            <button class="pub" id="pub">Publish app</button></div>
+          <div class="tbl">
+            <div class="row h"><span>Job</span><span>Sitting on</span><span>Late</span><span>Why</span><span>Suggested action</span></div>
+            <div class="grp">Machining <span>8 jobs</span></div>
+            <div class="row"><b>J-4812</b><span>Op 30 · Mill</span><span class="late">3 d</span><span><span class="tag">Waiting on material</span></span><span class="act">Expedite PO 2231</span></div>
+            <div class="row"><b>J-4790</b><span>Op 20 · Lathe</span><span class="late">2 d</span><span>Op ran over estimate</span><span class="act">Move to Haas 2</span></div>
+            <div class="row"><b>J-4775</b><span>Op 40 · Deburr</span><span class="late">1 d</span><span>Operator out</span><span class="act">Reassign to B shift</span></div>
+            <div class="grp">Welding <span>4 jobs</span></div>
+            <div class="row"><b>J-4802</b><span>Op 10 · Fit-up</span><span class="late">4 d</span><span><span class="tag">Waiting on inspection</span></span><span class="act">Call inspection</span></div>
+            <div class="row"><b>J-4766</b><span>Op 20 · Weld</span><span class="late">1 d</span><span>Fixture in use</span><span class="act">Split the lot</span></div>
+            <div class="grp">Finishing <span>2 jobs</span></div>
+            <div class="row"><b>J-4751</b><span>Op 50 · Paint</span><span class="late">2 d</span><span>Outside process late</span><span class="act">Chase Lakeshore Coatings</span></div>
+          </div>
+        </div>
+        <div class="modal" id="modal">
+          <div class="dlg">
+            <h3>Publish app</h3>
+            <p>Put it in the menu and choose who sees it.</p>
+            <div class="fld"><label>Name</label><div class="v">Late jobs</div></div>
+            <div class="fld"><label>Menu</label><div class="v">Production</div></div>
+            <div class="fld"><label>Who can see it</label>
+              <div class="roles" id="roles">
+                <div class="role"><i></i>Production manager</div>
+                <div class="role"><i></i>Shop floor lead</div>
+                <div class="role"><i></i>Sales</div>
+              </div>
+            </div>
+            <button class="pub" id="pub2">Publish</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- D. published -->
+    <section class="screen done" id="sDone">
+      <div class="menu">
+        <h4>Production</h4>
+        <div class="mi">Schedule</div>
+        <div class="mi">Jobs</div>
+        <div class="mi">Work orders</div>
+        <div class="mi new">Late jobs<span class="pill">New</span></div>
+        <div class="mi">Capacity</div>
+        <h4 style="margin-top:14px">Quality</h4>
+        <div class="mi">Inspections</div>
+        <div class="mi">NCRs</div>
+      </div>
+      <div class="canvas">
+        <div class="app show" id="app2"></div>
+      </div>
+      <div class="toast" id="toast"><i></i>Published. Production manager and Shop floor lead can see it.</div>
+    </section>
+    <button class="replay" id="replay" hidden>Replay</button>
+  </div>
+</div></div>
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s)};
+  var PROMPT="Show me every job behind schedule, grouped by department, with the operation it is sitting on and a reason why it's late. Suggest an action to take to fix it.";
+  var LINES=["Reading jobs, operations and due dates","Found 14 jobs behind, across 3 departments","Adding a reason and a suggested fix per job","Laying out the page"];
+  var run=0, timers=[];
+  function fit(){var w=window.innerWidth,h=window.innerHeight;var s=Math.min(w/770,h/560);$('#stage').style.transform='scale('+s+')';$('#fit').style.width=(770*s)+'px';$('#fit').style.height=(560*s)+'px';$('#fit').style.margin='0 auto'}
+  window.addEventListener('resize',fit);fit();
+  function wait(ms){return new Promise(function(r){var t=setTimeout(r,ms);timers.push(t)})}
+  function clear(){timers.forEach(clearTimeout);timers=[]}
+  function tell(n){try{parent.postMessage({abBuildStep:n},'*')}catch(e){}}
+  function show(id){['sHome','sBuild','sDone'].forEach(function(x){$('#'+x).classList.toggle('show',x===id)})}
+  function clickOrWait(btn,ms){return new Promise(function(res){var done=false;function go(){if(done)return;done=true;btn.removeEventListener('click',go);res()}btn.addEventListener('click',go);var t=setTimeout(go,ms);timers.push(t)})}
+  async function cycle(){
+    var me=++run; clear();
+    // A. home
+    $('#replay').hidden=true;$('#crumb').textContent='New build';
+    $('#typed').textContent='';$('#ph').hidden=false;$('#caret').hidden=true;$('#send').classList.remove('ready');
+    $('#log').innerHTML='';$('#skel').classList.remove('off');$('#app').classList.remove('show');$('#modal').classList.remove('show');$('#pub').classList.remove('ready');
+    $('#toast').classList.remove('show');$('#roles').querySelectorAll('.role').forEach(function(r){r.classList.remove('on')});
+    show('sHome'); tell(1);
+    await wait(1200); if(me!==run) return;
+    $('#ph').hidden=true;$('#caret').hidden=false;
+    for(var i=0;i<PROMPT.length;i++){$('#typed').textContent=PROMPT.slice(0,i+1);await wait(PROMPT[i]===' '?34:22);if(me!==run)return}
+    $('#send').classList.add('ready');
+    await clickOrWait($('#send'),1800); if(me!==run) return;
+    // B. build
+    $('#caret').hidden=true;$('#you').textContent=PROMPT;$('#crumb').textContent='Building…';
+    show('sBuild'); tell(2);
+    var log=$('#log');
+    for(var j=0;j<LINES.length;j++){
+      var prev=log.lastElementChild; if(prev){prev.classList.remove('live');prev.classList.add('done')}
+      var ln=document.createElement('div');ln.className='ln live';ln.innerHTML='<i></i><span>'+LINES[j]+'</span>';log.appendChild(ln);
+      void ln.offsetWidth; ln.classList.add('show');
+      await wait(1000); if(me!==run) return;
+    }
+    var last=log.lastElementChild; last.classList.remove('live'); last.classList.add('done');
+    $('#skel').classList.add('off');$('#app').classList.add('show');$('#crumb').textContent='Late jobs · v1';
+    await wait(2600); if(me!==run) return;
+    // C. publish
+    $('#pub').classList.add('ready'); tell(3);
+    await clickOrWait($('#pub'),2200); if(me!==run) return;
+    $('#pub').classList.remove('ready');$('#modal').classList.add('show');
+    await wait(900); if(me!==run) return;
+    var roles=$('#roles').querySelectorAll('.role');
+    roles[0].classList.add('on'); await wait(650); if(me!==run) return;
+    roles[1].classList.add('on'); await wait(500); if(me!==run) return;
+    $('#pub2').classList.add('ready');
+    await clickOrWait($('#pub2'),1600); if(me!==run) return;
+    $('#pub2').classList.remove('ready');
+    // D. in the menu
+    $('#app2').innerHTML=$('#app').innerHTML; var b=$('#app2 .pub'); if(b) b.remove();
+    $('#crumb').textContent='Published';
+    show('sDone'); await wait(350); if(me!==run) return;
+    $('#toast').classList.add('show');
+    await wait(2200); if(me!==run) return;
+    $('#replay').hidden=false;
+    await wait(3200); if(me!==run) return;
+    cycle();
+  }
+  $('#replay').addEventListener('click',function(){cycle()});
+  // start when visible (or straight away if the observer is unavailable)
+  var started=false; function start(){if(started)return;started=true;cycle()}
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){if(es.some(function(e){return e.isIntersecting})){start();io.disconnect()}},{threshold:.2});io.observe($('#stage'));setTimeout(start,4000)}else start();
+})();
+</script>
+</body>
+</html>
