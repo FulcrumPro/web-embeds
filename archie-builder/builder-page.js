@@ -1,7 +1,7 @@
 /* Archie Builder page: hero scripted build + customer date-change app. */
 document.addEventListener("DOMContentLoaded",function(){
 (function(){
-  var ROWS=[["10", "4856", "In process", "Oct 24", "Oct 15", "ok", "Scheduled finish Oct 14"], ["20", "4857", "In process", "Oct 24", "Oct 15", "ok", "Scheduled finish Oct 14"], ["30", "4861", "Material due Oct 9", "Oct 28", "Oct 17", "ok", "Scheduled finish Oct 16"], ["50", "4870", "Outside: anodize", "Nov 4", "Oct 22", "no", "Back from anodize Oct 27"], ["60", "4871", "Outside: anodize", "Nov 4", "Oct 22", "no", "Back from anodize Oct 27"], ["70", "4880", "Not started", "Oct 31", "Nov 14", "ok", "Later than today’s date"], ["80", "4890", "Not started", "Nov 7", "Nov 21", "ok", "Later than today’s date"], ["90", "4902", "Complete, awaiting ship", "Oct 21", "Oct 14", "ok", "Can ship now"]];
+  var ROWS=[["10", "4856", "In process", "Oct 24", "Oct 15", "ok", "Scheduled finish Oct 14"], ["20", "4857", "In process", "Oct 24", "Oct 15", "ok", "Scheduled finish Oct 14"], ["30", "4861", "Material due Oct 9", "Oct 28", "Oct 17", "ok", "Scheduled finish Oct 16"], ["50", "4870", "Outside: anodize", "Nov 4", "Oct 22", "no", "Back from anodize Oct 27"], ["60", "4871", "Outside: anodize", "Nov 4", "Oct 22", "no", "Back from anodize Oct 27"], ["70", "4880", "Not started", "Oct 31", "Nov 14", "ok", "Later than today’s date"], ["90", "4902", "Complete, awaiting ship", "Oct 21", "Oct 14", "ok", "Can ship now"]];
   var q=function(id){return document.getElementById(id);};
   var count=q('xfCount'), status=q('xfStatus'), accept=q('xfAccept'), reject=q('xfReject'), table=q('xfTable'), platform=q('xfPlatform'), log=q('xfLog');
   if(!table) return;
