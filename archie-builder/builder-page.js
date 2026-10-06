@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded",function(){
     d.innerHTML='<div class="app-bar">'+s.app.title+'<small>'+s.app.sub+'</small></div><div class="mini">'+mini+'</div>'+rows+'<div class="app-foot"><span class="btn">'+s.app.foot+'</span></div>';
     canvas.appendChild(d);
     var c=document.createElement('button'); c.className='chip-btn'; c.type='button'; c.textContent=s.w;
-    c.addEventListener('click',function(){ manual=true; demoNote.textContent='Scripted demo. Press Enter to build, or pick another team.'; runFor(i,true); });
+    c.addEventListener('click',function(){ manual=true; demoNote.textContent='Scripted demo.'; runFor(i,true); });
     chips.appendChild(c);
   });
   function markChip(i){ [].forEach.call(chips.children,function(c,k){ c.classList.toggle('on',k===i); }); }
