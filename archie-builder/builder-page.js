@@ -109,7 +109,8 @@ document.addEventListener("DOMContentLoaded",function(){
   if(!out||!document.getElementById('guided')) return;
   var st=document.getElementById('appStatic'); if(st) st.parentNode.removeChild(st);
   document.getElementById('chips').innerHTML=''; document.getElementById('stepsLog').innerHTML=''; document.getElementById('stepsLog').hidden=true; document.getElementById('chatHint').hidden=false; document.getElementById('emptyState').classList.remove('hide'); document.getElementById('promptBox').value='';
-  var promptBox=document.getElementById('promptBox'), sendBtn=document.getElementById('sendBtn'), nudge=document.getElementById('nudge');
+  var noop={classList:{add:function(){},remove:function(){}},addEventListener:function(){},hidden:false};
+  var promptBox=document.getElementById('promptBox'), sendBtn=document.getElementById('sendBtn')||noop, nudge=document.getElementById('nudge')||noop;
   var pageName=document.getElementById('pageName'), canvas=document.getElementById('canvas'), emptyState=document.getElementById('emptyState'), working=document.getElementById('working'), workingPill=document.getElementById('workingPill');
   var stepsLog=document.getElementById('stepsLog'), chatHint=document.getElementById('chatHint'), chips=document.getElementById('chips'), demoNote=document.getElementById('demoNote');
   var pause=document.getElementById('pause')||{checked:false};
