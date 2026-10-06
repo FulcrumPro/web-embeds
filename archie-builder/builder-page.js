@@ -87,13 +87,13 @@ document.addEventListener("DOMContentLoaded",function(){
   var STATES=[
     {w:'sales', page:'Quote hit rate', prompt:'Build a quote hit-rate board by customer for the last 12 months, with a drill-in to the quotes we lost.',
      log:['Reading quotes and sales orders from your Fulcrum','Grouping 1,284 quotes by customer and outcome','Laying out the board with a drill-in per customer'],
-     app:{title:'Quote hit rate by customer', sub:'Last 12 months · live', mini:[['Quoted','1,284'],['Won','612'],['Hit rate','48%'],['Lost value','$2.1M']], rows:[['Northrop Grumman','68%',68],['Boeing','54%',54],['Lockheed Martin','47%',47],['Raytheon','41%',41]], chip:'won / quoted', foot:'Open lost quotes'}},
+     app:{title:'Quote hit rate by customer', sub:'Last 12 months · live', mini:[['Quoted','1,284'],['Won','612'],['Hit rate','48%'],['Lost value','$2.1M']], rows:[['Crestline Aero','68%',68],['Harbor Dynamics','54%',54],['Summit Fabrication','47%',47],['Northfield Machine','41%',41]], chip:'won / quoted', foot:'Open lost quotes'}},
     {w:'engineering', page:'Setup sheets', prompt:'Give me a setup-sheet library: pick a job, show the routing, and attach the fixture photo and offsets for each op.',
      log:['Reading routings, operations and attachments','Matching fixtures and offsets to each op','Building the job picker and sheet view'],
      app:{title:'Setup sheets', sub:'Job 4912 · 12345678-BRKT', mini:[['Ops','5'],['Fixtures','3'],['Photos','7'],['Last edit','today']], rows:[['Op 10  Saw cut, 1.25 bar','photo + offsets',0],['Op 20  Mill, fixture F-114','photo + offsets',0],['Op 30  Deburr','notes',0],['Op 40  Anodize (outside)','vendor spec',0]], chip:'attachment', foot:'Print traveler'}},
     {w:'purchasing', page:'Open POs', prompt:'Show open purchase orders by vendor, flag anything past its promise date, and let me email the vendor from the row.',
      log:['Reading open purchase orders and promise dates','Flagging 6 lines past promise','Adding an email action to each row'],
-     app:{title:'Open POs, late by vendor', sub:'22 open · 6 late', mini:[['Open POs','22'],['Late','6'],['Due this week','9'],['Open $','$184K']], rows:[['Ryerson  PO 7781','4 days late',0],['McMaster-Carr  PO 7790','2 days late',0],['Kloeckner  PO 7765','1 day late',0],['Fastenal  PO 7802','due Fri',0]], chip:'email vendor', act:true, foot:'Email all late'}},
+     app:{title:'Open POs, late by vendor', sub:'22 open · 6 late', mini:[['Open POs','22'],['Late','6'],['Due this week','9'],['Open $','$184K']], rows:[['Midwest Steel Supply  PO 7781','4 days late',0],['Allied Fasteners  PO 7790','2 days late',0],['Lakeshore Metals  PO 7765','1 day late',0],['Prairie Tool Supply  PO 7802','due Fri',0]], chip:'email vendor', act:true, foot:'Email all late'}},
     {w:'quality', page:'Job inspection plan', prompt:'Build us a job inspection plan our QC team fills out. Type in a job number, pull the part details, draft the inspection plan, and export a PDF.',
      log:['Reading the job, part and drawing details','Drafting characteristics from the routing and specs','Adding measure fields and a PDF export'],
      app:{title:'Job inspection plan', sub:'Job 4856 · 12345678-BRKT', mini:[['Characteristics','5'],['Measured','0 / 5'],['Inspector','—'],['Status','Draft']], rows:[['Dimension 1.250 ±.005','measure',0],['Thread 1/4-20 UNC','measure',0],['Surface finish 63','measure',0],['Hole Ø.375 ±.002','measure',0]], chip:'measure', foot:'Export PDF'}},
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded",function(){
     d.innerHTML='<div class="app-bar">'+s.app.title+'<small>'+s.app.sub+'</small></div><div class="mini">'+mini+'</div>'+rows+'<div class="app-foot"><span class="btn">'+s.app.foot+'</span></div>';
     canvas.appendChild(d);
     var c=document.createElement('button'); c.className='chip-btn'; c.type='button'; c.textContent=s.w;
-    c.addEventListener('click',function(){ manual=true; demoNote.textContent='You are driving. Edit the request or pick another team, then press Enter.'; runFor(i,true); });
+    c.addEventListener('click',function(){ manual=true; demoNote.textContent='Scripted demo. Press Enter to build, or pick another team.'; runFor(i,true); });
     chips.appendChild(c);
   });
   function markChip(i){ [].forEach.call(chips.children,function(c,k){ c.classList.toggle('on',k===i); }); }
@@ -156,10 +156,10 @@ document.addEventListener("DOMContentLoaded",function(){
     await sleep(1400); if(manual) return;
     await build(i);
   }
-  function userSend(){ var txt=promptBox.value.trim(); if(!txt||busy) return; manual=true; demoNote.textContent='You are driving. Edit the request or pick another team, then press Enter.'; build(wi); }
+  function userSend(){ if(busy) return; manual=true; demoNote.textContent='Scripted demo. Pick a team to watch Builder make its app; the real Builder runs inside Fulcrum.'; build(wi); }
   sendBtn.addEventListener('click', userSend);
   promptBox.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); userSend(); } });
-  promptBox.addEventListener('input', function(){ manual=true; sendBtn.classList.add('pulse'); nudge.classList.add('show'); });
+  
   (async function loop(){
     out.textContent=STATES[wi].w; markChip(wi);
     while(true){
