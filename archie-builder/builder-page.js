@@ -4,10 +4,12 @@ document.addEventListener("DOMContentLoaded",function(){
   var ROWS=[["10", "4856", "In process", "Oct 24", "Oct 15", "ok", "Scheduled finish Oct 14"], ["20", "4857", "In process", "Oct 24", "Oct 15", "ok", "Scheduled finish Oct 14"], ["30", "4861", "Material due Oct 9", "Oct 28", "Oct 17", "ok", "Scheduled finish Oct 16"], ["50", "4870", "Outside: anodize", "Nov 4", "Oct 22", "no", "Back from anodize Oct 27"], ["60", "4871", "Outside: anodize", "Nov 4", "Oct 22", "no", "Back from anodize Oct 27"], ["70", "4880", "Not started", "Oct 31", "Nov 14", "ok", "Later than today’s date"], ["90", "4902", "Complete, awaiting ship", "Oct 21", "Oct 14", "ok", "Can ship now"]];
   var q=function(id){return document.getElementById(id);};
   var count=q('xfCount'), status=q('xfStatus'), accept=q('xfAccept'), reject=q('xfReject'), table=q('xfTable'), platform=q('xfPlatform'), log=q('xfLog');
+  var zone=q('xfZone'), file=q('xfFile'), headMeta=q('xfHeadMeta');
   if(!table) return;
   function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
   function rand(n){return Math.floor(Math.random()*n);}
-  function typeText(el,text){return new Promise(function(res){var k=0;el.textContent='';(function t(){if(k<text.length){k++;el.textContent=text.slice(0,k);setTimeout(t,55+rand(40));}else res();})();});}
+  /* rows come from the file, so they land whole rather than being typed */
+  function typeText(el,text){return new Promise(function(res){el.textContent=text;el.style.opacity='0';el.style.transition='opacity .25s';requestAnimationFrame(function(){el.style.opacity='1';});setTimeout(res,120);});}
   function line(txt,live){var ln=document.createElement('div');ln.className='ln '+(live?'live':'done');ln.innerHTML='<i></i><span>'+txt+'</span>';log.appendChild(ln);return ln;}
   var accepted=false, cycleId=0;
   function selectable(){return table.querySelectorAll('.xf-t:not(.hdr):not(.skip)').length;}
@@ -34,14 +36,22 @@ document.addEventListener("DOMContentLoaded",function(){
   }
   async function cycle(){
     var id=++cycleId; accepted=false;
-    log.innerHTML=''; count.textContent='0 of 7 entered'; status.textContent='Enter the requested dates. Nothing changes until you accept.'; status.classList.remove('ok');
+    log.innerHTML=''; count.textContent='0 of 7 read'; status.textContent='Drop the customer’s file to start. Nothing changes until you accept.'; status.classList.remove('ok');
+    if(headMeta) headMeta.textContent='Sales order 48812 · 7 lines';
     accept.disabled=true; accept.classList.remove('pulse','done'); accept.textContent='Update due dates';
     platform.classList.remove('live'); [].forEach.call(platform.querySelectorAll('.xf-plat'),function(p){p.classList.remove('on');});
+    if(file){ file.classList.remove('in','read'); } if(zone){ zone.classList.remove('hot'); zone.textContent='Drop the customer’s spreadsheet here'; }
     var trows=renderTable();
-    await sleep(900); if(id!==cycleId) return;
-    var l1=line('Reading sales order 48812 and its 7 jobs',true); await sleep(900); l1.className='ln done';
+    /* the CSR drags the customer's spreadsheet onto the page */
+    await sleep(1000); if(id!==cycleId) return;
+    if(zone) zone.classList.add('hot'); await sleep(650); if(id!==cycleId) return;
+    if(file) file.classList.add('in'); await sleep(450); if(id!==cycleId) return;
+    if(zone) zone.classList.remove('hot');
+    var l0=line('Reading acme-requested-dates.xlsx: 7 rows, requested dates in column C',true); await sleep(1000); l0.className='ln done'; if(file) file.classList.add('read');
+    if(id!==cycleId) return;
+    var l1=line('Matching each row to sales order 48812 and its jobs',true); if(headMeta) headMeta.textContent='Sales order 48812 · 7 lines · from acme-requested-dates.xlsx'; await sleep(800); l1.className='ln done';
     var l2=line('Comparing each requested date with the job’s scheduled finish',true);
-    for(var i=0;i<trows.length;i++){ if(id!==cycleId) return; var r=ROWS[i]; await typeText(trows[i].querySelector('.new'), r[4]); var rec=trows[i].querySelector('.rec'); rec.className='rec '+r[5]; rec.innerHTML=(r[5]==='ok'?'On track':'Needs a call')+'<small>· '+r[6]+'</small>'; if(r[5]==='no') trows[i].classList.add('skip'); count.textContent=(i+1)+' of 7 entered'; await sleep(220); }
+    for(var i=0;i<trows.length;i++){ if(id!==cycleId) return; var r=ROWS[i]; await typeText(trows[i].querySelector('.new'), r[4]); var rec=trows[i].querySelector('.rec'); rec.className='rec '+r[5]; rec.innerHTML=(r[5]==='ok'?'On track':'Needs a call')+'<small>· '+r[6]+'</small>'; if(r[5]==='no') trows[i].classList.add('skip'); count.textContent=(i+1)+' of 7 read'; await sleep(220); }
     l2.className='ln done';
     line('5 lines are on track. Lines 50 and 60 are at anodize until Oct 27, so they stay unchecked.',false);
     status.textContent='5 of 7 selected. Accept to update the jobs.'; accept.disabled=false; accept.classList.add('pulse'); accept.textContent='Update 5 due dates';
