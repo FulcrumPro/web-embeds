@@ -1,7 +1,7 @@
-/* Archie Builder page: hero scripted build + customer date-change app. Generated from the prototype. */
+/* Archie Builder page: hero scripted build + customer date-change app. */
 document.addEventListener("DOMContentLoaded",function(){
 (function(){
-  var ROWS=[["10", "4856", "In process", "Oct 24", "Oct 15", "ok", "Scheduled finish Oct 14"], ["20", "4857", "In process", "Oct 24", "Oct 15", "ok", "Scheduled finish Oct 14"], ["30", "4861", "Material due Oct 9", "Oct 28", "Oct 17", "ok", "Scheduled finish Oct 16"], ["40", "4862", "Not started", "Oct 28", "Oct 17", "ok", "Mill time open Oct 10 to 14"], ["50", "4870", "Outside: anodize", "Nov 4", "Oct 22", "no", "Back from anodize Oct 27"], ["60", "4871", "Outside: anodize", "Nov 4", "Oct 22", "no", "Back from anodize Oct 27"], ["70", "4880", "Not started", "Oct 31", "Nov 14", "ok", "Later than today’s date"], ["80", "4890", "Not started", "Nov 7", "Nov 21", "ok", "Later than today’s date"], ["90", "4902", "Complete, awaiting ship", "Oct 21", "Oct 14", "ok", "Can ship now"]];
+  var ROWS=[["10", "4856", "In process", "Oct 24", "Oct 15", "ok", "Scheduled finish Oct 14"], ["20", "4857", "In process", "Oct 24", "Oct 15", "ok", "Scheduled finish Oct 14"], ["30", "4861", "Material due Oct 9", "Oct 28", "Oct 17", "ok", "Scheduled finish Oct 16"], ["50", "4870", "Outside: anodize", "Nov 4", "Oct 22", "no", "Back from anodize Oct 27"], ["60", "4871", "Outside: anodize", "Nov 4", "Oct 22", "no", "Back from anodize Oct 27"], ["70", "4880", "Not started", "Oct 31", "Nov 14", "ok", "Later than today’s date"], ["80", "4890", "Not started", "Nov 7", "Nov 21", "ok", "Later than today’s date"], ["90", "4902", "Complete, awaiting ship", "Oct 21", "Oct 14", "ok", "Can ship now"]];
   var q=function(id){return document.getElementById(id);};
   var count=q('xfCount'), status=q('xfStatus'), accept=q('xfAccept'), reject=q('xfReject'), table=q('xfTable'), platform=q('xfPlatform'), log=q('xfLog');
   if(!table) return;
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded",function(){
       var t=document.createElement('div'); t.className='xf-t in';
       t.innerHTML='<span>Line '+r[0]+' · Job '+r[1]+'<span class="ls">'+r[2]+'</span></span><span class="old">'+r[3]+'</span><span class="arrow">→</span><span class="new"></span><span class="rec"></span><span class="st"></span>';
       t.title='Click to include or exclude this line';
-      t.addEventListener('click',function(){ if(accepted||accept.disabled) return; t.classList.toggle('skip'); var n=selectable(); accept.textContent='Update '+n+' due date'+(n===1?'':'s'); status.textContent=n+' of 9 selected. Accept to update the jobs.'; });
+      t.addEventListener('click',function(){ if(accepted||accept.disabled) return; t.classList.toggle('skip'); var n=selectable(); accept.textContent='Update '+n+' due date'+(n===1?'':'s'); status.textContent=n+' of 7 selected. Accept to update the jobs.'; });
       table.appendChild(t); return t; });
   }
   async function applyChanges(trows, id){
@@ -34,17 +34,17 @@ document.addEventListener("DOMContentLoaded",function(){
   }
   async function cycle(){
     var id=++cycleId; accepted=false;
-    log.innerHTML=''; count.textContent='0 of 9 entered'; status.textContent='Enter the requested dates. Nothing changes until you accept.'; status.classList.remove('ok');
+    log.innerHTML=''; count.textContent='0 of 7 entered'; status.textContent='Enter the requested dates. Nothing changes until you accept.'; status.classList.remove('ok');
     accept.disabled=true; accept.classList.remove('pulse','done'); accept.textContent='Update due dates';
     platform.classList.remove('live'); [].forEach.call(platform.querySelectorAll('.xf-plat'),function(p){p.classList.remove('on');});
     var trows=renderTable();
     await sleep(900); if(id!==cycleId) return;
-    var l1=line('Reading sales order 48812 and its 9 jobs',true); await sleep(900); l1.className='ln done';
+    var l1=line('Reading sales order 48812 and its 7 jobs',true); await sleep(900); l1.className='ln done';
     var l2=line('Comparing each requested date with the job’s scheduled finish',true);
-    for(var i=0;i<trows.length;i++){ if(id!==cycleId) return; var r=ROWS[i]; await typeText(trows[i].querySelector('.new'), r[4]); var rec=trows[i].querySelector('.rec'); rec.className='rec '+r[5]; rec.innerHTML=(r[5]==='ok'?'On track':'Needs a call')+'<small>· '+r[6]+'</small>'; if(r[5]==='no') trows[i].classList.add('skip'); count.textContent=(i+1)+' of 9 entered'; await sleep(220); }
+    for(var i=0;i<trows.length;i++){ if(id!==cycleId) return; var r=ROWS[i]; await typeText(trows[i].querySelector('.new'), r[4]); var rec=trows[i].querySelector('.rec'); rec.className='rec '+r[5]; rec.innerHTML=(r[5]==='ok'?'On track':'Needs a call')+'<small>· '+r[6]+'</small>'; if(r[5]==='no') trows[i].classList.add('skip'); count.textContent=(i+1)+' of 7 entered'; await sleep(220); }
     l2.className='ln done';
-    line('7 lines are on track. Lines 50 and 60 are at anodize until Oct 27, so they stay unchecked.',false);
-    status.textContent='7 of 9 selected. Accept to update the jobs.'; accept.disabled=false; accept.classList.add('pulse'); accept.textContent='Update 7 due dates';
+    line('5 lines are on track. Lines 50 and 60 are at anodize until Oct 27, so they stay unchecked.',false);
+    status.textContent='5 of 7 selected. Accept to update the jobs.'; accept.disabled=false; accept.classList.add('pulse'); accept.textContent='Update 5 due dates';
     var t=0; while(t<4200 && !accepted && id===cycleId){ await sleep(100); t+=100; }
     if(id!==cycleId) return;
     if(!accepted) await applyChanges(trows,id);
