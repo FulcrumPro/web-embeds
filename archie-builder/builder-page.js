@@ -66,41 +66,105 @@ document.addEventListener("DOMContentLoaded",function(){
   (function(){ var el=document.getElementById('xf'); if(el&&'IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })){ io.disconnect(); cycle(); } },{threshold:.25}); io.observe(el); } else cycle(); })();
 })();
 (function(){
+  /* Hero scripted demo: six builds, six different interfaces. Sample data only. */
+  function esc(s){ return String(s); }
   var STATES=[
     {w:'sales', page:'Quote hit rate', prompt:'Build a quote hit-rate board by customer for the last 12 months, with a drill-in to the quotes we lost.',
      log:['Reading quotes and sales orders from your Fulcrum','Grouping 1,284 quotes by customer and outcome','Laying out the board with a drill-in per customer'],
-     app:{title:'Quote hit rate by customer', sub:'Last 12 months · live', mini:[['Quoted','1,284'],['Won','612'],['Hit rate','48%'],['Lost value','$2.1M']], rows:[['Crestline Aero','68%',68],['Harbor Dynamics','54%',54],['Summit Fabrication','47%',47],['Northfield Machine','41%',41]], chip:'won / quoted', foot:'Open lost quotes'}},
+     done:'Lost quotes open', sum:'18 lost quotes listed for Northfield Machine. Top reason: lead time.', logDone:'Opened the 18 lost quotes with the reason logged on each one.',
+     render:function(){
+       var rows=[['Crestline Aero',68,'214'],['Harbor Dynamics',54,'180'],['Summit Fabrication',47,'162'],['Lakeshore Controls',44,'97'],['Northfield Machine',41,'143']];
+       return '<div class="sa"><div class="sa-head"><div><b>Quote hit rate by customer</b><small>Last 12 months · 1,284 quotes</small></div><div class="sa-kpis"><div><b>48%</b><small>won</small></div><div><b>$2.1M</b><small>lost value</small></div></div></div>'
+       +'<div class="sa-body"><div class="sa-bars">'+rows.map(function(r,i){ return '<div class="sa-row" data-i="'+i+'"><span class="sa-name">'+r[0]+'</span><div class="sa-track"><i style="width:'+r[1]+'%"></i></div><b>'+r[1]+'%</b><small>'+r[2]+' quotes</small></div>'; }).join('')+'</div>'
+       +'<div class="sa-drill"><div class="sa-drill-h"><b>Lost quotes · Northfield Machine</b><small>18 · $412K</small></div><div class="sa-q"><b>Q-2291</b><span>$142K</span><em>lead time</em></div><div class="sa-q"><b>Q-2318</b><span>$88K</span><em>price</em></div><div class="sa-q"><b>Q-2340</b><span>$61K</span><em>lead time</em></div><div class="sa-q"><b>Q-2377</b><span>$47K</span><em>no response</em></div></div></div>'
+       +'<div class="app-foot"><span class="btn" role="button" tabindex="0">Open lost quotes</span></div></div>';
+     },
+     act:async function(app,sleep){
+       var row=app.querySelector('.sa-row[data-i="4"]'); row.classList.add('on'); await sleep(400);
+       app.querySelector('.sa').classList.add('drill'); await sleep(350);
+       var qs=app.querySelectorAll('.sa-q'); for(var i=0;i<qs.length;i++){ qs[i].classList.add('in'); await sleep(220); }
+     }},
     {w:'engineering', page:'Setup sheets', prompt:'Give me a setup-sheet library: pick a job, show the routing, and the setup notes and offsets for each op.',
      log:['Reading routings, operations and attachments','Matching setup notes and offsets to each op','Building the job picker and sheet view'],
-     app:{title:'Setup sheets', sub:'Job 4912 · 12345678-BRKT', mini:[['Ops','5'],['Fixtures','3'],['Photos','7'],['Last edit','today']], rows:[['Op 10  Saw cut, 1.25 bar','2 photos · notes',0],['Op 20  Mill, fixture F-114','3 photos · offsets',0],['Op 30  Deburr','notes',0],['Op 40  Anodize (outside)','vendor spec',0]], vk:'text', foot:'Print traveler'}},
+     done:'Ready to print', sum:'Traveler for job 4912 is ready to print: 4 pages, photos included.', logDone:'Traveler for job 4912 is ready to print: 4 pages with the setup photos.',
+     render:function(){
+       return '<div class="en"><div class="en-list"><div class="en-search">Find a job…</div><div class="en-job on"><b>4912</b><span>12345678-BRKT · Rev C</span></div><div class="en-job"><b>4907</b><span>22110-HSG · Rev A</span></div><div class="en-job"><b>4899</b><span>30441-PLT · Rev B</span></div><div class="en-job"><b>4880</b><span>18870-TRAY · Rev D</span></div></div>'
+       +'<div class="en-sheet"><div class="en-title"><b>Setup sheet · Job 4912</b><small>12345678-BRKT · Rev C · 5 ops · 3 fixtures</small></div>'
+       +'<div class="en-op"><div class="en-op-h"><b>Op 10</b> Saw cut, 1.25 bar</div><div class="en-op-b"><div class="en-photo"></div><div class="en-notes"><span>Stop at 14.50, deburr both ends.</span><table><tr><td>Length</td><td>14.500</td></tr><tr><td>Qty per bar</td><td>8</td></tr></table></div></div></div>'
+       +'<div class="en-op"><div class="en-op-h"><b>Op 20</b> Mill, fixture F-114</div><div class="en-op-b"><div class="en-photo p2"></div><div class="en-notes"><span>Locate on dowels, clamp from the back.</span><table><tr><td>G54 X / Y</td><td>−2.1250 / 0.7500</td></tr><tr><td>Z</td><td>−0.0625</td></tr></table></div></div></div>'
+       +'<div class="en-op"><div class="en-op-h"><b>Op 30</b> Deburr</div><div class="en-op-b"><div class="en-photo p3"></div><div class="en-notes"><span>Break all edges .010 max. Check the slot.</span></div></div></div>'
+       +'<div class="en-pages"><div class="en-page"></div><div class="en-page"></div><div class="en-page"></div><div class="en-page"></div><span>4 pages</span></div>'
+       +'</div><div class="app-foot"><span class="btn" role="button" tabindex="0">Print traveler</span></div></div>';
+     },
+     act:async function(app,sleep){
+       app.querySelector('.en').classList.add('print'); var pg=app.querySelectorAll('.en-page'); for(var i=0;i<pg.length;i++){ pg[i].classList.add('in'); await sleep(260); }
+       await sleep(300); app.querySelector('.en-pages').classList.add('ready');
+     }},
     {w:'purchasing', page:'Open POs', prompt:'Show open purchase orders by vendor, flag anything past its promise date, and let me flag it for the buyer from the row.',
      log:['Reading open purchase orders and promise dates','Flagging 6 lines past promise','Adding a flag-and-note action to each row'],
-     app:{title:'Open POs, late by vendor', sub:'22 open · 6 late', mini:[['Open POs','22'],['Late','6'],['Due this week','9'],['Open $','$184K']], rows:[['Midwest Steel Supply  PO 7781','Promised Oct 9 · 4 days late',0],['Allied Fasteners  PO 7790','Promised Oct 7 · 2 days late',0],['Lakeshore Metals  PO 7765','Promised Oct 8 · 1 day late',0],['Prairie Tool Supply  PO 7802','Due Fri',0]], vk:'late', foot:'Flag late POs'}},
+     done:'Late POs flagged', sum:'3 late POs flagged, with a note on each for the buyer.', logDone:'Flagged the 3 late purchase orders in Fulcrum and added a note to each for the buyer.',
+     render:function(){
+       var rows=[['Midwest Steel Supply','PO 7781',10,62,true,'4 days late'],['Allied Fasteners','PO 7790',22,58,true,'2 days late'],['Lakeshore Metals','PO 7765',30,55,true,'1 day late'],['Prairie Tool Supply','PO 7802',34,76,false,'due Fri'],['Northfield Castings','PO 7810',40,88,false,'due next week']];
+       return '<div class="po"><div class="po-head"><div><b>Open POs, late by vendor</b><small>22 open · <em class="po-late-n">6</em> past promise</small></div><div class="po-legend"><span><i class="ok"></i>on time</span><span><i class="no"></i>late</span><span class="today">today</span></div></div>'
+       +'<div class="po-rows">'+rows.map(function(r){ return '<div class="po-row'+(r[4]?' late':'')+'"><div class="po-v"><b>'+r[0]+'</b><small>'+r[1]+'</small></div><div class="po-tl"><i class="po-bar" style="left:'+r[2]+'%;width:'+(r[3]-r[2])+'%"></i><span class="po-lbl">'+r[5]+'</span></div><span class="po-flag">'+(r[4]?'Flag for buyer':'')+'</span></div>'; }).join('')+'</div>'
+       +'<div class="app-foot"><span class="btn" role="button" tabindex="0">Flag late POs</span></div></div>';
+     },
+     act:async function(app,sleep){
+       var rows=app.querySelectorAll('.po-row.late'); for(var i=0;i<rows.length;i++){ rows[i].classList.add('flagged'); rows[i].querySelector('.po-flag').textContent='Flagged · note added'; await sleep(380); }
+       app.querySelector('.po-late-n').textContent='3';
+     }},
     {w:'quality', page:'Job inspection plan', prompt:'Build us a job inspection plan our QC team fills out. Type in a job number, pull the part details, draft the inspection plan, and print it.',
      log:['Reading the job, part and drawing details','Drafting characteristics from the routing and specs','Adding measure fields and a print layout'],
-     app:{title:'Job inspection plan', sub:'Job 4856 · 12345678-BRKT', mini:[['Characteristics','5'],['Measured','0 / 5'],['Inspector','—'],['Status','Draft']], rows:[['Dimension 1.250 ±.005','—',0],['Thread 1/4-20 UNC','—',0],['Surface finish 63','—',0],['Hole Ø.375 ±.002','—',0]], vk:'field', foot:'Print / PDF'}},
+     done:'NCR opened, ready to print', sum:'NCR opened for hole Ø.375. Plan attached to job 4856.', logDone:'Opened an NCR for the hole size, attached the plan to job 4856, and laid out the print view.',
+     render:function(){
+       var ch=[['Dimension','1.250','± .005'],['Thread','1/4-20 UNC','go / no-go'],['Surface finish','63 Ra','max'],['Hole Ø','.375','± .002']];
+       return '<div class="qc"><div class="qc-form"><div class="qc-f"><small>Job</small><b>4856</b></div><div class="qc-f"><small>Part</small><b>12345678-BRKT</b></div><div class="qc-f"><small>Inspector</small><b class="qc-insp">—</b></div><div class="qc-f"><small>Status</small><b class="qc-status">Draft</b></div></div>'
+       +'<div class="qc-rows"><div class="qc-row h"><span>Characteristic</span><span>Nominal</span><span>Tolerance</span><span>Measured</span><span>Result</span></div>'
+       +ch.map(function(c){ return '<div class="qc-row"><span>'+c[0]+'</span><span>'+c[1]+'</span><span>'+c[2]+'</span><span class="qc-in"><i></i></span><span class="qc-res"></span></div>'; }).join('')+'</div>'
+       +'<div class="qc-ncr"><b>NCR-0142 opened</b><span>Hole Ø .375 measured .3774, out of tolerance. Attached to job 4856.</span></div>'
+       +'<div class="app-foot"><span class="btn" role="button" tabindex="0">Print / PDF</span></div></div>';
+     },
+     act:async function(app,sleep){
+       var vals=[['1.2512','ok'],['pass','ok'],['58 Ra','ok'],['.3774','no']]; var ins=app.querySelectorAll('.qc-in i'), res=app.querySelectorAll('.qc-res');
+       app.querySelector('.qc-insp').textContent='R. Chen'; app.querySelector('.qc-status').textContent='In progress';
+       for(var i=0;i<vals.length;i++){ var t=vals[i][0]; for(var k=1;k<=t.length;k++){ ins[i].textContent=t.slice(0,k); await sleep(55); } res[i].className='qc-res '+vals[i][1]; res[i].textContent=vals[i][1]==='ok'?'Pass':'Out of spec'; await sleep(260); }
+       await sleep(300); app.querySelector('.qc-ncr').classList.add('in'); app.querySelector('.qc-status').textContent='1 flagged';
+     }},
     {w:'production', page:'Behind schedule', prompt:"Show me every job behind schedule, grouped by department, with the operation it is sitting on, and a reason for why it’s late. Suggest an action to take to fix it.",
      log:['Reading jobs, operations and due dates','Found 14 jobs behind, across 3 departments','Adding a move-to-next-op button on each row'],
-     app:{title:'Behind schedule by department', sub:'14 jobs · 3 departments', mini:[['Behind','14'],['Mill','7'],['Weld','5'],['Finish','2']], rows:[['Mill  Job 4820  Op 20 · waiting on material','Due Oct 14 · 3 days late',0],['Mill  Job 4833  Op 30 · machine down','Due Oct 15 · 2 days late',0],['Weld  Job 4790  Op 10 · waiting on inspection','Due Oct 15 · 2 days late',0],['Finish  Job 4802  Op 40 · outside service','Due Oct 13 · 1 day late',0]], vk:'late', foot:'Set new due dates'}},
+     done:'Due dates set', sum:'4 due dates written to Fulcrum and each job moved to its next operation. 3 customers flagged for a call.', logDone:'Wrote 4 new due dates to Fulcrum and moved each job to its next operation. The 3 affected customers are flagged for a call.',
+     render:function(){
+       var cols=[['Mill',7,[['4820','Op 20','3 d late','waiting on material','Expedite PO 2231','Oct 17'],['4833','Op 30','2 d late','machine down','Move to Haas 2','Oct 17']]],['Weld',5,[['4790','Op 10','2 d late','waiting on inspection','Call inspection','Oct 16']]],['Finish',2,[['4802','Op 40','1 d late','outside service','Chase Lakeshore Coatings','Oct 15']]]];
+       return '<div class="pr"><div class="pr-head"><div><b>Behind schedule by department</b><small><em class="pr-n">14</em> jobs behind · 3 departments</small></div></div><div class="pr-cols">'
+       +cols.map(function(c){ return '<div class="pr-col"><div class="pr-col-h"><b>'+c[0]+'</b><span class="pr-cnt">'+c[1]+'</span></div>'+c[2].map(function(j){ return '<div class="pr-card" data-new="'+j[5]+'"><div class="pr-card-t"><b>Job '+j[0]+'</b><span>'+j[1]+'</span></div><div class="pr-why"><em>'+j[2]+'</em> · '+j[3]+'</div><div class="pr-act">'+j[4]+'</div><div class="pr-due">Due <s></s><b></b></div></div>'; }).join('')+'</div>'; }).join('')
+       +'</div><div class="app-foot"><span class="btn" role="button" tabindex="0">Set new due dates</span></div></div>';
+     },
+     act:async function(app,sleep){
+       var cards=app.querySelectorAll('.pr-card'); var olds=['Oct 14','Oct 15','Oct 15','Oct 13'];
+       for(var i=0;i<cards.length;i++){ var c=cards[i]; c.querySelector('.pr-due s').textContent=olds[i]; c.querySelector('.pr-due b').textContent=c.getAttribute('data-new'); c.classList.add('set'); await sleep(420); }
+       var n=app.querySelector('.pr-n'); n.textContent='10'; var cnts=app.querySelectorAll('.pr-cnt'); cnts[0].textContent='5'; cnts[1].textContent='4'; cnts[2].textContent='1';
+     }},
     {w:'everyone', page:'Shop scoreboard', prompt:'Make a shop scoreboard for the TV on the floor: jobs shipped today, on-time this week, and who is clocked in where.',
      log:['Reading shipments, time clock and job status','Calculating on-time for the week','Laying out big numbers for a TV'],
-     app:{title:'Shop scoreboard', sub:'Live · on live Fulcrum data', mini:[['Shipped today','11'],['On time','94%'],['Open jobs','128'],['Clocked in','23']], rows:[['Mill 3  Job 4820  Op 20','T. Alvarez',0],['Laser 1  Job 4871  Op 10','R. Chen',0],['Weld A  Job 4790  Op 30','M. Dubois',0],['Finish  Job 4802  Op 40','J. Okafor',0]], vk:'live', foot:'Full screen'}}
+     done:'Full screen', sum:'Live on the floor TV.', logDone:'Live on the floor TV, on live Fulcrum data.',
+     render:function(){
+       var m=[['Mill 3','Job 4820 · Op 20','T. Alvarez'],['Laser 1','Job 4871 · Op 10','R. Chen'],['Weld A','Job 4790 · Op 30','M. Dubois'],['Finish','Job 4802 · Op 40','J. Okafor'],['Brake 2','Job 4866 · Op 20','L. Park']];
+       return '<div class="tv"><div class="tv-top"><b>Shop scoreboard</b><span class="tv-clock"><i></i>Live · 10:41</span></div><div class="tv-big"><div><small>Shipped today</small><b class="tv-ship">11</b></div><div><small>On time this week</small><b>94<em>%</em></b></div><div><small>Open jobs</small><b>128</b></div><div><small>Clocked in</small><b class="tv-in">23</b></div></div>'
+       +'<div class="tv-now"><small>Now running</small><div class="tv-m">'+m.map(function(x){ return '<div class="tv-mc"><i></i><b>'+x[0]+'</b><span>'+x[1]+'</span><em>'+x[2]+'</em></div>'; }).join('')+'</div></div>'
+       +'<div class="app-foot"><span class="btn" role="button" tabindex="0">Full screen</span></div></div>';
+     },
+     act:async function(app,sleep){
+       app.querySelector('.tv').classList.add('full'); await sleep(500);
+       app.querySelector('.tv-clock').innerHTML='<i></i>Live · 10:42'; await sleep(500);
+       app.querySelector('.tv-ship').textContent='12'; app.querySelector('.tv-ship').classList.add('tick'); await sleep(600);
+       var mc=app.querySelectorAll('.tv-mc'); mc[1].querySelector('span').textContent='Job 4874 · Op 10'; mc[1].classList.add('swap'); await sleep(500);
+       app.querySelector('.tv-in').textContent='24'; app.querySelector('.tv-in').classList.add('tick');
+     }}
   ];
-  /* What happens after the app is built and its button is pressed: rows update, tiles change, and the places the result lands. */
-  var AFTER=[
-    {rows:[[0,'3 lost · price'],[1,'5 lost · lead time'],[2,'4 lost · no response'],[3,'6 lost · lead time']], sum:'18 lost quotes listed. Top reason: lead time.', done:'Lost quotes open', log:'Opened the 18 lost quotes with the reason logged on each one.'},
-    {rows:[[0,'page 1'],[1,'page 2'],[2,'page 3'],[3,'vendor spec attached']], sum:'Traveler ready to print: 4 pages, photos included.', done:'Ready to print', log:'Traveler for job 4912 is ready to print: 4 pages with the setup photos.'},
-    {rows:[[0,'Flagged · note added'],[1,'Flagged · note added'],[2,'Flagged · note added']], sum:'3 late POs flagged, with a note on each for the buyer.', done:'Late POs flagged', log:'Flagged the 3 late purchase orders in Fulcrum and added a note to each for the buyer.'},
-    {rows:[[0,'1.2512'],[1,'pass'],[2,'58 Ra'],[3,'.3774','warn']], mini:[[1,'5 / 5'],[2,'R. Chen'],[3,'1 flagged']], sum:'NCR opened for hole Ø.375. Plan attached to job 4856.', done:'NCR opened, ready to print', log:'Opened an NCR for the hole size, attached the plan to job 4856, and laid out the print view.'},
-    {rows:[[0,'Oct 14 → Oct 17'],[1,'Oct 15 → Oct 17'],[2,'Oct 15 → Oct 16'],[3,'Oct 13 → Oct 15']], mini:[[0,'10'],[1,'5'],[2,'4'],[3,'1']], sum:'4 due dates written to Fulcrum and each job moved to its next operation. 3 customers flagged for a call.', done:'Due dates set', log:'Wrote 4 new due dates to Fulcrum and moved each job to its next operation. The 3 affected customers are flagged for a call.'},
-    {mini:[[0,'12'],[3,'24']], rows:[[1,'R. Chen · Op 10 done'],[0,'T. Alvarez']], sum:'Live on the floor TV.', done:'Full screen', log:'Live on the floor TV, on live Fulcrum data.'}
-  ];
-  function rightFor(s,r){ if(r[2]) return '<div class="bar" aria-hidden="true"><i style="width:'+r[2]+'%"></i></div>'; var k=s.app.vk||'text'; if(k==='late'&&!/late/.test(r[1])) k='text'; return '<span class="val k-'+k+'">'+r[1]+'</span>'; }
   var TYPE_MS=65, DELETE_MS=38, JITTER=45, GAP_MS=350;
   var out=document.getElementById('cycle'), caret=document.getElementById('caret');
   if(!out||!document.getElementById('guided')) return;
   var st=document.getElementById('appStatic'); if(st) st.parentNode.removeChild(st);
-  document.getElementById('chips').innerHTML=''; document.getElementById('stepsLog').innerHTML=''; document.getElementById('stepsLog').hidden=true; document.getElementById('chatHint').hidden=false; document.getElementById('emptyState').classList.remove('hide'); document.getElementById('promptBox').value='';
   var noop={classList:{add:function(){},remove:function(){}},addEventListener:function(){},hidden:false};
   var promptBox=document.getElementById('promptBox'), sendBtn=document.getElementById('sendBtn')||noop, nudge=document.getElementById('nudge')||noop;
   var pageName=document.getElementById('pageName'), canvas=document.getElementById('canvas'), emptyState=document.getElementById('emptyState'), working=document.getElementById('working'), workingPill=document.getElementById('workingPill');
@@ -109,13 +173,7 @@ document.addEventListener("DOMContentLoaded",function(){
   var manual=false, busy=false, showing=-1, wi=4;
   function rand(n){return Math.floor(Math.random()*n);}
   STATES.forEach(function(s,i){
-    var d=document.createElement('div'); d.className='app'; d.id='app'+i;
-    var mini=s.app.mini.map(function(m){return '<div><small>'+m[0]+'</small><b>'+m[1]+'</b></div>';}).join('');
-    var rows=s.app.rows.map(function(r){
-      var left = r[2] ? r[0]+' &nbsp;<span class="num">'+r[1]+'</span>' : r[0];
-      return '<div class="row"><div>'+left+'</div>'+rightFor(s,r)+'</div>';
-    }).join('');
-    d.innerHTML='<div class="app-bar">'+s.app.title+'<small>'+s.app.sub+'</small></div><div class="mini">'+mini+'</div>'+rows+'<div class="done-bar" hidden><i></i><span></span></div><div class="app-foot"><span class="btn" role="button" tabindex="0">'+s.app.foot+'</span></div>';
+    var d=document.createElement('div'); d.className='app app-'+s.w; d.id='app'+i; d.innerHTML=s.render()+'<div class="done-bar" hidden><i></i><span></span></div>';
     canvas.appendChild(d);
     var c=document.createElement('button'); c.className='chip-btn'; c.type='button'; c.textContent=s.w;
     c.addEventListener('click',function(){ manual=true; demoNote.textContent='Scripted demo.'; runFor(i,true); });
@@ -141,23 +199,18 @@ document.addEventListener("DOMContentLoaded",function(){
   }
   function clickOrWait(el,ms){ return new Promise(function(res){ var done=false; function go(){ if(done) return; done=true; el.removeEventListener('click',go); res(); } el.addEventListener('click',go); setTimeout(go,ms); }); }
   async function act(i){
-    var A=AFTER[i], app=document.getElementById('app'+i); if(!A||!app) return;
-    var btn=app.querySelector('.app-foot .btn'), rows=app.querySelectorAll('.row'), minis=app.querySelectorAll('.mini b'), bar=app.querySelector('.done-bar');
+    var s=STATES[i], app=document.getElementById('app'+i); if(!app) return;
+    var btn=app.querySelector('.app-foot .btn'), bar=app.querySelector('.done-bar');
     await sleep(1100); if(showing!==i) return;
     btn.classList.add('pulse'); await clickOrWait(btn,1700); if(showing!==i) return;
     btn.classList.remove('pulse'); btn.textContent='Working…';
-    for(var k=0;k<A.rows.length;k++){ var r=rows[A.rows[k][0]]; if(!r) continue; var v=r.querySelector('.val'); if(!v){ v=document.createElement('span'); v.className='val'; r.lastElementChild.replaceWith(v); } v.textContent=A.rows[k][1]; v.className='val '+(A.rows[k][2]||'ok'); await sleep(380); if(showing!==i) return; }
-    if(A.mini){ A.mini.forEach(function(m){ var b=minis[m[0]]; if(b){ b.textContent=m[1]; b.classList.add('flash'); } }); }
-    if(A.sum&&bar){ bar.querySelector('span').textContent=A.sum; bar.hidden=false; void bar.offsetWidth; bar.classList.add('on'); await sleep(500); if(showing!==i) return; }
-    btn.textContent=A.done; btn.classList.add('done');
-    var ln=document.createElement('div'); ln.className='ln done'; ln.innerHTML='<i></i><span>'+A.log+'</span>'; stepsLog.appendChild(ln);
+    try{ await s.act(app,sleep); }catch(e){}
+    if(showing!==i) return;
+    if(bar){ bar.querySelector('span').textContent=s.sum; bar.hidden=false; void bar.offsetWidth; bar.classList.add('on'); await sleep(500); if(showing!==i) return; }
+    btn.textContent=s.done; btn.classList.add('done');
+    var ln=document.createElement('div'); ln.className='ln done'; ln.innerHTML='<i></i><span>'+s.logDone+'</span>'; stepsLog.appendChild(ln);
   }
-  function resetApp(i){ var app=document.getElementById('app'+i); if(!app) return; var s=STATES[i];
-    var btn=app.querySelector('.app-foot .btn'); btn.className='btn'; btn.textContent=s.app.foot;
-    var bar=app.querySelector('.done-bar'); bar.hidden=true; bar.classList.remove('on');
-    app.querySelectorAll('.mini b').forEach(function(b,k){ b.textContent=s.app.mini[k][1]; b.classList.remove('flash'); });
-    app.querySelectorAll('.row').forEach(function(r,k){ var row=s.app.rows[k]; var t=document.createElement('template'); t.innerHTML=rightFor(s,row); r.lastElementChild.replaceWith(t.content.firstChild); });
-  }
+  function resetApp(i){ var app=document.getElementById('app'+i); if(!app) return; app.innerHTML=STATES[i].render()+'<div class="done-bar" hidden><i></i><span></span></div>'; }
   async function runFor(i, fromUser){
     resetApp(i);
     if(busy) return; markChip(i); wi=i;
@@ -171,7 +224,6 @@ document.addEventListener("DOMContentLoaded",function(){
   function userSend(){ if(busy) return; manual=true; demoNote.textContent='Scripted demo. Builder cycles through one build per team; the real Builder runs inside Fulcrum.'; build(wi).then(function(){ return act(wi); }).then(function(){ return sleep(3000); }).then(function(){ manual=false; }); }
   sendBtn.addEventListener('click', userSend);
   promptBox.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); userSend(); } });
-  
   function inView(el){ return new Promise(function(res){ if(!el||!('IntersectionObserver' in window)){ res(); return; } var io=new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })){ io.disconnect(); res(); } },{threshold:.25}); io.observe(el); }); }
   (async function loop(){
     out.textContent=STATES[wi].w; markChip(wi);
@@ -185,9 +237,5 @@ document.addEventListener("DOMContentLoaded",function(){
       wi=(wi+1)%STATES.length;
     }
   })();
-  var items=[].slice.call(document.querySelectorAll('#stepper li')), si=0, smanual=false;
-  function setStep(i){ items.forEach(function(li,k){ li.classList.toggle('active',k===i); }); si=i; }
-  items.forEach(function(li,i){ li.addEventListener('click',function(){ smanual=true; setStep(i); }); });
-  setInterval(function(){ if(!smanual && !pause.checked) setStep((si+1)%items.length); },4000);
 })();
 });
