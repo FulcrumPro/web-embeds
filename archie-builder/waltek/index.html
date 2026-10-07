@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Production list, a Builder app</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{--ink:#1b1f3b;--slate:#3d414a;--grey:#5e6066;--line:#e2e2e6;--bg:#f0f1f3;--blue:#1d63ed;--blue-light:#e8effd;--green:#008455;--green-light:#d9ede6;--warn:#9a4a00;--warn-light:#ffeddd}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#f0f1f3;font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden}
+#fit{position:absolute;left:0;top:0;display:block;overflow:hidden}
+#stage{width:640px;height:400px;position:relative;background:var(--bg);transform-origin:top left;overflow:hidden;display:grid;grid-template-columns:48px minmax(0,1fr);grid-template-rows:44px minmax(0,1fr)}
+.fu-rail{background:#15161c;display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:4px;width:48px;flex:0 0 48px}
+.fu-rail .fu-logo{width:22px;height:22px;margin-bottom:12px}
+.fu-rail i{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:#aab0bd}
+.fu-rail i svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fu-rail i.on{background:#2a2c36;color:#fff}
+.fu-rail .fu-av{margin-top:auto;width:28px;height:28px;border-radius:50%;background:#ff8a1d;color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center}
+.fu-rail{grid-row:1/-1}
+.top{display:flex;align-items:center;gap:12px;padding:0 14px;background:#fff;border-bottom:1px solid var(--line)}
+.top .tab{margin-left:auto;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:11px;font-weight:500;display:flex;align-items:center;gap:6px;background:#fff}
+.top .tab svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+.top .crumb{font-size:11px;color:var(--grey)}
+.main{position:relative;padding:12px 14px;min-height:0}
+.app{background:#fff;border:1px solid var(--line);border-radius:10px;height:100%;display:flex;flex-direction:column;overflow:hidden}
+.bar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.bar b{font-size:13px;font-weight:600}
+.bar small{color:var(--grey);font-size:11px}
+.pill{margin-left:auto;font-size:11px;color:var(--grey);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.filters{display:flex;gap:8px;padding:8px 14px;border-bottom:1px solid var(--line);font-size:11px;color:var(--slate)}
+.filters span{border:1px solid var(--line);border-radius:6px;padding:3px 8px;background:#fff}
+.filters span.on{background:var(--blue-light);color:var(--blue);border-color:transparent;font-weight:500}
+.body{flex:1;overflow:hidden;padding:6px 0 0}
+.grp{opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s}
+.grp.show{opacity:1;transform:none}
+.gh{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:7px 14px;background:#f7f8fa;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:11.5px}
+.gh b{font-weight:600}
+.gh small{color:var(--grey);margin-left:6px}
+.gh .cnt{color:var(--grey);font-size:11px}
+.stage{font-size:11px;font-weight:600;color:var(--blue);background:var(--blue-light);border-radius:6px;padding:3px 9px;cursor:pointer;transition:background .2s,color .2s}
+.stage.pulse{animation:pulse 1.2s ease-in-out infinite}
+.stage.done{background:var(--green-light);color:var(--green);cursor:default}
+.stage.done::before{content:"\2713  "}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(29,99,237,.35)}60%{box-shadow:0 0 0 7px rgba(29,99,237,0)}}
+.row{display:grid;grid-template-columns:58px 1fr 44px 70px 72px;gap:10px;padding:5px 14px;font-size:11px;color:var(--slate);border-bottom:1px solid #eef0f3;align-items:center}
+.row b{color:var(--ink);font-weight:600}
+.row .t{color:var(--grey)}
+.row .late{color:#b42318;font-weight:600}
+.row.staged .t{color:var(--green)}
+.hdr{display:grid;grid-template-columns:58px 1fr 44px 70px 72px;gap:10px;padding:4px 14px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--grey)}
+.skel{position:absolute;left:14px;right:14px;top:12px;bottom:12px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:10px;align-content:start;transition:opacity .3s}
+.skel div{height:12px;border-radius:6px;background:linear-gradient(90deg,#eaeaeb,#f4f4f5,#eaeaeb);background-size:200% 100%;animation:sh 1.2s linear infinite}
+.skel div:nth-child(1){width:40%;height:18px}.skel div:nth-child(2){width:60%}.skel div:nth-child(3){width:100%;height:60px}.skel div:nth-child(4){width:100%;height:60px}.skel div:nth-child(5){width:100%;height:40px}
+@keyframes sh{to{background-position:-200% 0}}
+.skel.off{opacity:0;pointer-events:none}
+.toast{position:absolute;left:50%;bottom:22px;transform:translate(-50%,8px);background:var(--ink);color:#fff;font-size:11.5px;border-radius:8px;padding:8px 12px;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast i{width:7px;height:7px;border-radius:50%;background:#3dc975}
+
+.foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:6px 14px;border-top:1px solid var(--line);font-size:11px;color:var(--grey)}
+.foot .btn{margin-left:auto;font-size:11px;font-weight:600;color:#fff;background:var(--blue);border-radius:999px;padding:6px 12px;cursor:pointer;transition:background .2s}
+.foot .btn.pulse{animation:pulse 1.2s ease-in-out infinite}
+.foot .btn.done{background:var(--green);cursor:default}
+.bar{padding:8px 14px}
+
+.phdr,.prow{display:grid;grid-template-columns:66px 108px 118px 48px minmax(0,1fr) 54px;gap:8px;padding:4px 14px;align-items:center;white-space:nowrap}
+.phdr{font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--grey);padding:6px 14px 4px;border-top:1px solid var(--line)}
+.prow{font-size:10.5px;color:var(--slate);border-bottom:1px solid #eef0f3;opacity:0;transform:translateY(5px);transition:opacity .3s,transform .3s,background .3s}
+.prow.show{opacity:1;transform:none}
+.prow a{color:var(--blue);font-weight:600;text-decoration:none}
+.prow .cust{overflow:hidden;text-overflow:ellipsis}
+.ops{display:flex;gap:3px;align-items:center}
+.ops i{width:16px;height:7px;border-radius:2px;background:#dfe3ea;display:block;transition:background .3s}
+.ops i.done{background:var(--green)}
+.ops i.now{background:var(--blue)}
+.ops span{font-size:10px;color:var(--grey);margin-left:4px;white-space:nowrap}
+.ship{font-variant-numeric:tabular-nums}
+.ship.late{color:#b42318;font-weight:600}
+.prow.moved{background:#eefaf3}
+.prow.moved .ship{color:var(--green);font-weight:600}
+</style>
+</head>
+<body>
+<div id="fit"><div id="stage"><div class="fu-rail" aria-hidden="true"><svg class="fu-logo" viewBox="0 0 24 24"><path d="M4 20 14 4h3L7 20H4zm7 0L21 4h-3L8 20h3z" fill="#fff"/></svg><i><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg></i><i><svg viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h12"/></svg></i><i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></i><i class="on"><svg viewBox="0 0 24 24"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg></i><i><svg viewBox="0 0 24 24"><path d="M4 19h16M4 15l4-4 4 3 8-8"/></svg></i><i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.5-2.4 1a7 7 0 0 0-1.7-1L14.5 3h-5l-.3 2.9a7 7 0 0 0-1.7 1l-2.4-1-2 3.5 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7 7 0 0 0 1.7 1l.3 2.9h5l.3-2.9a7 7 0 0 0 1.7-1l2.4 1 2-3.5-2-1.5c.1-.3.1-.7.1-1z"/></svg></i><span class="fu-av">JB</span></div><div class="top"><span class="crumb">‹ Builds · <b>Production list</b> · Published · v37</span><div class="tab"><svg viewBox="0 0 24 24"><path d="m8 7-5 5 5 5M16 7l5 5-5 5"/></svg>Builder</div></div><div class="main">
+  <div class="app">
+    <div class="bar"><div><b>Production list</b><br><small>Open sales-order lines with the operations still to run · by division</small></div><div class="pill"><i></i>Live Fulcrum data</div></div>
+    <div class="filters"><span class="on" id="fMs">Machine shop</span><span id="fFab">Fab</span><span>Ship this week</span><span>All customers</span></div>
+    <div class="body" id="body">
+      <div class="phdr"><span>SO · line</span><span>Customer</span><span>Part</span><span>Job</span><span>Ops remaining</span><span>Ship by</span></div>
+      <div class="prow"><span><a>SO-4471·2</a></span><span class="cust">Harbor Dynamics</span><span class="cust">Manifold block</span><span><a>J-9120</a></span><span class="ops"><i class="done"></i><i class="done"></i><i class="now"></i><i></i><i></i><span>3 · Mill 2</span></span><span class="ship">Oct 10</span></div>
+      <div class="prow"><span><a>SO-4468·1</a></span><span class="cust">Crestline Aero</span><span class="cust">Housing, upper</span><span><a>J-9114</a></span><span class="ops"><i class="done"></i><i class="done"></i><i class="done"></i><i class="now"></i><span>2 · Lathe 1</span></span><span class="ship">Oct 11</span></div>
+      <div class="prow"><span><a>SO-4452·4</a></span><span class="cust">Summit Fabrication</span><span class="cust">Spindle adapter</span><span><a>J-9102</a></span><span class="ops"><i class="done"></i><i class="now"></i><i></i><i></i><span>4 · Mill 1</span></span><span class="ship late">Oct 9</span></div>
+      <div class="prow"><span><a>SO-4475·1</a></span><span class="cust">Northfield Machine</span><span class="cust">Fixture plate</span><span><a>J-9131</a></span><span class="ops"><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="now"></i><span>1 · Inspect</span></span><span class="ship">Oct 13</span></div>
+      <div class="prow"><span><a>SO-4460·3</a></span><span class="cust">Lakeshore Controls</span><span class="cust">Cover, machined</span><span><a>J-9108</a></span><span class="ops"><i class="done"></i><i class="now"></i><i></i><span>2 · Mill 3</span></span><span class="ship">Oct 14</span></div>
+      <div class="prow"><span><a>SO-4479·1</a></span><span class="cust">Prairie Tool</span><span class="cust">Shaft, 1.25</span><span><a>J-9140</a></span><span class="ops"><i class="now"></i><i></i><i></i><span>3 · Saw</span></span><span class="ship">Oct 16</span></div>
+    </div>
+    <div class="foot"><span id="fs">Replaces the weekly Excel. Refreshes from Fulcrum as jobs clock through.</span><span class="btn" id="btn">Refresh</span></div>
+  </div>
+  <div class="skel" id="skel"><div></div><div></div><div></div><div></div><div></div></div>
+  <div class="toast" id="toast"><i></i>J-9131 finished inspection. Ready to ship.</div>
+</div></div></div>
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s)}, $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+  var run=0, timers=[];
+  function fit(){var w=window.innerWidth,h=window.innerHeight;var s=Math.min(w/640,h/400);$('#stage').style.transform='scale('+s+')';var f=$('#fit');f.style.width=(640*s)+'px';f.style.height=(400*s)+'px';f.style.left=Math.max(0,(w-640*s)/2)+'px';f.style.top=Math.max(0,(h-400*s)/2)+'px'}
+  window.addEventListener('resize',fit);fit();
+  function wait(ms){return new Promise(function(r){var t=setTimeout(r,ms);timers.push(t)})}
+  function clear(){timers.forEach(clearTimeout);timers=[]}
+  function clickOrWait(btn,ms){return new Promise(function(res){var done=false;function go(){if(done)return;done=true;btn.removeEventListener('click',go);res()}btn.addEventListener('click',go);var t=setTimeout(go,ms);timers.push(t)})}
+
+  async function cycle(){
+    var me=++run; clear();
+    $('#skel').classList.remove('off'); $('#toast').classList.remove('show');
+    var rows=$$('.prow'); rows.forEach(function(r){r.classList.remove('show','moved')});
+    var r4=rows[3]; r4.querySelector('.ops').innerHTML='<i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="now"></i><span>1 · Inspect</span>'; r4.querySelector('.ship').textContent='Oct 13';
+    var b=$('#btn'); b.className='btn'; b.textContent='Refresh'; $('#fs').textContent='Replaces the weekly Excel. Refreshes from Fulcrum as jobs clock through.';
+    await wait(900); if(me!==run) return;
+    $('#skel').classList.add('off');
+    for(var i=0;i<rows.length;i++){ rows[i].classList.add('show'); await wait(220); if(me!==run) return; }
+    await wait(1500); if(me!==run) return;
+    b.classList.add('pulse');
+    await clickOrWait(b,1900); if(me!==run) return;
+    b.classList.remove('pulse'); b.textContent='Refreshing…';
+    await wait(700); if(me!==run) return;
+    r4.querySelector('.ops').innerHTML='<i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><span>0 · ship</span>'; r4.classList.add('moved'); r4.querySelector('.ship').textContent='Ready';
+    b.classList.add('done'); b.textContent='Up to date · 2:14 PM';
+    $('#fs').textContent='Shipping, quality, sales and ops all read the same list.';
+    $('#toast').classList.add('show'); await wait(2000); if(me!==run) return; $('#toast').classList.remove('show');
+    await wait(5200); if(me!==run) return;
+    cycle();
+  }
+  var started=false; function start(){if(started)return;started=true;cycle()}
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){if(es.some(function(e){return e.isIntersecting})){start();io.disconnect()}},{threshold:.2});io.observe($('#stage'))}else start();
+})();
+</script>
+</body>
+</html>
