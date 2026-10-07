@@ -161,8 +161,6 @@ document.addEventListener("DOMContentLoaded",function(){
   async function runFor(i, fromUser){
     resetApp(i);
     if(busy) return; markChip(i); wi=i;
-    /* clear the canvas before the next request types, so the old app never sits behind a new prompt */
-    if(!fromUser){ hideApp(); stepsLog.innerHTML=''; emptyState.classList.remove('hide'); pageName.textContent='New build'; }
     if(!fromUser){ await setWord(i); } else { out.textContent=STATES[i].w; caret.classList.add('blink'); }
     await typeInto(promptBox, STATES[i].prompt);
     sendBtn.classList.add('pulse'); nudge.classList.add('show');
