@@ -156,3 +156,25 @@
   .ab-root .pr-cols{grid-template-columns:1fr}
   .ab-root .tv-big{grid-template-columns:repeat(2,1fr)}.ab-root .tv-m{grid-template-columns:repeat(3,1fr)}.ab-root .tv-big b{font-size:36px}
 }
+
+/* Fulcrum product nav with labels (hero module) + the Archie build demo as the canvas */
+.ab-root .panel>.fu-nav{grid-column:1;grid-row:1/-1}
+.ab-root .panel.has-nav{grid-template-columns:208px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+.ab-root .panel.has-nav>.panel-top,.ab-root .panel.has-nav>.hero-frame{grid-column:2;min-width:0}
+.ab-root .fu-nav{background:#15161c;color:#d4d4d6;padding:14px 10px;display:flex;flex-direction:column;gap:2px;font-family:Inter,system-ui,sans-serif;font-size:12.5px;overflow:hidden}
+.ab-root .fu-nav .fu-brand{display:flex;align-items:center;gap:8px;padding:4px 8px 14px;color:#fff;font-weight:700;font-size:14px;letter-spacing:-.2px}
+.ab-root .fu-nav .fu-brand svg{width:18px;height:18px}
+.ab-root .fu-nav .fu-item{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:7px;color:#d4d4d6}
+.ab-root .fu-nav .fu-item.on{background:#2a2c36;color:#fff}
+.ab-root .fu-nav .fu-item.on b{color:#e8ff5e}
+.ab-root .fu-nav .fu-item b{font-weight:500}
+.ab-root .fu-nav .fu-item i{width:6px;height:6px;border-right:1.5px solid #7f7f84;border-bottom:1.5px solid #7f7f84;transform:rotate(-45deg)}
+.ab-root .fu-nav .fu-item.open i{transform:rotate(45deg)}
+.ab-root .fu-nav .fu-sub{display:flex;flex-direction:column;gap:1px;padding:2px 0 6px 22px}
+.ab-root .fu-nav .fu-sub span{padding:5px 8px;border-radius:6px;color:#aab0bd;font-size:12px}
+.ab-root .fu-nav .fu-sub span.on{color:#fff;background:#2a2c36}
+.ab-root .fu-nav .fu-av{margin-top:auto;display:flex;align-items:center;gap:8px;padding:8px;color:#aab0bd;font-size:12px}
+.ab-root .fu-nav .fu-av i{width:26px;height:26px;border-radius:50%;background:#ff8a1d;color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center;font-style:normal;border:0;transform:none}
+.ab-root .hero-frame{position:relative;background:#f0f1f3;min-height:520px}
+.ab-root .hero-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+@media (max-width:991px){.ab-root .panel.has-nav{grid-template-columns:minmax(0,1fr)}.ab-root .panel>.fu-nav{display:none}.ab-root .panel.has-nav>.panel-top,.ab-root .panel.has-nav>.hero-frame{grid-column:1}.ab-root .hero-frame{min-height:420px}}

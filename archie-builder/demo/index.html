@@ -11697,6 +11697,29 @@ markTabSeen(state.view || "chat");
 
 <script id="build-only-js">
 (function(){
+  /* bare mode (?bare=1): no demo chrome, the page around it supplies the Fulcrum nav and Archie header; the build runs on its own and loops */
+  if(/[?&]bare/.test(location.search)){
+    document.documentElement.classList.add('bare');
+    var st=document.createElement('style'); st.textContent='.bare .live-demo-bar,.bare .fulcrum-side,.bare nav.tabbar,.bare #tour-overlay,.bare #tour-start-pill,.bare #tour-end-pill,.bare .book-demo-cta{display:none!important}.bare body,.bare #app{padding-top:0!important;margin-top:0!important;top:0!important}.bare .main{margin-left:0!important}'; document.head.appendChild(st);
+    function auto(){ setTimeout(async function(){
+      while(true){
+        try{ resetBuild(); }catch(e){}
+        try{ setView('build'); showBuildMode('home'); }catch(e){}
+        var input=document.getElementById('hero-input'); if(!input){ await sleep(2000); continue; }
+        await sleep(900);
+        var cfg=BUILD_SEQUENCE[state.buildIndex]||BUILD_SEQUENCE[0];
+        try{ await typewriter(input, cfg.prompt, 'build-hero', true); }catch(e){ input.value=cfg.prompt; }
+        await sleep(700);
+        var done=new Promise(function(r){ state.onBuildComplete=r; setTimeout(r,25000); });
+        var send=document.getElementById('hero-send'); if(send) send.click();
+        await done; await sleep(3200);
+        var pub=document.querySelector("#build-right .dash-btn.primary[data-action='create-app']"); if(pub){ pub.click(); await sleep(3800); }
+        await sleep(1200);
+      }
+    }, 800); }
+    if(document.readyState==='complete') auto(); else window.addEventListener('load',auto);
+  }
+
   function go(){
     try{ if(typeof setView==='function'){ setView('build'); if(typeof showBuildMode==='function'){ try{ showBuildMode('home'); }catch(e){} } } else { var b=document.getElementById('tab-build'); if(b) b.click(); } }catch(e){ var b=document.getElementById('tab-build'); if(b) b.click(); }
     try{ var o=document.getElementById('tour-offer'); if(o) o.remove(); var ov=document.getElementById('tour-overlay'); if(ov) ov.remove(); }catch(e){}

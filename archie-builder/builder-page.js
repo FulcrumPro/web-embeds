@@ -165,6 +165,16 @@ document.addEventListener("DOMContentLoaded",function(){
   var out=document.getElementById('cycle'), caret=document.getElementById('caret');
   if(!out||!document.getElementById('guided')) return;
   var st=document.getElementById('appStatic'); if(st) st.parentNode.removeChild(st);
+  /* hero without a canvas (video/iframe module): only the typed team line cycles */
+  if(!document.getElementById('canvas')){
+    var WORDS=['production','sales','engineering','purchasing','quality','everyone'], wix=0;
+    function cyc(){ return new Promise(function(res){ var cur=out.textContent, target=WORDS[wix];
+      function del(){ if(cur.length){ cur=cur.slice(0,-1); out.textContent=cur; setTimeout(del,38+Math.floor(Math.random()*18)); } else { caret.classList.add('blink'); setTimeout(function(){ caret.classList.remove('blink'); typ(); },350); } }
+      function typ(){ if(cur.length<target.length){ cur=target.slice(0,cur.length+1); out.textContent=cur; setTimeout(typ,65+Math.floor(Math.random()*45)); } else { caret.classList.add('blink'); res(); } }
+      if(cur===target) res(); else del(); }); }
+    (async function(){ while(true){ await cyc(); await new Promise(function(r){ setTimeout(r,3400); }); wix=(wix+1)%WORDS.length; } })();
+    return;
+  }
   var noop={classList:{add:function(){},remove:function(){}},addEventListener:function(){},hidden:false};
   var promptBox=document.getElementById('promptBox'), sendBtn=document.getElementById('sendBtn')||noop, nudge=document.getElementById('nudge')||noop;
   var pageName=document.getElementById('pageName'), canvas=document.getElementById('canvas'), emptyState=document.getElementById('emptyState'), working=document.getElementById('working'), workingPill=document.getElementById('workingPill');
