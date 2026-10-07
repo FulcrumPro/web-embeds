@@ -13,6 +13,10 @@ document.addEventListener("DOMContentLoaded",function(){
   function line(txt,live){var ln=document.createElement('div');ln.className='ln '+(live?'live':'done');ln.innerHTML='<i></i><span>'+txt+'</span>';if(log) log.appendChild(ln);return ln;}
   function typeChars(el,text,ms){return new Promise(function(res){var k=0;el.textContent='';(function t(){if(k<text.length){k++;el.textContent=text.slice(0,k);setTimeout(t,ms||14);}else res();})();});}
   var pub=q('xfPub'), skel=q('xfSkel'), publish=q('xfPublish'), promptText=q('xfPromptText');
+  var who=q('xfWho'), whoAv=q('xfAv'), whoName=q('xfWhoName'), whoRole=q('xfWhoRole'), railAv=document.querySelector('#xf .fu-rail .fu-av'), phase=q('xfPhase');
+  function persona(p){ if(!who) return; who.classList.remove('build','use'); who.classList.add(p);
+    if(p==='build'){ whoAv.textContent='MK'; whoName.textContent='Mike Kowalski'; whoRole.textContent='Operations manager · building the app'; if(railAv) railAv.textContent='MK'; if(phase){ phase.textContent='1 · Mike builds it'; phase.className='xf-phase build'; } }
+    else { whoAv.textContent='JO'; whoName.textContent='Jen Okafor'; whoRole.textContent='Customer service · using the app'; if(railAv) railAv.textContent='JO'; if(phase){ phase.textContent='2 · Jen uses it'; phase.className='xf-phase use'; } } }
   var accepted=false, cycleId=0;
   function selectable(){return table.querySelectorAll('.xf-t:not(.hdr):not(.skip)').length;}
   function renderTable(){
@@ -40,6 +44,7 @@ document.addEventListener("DOMContentLoaded",function(){
     var id=++cycleId; accepted=false;
     if(log) log.innerHTML=''; count.textContent='0 of 7 read'; status.textContent='Drop the customer’s file to start. Nothing changes until you accept.'; status.classList.remove('ok');
     /* quick build: the request types, the app takes shape, it gets published to the Sales menu */
+    persona('build');
     if(pub){ pub.textContent='Draft'; pub.classList.remove('live'); }
     if(publish){ publish.hidden=false; publish.classList.remove('pulse','done'); publish.textContent='Publish app'; }
     if(skel) skel.classList.remove('off');
@@ -55,9 +60,11 @@ document.addEventListener("DOMContentLoaded",function(){
     await sleep(500); if(id!==cycleId) return;
     if(publish){ publish.classList.add('pulse'); await new Promise(function(res){ var done=false; function go(){ if(done) return; done=true; publish.removeEventListener('click',go); res(); } publish.addEventListener('click',go); setTimeout(go,1600); }); if(id!==cycleId) return; publish.classList.remove('pulse'); publish.classList.add('done'); publish.textContent='Published'; }
     if(pub){ pub.textContent='Published · Sales'; pub.classList.add('live'); }
-    status.textContent='Published to the Sales menu. Drop the customer’s file to use it.';
+    status.textContent='Published to the Sales menu.';
     await sleep(1400); if(id!==cycleId) return;
     if(publish) publish.hidden=true;
+    persona('use'); status.textContent='Jen opens it from the Sales menu and drops in the customer’s file.';
+    await sleep(1200); if(id!==cycleId) return;
     /* use the app */
     /* the CSR drags the customer's spreadsheet onto the page */
     await sleep(1000); if(id!==cycleId) return;
