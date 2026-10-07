@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Scheduled material, a Builder app</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{--ink:#1b1f3b;--slate:#3d414a;--grey:#5e6066;--line:#e2e2e6;--bg:#f0f1f3;--blue:#1d63ed;--blue-light:#e8effd;--green:#008455;--green-light:#d9ede6;--warn:#9a4a00;--warn-light:#ffeddd}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#f0f1f3;font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden}
+#fit{position:absolute;left:0;top:0;display:block;overflow:hidden}
+#stage{width:640px;height:400px;position:relative;background:var(--bg);transform-origin:top left;overflow:hidden;padding:14px 16px}
+.app{background:#fff;border:1px solid var(--line);border-radius:10px;height:100%;display:flex;flex-direction:column;overflow:hidden}
+.bar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.bar b{font-size:13px;font-weight:600}
+.bar small{color:var(--grey);font-size:11px}
+.pill{margin-left:auto;font-size:11px;color:var(--grey);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.filters{display:flex;gap:8px;padding:8px 14px;border-bottom:1px solid var(--line);font-size:11px;color:var(--slate)}
+.filters span{border:1px solid var(--line);border-radius:6px;padding:3px 8px;background:#fff}
+.filters span.on{background:var(--blue-light);color:var(--blue);border-color:transparent;font-weight:500}
+.body{flex:1;overflow:hidden;padding:6px 0 0}
+.grp{opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s}
+.grp.show{opacity:1;transform:none}
+.gh{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:7px 14px;background:#f7f8fa;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:11.5px}
+.gh b{font-weight:600}
+.gh small{color:var(--grey);margin-left:6px}
+.gh .cnt{color:var(--grey);font-size:11px}
+.stage{font-size:11px;font-weight:600;color:var(--blue);background:var(--blue-light);border-radius:6px;padding:3px 9px;cursor:pointer;transition:background .2s,color .2s}
+.stage.pulse{animation:pulse 1.2s ease-in-out infinite}
+.stage.done{background:var(--green-light);color:var(--green);cursor:default}
+.stage.done::before{content:"\2713  "}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(29,99,237,.35)}60%{box-shadow:0 0 0 7px rgba(29,99,237,0)}}
+.row{display:grid;grid-template-columns:58px 1fr 44px 70px 72px;gap:10px;padding:5px 14px;font-size:11px;color:var(--slate);border-bottom:1px solid #eef0f3;align-items:center}
+.row b{color:var(--ink);font-weight:600}
+.row .t{color:var(--grey)}
+.row .late{color:#b42318;font-weight:600}
+.row.staged .t{color:var(--green)}
+.hdr{display:grid;grid-template-columns:58px 1fr 44px 70px 72px;gap:10px;padding:4px 14px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--grey)}
+.skel{position:absolute;left:16px;right:16px;top:14px;bottom:14px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:10px;align-content:start;transition:opacity .3s}
+.skel div{height:12px;border-radius:6px;background:linear-gradient(90deg,#eaeaeb,#f4f4f5,#eaeaeb);background-size:200% 100%;animation:sh 1.2s linear infinite}
+.skel div:nth-child(1){width:40%;height:18px}.skel div:nth-child(2){width:60%}.skel div:nth-child(3){width:100%;height:60px}.skel div:nth-child(4){width:100%;height:60px}.skel div:nth-child(5){width:100%;height:40px}
+@keyframes sh{to{background-position:-200% 0}}
+.skel.off{opacity:0;pointer-events:none}
+.toast{position:absolute;left:50%;bottom:22px;transform:translate(-50%,8px);background:var(--ink);color:#fff;font-size:11.5px;border-radius:8px;padding:8px 12px;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast i{width:7px;height:7px;border-radius:50%;background:#3dc975}
+</style>
+</head>
+<body>
+<div id="fit"><div id="stage">
+  <div class="app">
+    <div class="bar"><div><b>Scheduled material</b><br><small>Jobs grouped by raw material and start time · next two shifts</small></div><div class="pill"><i></i>Live Fulcrum data</div></div>
+    <div class="filters"><span class="on">Tomorrow 6:00 AM</span><span>Turret 1</span><span>Turret 2</span><span>Press brake</span></div>
+    <div class="body" id="body">
+      <div class="hdr"><span>Job</span><span>Customer · part</span><span>Qty</span><span>Start</span><span></span></div>
+      <div class="grp" data-g="0">
+        <div class="gh"><div><b>0.125 5052-H32 sheet</b><small>48 × 120</small></div><span class="cnt">4 jobs · 9 sheets</span><span class="stage">Stage for night shift</span></div>
+        <div class="row"><b>J-5120</b><span>Crestline Aero · bracket, left</span><span>120</span><span class="t">6:00 AM</span><span></span></div>
+        <div class="row"><b>J-5124</b><span>Harbor Dynamics · housing</span><span>60</span><span class="t">6:00 AM</span><span></span></div>
+        <div class="row"><b>J-5131</b><span>Summit Fabrication · cover plate</span><span>200</span><span class="t">8:30 AM</span><span></span></div>
+        <div class="row"><b>J-5137</b><span>Northfield Machine · gusset</span><span>80</span><span class="t">10:15 AM</span><span></span></div>
+      </div>
+      <div class="grp" data-g="1">
+        <div class="gh"><div><b>0.060 CRS sheet</b><small>48 × 96</small></div><span class="cnt">3 jobs · 5 sheets</span><span class="stage">Stage for night shift</span></div>
+        <div class="row"><b>J-5118</b><span>Lakeshore Controls · panel door</span><span>40</span><span class="t">6:00 AM</span><span></span></div>
+        <div class="row"><b>J-5129</b><span>Prairie Tool · chute</span><span>25</span><span class="t">1:00 PM</span><span></span></div>
+        <div class="row"><b>J-5140</b><span>Crestline Aero · tray</span><span>150</span><span class="t">2:30 PM</span><span></span></div>
+      </div>
+      <div class="grp" data-g="2">
+        <div class="gh"><div><b>0.090 304 stainless</b><small>36 × 96</small></div><span class="cnt">2 jobs · 2 sheets</span><span class="stage">Stage for night shift</span></div>
+        <div class="row"><b>J-5133</b><span>Harbor Dynamics · splash guard</span><span>30</span><span class="t">3:00 PM</span><span></span></div>
+        <div class="row"><b>J-5142</b><span>Summit Fabrication · hopper lid</span><span>12</span><span class="late">Material due today</span><span></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="skel" id="skel"><div></div><div></div><div></div><div></div><div></div></div>
+  <div class="toast" id="toast"><i></i>Staged. Turret 1 is set for 6:00 AM.</div>
+</div></div>
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s)}, $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+  var run=0, timers=[];
+  function fit(){var w=window.innerWidth,h=window.innerHeight;var s=Math.min(w/640,h/400);$('#stage').style.transform='scale('+s+')';var f=$('#fit');f.style.width=(640*s)+'px';f.style.height=(400*s)+'px';f.style.left=Math.max(0,(w-640*s)/2)+'px';f.style.top=Math.max(0,(h-400*s)/2)+'px'}
+  window.addEventListener('resize',fit);fit();
+  function wait(ms){return new Promise(function(r){var t=setTimeout(r,ms);timers.push(t)})}
+  function clear(){timers.forEach(clearTimeout);timers=[]}
+  function clickOrWait(btn,ms){return new Promise(function(res){var done=false;function go(){if(done)return;done=true;btn.removeEventListener('click',go);res()}btn.addEventListener('click',go);var t=setTimeout(go,ms);timers.push(t)})}
+  async function cycle(){
+    var me=++run; clear();
+    $('#skel').classList.remove('off'); $('#toast').classList.remove('show');
+    $$('.grp').forEach(function(g){g.classList.remove('show');g.querySelectorAll('.row').forEach(function(r){r.classList.remove('staged')});var b=g.querySelector('.stage');b.className='stage';b.textContent='Stage for night shift'});
+    await wait(900); if(me!==run) return;
+    $('#skel').classList.add('off');
+    var groups=$$('.grp');
+    for(var i=0;i<groups.length;i++){ groups[i].classList.add('show'); await wait(380); if(me!==run) return; }
+    await wait(1400); if(me!==run) return;
+    for(var k=0;k<2;k++){
+      var g=groups[k], b=g.querySelector('.stage');
+      b.classList.add('pulse');
+      await clickOrWait(b,1900); if(me!==run) return;
+      b.classList.remove('pulse'); b.textContent='Staging…';
+      var rows=g.querySelectorAll('.row');
+      for(var r=0;r<rows.length;r++){ rows[r].classList.add('staged'); await wait(260); if(me!==run) return; }
+      b.classList.add('done'); b.textContent=k===0?'Staged 11:40 PM':'Staged 11:52 PM';
+      if(k===0){ $('#toast').classList.add('show'); await wait(1800); if(me!==run) return; $('#toast').classList.remove('show'); }
+      await wait(700); if(me!==run) return;
+    }
+    await wait(5200); if(me!==run) return;
+    cycle();
+  }
+  var started=false; function start(){if(started)return;started=true;cycle()}
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){if(es.some(function(e){return e.isIntersecting})){start();io.disconnect()}},{threshold:.2});io.observe($('#stage'))}else start();
+})();
+</script>
+</body>
+</html>
