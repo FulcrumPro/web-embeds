@@ -73,28 +73,26 @@ document.addEventListener("DOMContentLoaded",function(){
      log:['Reading quotes and sales orders from your Fulcrum','Grouping 1,284 quotes by customer and outcome','Laying out the board with a drill-in per customer'],
      done:'Lost quotes open', sum:'18 lost quotes listed for Northfield Machine. Top reason: lead time.', logDone:'Opened the 18 lost quotes with the reason logged on each one.',
      render:function(){
-       var rows=[['Crestline Aero',68,'214'],['Harbor Dynamics',54,'180'],['Summit Fabrication',47,'162'],['Lakeshore Controls',44,'97'],['Northfield Machine',41,'143']];
-       return '<div class="sa"><div class="sa-head"><div><b>Quote hit rate by customer</b><small>Last 12 months · 1,284 quotes</small></div><div class="sa-kpis"><div><b>48%</b><small>won</small></div><div><b>$2.1M</b><small>lost value</small></div></div></div>'
-       +'<div class="sa-body"><div class="sa-bars">'+rows.map(function(r,i){ return '<div class="sa-row" data-i="'+i+'"><span class="sa-name">'+r[0]+'</span><div class="sa-track"><i style="width:'+r[1]+'%"></i></div><b>'+r[1]+'%</b><small>'+r[2]+' quotes</small></div>'; }).join('')+'</div>'
-       +'<div class="sa-drill"><div class="sa-drill-h"><b>Lost quotes · Northfield Machine</b><small>18 · $412K</small></div><div class="sa-q"><b>Q-2291</b><span>$142K</span><em>lead time</em></div><div class="sa-q"><b>Q-2318</b><span>$88K</span><em>price</em></div><div class="sa-q"><b>Q-2340</b><span>$61K</span><em>lead time</em></div><div class="sa-q"><b>Q-2377</b><span>$47K</span><em>no response</em></div></div></div>'
+       var rows=[['Crestline Aero',68],['Harbor Dynamics',54],['Summit Fabrication',47],['Northfield Machine',41]];
+       var C=2*Math.PI*54;
+       return '<div class="sa"><div class="sa-ring"><svg viewBox="0 0 128 128" width="150" height="150"><circle cx="64" cy="64" r="54" fill="none" stroke="#e8effd" stroke-width="14"/><circle class="sa-arc" cx="64" cy="64" r="54" fill="none" stroke="#1d63ed" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+(C*(1-.48))+'" transform="rotate(-90 64 64)"/></svg><div class="sa-ring-t"><b>48<em>%</em></b><small>quotes won</small></div><div class="sa-ring-k"><span><b>612</b> won</span><span><b>$2.1M</b> lost</span></div></div>'
+       +'<div class="sa-bars">'+rows.map(function(r,i){ return '<div class="sa-row" data-i="'+i+'"><div class="sa-l"><span>'+r[0]+'</span><b>'+r[1]+'%</b></div><div class="sa-track"><i style="width:'+r[1]+'%"></i></div></div>'; }).join('')
+       +'<div class="sa-drill"><div class="sa-drill-h"><b>Northfield Machine</b><span>18 lost · $412K</span></div><div class="sa-tiles"><div><b>11</b><small>lead time</small></div><div><b>5</b><small>price</small></div><div><b>2</b><small>no reply</small></div></div></div></div>'
        +'<div class="app-foot"><span class="btn" role="button" tabindex="0">Open lost quotes</span></div></div>';
      },
      act:async function(app,sleep){
-       var row=app.querySelector('.sa-row[data-i="4"]'); row.classList.add('on'); await sleep(400);
-       app.querySelector('.sa').classList.add('drill'); await sleep(350);
-       var qs=app.querySelectorAll('.sa-q'); for(var i=0;i<qs.length;i++){ qs[i].classList.add('in'); await sleep(220); }
+       var row=app.querySelector('.sa-row[data-i="3"]'); row.classList.add('on'); await sleep(450);
+       app.querySelector('.sa').classList.add('drill'); await sleep(300);
+       var t=app.querySelectorAll('.sa-tiles div'); for(var i=0;i<t.length;i++){ t[i].classList.add('in'); await sleep(220); }
      }},
     {w:'engineering', page:'Setup sheets', prompt:'Give me a setup-sheet library: pick a job, show the routing, and the setup notes and offsets for each op.',
      log:['Reading routings, operations and attachments','Matching setup notes and offsets to each op','Building the job picker and sheet view'],
      done:'Ready to print', sum:'Traveler for job 4912 is ready to print: 4 pages, photos included.', logDone:'Traveler for job 4912 is ready to print: 4 pages with the setup photos.',
      render:function(){
-       return '<div class="en"><div class="en-list"><div class="en-search">Find a job…</div><div class="en-job on"><b>4912</b><span>12345678-BRKT · Rev C</span></div><div class="en-job"><b>4907</b><span>22110-HSG · Rev A</span></div><div class="en-job"><b>4899</b><span>30441-PLT · Rev B</span></div><div class="en-job"><b>4880</b><span>18870-TRAY · Rev D</span></div></div>'
-       +'<div class="en-sheet"><div class="en-title"><b>Setup sheet · Job 4912</b><small>12345678-BRKT · Rev C · 5 ops · 3 fixtures</small></div>'
-       +'<div class="en-op"><div class="en-op-h"><b>Op 10</b> Saw cut, 1.25 bar</div><div class="en-op-b"><div class="en-photo"></div><div class="en-notes"><span>Stop at 14.50, deburr both ends.</span><table><tr><td>Length</td><td>14.500</td></tr><tr><td>Qty per bar</td><td>8</td></tr></table></div></div></div>'
-       +'<div class="en-op"><div class="en-op-h"><b>Op 20</b> Mill, fixture F-114</div><div class="en-op-b"><div class="en-photo p2"></div><div class="en-notes"><span>Locate on dowels, clamp from the back.</span><table><tr><td>G54 X / Y</td><td>−2.1250 / 0.7500</td></tr><tr><td>Z</td><td>−0.0625</td></tr></table></div></div></div>'
-       +'<div class="en-op"><div class="en-op-h"><b>Op 30</b> Deburr</div><div class="en-op-b"><div class="en-photo p3"></div><div class="en-notes"><span>Break all edges .010 max. Check the slot.</span></div></div></div>'
-       +'<div class="en-pages"><div class="en-page"></div><div class="en-page"></div><div class="en-page"></div><div class="en-page"></div><span>4 pages</span></div>'
-       +'</div><div class="app-foot"><span class="btn" role="button" tabindex="0">Print traveler</span></div></div>';
+       return '<div class="en"><div class="en-photo"><svg viewBox="0 0 200 140" aria-hidden="true"><path d="M30 20h100l40 30v70H30z" fill="#c9cfdb" stroke="#8a93a8" stroke-width="2"/><circle cx="60" cy="50" r="9" fill="#eef1f7" stroke="#8a93a8" stroke-width="2"/><circle cx="140" cy="95" r="9" fill="#eef1f7" stroke="#8a93a8" stroke-width="2"/><rect x="75" y="80" width="50" height="14" rx="7" fill="#eef1f7" stroke="#8a93a8" stroke-width="2"/></svg><div class="en-tag"><b>Job 4912</b><span>12345678-BRKT · Rev C</span></div><div class="en-thumbs"><i></i><i></i><i></i><i></i><b>7 photos</b></div></div>'
+       +'<div class="en-ops"><div class="en-op"><b>10</b><div><strong>Saw cut</strong><span>1.25 bar · stop at 14.500</span></div></div><div class="en-op"><b>20</b><div><strong>Mill · fixture F-114</strong><span>G54 X −2.1250 · Y 0.7500 · Z −0.0625</span></div></div><div class="en-op"><b>30</b><div><strong>Deburr</strong><span>Break edges .010 max</span></div></div><div class="en-op"><b>40</b><div><strong>Anodize</strong><span>Outside · Lakeshore Coatings</span></div></div>'
+       +'<div class="en-pages"><div class="en-page"></div><div class="en-page"></div><div class="en-page"></div><div class="en-page"></div><span>4 pages</span></div></div>'
+       +'<div class="app-foot"><span class="btn" role="button" tabindex="0">Print traveler</span></div></div>';
      },
      act:async function(app,sleep){
        app.querySelector('.en').classList.add('print'); var pg=app.querySelectorAll('.en-page'); for(var i=0;i<pg.length;i++){ pg[i].classList.add('in'); await sleep(260); }
@@ -104,61 +102,63 @@ document.addEventListener("DOMContentLoaded",function(){
      log:['Reading open purchase orders and promise dates','Flagging 6 lines past promise','Adding a flag-and-note action to each row'],
      done:'Late POs flagged', sum:'3 late POs flagged, with a note on each for the buyer.', logDone:'Flagged the 3 late purchase orders in Fulcrum and added a note to each for the buyer.',
      render:function(){
-       var rows=[['Midwest Steel Supply','PO 7781',10,62,true,'4 days late'],['Allied Fasteners','PO 7790',22,58,true,'2 days late'],['Lakeshore Metals','PO 7765',30,55,true,'1 day late'],['Prairie Tool Supply','PO 7802',34,76,false,'due Fri'],['Northfield Castings','PO 7810',40,88,false,'due next week']];
-       return '<div class="po"><div class="po-head"><div><b>Open POs, late by vendor</b><small>22 open · <em class="po-late-n">6</em> past promise</small></div><div class="po-legend"><span><i class="ok"></i>on time</span><span><i class="no"></i>late</span><span class="today">today</span></div></div>'
-       +'<div class="po-rows">'+rows.map(function(r){ return '<div class="po-row'+(r[4]?' late':'')+'"><div class="po-v"><b>'+r[0]+'</b><small>'+r[1]+'</small></div><div class="po-tl"><i class="po-bar" style="left:'+r[2]+'%;width:'+(r[3]-r[2])+'%"></i><span class="po-lbl">'+r[5]+'</span></div><span class="po-flag">'+(r[4]?'Flag for buyer':'')+'</span></div>'; }).join('')+'</div>'
+       var days=['Mon','Tue','Wed','Thu','Fri','Mon','Tue','Wed','Thu','Fri'];
+       var rows=[['Midwest Steel','PO 7781',0,46,true,'4 d late'],['Allied Fasteners','PO 7790',10,41,true,'2 d late'],['Lakeshore Metals','PO 7765',18,38,true,'1 d late'],['Prairie Tool','PO 7802',22,62,false,'Fri'],['Northfield Castings','PO 7810',30,90,false,'next Thu']];
+       return '<div class="po"><div class="po-cal"><span class="po-cal-v"></span>'+days.map(function(d,i){ return '<span class="'+(i===3?'today':'')+'">'+d+'</span>'; }).join('')+'</div>'
+       +'<div class="po-rows">'+rows.map(function(r){ return '<div class="po-row'+(r[4]?' late':'')+'"><div class="po-v"><b>'+r[0]+'</b><small>'+r[1]+'</small></div><div class="po-tl"><i class="po-bar" style="left:'+r[2]+'%;width:'+(r[3]-r[2])+'%"><span>'+r[5]+'</span></i></div></div>'; }).join('')+'</div>'
+       +'<div class="po-foot"><span class="po-n"><b>3</b> late</span><span class="po-ok"><b>2</b> on time</span></div>'
        +'<div class="app-foot"><span class="btn" role="button" tabindex="0">Flag late POs</span></div></div>';
      },
      act:async function(app,sleep){
-       var rows=app.querySelectorAll('.po-row.late'); for(var i=0;i<rows.length;i++){ rows[i].classList.add('flagged'); rows[i].querySelector('.po-flag').textContent='Flagged · note added'; await sleep(380); }
-       app.querySelector('.po-late-n').textContent='3';
+       var rows=app.querySelectorAll('.po-row.late'); for(var i=0;i<rows.length;i++){ rows[i].classList.add('flagged'); rows[i].querySelector('.po-bar span').textContent='Flagged'; await sleep(420); }
+       app.querySelector('.po-n').innerHTML='<b>0</b> late'; app.querySelector('.po-foot').classList.add('ok');
      }},
     {w:'quality', page:'Job inspection plan', prompt:'Build us a job inspection plan our QC team fills out. Type in a job number, pull the part details, draft the inspection plan, and print it.',
      log:['Reading the job, part and drawing details','Drafting characteristics from the routing and specs','Adding measure fields and a print layout'],
      done:'NCR opened, ready to print', sum:'NCR opened for hole Ø.375. Plan attached to job 4856.', logDone:'Opened an NCR for the hole size, attached the plan to job 4856, and laid out the print view.',
      render:function(){
-       var ch=[['Dimension','1.250','± .005'],['Thread','1/4-20 UNC','go / no-go'],['Surface finish','63 Ra','max'],['Hole Ø','.375','± .002']];
-       return '<div class="qc"><div class="qc-form"><div class="qc-f"><small>Job</small><b>4856</b></div><div class="qc-f"><small>Part</small><b>12345678-BRKT</b></div><div class="qc-f"><small>Inspector</small><b class="qc-insp">—</b></div><div class="qc-f"><small>Status</small><b class="qc-status">Draft</b></div></div>'
-       +'<div class="qc-rows"><div class="qc-row h"><span>Characteristic</span><span>Nominal</span><span>Tolerance</span><span>Measured</span><span>Result</span></div>'
-       +ch.map(function(c){ return '<div class="qc-row"><span>'+c[0]+'</span><span>'+c[1]+'</span><span>'+c[2]+'</span><span class="qc-in"><i></i></span><span class="qc-res"></span></div>'; }).join('')+'</div>'
-       +'<div class="qc-ncr"><b>NCR-0142 opened</b><span>Hole Ø .375 measured .3774, out of tolerance. Attached to job 4856.</span></div>'
+       var ch=[['1','1.250','± .005'],['2','1/4-20','thread'],['3','63 Ra','finish'],['4','Ø .375','± .002']];
+       return '<div class="qc"><div class="qc-draw"><svg viewBox="0 0 220 160" aria-hidden="true"><rect x="30" y="30" width="160" height="100" rx="6" fill="none" stroke="#292932" stroke-width="2"/><circle cx="70" cy="80" r="12" fill="none" stroke="#292932" stroke-width="2"/><circle cx="150" cy="80" r="12" fill="none" stroke="#292932" stroke-width="2"/><rect x="95" y="60" width="30" height="40" rx="4" fill="none" stroke="#292932" stroke-width="2"/><line x1="30" y1="18" x2="190" y2="18" stroke="#8a93a8" stroke-width="1.5"/><line x1="30" y1="12" x2="30" y2="24" stroke="#8a93a8" stroke-width="1.5"/><line x1="190" y1="12" x2="190" y2="24" stroke="#8a93a8" stroke-width="1.5"/><text x="110" y="12" font-size="9" text-anchor="middle" fill="#3d414a" font-family="Inter,sans-serif">1.250</text>'
+       +'<g class="qc-b"><circle cx="18" cy="60" r="10" fill="#1d63ed"/><text x="18" y="64" font-size="10" text-anchor="middle" fill="#fff" font-weight="700" font-family="Inter,sans-serif">1</text></g><g class="qc-b"><circle cx="110" cy="146" r="10" fill="#1d63ed"/><text x="110" y="150" font-size="10" text-anchor="middle" fill="#fff" font-weight="700" font-family="Inter,sans-serif">2</text></g><g class="qc-b"><circle cx="204" cy="60" r="10" fill="#1d63ed"/><text x="204" y="64" font-size="10" text-anchor="middle" fill="#fff" font-weight="700" font-family="Inter,sans-serif">3</text></g><g class="qc-b" id="qcB4"><circle cx="150" cy="40" r="10" fill="#1d63ed"/><text x="150" y="44" font-size="10" text-anchor="middle" fill="#fff" font-weight="700" font-family="Inter,sans-serif">4</text></g></svg><div class="qc-tag"><b>Job 4856</b><span>12345678-BRKT</span></div></div>'
+       +'<div class="qc-tiles">'+ch.map(function(c){ return '<div class="qc-t"><i>'+c[0]+'</i><small>'+c[1]+' <em>'+c[2]+'</em></small><b class="qc-val">—</b><span class="qc-res"></span></div>'; }).join('')
+       +'<div class="qc-ncr"><b>NCR-0142 opened</b><span>Hole Ø .375 measured .3774. Attached to job 4856.</span></div></div>'
        +'<div class="app-foot"><span class="btn" role="button" tabindex="0">Print / PDF</span></div></div>';
      },
      act:async function(app,sleep){
-       var vals=[['1.2512','ok'],['pass','ok'],['58 Ra','ok'],['.3774','no']]; var ins=app.querySelectorAll('.qc-in i'), res=app.querySelectorAll('.qc-res');
-       app.querySelector('.qc-insp').textContent='R. Chen'; app.querySelector('.qc-status').textContent='In progress';
-       for(var i=0;i<vals.length;i++){ var t=vals[i][0]; for(var k=1;k<=t.length;k++){ ins[i].textContent=t.slice(0,k); await sleep(55); } res[i].className='qc-res '+vals[i][1]; res[i].textContent=vals[i][1]==='ok'?'Pass':'Out of spec'; await sleep(260); }
-       await sleep(300); app.querySelector('.qc-ncr').classList.add('in'); app.querySelector('.qc-status').textContent='1 flagged';
+       var vals=[['1.2512','ok'],['pass','ok'],['58 Ra','ok'],['.3774','no']]; var tiles=app.querySelectorAll('.qc-t');
+       for(var i=0;i<vals.length;i++){ var t=vals[i][0], v=tiles[i].querySelector('.qc-val'); for(var k=1;k<=t.length;k++){ v.textContent=t.slice(0,k); await sleep(55); } tiles[i].classList.add(vals[i][1]); tiles[i].querySelector('.qc-res').textContent=vals[i][1]==='ok'?'Pass':'Out of spec'; await sleep(260); }
+       var b4=app.querySelector('#qcB4 circle'); if(b4) b4.setAttribute('fill','#ff3d00');
+       await sleep(300); app.querySelector('.qc-ncr').classList.add('in');
      }},
     {w:'production', page:'Behind schedule', prompt:"Show me every job behind schedule, grouped by department, with the operation it is sitting on, and a reason for why it’s late. Suggest an action to take to fix it.",
      log:['Reading jobs, operations and due dates','Found 14 jobs behind, across 3 departments','Adding a move-to-next-op button on each row'],
      done:'Due dates set', sum:'4 due dates written to Fulcrum and each job moved to its next operation. 3 customers flagged for a call.', logDone:'Wrote 4 new due dates to Fulcrum and moved each job to its next operation. The 3 affected customers are flagged for a call.',
      render:function(){
-       var cols=[['Mill',7,[['4820','Op 20','3 d late','waiting on material','Expedite PO 2231','Oct 17'],['4833','Op 30','2 d late','machine down','Move to Haas 2','Oct 17']]],['Weld',5,[['4790','Op 10','2 d late','waiting on inspection','Call inspection','Oct 16']]],['Finish',2,[['4802','Op 40','1 d late','outside service','Chase Lakeshore Coatings','Oct 15']]]];
-       return '<div class="pr"><div class="pr-head"><div><b>Behind schedule by department</b><small><em class="pr-n">14</em> jobs behind · 3 departments</small></div></div><div class="pr-cols">'
-       +cols.map(function(c){ return '<div class="pr-col"><div class="pr-col-h"><b>'+c[0]+'</b><span class="pr-cnt">'+c[1]+'</span></div>'+c[2].map(function(j){ return '<div class="pr-card" data-new="'+j[5]+'"><div class="pr-card-t"><b>Job '+j[0]+'</b><span>'+j[1]+'</span></div><div class="pr-why"><em>'+j[2]+'</em> · '+j[3]+'</div><div class="pr-act">'+j[4]+'</div><div class="pr-due">Due <s></s><b></b></div></div>'; }).join('')+'</div>'; }).join('')
+       var cols=[['Mill','mill',7,[['4820','3d','waiting on material','Oct 17'],['4833','2d','machine down','Oct 17']]],['Weld','weld',5,[['4790','2d','waiting on inspection','Oct 16']]],['Finish','fin',2,[['4802','1d','outside service','Oct 15']]]];
+       return '<div class="pr"><div class="pr-top"><b><em class="pr-n">14</em> jobs behind</b><span>3 departments</span></div><div class="pr-cols">'
+       +cols.map(function(c){ return '<div class="pr-col '+c[1]+'"><div class="pr-col-h"><b>'+c[0]+'</b><span class="pr-cnt">'+c[2]+'</span></div>'+c[3].map(function(j){ return '<div class="pr-card" data-new="'+j[3]+'"><i class="pr-late">'+j[1]+'</i><div><b>Job '+j[0]+'</b><span>'+j[2]+'</span></div><em class="pr-new"></em></div>'; }).join('')+'</div>'; }).join('')
        +'</div><div class="app-foot"><span class="btn" role="button" tabindex="0">Set new due dates</span></div></div>';
      },
      act:async function(app,sleep){
-       var cards=app.querySelectorAll('.pr-card'); var olds=['Oct 14','Oct 15','Oct 15','Oct 13'];
-       for(var i=0;i<cards.length;i++){ var c=cards[i]; c.querySelector('.pr-due s').textContent=olds[i]; c.querySelector('.pr-due b').textContent=c.getAttribute('data-new'); c.classList.add('set'); await sleep(420); }
-       var n=app.querySelector('.pr-n'); n.textContent='10'; var cnts=app.querySelectorAll('.pr-cnt'); cnts[0].textContent='5'; cnts[1].textContent='4'; cnts[2].textContent='1';
+       var cards=app.querySelectorAll('.pr-card');
+       for(var i=0;i<cards.length;i++){ var c=cards[i]; c.querySelector('.pr-new').textContent='Due '+c.getAttribute('data-new'); c.classList.add('set'); await sleep(450); }
+       app.querySelector('.pr-n').textContent='10'; var cnts=app.querySelectorAll('.pr-cnt'); cnts[0].textContent='5'; cnts[1].textContent='4'; cnts[2].textContent='1';
      }},
     {w:'everyone', page:'Shop scoreboard', prompt:'Make a shop scoreboard for the TV on the floor: jobs shipped today, on-time this week, and who is clocked in where.',
      log:['Reading shipments, time clock and job status','Calculating on-time for the week','Laying out big numbers for a TV'],
      done:'Full screen', sum:'Live on the floor TV.', logDone:'Live on the floor TV, on live Fulcrum data.',
      render:function(){
-       var m=[['Mill 3','Job 4820 · Op 20','T. Alvarez'],['Laser 1','Job 4871 · Op 10','R. Chen'],['Weld A','Job 4790 · Op 30','M. Dubois'],['Finish','Job 4802 · Op 40','J. Okafor'],['Brake 2','Job 4866 · Op 20','L. Park']];
-       return '<div class="tv"><div class="tv-top"><b>Shop scoreboard</b><span class="tv-clock"><i></i>Live · 10:41</span></div><div class="tv-big"><div><small>Shipped today</small><b class="tv-ship">11</b></div><div><small>On time this week</small><b>94<em>%</em></b></div><div><small>Open jobs</small><b>128</b></div><div><small>Clocked in</small><b class="tv-in">23</b></div></div>'
-       +'<div class="tv-now"><small>Now running</small><div class="tv-m">'+m.map(function(x){ return '<div class="tv-mc"><i></i><b>'+x[0]+'</b><span>'+x[1]+'</span><em>'+x[2]+'</em></div>'; }).join('')+'</div></div>'
+       var m=[['Mill 3','T. Alvarez'],['Laser 1','R. Chen'],['Weld A','M. Dubois'],['Finish','J. Okafor'],['Brake 2','L. Park'],['Turret 1','—']];
+       var spark=[70,82,88,91,96,94];
+       return '<div class="tv"><div class="tv-top"><b>Shop scoreboard</b><span class="tv-clock"><i></i>Live · 10:41</span></div><div class="tv-big"><div class="hi"><small>Shipped today</small><b class="tv-ship">11</b></div><div><small>On time this week</small><b>94<em>%</em></b><div class="tv-spark">'+spark.map(function(v){ return '<i style="height:'+v+'%"></i>'; }).join('')+'</div></div><div><small>Open jobs</small><b>128</b></div><div><small>Clocked in</small><b class="tv-in">23</b></div></div>'
+       +'<div class="tv-m">'+m.map(function(x,i){ return '<div class="tv-mc'+(i===5?' idle':'')+'"><i></i><b>'+x[0]+'</b><em>'+x[1]+'</em></div>'; }).join('')+'</div>'
        +'<div class="app-foot"><span class="btn" role="button" tabindex="0">Full screen</span></div></div>';
      },
      act:async function(app,sleep){
-       app.querySelector('.tv').classList.add('full'); await sleep(500);
-       app.querySelector('.tv-clock').innerHTML='<i></i>Live · 10:42'; await sleep(500);
-       app.querySelector('.tv-ship').textContent='12'; app.querySelector('.tv-ship').classList.add('tick'); await sleep(600);
-       var mc=app.querySelectorAll('.tv-mc'); mc[1].querySelector('span').textContent='Job 4874 · Op 10'; mc[1].classList.add('swap'); await sleep(500);
-       app.querySelector('.tv-in').textContent='24'; app.querySelector('.tv-in').classList.add('tick');
+       await sleep(400); app.querySelector('.tv-clock').innerHTML='<i></i>Live · 10:42'; await sleep(500);
+       var sh=app.querySelector('.tv-ship'); sh.textContent='12'; sh.classList.add('tick'); await sleep(600);
+       var mc=app.querySelectorAll('.tv-mc'); mc[5].classList.remove('idle'); mc[5].querySelector('em').textContent='S. Patel'; await sleep(500);
+       var ci=app.querySelector('.tv-in'); ci.textContent='24'; ci.classList.add('tick');
      }}
   ];
   var TYPE_MS=65, DELETE_MS=38, JITTER=45, GAP_MS=350;
