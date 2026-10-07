@@ -13,10 +13,11 @@ document.addEventListener("DOMContentLoaded",function(){
   function line(txt,live){var ln=document.createElement('div');ln.className='ln '+(live?'live':'done');ln.innerHTML='<i></i><span>'+txt+'</span>';if(log) log.appendChild(ln);return ln;}
   function typeChars(el,text,ms){return new Promise(function(res){var k=0;el.textContent='';(function t(){if(k<text.length){k++;el.textContent=text.slice(0,k);setTimeout(t,ms||14);}else res();})();});}
   var pub=q('xfPub'), skel=q('xfSkel'), publish=q('xfPublish'), promptText=q('xfPromptText');
-  var who=q('xfWho'), whoAv=q('xfAv'), whoName=q('xfWhoName'), whoRole=q('xfWhoRole'), railAv=document.querySelector('#xf .fu-rail .fu-av'), phase=q('xfPhase');
+  var who=q('xfWho'), whoAv=q('xfAv'), whoName=q('xfWhoName'), whoRole=q('xfWhoRole'), railAv=document.querySelector('#xf .fu-nav .fu-av i'), navName=document.querySelector('#xf .fu-nav .fu-av span'), navArchie=q('xfNavArchie'), navArchieSub=q('xfNavArchieSub'), navSales=q('xfNavSales'), navSalesSub=q('xfNavSalesSub'), phase=q('xfPhase');
   function persona(p){ if(!who) return; who.classList.remove('build','use'); who.classList.add(p);
-    if(p==='build'){ whoAv.textContent='MK'; whoName.textContent='Mike Kowalski'; whoRole.textContent='Operations manager · building the app'; if(railAv) railAv.textContent='MK'; if(phase){ phase.textContent='1 · Mike builds it'; phase.className='xf-phase build'; } }
-    else { whoAv.textContent='JO'; whoName.textContent='Jen Okafor'; whoRole.textContent='Customer service · using the app'; if(railAv) railAv.textContent='JO'; if(phase){ phase.textContent='2 · Jen uses it'; phase.className='xf-phase use'; } } }
+    if(p==='build'){ whoAv.textContent='MK'; whoName.textContent='Mike Kowalski'; whoRole.textContent='Operations manager · building the app'; if(railAv) railAv.textContent='MK'; if(navName) navName.textContent='M. Kowalski'; nav(true); if(phase){ phase.textContent='1 · Mike builds it'; phase.className='xf-phase build'; } }
+    else { whoAv.textContent='JO'; whoName.textContent='Jen Okafor'; whoRole.textContent='Customer service · using the app'; if(railAv) railAv.textContent='JO'; if(navName) navName.textContent='J. Okafor'; nav(false); if(phase){ phase.textContent='2 · Jen uses it'; phase.className='xf-phase use'; } } }
+  function nav(build){ if(!navArchie||!navSales) return; navArchie.className='fu-item'+(build?' on open':''); navArchieSub.hidden=!build; navSales.className='fu-item'+(build?'':' on open'); navSalesSub.hidden=build; }
   var accepted=false, cycleId=0;
   function selectable(){return table.querySelectorAll('.xf-t:not(.hdr):not(.skip)').length;}
   function renderTable(){
