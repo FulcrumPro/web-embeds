@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded",function(){
     {rows:[[0,'page 1'],[1,'page 2'],[2,'page 3'],[3,'vendor spec attached']], sum:'Traveler ready to print: 4 pages, photos included.', done:'Ready to print', log:'Traveler for job 4912 is ready to print: 4 pages with the setup photos.'},
     {rows:[[0,'Flagged · note added'],[1,'Flagged · note added'],[2,'Flagged · note added']], sum:'3 late POs flagged, with a note on each for the buyer.', done:'Late POs flagged', log:'Flagged the 3 late purchase orders in Fulcrum and added a note to each for the buyer.'},
     {rows:[[0,'1.2512'],[1,'pass'],[2,'58 Ra'],[3,'.3774','warn']], mini:[[1,'5 / 5'],[2,'R. Chen'],[3,'1 flagged']], sum:'NCR opened for hole Ø.375. Plan attached to job 4856.', done:'NCR opened, ready to print', log:'Opened an NCR for the hole size, attached the plan to job 4856, and laid out the print view.'},
-    {rows:[[0,'Oct 14 → Oct 17'],[1,'Oct 15 → Oct 17'],[2,'Oct 15 → Oct 16'],[3,'Oct 13 → Oct 15']], mini:[[0,'0'],[1,'0'],[2,'0'],[3,'0']], sum:'4 due dates written to Fulcrum and each job moved to its next operation. 3 customers flagged for a call.', done:'Due dates set', log:'Wrote 4 new due dates to Fulcrum and moved each job to its next operation. The 3 affected customers are flagged for a call.'},
+    {rows:[[0,'Oct 14 → Oct 17'],[1,'Oct 15 → Oct 17'],[2,'Oct 15 → Oct 16'],[3,'Oct 13 → Oct 15']], mini:[[0,'10'],[1,'5'],[2,'4'],[3,'1']], sum:'4 due dates written to Fulcrum and each job moved to its next operation. 3 customers flagged for a call.', done:'Due dates set', log:'Wrote 4 new due dates to Fulcrum and moved each job to its next operation. The 3 affected customers are flagged for a call.'},
     {mini:[[0,'12'],[3,'24']], rows:[[1,'R. Chen · Op 10 done'],[0,'T. Alvarez']], sum:'Live on the floor TV.', done:'Full screen', log:'Live on the floor TV, on live Fulcrum data.'}
   ];
   function rightFor(s,r){ if(r[2]) return '<div class="bar" aria-hidden="true"><i style="width:'+r[2]+'%"></i></div>'; var k=s.app.vk||'text'; if(k==='late'&&!/late/.test(r[1])) k='text'; return '<span class="val k-'+k+'">'+r[1]+'</span>'; }
@@ -161,6 +161,8 @@ document.addEventListener("DOMContentLoaded",function(){
   async function runFor(i, fromUser){
     resetApp(i);
     if(busy) return; markChip(i); wi=i;
+    /* clear the canvas before the next request types, so the old app never sits behind a new prompt */
+    if(!fromUser){ hideApp(); stepsLog.innerHTML=''; emptyState.classList.remove('hide'); pageName.textContent='New build'; }
     if(!fromUser){ await setWord(i); } else { out.textContent=STATES[i].w; caret.classList.add('blink'); }
     await typeInto(promptBox, STATES[i].prompt);
     sendBtn.classList.add('pulse'); nudge.classList.add('show');

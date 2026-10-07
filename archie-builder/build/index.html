@@ -10,7 +10,7 @@
 <style>
 :root{--ink:#1b1f3b;--slate:#3d414a;--grey:#7f7f84;--line:#e2e2e6;--bg:#f0f1f3;--blue:#1d63ed;--blue-light:#e8effd;--green:#008455;--green-light:#d9ede6;--warn:#ff8a1d;--warn-light:#ffeddd;--rail:#15161c}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;background:transparent;font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden}
+html,body{margin:0;height:100%;background:#f0f1f3;font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden}
 #fit{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:center}
 #stage{width:770px;height:560px;position:relative;background:#fff;transform-origin:top left;overflow:hidden;display:grid;grid-template-columns:48px 1fr;grid-template-rows:52px 1fr}
 /* rail */
@@ -59,8 +59,8 @@ html,body{margin:0;height:100%;background:transparent;font-family:Inter,system-u
 .steps{background:#fff;border-right:1px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
 .you{background:var(--blue-light);border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.45;color:var(--ink)}
 .log{display:grid;gap:9px;font-size:12px;color:var(--slate)}
-.ln{display:flex;gap:8px;align-items:flex-start;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s}
-.ln.show{opacity:1;transform:none}
+.ln{display:flex;gap:8px;align-items:flex-start}
+.ln span{display:block;font:400 12px/1.45 Inter,system-ui,sans-serif;color:#3d414a}
 .ln i{flex:0 0 14px;width:14px;height:14px;border-radius:50%;border:2px solid #cfd3da;margin-top:1px;position:relative}
 .ln.live i{border-color:var(--blue);border-top-color:transparent;animation:spin .8s linear infinite}
 .ln.done i{border-color:var(--green);background:var(--green)}
@@ -225,7 +225,7 @@ html,body{margin:0;height:100%;background:transparent;font-family:Inter,system-u
   var PROMPT="Show me every job behind schedule, grouped by department, with the operation it is sitting on, and a reason for why it’s late. Suggest an action to take to fix it.";
   var LINES=["Reading jobs, operations and due dates","Found 14 jobs behind, across 3 departments","Adding a reason and a suggested fix per job","Laying out the page"];
   var run=0, timers=[];
-  function fit(){var w=window.innerWidth,h=window.innerHeight;var s=Math.min(w/770,h/560);$('#stage').style.transform='scale('+s+')';$('#fit').style.width=(770*s)+'px';$('#fit').style.height=(560*s)+'px';$('#fit').style.margin='0 auto'}
+  function fit(){var w=window.innerWidth,h=window.innerHeight;var s=Math.min(w/770,h/560);$('#stage').style.transform='scale('+s+')';var f=$('#fit');f.style.width=(770*s)+'px';f.style.height=(560*s)+'px';f.style.left=Math.max(0,(w-770*s)/2)+'px';f.style.top=Math.max(0,(h-560*s)/2)+'px';f.style.right='auto';f.style.bottom='auto';f.style.margin='0'}
   window.addEventListener('resize',fit);fit();
   function wait(ms){return new Promise(function(r){var t=setTimeout(r,ms);timers.push(t)})}
   function clear(){timers.forEach(clearTimeout);timers=[]}
