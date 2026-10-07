@@ -10,7 +10,9 @@ document.addEventListener("DOMContentLoaded",function(){
   function rand(n){return Math.floor(Math.random()*n);}
   /* rows come from the file, so they land whole rather than being typed */
   function typeText(el,text){return new Promise(function(res){el.textContent=text;el.style.opacity='0';el.style.transition='opacity .25s';requestAnimationFrame(function(){el.style.opacity='1';});setTimeout(res,120);});}
-  function line(txt,live){var ln=document.createElement('div');ln.className='ln '+(live?'live':'done');ln.innerHTML='<i></i><span>'+txt+'</span>';log.appendChild(ln);return ln;}
+  function line(txt,live){var ln=document.createElement('div');ln.className='ln '+(live?'live':'done');ln.innerHTML='<i></i><span>'+txt+'</span>';if(log) log.appendChild(ln);return ln;}
+  function typeChars(el,text,ms){return new Promise(function(res){var k=0;el.textContent='';(function t(){if(k<text.length){k++;el.textContent=text.slice(0,k);setTimeout(t,ms||14);}else res();})();});}
+  var pub=q('xfPub'), skel=q('xfSkel'), publish=q('xfPublish'), promptText=q('xfPromptText');
   var accepted=false, cycleId=0;
   function selectable(){return table.querySelectorAll('.xf-t:not(.hdr):not(.skip)').length;}
   function renderTable(){
@@ -36,12 +38,27 @@ document.addEventListener("DOMContentLoaded",function(){
   }
   async function cycle(){
     var id=++cycleId; accepted=false;
-    log.innerHTML=''; count.textContent='0 of 7 read'; status.textContent='Drop the customer’s file to start. Nothing changes until you accept.'; status.classList.remove('ok');
+    if(log) log.innerHTML=''; count.textContent='0 of 7 read'; status.textContent='Drop the customer’s file to start. Nothing changes until you accept.'; status.classList.remove('ok');
+    /* quick build: the request types, the app takes shape, it gets published to the Sales menu */
+    if(pub){ pub.textContent='Draft'; pub.classList.remove('live'); }
+    if(publish){ publish.hidden=false; publish.classList.remove('pulse','done'); publish.textContent='Publish app'; }
+    if(skel) skel.classList.remove('off');
+    if(promptText){ promptText.textContent=''; }
+    if(file){ file.classList.remove('in','read'); } if(zone){ zone.classList.remove('hot'); zone.textContent='Drop the customer’s spreadsheet here'; }
     if(headMeta) headMeta.textContent='Sales order 48812 · 7 lines';
     accept.disabled=true; accept.classList.remove('pulse','done'); accept.textContent='Update due dates';
     platform.classList.remove('live'); [].forEach.call(platform.querySelectorAll('.xf-plat'),function(p){p.classList.remove('on');});
-    if(file){ file.classList.remove('in','read'); } if(zone){ zone.classList.remove('hot'); zone.textContent='Drop the customer’s spreadsheet here'; }
     var trows=renderTable();
+    if(promptText){ await typeChars(promptText,'Make a page where we drop in a customer’s spreadsheet of requested dates, match each line to its job, see the job’s status, and update the due dates on the lines we accept.',12); if(id!==cycleId) return; }
+    await sleep(1500); if(id!==cycleId) return;
+    if(skel) skel.classList.add('off');
+    await sleep(500); if(id!==cycleId) return;
+    if(publish){ publish.classList.add('pulse'); await new Promise(function(res){ var done=false; function go(){ if(done) return; done=true; publish.removeEventListener('click',go); res(); } publish.addEventListener('click',go); setTimeout(go,1600); }); if(id!==cycleId) return; publish.classList.remove('pulse'); publish.classList.add('done'); publish.textContent='Published'; }
+    if(pub){ pub.textContent='Published · Sales'; pub.classList.add('live'); }
+    status.textContent='Published to the Sales menu. Drop the customer’s file to use it.';
+    await sleep(1400); if(id!==cycleId) return;
+    if(publish) publish.hidden=true;
+    /* use the app */
     /* the CSR drags the customer's spreadsheet onto the page */
     await sleep(1000); if(id!==cycleId) return;
     if(zone) zone.classList.add('hot'); await sleep(650); if(id!==cycleId) return;
