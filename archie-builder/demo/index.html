@@ -11700,7 +11700,7 @@ markTabSeen(state.view || "chat");
   /* bare mode (?bare=1): no demo chrome, the page around it supplies the Fulcrum nav and Archie header; the build runs on its own and loops */
   if(/[?&]bare/.test(location.search)){
     document.documentElement.classList.add('bare');
-    var st=document.createElement('style'); st.textContent='.bare .live-demo-bar,.bare .fulcrum-side,.bare nav.tabbar,.bare #tour-overlay,.bare #tour-start-pill,.bare #tour-end-pill,.bare .book-demo-cta{display:none!important}.bare body,.bare #app{padding-top:0!important;margin-top:0!important;top:0!important}.bare .main{margin-left:0!important}.bare .hero-blobs,.bare .hero-shimmer,.bare .hero-blob{display:none!important}'; document.head.appendChild(st);
+    var st=document.createElement('style'); st.textContent='.bare .live-demo-bar,.bare .fulcrum-side,.bare nav.tabbar,.bare #tour-overlay,.bare #tour-start-pill,.bare #tour-end-pill,.bare .book-demo-cta{display:none!important}.bare body,.bare #app{padding-top:0!important;margin-top:0!important;top:0!important}.bare .app,.bare #app{grid-template-columns:minmax(0,1fr)!important;width:100%!important}.bare .main{margin-left:0!important;grid-column:1!important;width:100%!important;min-width:0}.bare .hero-blobs,.bare .hero-shimmer,.bare .hero-blob{display:none!important}'; document.head.appendChild(st);
     function auto(){ setTimeout(async function(){
       while(true){
         try{ resetBuild(); }catch(e){}
