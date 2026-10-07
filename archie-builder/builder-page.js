@@ -62,8 +62,8 @@ document.addEventListener("DOMContentLoaded",function(){
     cycle();
   }
   accept.addEventListener('click',function(){ if(!accept.disabled){ var tr=[].slice.call(table.querySelectorAll('.xf-t:not(.hdr)')); applyChanges(tr,cycleId); } });
-  reject.addEventListener('click',function(){ if(accepted) return; status.textContent='Cleared. No jobs were changed.'; accept.disabled=true; accept.classList.remove('pulse'); line('Cleared. Nothing was written to Fulcrum.',false); accepted=true; setTimeout(cycle,2600); });
-  cycle();
+  reject.addEventListener('click',function(){ if(accepted) return; cycleId++; accepted=true; status.textContent='Cleared. No jobs were changed.'; accept.disabled=true; accept.classList.remove('pulse'); line('Cleared. Nothing was written to Fulcrum.',false); setTimeout(cycle,2600); });
+  (function(){ var el=document.getElementById('xf'); if(el&&'IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })){ io.disconnect(); cycle(); } },{threshold:.25}); io.observe(el); } else cycle(); })();
 })();
 (function(){
   var STATES=[
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded",function(){
   var noop={classList:{add:function(){},remove:function(){}},addEventListener:function(){},hidden:false};
   var promptBox=document.getElementById('promptBox'), sendBtn=document.getElementById('sendBtn')||noop, nudge=document.getElementById('nudge')||noop;
   var pageName=document.getElementById('pageName'), canvas=document.getElementById('canvas'), emptyState=document.getElementById('emptyState'), working=document.getElementById('working'), workingPill=document.getElementById('workingPill');
-  var stepsLog=document.getElementById('stepsLog'), chatHint=document.getElementById('chatHint'), chips=document.getElementById('chips'), demoNote=document.getElementById('demoNote');
+  var stepsLog=document.getElementById('stepsLog'), chatHint=document.getElementById('chatHint'), chips=document.getElementById('chips')||document.createElement('div'), demoNote=document.getElementById('demoNote')||{};
   var pause=document.getElementById('pause')||{checked:false};
   var manual=false, busy=false, showing=-1, wi=4;
   function rand(n){return Math.floor(Math.random()*n);}
@@ -168,12 +168,14 @@ document.addEventListener("DOMContentLoaded",function(){
     await sleep(1400); if(manual) return;
     await build(i);
   }
-  function userSend(){ if(busy) return; manual=true; demoNote.textContent='Scripted demo. Builder cycles through one build per team; the real Builder runs inside Fulcrum.'; build(wi).then(function(){ return act(wi); }); }
+  function userSend(){ if(busy) return; manual=true; demoNote.textContent='Scripted demo. Builder cycles through one build per team; the real Builder runs inside Fulcrum.'; build(wi).then(function(){ return act(wi); }).then(function(){ return sleep(3000); }).then(function(){ manual=false; }); }
   sendBtn.addEventListener('click', userSend);
   promptBox.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); userSend(); } });
   
+  function inView(el){ return new Promise(function(res){ if(!el||!('IntersectionObserver' in window)){ res(); return; } var io=new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })){ io.disconnect(); res(); } },{threshold:.25}); io.observe(el); }); }
   (async function loop(){
     out.textContent=STATES[wi].w; markChip(wi);
+    await inView(document.getElementById('guided'));
     while(true){
       if(pause.checked || manual){ await sleep(400); continue; }
       await runFor(wi,false);

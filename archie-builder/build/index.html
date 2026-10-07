@@ -58,9 +58,9 @@ html,body{margin:0;height:100%;background:#f0f1f3;font-family:Inter,system-ui,-a
 .build{display:grid;grid-template-columns:238px 1fr;height:100%}
 .steps{background:#fff;border-right:1px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
 .you{background:var(--blue-light);border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.45;color:var(--ink)}
-.log{display:grid;gap:9px;font-size:12px;color:var(--slate)}
-.ln{display:flex;gap:8px;align-items:flex-start}
-.ln span{display:block;font:400 12px/1.45 Inter,system-ui,sans-serif;color:#3d414a}
+.log{display:grid;grid-template-columns:minmax(0,1fr);gap:9px;font-size:12px;color:var(--slate);min-width:0}
+.ln{display:flex;gap:8px;align-items:flex-start;min-width:0}
+.ln span{display:block;min-width:0;flex:1 1 auto;font:400 12px/1.45 Inter,system-ui,sans-serif;color:#3d414a}
 .ln i{flex:0 0 14px;width:14px;height:14px;border-radius:50%;border:2px solid #cfd3da;margin-top:1px;position:relative}
 .ln.live i{border-color:var(--blue);border-top-color:transparent;animation:spin .8s linear infinite}
 .ln.done i{border-color:var(--green);background:var(--green)}
@@ -83,9 +83,9 @@ html,body{margin:0;height:100%;background:#f0f1f3;font-family:Inter,system-ui,-a
 .pub{border:0;border-radius:8px;background:var(--blue);color:#fff;font:600 12px Inter,sans-serif;padding:8px 12px;cursor:pointer;margin-left:8px}
 .pub.ready{animation:pulse 1.4s ease-in-out infinite}
 .tbl{flex:1;overflow:hidden;font-size:11.5px}
-.grp{display:flex;align-items:center;gap:8px;padding:7px 14px;background:#f7f8fa;border-bottom:1px solid var(--line);font-weight:600;font-size:11px;color:var(--slate);text-transform:uppercase;letter-spacing:.04em}
+.grp{display:flex;align-items:center;gap:8px;padding:5px 14px;background:#f7f8fa;border-bottom:1px solid var(--line);font-weight:600;font-size:11px;color:var(--slate);text-transform:uppercase;letter-spacing:.04em}
 .grp span{font-weight:500;text-transform:none;letter-spacing:0;color:var(--grey)}
-.row{display:grid;grid-template-columns:62px 92px 50px 1fr 1fr;gap:8px;padding:7px 14px;border-bottom:1px solid #eef0f3;align-items:center}
+.row{display:grid;grid-template-columns:62px 92px 50px 1fr 1fr;gap:8px;padding:5px 14px;border-bottom:1px solid #eef0f3;align-items:center}
 .row.h{color:var(--grey);font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;background:#fff}
 .row b{font-weight:600}
 .late{color:#b42318;font-weight:600}
@@ -113,7 +113,7 @@ html,body{margin:0;height:100%;background:#f0f1f3;font-family:Inter,system-ui,-a
 .mi{padding:7px 16px;font-size:13px;color:var(--slate);display:flex;align-items:center;gap:8px}
 .mi.new{background:var(--blue-light);color:var(--blue);font-weight:600;border-right:3px solid var(--blue)}
 .mi .pill{margin-left:auto;width:8px;height:8px;border-radius:50%;background:var(--green);font-size:0}
-.toast{position:absolute;left:50%;bottom:18px;transform:translate(-50%,10px);background:var(--ink);color:#fff;font-size:12.5px;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap}
+.toast{position:absolute;left:50%;bottom:6px;transform:translate(-50%,10px);background:var(--ink);color:#fff;font-size:12.5px;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity .3s,transform .3s;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .toast i{width:8px;height:8px;border-radius:50%;background:#3dc975}
 .replay{position:absolute;right:10px;top:8px;font-size:11px;color:var(--grey);background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px;cursor:pointer}
@@ -282,7 +282,7 @@ html,body{margin:0;height:100%;background:#f0f1f3;font-family:Inter,system-ui,-a
   $('#replay').addEventListener('click',function(){cycle()});
   // start when visible (or straight away if the observer is unavailable)
   var started=false; function start(){if(started)return;started=true;cycle()}
-  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){if(es.some(function(e){return e.isIntersecting})){start();io.disconnect()}},{threshold:.2});io.observe($('#stage'));setTimeout(start,4000)}else start();
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){if(es.some(function(e){return e.isIntersecting})){start();io.disconnect()}},{threshold:.2});io.observe($('#stage'))}else start();
 })();
 </script>
 </body>
