@@ -165,18 +165,18 @@ html,body{margin:0;height:100%;background:transparent;font-family:Inter,system-u
         <div class="skel" id="skel"><div></div><div></div><div></div><div></div></div>
         <div class="app" id="app">
           <div class="app-h"><div><b>Late jobs by department</b><br><small>Live · 14 jobs behind schedule</small></div>
-            <div class="kpis"><div class="kpi">Machining<b>8</b></div><div class="kpi">Welding<b>4</b></div><div class="kpi">Finishing<b>2</b></div></div>
+            <div class="kpis"><div class="kpi">Mill<b>7</b></div><div class="kpi">Weld<b>5</b></div><div class="kpi">Finish<b>2</b></div></div>
             <button class="pub" id="pub">Publish app</button></div>
           <div class="tbl">
             <div class="row h"><span>Job</span><span>Sitting on</span><span>Late</span><span>Why</span><span>Suggested action</span></div>
-            <div class="grp">Machining <span>8 jobs</span></div>
+            <div class="grp">Mill <span>7 jobs</span></div>
             <div class="row"><b>J-4812</b><span>Op 30 · Mill</span><span class="late">3 d</span><span><span class="tag">Waiting on material</span></span><span class="act">Expedite PO 2231</span></div>
             <div class="row"><b>J-4790</b><span>Op 20 · Lathe</span><span class="late">2 d</span><span>Op ran over estimate</span><span class="act">Move to Haas 2</span></div>
             <div class="row"><b>J-4775</b><span>Op 40 · Deburr</span><span class="late">1 d</span><span>Operator out</span><span class="act">Reassign to B shift</span></div>
-            <div class="grp">Welding <span>4 jobs</span></div>
+            <div class="grp">Weld <span>5 jobs</span></div>
             <div class="row"><b>J-4802</b><span>Op 10 · Fit-up</span><span class="late">4 d</span><span><span class="tag">Waiting on inspection</span></span><span class="act">Call inspection</span></div>
             <div class="row"><b>J-4766</b><span>Op 20 · Weld</span><span class="late">1 d</span><span>Fixture in use</span><span class="act">Split the lot</span></div>
-            <div class="grp">Finishing <span>2 jobs</span></div>
+            <div class="grp">Finish <span>2 jobs</span></div>
             <div class="row"><b>J-4751</b><span>Op 50 · Paint</span><span class="late">2 d</span><span>Outside process late</span><span class="act">Chase Lakeshore Coatings</span></div>
           </div>
         </div>
@@ -222,7 +222,7 @@ html,body{margin:0;height:100%;background:transparent;font-family:Inter,system-u
 <script>
 (function(){
   var $=function(s){return document.querySelector(s)};
-  var PROMPT="Show me every job behind schedule, grouped by department, with the operation it is sitting on and a reason why it's late. Suggest an action to take to fix it.";
+  var PROMPT="Show me every job behind schedule, grouped by department, with the operation it is sitting on, and a reason for why it’s late. Suggest an action to take to fix it.";
   var LINES=["Reading jobs, operations and due dates","Found 14 jobs behind, across 3 departments","Adding a reason and a suggested fix per job","Laying out the page"];
   var run=0, timers=[];
   function fit(){var w=window.innerWidth,h=window.innerHeight;var s=Math.min(w/770,h/560);$('#stage').style.transform='scale('+s+')';$('#fit').style.width=(770*s)+'px';$('#fit').style.height=(560*s)+'px';$('#fit').style.margin='0 auto'}
