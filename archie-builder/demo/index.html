@@ -11705,8 +11705,8 @@ markTabSeen(state.view || "chat");
     if(/[?&]fit/.test(location.search)){
       var fs=document.createElement('style'); fs.textContent='html.bare.fit,html.bare.fit body{overflow:hidden!important;background:#fff}.bare.fit #app{position:absolute!important;left:0;top:0;width:1280px!important;transform-origin:0 0;min-height:0!important}'; document.head.appendChild(fs);
       document.documentElement.classList.add('fit');
-      function fit(){ var app=document.getElementById('app'); if(!app) return; var W=1280, s=Math.min(1,window.innerWidth/W); var H=Math.max(560,Math.round(window.innerHeight/s)); app.style.height=H+'px'; app.style.transform='scale('+s+')'; app.style.left=Math.round((window.innerWidth-W*s)/2)+'px'; }
-      window.addEventListener('resize',fit); document.addEventListener('DOMContentLoaded',fit); fit(); setTimeout(fit,300);
+      var lastW=0,lastH=0; function fit(){ var app=document.getElementById('app'); if(!app) return; var iw=window.innerWidth, ih=window.innerHeight; if(iw<50||ih<50) return; lastW=iw; lastH=ih; var W=1280, s=Math.min(1,iw/W); var H=Math.max(560,Math.round(ih/s)); app.style.height=H+'px'; app.style.transform='scale('+s+')'; app.style.left=Math.round((iw-W*s)/2)+'px'; }
+      window.addEventListener('resize',fit); document.addEventListener('DOMContentLoaded',fit); fit(); (function poll(n){ if(window.innerWidth!==lastW||window.innerHeight!==lastH) fit(); if(n>0) setTimeout(function(){ poll(n-1); },250); })(80);
     }
     function auto(){ setTimeout(async function(){
       while(true){
