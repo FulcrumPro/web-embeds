@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
-:root{--ink:#1b1f3b;--slate:#3d414a;--grey:#5e6066;--line:#e2e2e6;--bg:#f0f1f3;--blue:#1d63ed;--blue-light:#e8effd;--green:#008455;--green-light:#d9ede6;--warn:#9a4a00;--warn-light:#ffeddd}
+:root{--ink:#102a2a;--slate:#3d414a;--grey:#5e6066;--line:#d9e6e4;--bg:#e6f0ee;--blue:#0f766e;--blue-light:#d6efea;--green:#0f766e;--green-light:#d6efea;--warn:#9a4a00;--warn-light:#ffeddd}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:#f0f1f3;font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden}
 #fit{position:absolute;left:0;top:0;display:block;overflow:hidden}
@@ -28,12 +28,12 @@ html,body{margin:0;height:100%;background:#f0f1f3;font-family:Inter,system-ui,-a
 .app{background:#fff;border:1px solid var(--line);border-radius:10px;height:100%;display:flex;flex-direction:column;overflow:hidden}
 .bar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
 .bar b{font-size:13px;font-weight:600}
-.bar small{color:var(--grey);font-size:11px}
-.pill{margin-left:auto;font-size:11px;color:var(--grey);display:flex;align-items:center;gap:6px;white-space:nowrap}
-.pill i{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.bar small{color:#bfe6df;font-size:11px}
+.pill{margin-left:auto;font-size:11px;color:#e3f6f2;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.pill i{width:7px;height:7px;border-radius:50%;background:#5eead4}
 .filters{display:flex;gap:8px;padding:8px 14px;border-bottom:1px solid var(--line);font-size:11px;color:var(--slate)}
-.filters span{border:1px solid var(--line);border-radius:6px;padding:3px 8px;background:#fff}
-.filters span.on{background:var(--blue-light);color:var(--blue);border-color:transparent;font-weight:500}
+.filters span{border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:#fff}
+.filters span.on{background:#0f766e;color:#fff;border-color:transparent;font-weight:600}
 .body{flex:1;overflow:hidden;padding:6px 0 0}
 .grp{opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s}
 .grp.show{opacity:1;transform:none}
@@ -62,21 +62,21 @@ html,body{margin:0;height:100%;background:#f0f1f3;font-family:Inter,system-ui,-a
 .toast i{width:7px;height:7px;border-radius:50%;background:#3dc975}
 
 .foot{margin-top:auto;display:flex;align-items:center;gap:10px;padding:6px 14px;border-top:1px solid var(--line);font-size:11px;color:var(--grey)}
-.foot .btn{margin-left:auto;font-size:11px;font-weight:600;color:#fff;background:var(--blue);border-radius:999px;padding:6px 12px;cursor:pointer;transition:background .2s}
+.foot .btn{margin-left:auto;font-size:11px;font-weight:600;color:#fff;background:#0f766e;border-radius:999px;padding:6px 12px;cursor:pointer;transition:background .2s}
 .foot .btn.pulse{animation:pulse 1.2s ease-in-out infinite}
 .foot .btn.done{background:var(--green);cursor:default}
 .bar{padding:8px 14px}
 
 .phdr,.prow{display:grid;grid-template-columns:58px 96px 100px 42px minmax(0,1fr) 46px;gap:6px;padding:4px 14px;align-items:center;white-space:nowrap}
 .phdr{font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--grey);padding:6px 14px 4px;border-top:1px solid var(--line)}
-.prow{font-size:10.5px;color:var(--slate);border-bottom:1px solid #eef0f3;opacity:0;transform:translateY(5px);transition:opacity .3s,transform .3s,background .3s}
+.prow{font-size:10.5px;color:var(--slate);border-bottom:1px solid #e8f1ef;opacity:0;transform:translateY(5px);transition:opacity .3s,transform .3s,background .3s}
 .prow.show{opacity:1;transform:none}
 .prow a{color:var(--blue);font-weight:600;text-decoration:none}
 .prow .cust{overflow:hidden;text-overflow:ellipsis}
 .ops{display:flex;gap:2px;align-items:center;min-width:0;overflow:hidden}
-.ops i{width:11px;height:6px;border-radius:2px;background:#dfe3ea;display:block;transition:background .3s}
+.ops i{width:11px;height:6px;border-radius:2px;background:#d5e3e0;display:block;transition:background .3s}
 .ops i.done{background:var(--green)}
-.ops i.now{background:var(--blue)}
+.ops i.now{background:#f59e0b}
 .ops span{font-size:10px;color:var(--grey);margin-left:4px;white-space:nowrap}
 .ship{font-variant-numeric:tabular-nums}
 .ship.late{color:#b42318;font-weight:600}
