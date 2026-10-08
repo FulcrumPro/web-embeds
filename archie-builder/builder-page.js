@@ -97,13 +97,13 @@ document.addEventListener("DOMContentLoaded",function(){
   var STATES=[
     {w:'sales', page:'Quote hit rate', prompt:'Build a quote hit-rate board by customer for the last 12 months, with a drill-in to the quotes we lost.',
      log:['Reading quotes and sales orders from your Fulcrum','Grouping 1,284 quotes by customer and outcome','Laying out the board with a drill-in per customer'],
-     done:'Lost quotes open', sum:'18 lost quotes listed for Northfield Machine. Top reason: lead time.', logDone:'Opened the 18 lost quotes with the reason logged on each one.',
+     done:'Lost quotes open', sum:'18 lost quotes listed for Copperline Machine. Top reason: lead time.', logDone:'Opened the 18 lost quotes with the reason logged on each one.',
      render:function(){
-       var rows=[['Crestline Aero',68],['Harbor Dynamics',54],['Summit Fabrication',47],['Northfield Machine',41]];
+       var rows=[['Crestline Aero',68],['Harbor Dynamics',54],['Summit Fabrication',47],['Copperline Machine',41]];
        var C=2*Math.PI*54;
        return '<div class="sa"><div class="sa-ring"><svg viewBox="0 0 128 128" width="150" height="150"><circle cx="64" cy="64" r="54" fill="none" stroke="#e8effd" stroke-width="14"/><circle class="sa-arc" cx="64" cy="64" r="54" fill="none" stroke="#1d63ed" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+(C*(1-.48))+'" transform="rotate(-90 64 64)"/></svg><div class="sa-ring-t"><b>48<em>%</em></b><small>quotes won</small></div><div class="sa-ring-k"><span><b>612</b> won</span><span><b>$2.1M</b> lost</span></div></div>'
        +'<div class="sa-bars">'+rows.map(function(r,i){ return '<div class="sa-row" data-i="'+i+'"><div class="sa-l"><span>'+r[0]+'</span><b>'+r[1]+'%</b></div><div class="sa-track"><i style="width:'+r[1]+'%"></i></div></div>'; }).join('')
-       +'<div class="sa-drill"><div class="sa-drill-h"><b>Northfield Machine</b><span>18 lost · $412K</span></div><div class="sa-tiles"><div><b>11</b><small>lead time</small></div><div><b>5</b><small>price</small></div><div><b>2</b><small>no reply</small></div></div></div></div>'
+       +'<div class="sa-drill"><div class="sa-drill-h"><b>Copperline Machine</b><span>18 lost · $412K</span></div><div class="sa-tiles"><div><b>11</b><small>lead time</small></div><div><b>5</b><small>price</small></div><div><b>2</b><small>no reply</small></div></div></div></div>'
        +'<div class="app-foot"><span class="btn" role="button" tabindex="0">Open lost quotes</span></div></div>';
      },
      act:async function(app,sleep){
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded",function(){
      done:'Late POs flagged', sum:'3 late POs flagged, with a note on each for the buyer.', logDone:'Flagged the 3 late purchase orders in Fulcrum and added a note to each for the buyer.',
      render:function(){
        var days=['Mon','Tue','Wed','Thu','Fri','Mon','Tue','Wed','Thu','Fri'];
-       var rows=[['Midwest Steel','PO 7781',0,46,true,'4 d late'],['Allied Fasteners','PO 7790',10,41,true,'2 d late'],['Lakeshore Metals','PO 7765',18,38,true,'1 d late'],['Prairie Tool','PO 7802',22,62,false,'Fri'],['Northfield Castings','PO 7810',30,90,false,'next Thu']];
+       var rows=[['Midwest Steel','PO 7781',0,46,true,'4 d late'],['Allied Fasteners','PO 7790',10,41,true,'2 d late'],['Lakeshore Metals','PO 7765',18,38,true,'1 d late'],['Tallgrass Tool','PO 7802',22,62,false,'Fri'],['Northfield Castings','PO 7810',30,90,false,'next Thu']];
        return '<div class="po"><div class="po-cal"><span class="po-cal-v"></span>'+days.map(function(d,i){ return '<span class="'+(i===3?'today':'')+'">'+d+'</span>'; }).join('')+'</div>'
        +'<div class="po-rows">'+rows.map(function(r){ return '<div class="po-row'+(r[4]?' late':'')+'"><div class="po-v"><b>'+r[0]+'</b><small>'+r[1]+'</small></div><div class="po-tl"><i class="po-bar" style="left:'+r[2]+'%;width:'+(r[3]-r[2])+'%"><span>'+r[5]+'</span></i></div></div>'; }).join('')+'</div>'
        +'<div class="po-foot"><span class="po-n"><b>3</b> late</span><span class="po-ok"><b>2</b> on time</span></div>'
