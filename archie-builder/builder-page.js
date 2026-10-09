@@ -1,95 +1,222 @@
 /* Archie Builder page: hero scripted build + customer date-change app. */
 document.addEventListener("DOMContentLoaded",function(){
 (function(){
-  var ROWS=[["10", "4856", "In process", "Oct 24", "Oct 15", "ok", "Scheduled finish Oct 14"], ["20", "4857", "In process", "Oct 24", "Oct 15", "ok", "Scheduled finish Oct 14"], ["30", "4861", "Material due Oct 9", "Oct 28", "Oct 17", "ok", "Scheduled finish Oct 16"], ["50", "4870", "Outside: anodize", "Nov 4", "Oct 22", "no", "Back from anodize Oct 27"], ["60", "4871", "Outside: anodize", "Nov 4", "Oct 22", "no", "Back from anodize Oct 27"], ["70", "4880", "Not started", "Oct 31", "Nov 14", "ok", "Later than current due"], ["90", "4902", "Complete, awaiting ship", "Oct 21", "Oct 14", "ok", "Can ship now"]];
+  /* Act panel, laid out like the real Builder: Fulcrum icon rail on the left, the app preview in the middle,
+     the authoring chat on the right. Mike builds and publishes it; Jen opens it from the Sales menu and uses it. */
+  var root=document.getElementById('xf'); if(!root) return;
+  var MEDIA='https://fulcrumpro.github.io/web-embeds/archie-builder/media/';
+  function ico(d){ return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+d+'"/></svg>'; }
+  var RAIL=[
+    ['archie','M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z'],
+    ['sales','M4 4h16v16H4zM4 10h16M4 15h16M10 4v16'],
+    ['purchasing','M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.7a1 1 0 0 0 1-.8L20 7H6M9 19.5h.01M17 19.5h.01'],
+    ['production','M7 4h10v6H7zM3 14h18v5H3zM7 19v2M17 19v2M12 10v4'],
+    ['scheduling','M4 6h16v14H4zM4 10h16M9 3v5M15 3v5M8 14h2M14 14h2M8 17h2'],
+    ['warehouse','M4 9h15l-3-3M20 15H5l3 3'],
+    ['accounting','M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01'],
+    ['items','M4 13h7v7H4zM13 13h7v7h-7zM8.5 5h7v7h-7z'],
+    ['reporting','M4 20h16M7 16v-5M11 16V8M15 16v-3M19 16V6'],
+    ['live','M9 6h11M9 12h11M9 18h11M5 6h.01M5 12h.01M5 18h.01'],
+    ['settings','M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1']
+  ];
+  root.className='panel xb';
+  root.setAttribute('aria-label','A Builder app, simulated on sample data: Mike describes it to Archie in Builder and publishes it to the Sales menu, then Jen in customer service opens it and accepts a customer’s requested dates');
+  root.innerHTML=
+    '<div class="xb-rail" aria-hidden="true">'
+    +'<span class="xb-logo"><svg viewBox="0 0 24 24"><path d="M4 20 14 4h3L7 20H4zm7 0L21 4h-3L8 20h3z" fill="#fff"/></svg></span>'
+    +RAIL.map(function(r){ return '<i class="xb-ri" id="xbRail-'+r[0]+'">'+ico(r[1])+'</i>'; }).join('')
+    +'<span class="xb-rail-gap"></span>'
+    +'<i class="xb-ri">'+ico('M9 4h6l-1 6 3 3H7l3-3zM12 13v7')+'</i>'
+    +'<span class="xb-rav"><img id="xbNavAv" src="'+MEDIA+'av-mike.jpg" alt="" width="28" height="28"></span>'
+    +'</div>'
+    +'<span class="xb-cur" id="xbCur" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2l15 11.5-6.6 1.1 3.9 7.6-2.9 1.4-3.8-7.7L4 20.7z"/></svg></span>'
+    +'<div class="xb-fly" id="xbFly" aria-hidden="true"><b>Sales</b><span>Quotes</span><span>Sales orders</span><span>Customers</span><span class="xb-flyapp" id="xbFlyApp">Customer date changes</span></div>'
+    +'<div class="xb-main">'
+    +  '<div class="xb-head">'
+    +    '<span class="xb-crumb" id="xbCrumb">Builder</span><span class="xb-sep">›</span><b class="xb-title" id="xbTitle">Untitled page</b>'
+    +    '<span class="xb-badge" id="xbBadge" hidden></span>'
+    +    '<div class="xb-head-r"><div class="xb-who" id="xbWho"><i><img id="xbWhoAv" src="'+MEDIA+'av-mike.jpg" alt="" width="28" height="28"></i><div><b id="xbWhoName">Mike Kowalski</b><small id="xbWhoRole">Operations manager · building it in Builder</small></div><span class="xb-step" id="xbStep">1 of 2</span></div><span class="xb-undo" id="xbUndo" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg></span><button class="xb-publish" id="xbPublish" type="button" hidden>Publish <i>⌄</i></button><div class="xb-pop" id="xbPop" aria-hidden="true"><div class="xb-pop-kv"><b>Live version:</b> <span id="xbPopLive">None</span></div><div class="xb-pop-kv"><b>Latest draft:</b> <span>v1 · edited just now</span></div><label>Navigation position</label><div class="xb-field" id="xbPopNav">Don’t show</div><label>Visible to</label><div class="xb-field xb-sel" id="xbPopRoles">All roles</div><div class="xb-opts" id="xbOpts"></div><div class="xb-pop-f"><span class="xb-pop-go" id="xbPopGo">Publish v1</span></div></div><span class="xb-kebab">⋮</span></div>'
+    +  '</div>'
+    +  '<div class="xb-body">'
+    +    '<div class="xb-preview"><div class="xb-canvas">'
+    +      '<div class="xb-empty" id="xbEmpty"><b>Describe what you want in the chat.</b><span>For example, “Show me open jobs grouped by status.”</span></div>'
+    +      '<div class="xb-skel" id="xbSkel"><div></div><div></div><div></div><div></div><div></div><span class="xb-working">Building…</span></div>'
+    +      '<div class="xb-app" id="xbApp">'
+    +        '<div class="xf-form-head"><div><b>Customer date changes</b><small id="xbHeadMeta">Bring in a customer’s requested dates and update the jobs you agree to</small></div><span class="xf-count" id="xbCount" hidden></span></div>'
+    +        '<div class="xb-intake" id="xbIntake">'
+    +          '<div class="xb-zone" id="xbZone">'
+    +            '<span class="xb-zico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M12 18v-6M9 15l3-3 3 3"/></svg></span>'
+    +            '<b>Drop the customer’s file</b>'
+    +            '<span>Each row is matched to its sales order line and job</span>'
+    +            '<span class="xb-zfmt"><em>.xlsx</em><em>.xls</em><em>.csv</em></span>'
+    +            '<span class="xb-zbtn">Browse files</span>'
+    +            '<div class="xf-file xb-fly-file" id="xbFile"><span class="xf-ico xls">XLS</span><div><b>acme-requested-dates.xlsx</b><small>7 rows · item, qty, requested date</small></div></div>'
+    +          '</div>'
+    +          '<div class="xb-how"><div><i>1</i><b>Drop the file</b><span>Any layout with a line or job and a date</span></div><div><i>2</i><b>Review each line</b><span>See the job’s status next to the date asked for</span></div><div><i>3</i><b>Update due dates</b><span>Only on the lines you accept</span></div></div>'
+    +        '</div>'
+    +        '<div class="xb-result" id="xbResult">'
+    +        '<div class="xb-chip" id="xbChip"><span class="xf-ico xls">XLS</span><div><b>acme-requested-dates.xlsx</b><small id="xbChipMeta">Reading…</small></div></div>'
+    +        '<div class="xf-table" id="xbTable"></div>'
+    +        '<div class="xf-actions"><span class="xf-status" id="xbStatus"></span><div><button class="xf-reject" id="xbReject" type="button">Clear</button><button class="xf-accept" id="xbAccept" type="button" disabled>Update due dates</button></div></div>'
+    +        '<div class="xf-platform" id="xbPlatform"><div class="xf-plat-title">Written to Fulcrum</div><div class="xf-plat-grid">'
+    +          '<div class="xf-plat"><i></i><b>Jobs</b><span>5 due dates</span></div>'
+    +          '<div class="xf-plat"><i></i><b>Job notes</b><span>5 added · J. Okafor</span></div>'
+    +          '<div class="xf-plat"><i></i><b>Schedule</b><span>Rebuilt around the new dates</span></div>'
+    +        '</div></div>'
+    +        '</div>'
+    +      '</div>'
+    +    '</div>'
+    +    '<div class="xb-tag">Simulated on sample data</div>'
+    +    '</div>'
+    +    '<div class="xb-chat" id="xbChat">'
+    +      '<div class="xb-tabs"><span class="on">Chat</span><span>Versions</span></div>'
+    +      '<div class="xb-msgs" id="xbMsgs"></div>'
+    +      '<div class="xb-compose"><div class="xb-input" id="xbInput"></div><div class="xb-cbar">'+ico('M21 11.5l-8.6 8.6a5 5 0 0 1-7.1-7.1l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9')+'<span class="xb-send" id="xbSend">Send</span></div></div>'
+    +    '</div>'
+    +  '</div>'
+    +'</div>';
+
+  var ROWS=[["Mounting bracket","120","4856","In progress","Oct 24","Oct 15","ok","Scheduled finish Oct 14"],["Hinge plate","80","4857","In progress","Oct 24","Oct 15","ok","Scheduled finish Oct 14"],["Valve body","40","4861","Material due Oct 9","Oct 28","Oct 17","ok","Scheduled finish Oct 16"],["Pump housing","25","4870","Outside: anodize","Nov 4","Oct 22","no","Back from anodize Oct 27","Oct 29"],["Pump cover","25","4871","Outside: anodize","Nov 4","Oct 22","no","Back from anodize Oct 27","Oct 29"],["Drive shaft","60","4880","Not started","Oct 31","Nov 14","ok","Later than current due"],["Bearing cap","150","4902","Complete, awaiting ship","Oct 21","Oct 14","ok","Can ship now"]];
+  var PROMPT='Make a page where we drop in a customer’s file of requested dates, match each line to its job, show the job’s status, and update the due dates on the lines we accept.';
   var q=function(id){return document.getElementById(id);};
-  var count=q('xfCount'), status=q('xfStatus'), accept=q('xfAccept'), reject=q('xfReject'), table=q('xfTable'), platform=q('xfPlatform'), log=q('xfLog');
-  var zone=q('xfZone'), file=q('xfFile'), headMeta=q('xfHeadMeta');
-  if(!table) return;
+  var cur=q('xbCur'), canvasEl=root.querySelector('.xb-canvas'), railArchie=q('xbRail-archie'), railSales=q('xbRail-sales'), fly=q('xbFly'), flyApp=q('xbFlyApp'), navAv=q('xbNavAv');
+  var crumb=q('xbCrumb'), title=q('xbTitle'), badge=q('xbBadge'), publish=q('xbPublish'), undo=q('xbUndo'), pop=q('xbPop'), popNav=q('xbPopNav'), popRoles=q('xbPopRoles'), opts=q('xbOpts'), popGo=q('xbPopGo'), popLive=q('xbPopLive');
+  var empty=q('xbEmpty'), skel=q('xbSkel'), app=q('xbApp'), headMeta=q('xbHeadMeta'), count=q('xbCount'), zone=q('xbZone'), file=q('xbFile'), table=q('xbTable'), intake=q('xbIntake'), result=q('xbResult'), chipMeta=q('xbChipMeta');
+  var status=q('xbStatus'), accept=q('xbAccept'), reject=q('xbReject'), platform=q('xbPlatform');
+  var who=q('xbWho'), whoAv=q('xbWhoAv'), whoName=q('xbWhoName'), whoRole=q('xbWhoRole'), step=q('xbStep');
+  var chat=q('xbChat'), msgs=q('xbMsgs'), input=q('xbInput'), send=q('xbSend');
   function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
-  function rand(n){return Math.floor(Math.random()*n);}
-  /* rows come from the file, so they land whole rather than being typed */
-  function typeText(el,text){return new Promise(function(res){el.textContent=text;el.style.opacity='0';el.style.transition='opacity .25s';requestAnimationFrame(function(){el.style.opacity='1';});setTimeout(res,120);});}
-  function line(txt,live){var ln=document.createElement('div');ln.className='ln '+(live?'live':'done');ln.innerHTML='<i></i><span>'+txt+'</span>';if(log) log.appendChild(ln);return ln;}
-  function typeChars(el,text,ms){return new Promise(function(res){var k=0;el.textContent='';(function t(){if(k<text.length){k++;el.textContent=text.slice(0,k);setTimeout(t,ms||14);}else res();})();});}
-  var pub=q('xfPub'), skel=q('xfSkel'), publish=q('xfPublish'), promptText=q('xfPromptText');
-  var who=q('xfWho'), whoAv=q('xfAv'), whoName=q('xfWhoName'), whoRole=q('xfWhoRole'), railAv=document.querySelector('#xf .fu-nav .fu-av i'), navName=document.querySelector('#xf .fu-nav .fu-av span'), navArchie=q('xfNavArchie'), navArchieSub=q('xfNavArchieSub'), navSales=q('xfNavSales'), navSalesSub=q('xfNavSalesSub'), phase=q('xfPhase');
-  function persona(p){ if(!who) return; who.classList.remove('build','use'); who.classList.add(p);
-    if(p==='build'){ whoName.textContent='Mike Kowalski'; whoRole.textContent='Operations manager · building the app'; setAv(railAv,'build','MK'); setAv(whoAv,'build','MK'); if(navName) navName.textContent='M. Kowalski'; nav(true); if(phase){ phase.textContent='1 · Mike builds it'; phase.className='xf-phase build'; } }
-    else { whoName.textContent='Jen Okafor'; whoRole.textContent='Customer service · using the app'; setAv(railAv,'use','JO'); setAv(whoAv,'use','JO'); if(navName) navName.textContent='J. Okafor'; nav(false); if(phase){ phase.textContent='2 · Jen uses it'; phase.className='xf-phase use'; } } }
-  function setAv(el,p,txt){ if(!el) return; var img=el.querySelector&&el.querySelector('img'); if(img){ var src=img.getAttribute('data-'+p); if(src&&img.getAttribute('src')!==src) img.setAttribute('src',src); } else el.textContent=txt; }
-  function nav(build){ if(!navArchie||!navSales) return; navArchie.className='fu-item'+(build?' on open':''); navArchieSub.hidden=!build; navSales.className='fu-item'+(build?'':' on open'); navSalesSub.hidden=build; }
+  function typeChars(el,text,ms){return new Promise(function(res){var k=0;el.textContent='';(function t(){if(k<text.length){k++;el.textContent=text.slice(0,k);setTimeout(t,ms);}else res();})();});}
+  function fadeIn(el,text){el.textContent=text;el.style.opacity='0';el.style.transition='opacity .25s';requestAnimationFrame(function(){el.style.opacity='1';});return sleep(120);}
+  function msg(cls,html){var m=document.createElement('div');m.className='xb-msg '+cls;m.innerHTML=html;msgs.appendChild(m);msgs.scrollTop=msgs.scrollHeight;return m;}
+  function toolLine(txt){var m=msg('xb-tool busy','<i></i><span>'+txt+'</span>');return m;}
+  function clickOrWait(el,ms){return new Promise(function(res){var done=false;function go(){if(done)return;done=true;el.removeEventListener('click',go);res();}el.addEventListener('click',go);setTimeout(go,ms);});}
+  function flyout(show,mode){ fly.classList.toggle('on',show); flyApp.className='xb-flyapp'+(mode?' '+mode:''); }
+
+  async function choose(field,list,pick){
+    field.classList.add('focus'); opts.innerHTML=list.map(function(x){ return '<span'+(x===pick?' data-pick':'')+'>'+x+'</span>'; }).join('');
+    opts.style.top=(field.offsetTop+field.offsetHeight+4)+'px'; opts.className='xb-opts on'; await sleep(380);
+    var el=opts.querySelector('[data-pick]'); el.classList.add('hover'); await sleep(260);
+    field.textContent=pick; field.classList.add('set'); opts.className='xb-opts'; field.classList.remove('focus'); await sleep(220);
+  }
+  async function chooseMany(field,list,picks){
+    field.classList.add('focus'); opts.innerHTML=list.map(function(x){ return '<span class="xb-chk" data-v="'+x+'"><i></i>'+x+'</span>'; }).join('');
+    opts.style.top=(field.offsetTop+field.offsetHeight+4)+'px'; opts.className='xb-opts on'; await sleep(350);
+    var chosen=[];
+    for(var i=0;i<picks.length;i++){ var el=opts.querySelector('[data-v="'+picks[i]+'"]'); el.classList.add('hover'); await sleep(220); el.classList.add('on'); el.classList.remove('hover'); chosen.push(picks[i]);
+      field.innerHTML=chosen.map(function(c){ return '<em class="xb-tagchip">'+c+'</em>'; }).join(''); field.classList.add('set'); await sleep(220); }
+    await sleep(150); opts.className='xb-opts'; field.classList.remove('focus'); await sleep(200);
+  }
+  function cursorTo(el,fx,fy,instant){
+    var r=el.getBoundingClientRect(), o=root.getBoundingClientRect();
+    cur.style.transition=instant?'none':'transform .75s cubic-bezier(.45,.05,.25,1)';
+    cur.style.transform='translate('+(r.left-o.left+r.width*fx)+'px,'+(r.top-o.top+r.height*fy)+'px)';
+    return sleep(instant?0:800);
+  }
+  function persona(p){
+    var build=p==='build';
+    root.classList.toggle('use',!build);
+    var av=MEDIA+(build?'av-mike.jpg':'av-jen.jpg');
+    navAv.src=av; whoAv.src=av;
+    whoName.textContent=build?'Mike Kowalski':'Jen Okafor';
+    whoRole.textContent=build?'Operations manager · building it in Builder':'Customer service · using the published app';
+    step.textContent=build?'1 of 2':'2 of 2';
+    who.classList.toggle('use',!build);
+    railArchie.classList.toggle('on',build); railSales.classList.toggle('on',!build);
+    crumb.textContent=build?'Builder':'Sales';
+  }
   var accepted=false, cycleId=0;
   function selectable(){return table.querySelectorAll('.xf-t:not(.hdr):not(.skip)').length;}
   function renderTable(){
-    table.innerHTML='<div class="xf-t hdr"><span>Line · job</span><span>Current due</span><span></span><span>Requested</span><span>Job status</span><span></span></div>';
+    table.innerHTML='<div class="xf-t hdr"><span>Item · qty</span><span>Current due</span><span></span><span>Requested</span><span>Job status</span><span></span></div>';
     return ROWS.map(function(r){
-      var t=document.createElement('div'); t.className='xf-t in';
-      t.innerHTML='<span>Line '+r[0]+' · Job '+r[1]+'<span class="ls">'+r[2]+'</span></span><span class="old">'+r[3]+'</span><span class="arrow">→</span><span class="new"></span><span class="rec"></span><span class="st"></span>';
-      t.title='Click to include or exclude this line';
-      t.addEventListener('click',function(){ if(accepted||accept.disabled) return; t.classList.toggle('skip'); var n=selectable(); accept.textContent='Update '+n+' due date'+(n===1?'':'s'); status.textContent=n+' of 7 selected. Accept to update the jobs.'; });
+      var t=document.createElement('div'); t.className='xf-t';
+      t.innerHTML='<span>'+r[0]+' · '+r[1]+' pcs<span class="ls">Job '+r[2]+' · '+r[3]+'</span></span><span class="cur">'+r[4]+'</span><span class="arrow"></span><span class="new"></span><span class="rec"></span><span class="st"></span>';
+      t.addEventListener('click',function(){ if(accepted||accept.disabled) return; t.classList.toggle('skip'); var n=selectable(); accept.textContent='Update '+n+' due date'+(n===1?'':'s'); status.textContent=n+' of 7 selected. Nothing changes until you accept.'; });
       table.appendChild(t); return t; });
   }
-  async function applyChanges(trows, id){
+  async function applyChanges(id){
     if(accepted||id!==cycleId) return; accepted=true;
+    var trows=[].slice.call(table.querySelectorAll('.xf-t:not(.hdr)'));
     accept.classList.remove('pulse'); accept.disabled=true; accept.textContent='Updating…'; status.textContent='Writing due dates to Fulcrum…';
-    var n=selectable(); var l=line('Updating '+n+' job due dates and adding a note to each',true);
     var applied=0; for(var i=0;i<trows.length;i++){ if(trows[i].classList.contains('skip')) continue; trows[i].classList.add('applied'); applied++; await sleep(170); }
-    l.className='ln done';
     platform.classList.add('live');
-    var plats=[].slice.call(platform.querySelectorAll('.xf-plat'));
-    for(var k=0;k<plats.length;k++){ plats[k].classList.add('on'); await sleep(260); }
-    accept.textContent=applied+' due date'+(applied===1?'':'s')+' updated'; accept.classList.add('done'); status.textContent='Done. '+applied+' jobs updated, with a note on each.'; status.classList.add('ok');
-    line(applied+' jobs updated. Lines 50 and 60 left as they were, for a call with Acme.',false);
+    var plats=platform.querySelectorAll('.xf-plat'); for(var k=0;k<plats.length;k++){ plats[k].classList.add('on'); await sleep(260); }
+    accept.textContent=applied+' due date'+(applied===1?'':'s')+' updated'; accept.classList.add('done');
+    status.textContent='Done. 5 due dates updated. 2 unchanged, with suggested dates to send Acme.'; status.classList.add('ok');
   }
-  async function cycle(){
-    var id=++cycleId; accepted=false;
-    if(log) log.innerHTML=''; count.textContent='0 of 7 read'; status.textContent='Drop the customer’s file to start. Nothing changes until you accept.'; status.classList.remove('ok');
-    /* quick build: the request types, the app takes shape, it gets published to the Sales menu */
-    persona('build');
-    if(pub){ pub.textContent='Draft'; pub.classList.remove('live'); }
-    if(publish){ publish.hidden=false; publish.classList.remove('pulse','done'); publish.textContent='Publish app'; }
-    if(skel) skel.classList.remove('off');
-    if(promptText){ promptText.textContent=''; }
-    if(file){ file.classList.remove('in','read'); } if(zone){ zone.classList.remove('hot'); zone.textContent='Drop the customer’s spreadsheet here'; }
-    if(headMeta) headMeta.textContent='Sales order 48812 · 7 lines';
+  function reset(){
+    accepted=false; persona('build');
+    title.textContent='Untitled page'; badge.hidden=true; badge.className='xb-badge';
+    publish.hidden=true; undo.hidden=true; publish.classList.remove('pulse','done','open'); flyout(false);
+    pop.classList.remove('on'); cur.classList.remove('on','click'); popNav.textContent='Don’t show'; popNav.classList.remove('set','focus'); popRoles.innerHTML='All roles'; popRoles.classList.remove('set','focus'); popGo.classList.remove('pulse'); popLive.textContent='None'; opts.className='xb-opts'; opts.innerHTML='';
+    empty.classList.remove('off'); skel.classList.remove('on'); app.classList.remove('on');
+    msgs.innerHTML='<div class="xb-ph"><b>Describe what you want and I’ll build it.</b><span>e.g. “Show me open jobs grouped by status with a due-date filter.”</span></div>';
+    input.textContent=''; send.classList.remove('pulse');
+    file.classList.remove('in'); zone.classList.remove('hot'); intake.classList.remove('off'); result.classList.remove('on');
+    headMeta.textContent='Bring in a customer’s requested dates and update the jobs you agree to'; count.hidden=true; chipMeta.textContent='Reading…';
+    status.textContent='Nothing changes until you accept.'; status.classList.remove('ok');
     accept.disabled=true; accept.classList.remove('pulse','done'); accept.textContent='Update due dates';
     platform.classList.remove('live'); [].forEach.call(platform.querySelectorAll('.xf-plat'),function(p){p.classList.remove('on');});
-    var trows=renderTable();
-    if(promptText){ await typeChars(promptText,'Make a page where we drop in a customer’s spreadsheet of requested dates, match each line to its job, see the job’s status, and update the due dates on the lines we accept.',12); if(id!==cycleId) return; }
-    await sleep(1500); if(id!==cycleId) return;
-    if(skel) skel.classList.add('off');
-    await sleep(500); if(id!==cycleId) return;
-    if(publish){ publish.classList.add('pulse'); await new Promise(function(res){ var done=false; function go(){ if(done) return; done=true; publish.removeEventListener('click',go); res(); } publish.addEventListener('click',go); setTimeout(go,1600); }); if(id!==cycleId) return; publish.classList.remove('pulse'); publish.classList.add('done'); publish.textContent='Published'; }
-    if(pub){ pub.textContent='Published · Sales'; pub.classList.add('live'); }
-    status.textContent='Published to the Sales menu.';
-    await sleep(1400); if(id!==cycleId) return;
-    if(publish) publish.hidden=true;
-    persona('use'); status.textContent='Jen opens it from the Sales menu and drops in the customer’s file.';
-    await sleep(1200); if(id!==cycleId) return;
-    /* use the app */
-    /* the CSR drags the customer's spreadsheet onto the page */
-    await sleep(1000); if(id!==cycleId) return;
-    if(zone) zone.classList.add('hot'); await sleep(650); if(id!==cycleId) return;
-    if(file) file.classList.add('in'); await sleep(450); if(id!==cycleId) return;
-    if(zone) zone.classList.remove('hot');
-    var l0=line('Reading acme-requested-dates.xlsx: 7 rows, requested dates in column C',true); await sleep(1000); l0.className='ln done'; if(file) file.classList.add('read');
-    if(id!==cycleId) return;
-    var l1=line('Matching each row to sales order 48812 and its jobs',true); if(headMeta) headMeta.textContent='Sales order 48812 · 7 lines · from acme-requested-dates.xlsx'; await sleep(800); l1.className='ln done';
-    var l2=line('Comparing each requested date with the job’s scheduled finish',true);
-    for(var i=0;i<trows.length;i++){ if(id!==cycleId) return; var r=ROWS[i]; await typeText(trows[i].querySelector('.new'), r[4]); var rec=trows[i].querySelector('.rec'); rec.className='rec '+r[5]; rec.innerHTML=(r[5]==='ok'?'On track':'Needs a call')+'<small>· '+r[6]+'</small>'; if(r[5]==='no') trows[i].classList.add('skip'); count.textContent=(i+1)+' of 7 read'; await sleep(220); }
-    l2.className='ln done';
-    line('5 lines are on track. Lines 50 and 60 are at anodize until Oct 27, so they stay unchecked.',false);
-    status.textContent='5 of 7 selected. Accept to update the jobs.'; accept.disabled=false; accept.classList.add('pulse'); accept.textContent='Update 5 due dates';
-    var t=0; while(t<4200 && !accepted && id===cycleId){ await sleep(100); t+=100; }
-    if(id!==cycleId) return;
-    if(!accepted) await applyChanges(trows,id);
-    await sleep(5600); if(id!==cycleId) return;
+    renderTable();
+  }
+  async function cycle(){
+    var id=++cycleId; var live=function(){return id===cycleId;};
+    reset();
+    /* 1 · Mike describes the app to Archie in Builder */
+    await sleep(700); if(!live()) return;
+    await typeChars(input,PROMPT,11); if(!live()) return;
+    send.classList.add('pulse'); await sleep(500); if(!live()) return;
+    send.classList.remove('pulse'); input.textContent='';
+    msgs.innerHTML=''; msg('xb-user','<span class="xb-bubble">'+PROMPT+'</span><i class="xb-mav"><img src="'+MEDIA+'av-mike.jpg" alt="" width="22" height="22"></i>');
+    await sleep(500); if(!live()) return;
+    empty.classList.add('off'); skel.classList.add('on'); badge.hidden=false; badge.textContent='Building…';
+    var steps=['Reading sales orders, lines and jobs','Matching each line to its job and scheduled finish','Adding a file drop zone and an Update due dates action'];
+    for(var s=0;s<steps.length;s++){ var l=toolLine(steps[s]); await sleep(900); if(!live()) return; l.className='xb-msg xb-tool done'; }
+    skel.classList.remove('on'); app.classList.add('on');
+    title.textContent='Customer date changes'; badge.textContent='Unpublished'; badge.className='xb-badge draft';
+    msg('xb-agent','<span class="xb-saved">✓ Saved v1</span><span class="xb-tx">▸ Tool transcript (9)</span><p>Done. It matches each row in the file to its sales order line and job, and only updates the lines you accept. Publish it when you’re ready.</p>');
+    publish.hidden=false; undo.hidden=false;
+    await sleep(1300); if(!live()) return;
+    publish.classList.add('pulse'); await clickOrWait(publish,1800); if(!live()) return;
+    publish.classList.remove('pulse'); publish.classList.add('open'); pop.classList.add('on'); await sleep(450); if(!live()) return;
+    await choose(popNav,['Don’t show','Sales','Purchasing','Production','Scheduling'],'Sales'); if(!live()) return;
+    await chooseMany(popRoles,['Customer Service','Sales','Production','Purchasing','Accounting'],['Sales','Customer Service']); if(!live()) return;
+    popGo.classList.add('pulse'); await clickOrWait(popGo,900); if(!live()) return;
+    popGo.classList.remove('pulse'); popLive.textContent='v1'; await sleep(350); pop.classList.remove('on'); publish.classList.remove('open');
+    badge.textContent='Published'; badge.className='xb-badge live';
+    msg('xb-agent','<p>Published v1 to the <b>Sales</b> menu. Visible to <b>Sales</b> and <b>Customer Service</b>.</p>');
+    await sleep(1000); if(!live()) return;
+    /* 2 · the app is opened from the Sales menu and used */
+    cur.classList.add('on'); cursorTo(canvasEl,.55,.45,true); await sleep(500); if(!live()) return;
+    await cursorTo(railSales,.5,.5); railSales.classList.add('peek'); flyout(true,'shown'); await sleep(500); if(!live()) return;
+    await cursorTo(flyApp,.35,.5); flyApp.classList.add('pick'); await sleep(350); if(!live()) return;
+    cur.classList.add('click'); await sleep(250); cur.classList.remove('click');
+    flyout(false); railSales.classList.remove('peek');
+    persona('use'); badge.hidden=true; publish.hidden=true; undo.hidden=true; title.textContent='Customer date changes';
+    await cursorTo(zone,.62,.7); if(!live()) return; await sleep(500); if(!live()) return;
+    cur.classList.remove('on');
+    file.classList.add('in'); await sleep(700); if(!live()) return;
+    zone.classList.add('hot'); await sleep(700); if(!live()) return;
+    intake.classList.add('off'); result.classList.add('on'); headMeta.textContent='Reading acme-requested-dates.xlsx…'; await sleep(900); if(!live()) return;
+    chipMeta.textContent='7 rows · matched to sales order 48812 · Acme'; headMeta.textContent='Sales order 48812 · Acme'; count.hidden=false; count.textContent='0 of 7 read';
+    var trows=table.querySelectorAll('.xf-t:not(.hdr)');
+    for(var i=0;i<trows.length;i++){ if(!live()) return; var r=ROWS[i];
+      trows[i].classList.add('in'); await sleep(140); trows[i].querySelector('.cur').classList.add('old'); trows[i].querySelector('.arrow').textContent='→';
+      await fadeIn(trows[i].querySelector('.new'),r[5]);
+      var rec=trows[i].querySelector('.rec'); rec.className='rec '+r[6]; rec.innerHTML=(r[6]==='ok'?'On track':'Suggest '+r[8])+'<small>· '+r[7]+'</small>';
+      if(r[6]==='no') trows[i].classList.add('skip'); count.textContent=(i+1)+' of 7 read'; await sleep(220); }
+    status.textContent='5 of 7 selected. 2 items can’t make the requested date, so it suggests the earliest date that works.'; accept.disabled=false; accept.classList.add('pulse'); accept.textContent='Update 5 due dates';
+    var t=0; while(t<4200 && !accepted && live()){ await sleep(100); t+=100; }
+    if(!live()) return;
+    if(!accepted) await applyChanges(id);
+    await sleep(5600); if(!live()) return;
     cycle();
   }
-  accept.addEventListener('click',function(){ if(!accept.disabled){ var tr=[].slice.call(table.querySelectorAll('.xf-t:not(.hdr)')); applyChanges(tr,cycleId); } });
-  reject.addEventListener('click',function(){ if(accepted) return; cycleId++; accepted=true; status.textContent='Cleared. No jobs were changed.'; accept.disabled=true; accept.classList.remove('pulse'); line('Cleared. Nothing was written to Fulcrum.',false); setTimeout(cycle,2600); });
-  (function(){ var el=document.getElementById('xf'); if(el&&'IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })){ io.disconnect(); cycle(); } },{threshold:.25}); io.observe(el); } else cycle(); })();
+  accept.addEventListener('click',function(){ if(!accept.disabled) applyChanges(cycleId); });
+  reject.addEventListener('click',function(){ if(accepted||accept.disabled) return; cycleId++; accepted=true; status.textContent='Cleared. Nothing was written to Fulcrum.'; accept.disabled=true; accept.classList.remove('pulse'); setTimeout(cycle,2600); });
+  reset();
+  if('IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })){ io.disconnect(); cycle(); } },{threshold:.25}); io.observe(root); } else cycle();
 })();
 (function(){
   /* Hero scripted demo: six builds, six different interfaces. Sample data only. */
