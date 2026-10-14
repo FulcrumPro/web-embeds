@@ -1,4 +1,4 @@
-/* Archie Builder page · act panel v18 (Oct 14 pm): the published app opens in a fresh page load for Jen, and the write-back moves the board (dates swap in, a progress strip fills, rows re-sort by their new dates). v17: Jen's cursor ticks each line as it lands and clicks Update itself. v16: the Fulcrum nav with labels replaces the icon rail, and the accepted click fans out to five places in Fulcrum.
+/* Archie Builder page · act panel v19 (Oct 14 pm): the five-places card covers the whole panel (no product chrome behind it). v18: the published app opens in a fresh page load for Jen, and the write-back moves the board (dates swap in, a progress strip fills, rows re-sort by their new dates). v17: Jen's cursor ticks each line as it lands and clicks Update itself. v16: the Fulcrum nav with labels replaces the icon rail, and the accepted click fans out to five places in Fulcrum.
    Loaded before builder-page.js; supersedes the act-panel section there. CSS: act-nav.css */
 document.addEventListener("DOMContentLoaded",function(){
 (function(){
@@ -78,17 +78,6 @@ document.addEventListener("DOMContentLoaded",function(){
     +        '<div class="xf-actions"><span class="xf-status" id="xbStatus"></span><div><button class="xf-reject" id="xbReject" type="button">Clear</button><button class="xf-accept" id="xbAccept" type="button" disabled>Update due dates</button></div></div>'
     +        '</div>'
     +      '</div>'
-    +      '<div class="xb-five" id="xbFive" aria-hidden="true">'
-    +        '<div class="xb-five-h"><b>One click. Five places.</b><span>Jen accepted five dates. Fulcrum did the rest.</span></div>'
-    +        '<div class="xb-five-g">'
-    +          '<div class="xb-fp" data-nav="production"><i>'+ico(I.jobs)+'</i><b>Jobs</b><span>5 due dates changed</span></div>'
-    +          '<div class="xb-fp" data-nav="scheduling"><i>'+ico(I.scheduling)+'</i><b>Schedule</b><span>Rebuilt around the new dates</span></div>'
-    +          '<div class="xb-fp" data-nav="sales"><i>'+ico(I.order)+'</i><b>Sales order 48812</b><span>5 lines updated</span></div>'
-    +          '<div class="xb-fp" data-nav="production"><i>'+ico(I.note)+'</i><b>Job notes</b><span>5 added · J. Okafor</span></div>'
-    +          '<div class="xb-fp" data-nav="live"><i>'+ico(I.floor)+'</i><b>Shop floor</b><span>Travelers show the new dates</span></div>'
-    +        '</div>'
-    +        '<div class="xb-five-f">Nothing re-keyed. Nothing exported.</div>'
-    +      '</div>'
     +    '</div>'
     +    '<div class="xb-tag">Simulated on sample data</div>'
     +    '</div>'
@@ -98,7 +87,20 @@ document.addEventListener("DOMContentLoaded",function(){
     +      '<div class="xb-compose"><div class="xb-input" id="xbInput"></div><div class="xb-cbar">'+ico('<path d="M21 11.5l-8.6 8.6a5 5 0 0 1-7.1-7.1l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9"/>')+'<span class="xb-send" id="xbSend">Send</span></div></div>'
     +    '</div>'
     +  '</div>'
-    +'</div>';
+    +'</div>'
+    /* the five-places card is NOT a product screen: it covers the whole panel, nav and header included */
+    +'<div class="xb-five" id="xbFive" aria-hidden="true">'
+    +  '<div class="xb-five-h"><b>One click. Five places.</b><span>Jen accepted five dates. Fulcrum did the rest.</span></div>'
+    +  '<div class="xb-five-g">'
+    +    '<div class="xb-fp" data-nav="production"><i>'+ico(I.jobs)+'</i><b>Jobs</b><span>5 due dates changed</span></div>'
+    +    '<div class="xb-fp" data-nav="scheduling"><i>'+ico(I.scheduling)+'</i><b>Schedule</b><span>Rebuilt around the new dates</span></div>'
+    +    '<div class="xb-fp" data-nav="sales"><i>'+ico(I.order)+'</i><b>Sales order 48812</b><span>5 lines updated</span></div>'
+    +    '<div class="xb-fp" data-nav="production"><i>'+ico(I.note)+'</i><b>Job notes</b><span>5 added · J. Okafor</span></div>'
+    +    '<div class="xb-fp" data-nav="live"><i>'+ico(I.floor)+'</i><b>Shop floor</b><span>Travelers show the new dates</span></div>'
+    +  '</div>'
+    +  '<div class="xb-five-f">Nothing re-keyed. Nothing exported.</div>'
+    +'</div>'
+    ;
 
   var ROWS=[["Mounting bracket","120","4856","In progress","Oct 24","Oct 15","ok","Scheduled finish Oct 14"],["Hinge plate","80","4857","In progress","Oct 24","Oct 15","ok","Scheduled finish Oct 14"],["Valve body","40","4861","Material due Oct 9","Oct 28","Oct 17","ok","Scheduled finish Oct 16"],["Pump housing","25","4870","Outside: anodize","Nov 4","Oct 22","no","Back from anodize Oct 27","Oct 29"],["Pump cover","25","4871","Outside: anodize","Nov 4","Oct 22","no","Back from anodize Oct 27","Oct 29"],["Drive shaft","60","4880","Not started","Oct 31","Nov 14","ok","Later than current due"],["Bearing cap","150","4902","Complete, awaiting ship","Oct 21","Oct 14","ok","Can ship now"]];
   var PROMPT='Make a page where we drop in a customer’s file of requested dates, match each line to its job, show the job’s status, and update the due dates on the lines we accept.';

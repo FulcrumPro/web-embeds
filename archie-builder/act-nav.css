@@ -24,7 +24,7 @@
 .ab-root .xb-ns .xb-nsapp.pick{background:#1d63ed;color:#fff;font-weight:600}
 .ab-root .xb-nav-user{margin-top:auto;display:flex;align-items:center;gap:8px;padding:8px 6px;color:#aab0bd;font-size:12px}
 .ab-root .xb-nav-user .xb-rav{margin-top:0}
-.ab-root .xb-five{position:absolute;inset:0;z-index:4;display:grid;align-content:center;justify-items:center;gap:18px;padding:24px;background:rgba(255,255,255,.96);opacity:0;pointer-events:none;transition:opacity .45s}
+.ab-root .xb-five{position:absolute;inset:0;z-index:9;display:grid;align-content:center;justify-items:center;gap:18px;padding:24px;background:#fff;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .45s}
 .ab-root .xb-five.on{opacity:1}
 .ab-root .xb-five-h{text-align:center;display:grid;gap:5px}
 .ab-root .xb-five-h b{font-family:'Gilroy','Inter',sans-serif;font-size:26px;font-weight:700;color:#292932;letter-spacing:-.3px;line-height:1.1}
@@ -66,3 +66,6 @@
 .ab-root .xb .xf-t .cur.swap-in{animation:xbSwapIn .32s cubic-bezier(.2,.8,.2,1) both;font-weight:600;color:#166534}
 .ab-root .xb .xf-t .xb-written{font-size:11px;font-weight:600;color:#166534;white-space:nowrap}
 @keyframes xbSwapIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* v5 (Oct 14 pm): the five-places card sits over the whole panel, not inside the app, so it never reads as a product screen */
+.ab-root .panel.xb{position:relative}
