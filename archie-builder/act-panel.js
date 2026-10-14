@@ -1,4 +1,4 @@
-/* Archie Builder page · act panel v17 (Oct 14 pm): Jen's cursor ticks each line as it lands and clicks Update itself. v16: the Fulcrum nav with labels replaces the icon rail, and the accepted click fans out to five places in Fulcrum.
+/* Archie Builder page · act panel v18 (Oct 14 pm): the published app opens in a fresh page load for Jen, and the write-back moves the board (dates swap in, a progress strip fills, rows re-sort by their new dates). v17: Jen's cursor ticks each line as it lands and clicks Update itself. v16: the Fulcrum nav with labels replaces the icon rail, and the accepted click fans out to five places in Fulcrum.
    Loaded before builder-page.js; supersedes the act-panel section there. CSS: act-nav.css */
 document.addEventListener("DOMContentLoaded",function(){
 (function(){
@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded",function(){
     +'</div>'
     +'<span class="xb-cur" id="xbCur" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2l15 11.5-6.6 1.1 3.9 7.6-2.9 1.4-3.8-7.7L4 20.7z"/></svg></span>'
     +'<div class="xb-main">'
+    +  '<div class="xb-reload" id="xbReload" aria-hidden="true"><i id="xbReloadBar"></i><span><b></b>Opening Customer date changes…</span></div>'
     +  '<div class="xb-head">'
     +    '<span class="xb-crumb" id="xbCrumb">Builder</span><span class="xb-sep">›</span><b class="xb-title" id="xbTitle">Untitled page</b>'
     +    '<span class="xb-badge" id="xbBadge" hidden></span>'
@@ -72,6 +73,7 @@ document.addEventListener("DOMContentLoaded",function(){
     +        '</div>'
     +        '<div class="xb-result" id="xbResult">'
     +        '<div class="xb-chip" id="xbChip"><span class="xf-ico xls">XLS</span><div><b>acme-requested-dates.xlsx</b><small id="xbChipMeta">Reading…</small></div></div>'
+    +        '<div class="xb-strip" id="xbStrip" aria-hidden="true"><span>Writing due dates to Fulcrum</span><span class="xb-bar"><i id="xbStripBar"></i></span><span><b id="xbStripN">0</b> of 5 written</span></div>'
     +        '<div class="xf-table" id="xbTable"></div>'
     +        '<div class="xf-actions"><span class="xf-status" id="xbStatus"></span><div><button class="xf-reject" id="xbReject" type="button">Clear</button><button class="xf-accept" id="xbAccept" type="button" disabled>Update due dates</button></div></div>'
     +        '</div>'
@@ -107,6 +109,7 @@ document.addEventListener("DOMContentLoaded",function(){
   var status=q('xbStatus'), accept=q('xbAccept'), reject=q('xbReject'), five=q('xbFive'), fps=[].slice.call(five.querySelectorAll('.xb-fp'));
   var who=q('xbWho'), whoAv=q('xbWhoAv'), whoName=q('xbWhoName'), whoRole=q('xbWhoRole'), step=q('xbStep');
   var chat=q('xbChat'), msgs=q('xbMsgs'), input=q('xbInput'), send=q('xbSend');
+  var reload=q('xbReload'), reloadBar=q('xbReloadBar'), strip=q('xbStrip'), stripBar=q('xbStripBar'), stripN=q('xbStripN');
   function sleep(ms){return new Promise(function(r){setTimeout(r,ms);});}
   function typeChars(el,text,ms){return new Promise(function(res){var k=0;el.textContent='';(function t(){if(k<text.length){k++;el.textContent=text.slice(0,k);setTimeout(t,ms);}else res();})();});}
   function fadeIn(el,text){el.textContent=text;el.style.opacity='0';el.style.transition='opacity .25s';requestAnimationFrame(function(){el.style.opacity='1';});return sleep(120);}
@@ -166,18 +169,44 @@ document.addEventListener("DOMContentLoaded",function(){
     var live=function(){return id===cycleId;};
     var trows=[].slice.call(table.querySelectorAll('.xf-t:not(.hdr)'));
     accept.classList.remove('pulse'); accept.disabled=true; accept.textContent='Updating…'; status.textContent='Writing due dates to Fulcrum…';
-    var applied=0; for(var i=0;i<trows.length;i++){ if(trows[i].classList.contains('skip')) continue; trows[i].classList.add('applied'); applied++; await sleep(170); }
+    var todo=trows.filter(function(t){ return !t.classList.contains('skip'); });
+    strip.classList.add('on'); stripN.textContent='0'; stripBar.style.width='4%'; await sleep(350); if(!live()) return;
+    /* each accepted line is written: the requested date slides into the due-date column, the row turns green, the strip fills */
+    var applied=0;
+    for(var i=0;i<todo.length;i++){ if(!live()) return; var t=todo[i], r=ROWS[trows.indexOf(t)];
+      var curEl=t.querySelector('.cur'), newEl=t.querySelector('.new'), arrow=t.querySelector('.arrow');
+      t.classList.add('writing'); await sleep(120);
+      curEl.classList.add('swap-out'); await sleep(170);
+      curEl.textContent=r[5]; curEl.classList.remove('old','swap-out'); curEl.classList.add('swap-in');
+      arrow.textContent=''; newEl.innerHTML='<span class="xb-written">✓ Written</span>';
+      t.classList.remove('writing'); t.classList.add('applied'); applied++;
+      stripN.textContent=String(applied); stripBar.style.width=(applied/todo.length*100)+'%';
+      await sleep(260); }
+    /* the board re-sorts by the new due dates: rows glide to where they now belong */
+    await sleep(320); if(!live()) return;
+    await resort(trows); if(!live()) return;
+    count.textContent=applied+' updated · 2 held';
     accept.textContent=applied+' due date'+(applied===1?'':'s')+' updated'; accept.classList.add('done');
     status.textContent='Done. 5 due dates updated. 2 unchanged, with suggested dates to send Acme.'; status.classList.add('ok');
     /* one click, five places: the write-back fans out across Fulcrum, and the nav shows where it went */
-    await sleep(900); if(!live()) return;
+    await sleep(1200); if(!live()) return;
     five.classList.add('on'); await sleep(350);
     for(var k=0;k<fps.length;k++){ if(!live()) return; fps[k].classList.add('in'); await sleep(200); }
     await sleep(350);
     for(var m=0;m<fps.length;m++){ if(!live()) return; fps[m].classList.add('on'); ping(fps[m].getAttribute('data-nav')); await sleep(420); }
   }
+  function dateKey(s){ var m=/^(\w{3}) (\d+)/.exec(s||''); if(!m) return 9999; return ({Oct:10,Nov:11,Dec:12}[m[1]]||13)*100+parseInt(m[2],10); }
+  async function resort(trows){
+    var first=trows.map(function(t){ return t.getBoundingClientRect().top; });
+    var order=trows.map(function(t,i){ return {t:t,i:i,k:dateKey(t.querySelector('.cur').textContent)}; }).sort(function(a,b){ return a.k-b.k||a.i-b.i; });
+    order.forEach(function(o){ table.appendChild(o.t); });
+    order.forEach(function(o){ var d=first[o.i]-o.t.getBoundingClientRect().top; if(d&&o.t.animate) o.t.animate([{transform:'translateY('+d+'px)'},{transform:'none'}],{duration:560,easing:'cubic-bezier(.2,.8,.2,1)'}); });
+    await sleep(620);
+  }
   function reset(){
     accepted=false; persona('build');
+    reload.classList.remove('on'); reloadBar.style.transition='none'; reloadBar.style.width='0'; reloadBar.offsetWidth; reloadBar.style.transition='';
+    strip.classList.remove('on'); stripBar.style.width='0'; stripN.textContent='0';
     title.textContent='Untitled page'; badge.hidden=true; badge.className='xb-badge';
     publish.hidden=true; undo.hidden=true; publish.classList.remove('pulse','done','open');
     navSales.classList.remove('on','open','peek'); flyApp.className='xb-nsapp';
@@ -227,7 +256,13 @@ document.addEventListener("DOMContentLoaded",function(){
     await cursorTo(flyApp,.45,.5); flyApp.className='xb-nsapp shown pick'; await sleep(350); if(!live()) return;
     cur.classList.add('click'); await sleep(250); cur.classList.remove('click');
     navSales.classList.remove('peek');
-    persona('use'); badge.hidden=true; publish.hidden=true; undo.hidden=true; title.textContent='Customer date changes';
+    /* the page reloads: Jen's browser opens the published app fresh, nothing of Mike's build session carries over */
+    reload.classList.add('on'); reloadBar.style.width='30%'; await sleep(450); if(!live()) return;
+    persona('use'); publish.hidden=true; undo.hidden=true; title.textContent='Customer date changes';
+    badge.hidden=false; badge.textContent='v1 · Live'; badge.className='xb-badge live';
+    reloadBar.style.width='78%'; await sleep(420); if(!live()) return;
+    reloadBar.style.width='100%'; await sleep(240); if(!live()) return;
+    reload.classList.remove('on'); await sleep(380); if(!live()) return;
     await cursorTo(zone,.62,.7); if(!live()) return; await sleep(500); if(!live()) return;
     file.classList.add('in'); await sleep(700); if(!live()) return;
     zone.classList.add('hot'); await sleep(700); if(!live()) return;

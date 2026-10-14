@@ -46,3 +46,23 @@
 .ab-root .xb .xf-t.pick .st{opacity:1;background:#1d63ed;border-color:#1d63ed;position:relative}
 .ab-root .xb .xf-t.pick .st::after{content:'';position:absolute;left:4px;top:1.5px;width:3px;height:7px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
 .ab-root .xb .xf-t.applied .st{background:var(--green);border-color:var(--green)}
+
+/* v4 (Oct 14 pm): the published app opens in a fresh page load; the write-back moves the board (dates swap in, a strip fills, rows re-sort) */
+.ab-root .xb-main{position:relative}
+.ab-root .xb-reload{position:absolute;inset:0;z-index:6;background:#fff;opacity:0;pointer-events:none;transition:opacity .25s}
+.ab-root .xb-reload.on{opacity:1}
+.ab-root .xb-reload i{position:absolute;left:0;top:0;height:3px;width:0;background:#1d63ed;transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.ab-root .xb-reload span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:10px;font-size:13px;color:#5e6066;white-space:nowrap}
+.ab-root .xb-reload b{width:16px;height:16px;border-radius:50%;border:2px solid #e2e2e6;border-top-color:#1d63ed;animation:xbspin .8s linear infinite}
+@keyframes xbspin{to{transform:rotate(360deg)}}
+.ab-root .xb-strip{display:none;align-items:center;gap:10px;margin:0 0 8px;padding:8px 12px;border-radius:8px;background:#f0fdf4;border:1px solid #bfe8cf;font-size:12px;color:#166534;white-space:nowrap}
+.ab-root .xb-strip.on{display:flex;animation:xbSwapIn .3s ease both}
+.ab-root .xb-strip .xb-bar{flex:1;height:6px;border-radius:999px;background:#d8f4e3;overflow:hidden}
+.ab-root .xb-strip .xb-bar i{display:block;height:100%;width:0;background:#3dc975;transition:width .35s cubic-bezier(.2,.8,.2,1)}
+.ab-root .xb-strip b{font-weight:700}
+.ab-root .xb .xf-t.writing{background:#eef3ff}
+.ab-root .xb .xf-t .cur{display:inline-block;transition:opacity .17s,transform .17s}
+.ab-root .xb .xf-t .cur.swap-out{opacity:0;transform:translateY(-6px)}
+.ab-root .xb .xf-t .cur.swap-in{animation:xbSwapIn .32s cubic-bezier(.2,.8,.2,1) both;font-weight:600;color:#166534}
+.ab-root .xb .xf-t .xb-written{font-size:11px;font-weight:600;color:#166534;white-space:nowrap}
+@keyframes xbSwapIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
