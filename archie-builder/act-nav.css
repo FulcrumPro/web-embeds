@@ -43,6 +43,6 @@
 @media (max-width:767px){.ab-root .panel.xb{grid-template-columns:minmax(0,1fr)}.ab-root .xb-nav{display:none}.ab-root .xb-five-g{grid-template-columns:repeat(2,minmax(0,1fr))}.ab-root .xb-five-h b{font-size:20px}.ab-root .xb-five{padding:16px}}
 
 /* v2 (Oct 14 pm): Jen ticks each line as it lands; the tick turns green once the due date is written */
-.ab-root .xb .xf-t.pick .st{background:#1d63ed;border-color:#1d63ed;position:relative}
+.ab-root .xb .xf-t.pick .st{opacity:1;background:#1d63ed;border-color:#1d63ed;position:relative}
 .ab-root .xb .xf-t.pick .st::after{content:'';position:absolute;left:4px;top:1.5px;width:3px;height:7px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
 .ab-root .xb .xf-t.applied .st{background:var(--green);border-color:var(--green)}
