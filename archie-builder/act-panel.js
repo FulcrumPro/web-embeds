@@ -1,4 +1,4 @@
-/* Archie Builder page · act panel v16 (Oct 14): the Fulcrum nav with labels replaces the icon rail, and the accepted click fans out to five places in Fulcrum.
+/* Archie Builder page · act panel v17 (Oct 14 pm): Jen's cursor ticks each line as it lands and clicks Update itself. v16: the Fulcrum nav with labels replaces the icon rail, and the accepted click fans out to five places in Fulcrum.
    Loaded before builder-page.js; supersedes the act-panel section there. CSS: act-nav.css */
 document.addEventListener("DOMContentLoaded",function(){
 (function(){
@@ -129,12 +129,14 @@ document.addEventListener("DOMContentLoaded",function(){
       field.innerHTML=chosen.map(function(c){ return '<em class="xb-tagchip">'+c+'</em>'; }).join(''); field.classList.add('set'); await sleep(220); }
     await sleep(150); opts.className='xb-opts'; field.classList.remove('focus'); await sleep(200);
   }
-  function cursorTo(el,fx,fy,instant){
+  function cursorTo(el,fx,fy,instant,ms){
+    ms=ms||750;
     var r=el.getBoundingClientRect(), o=root.getBoundingClientRect();
-    cur.style.transition=instant?'none':'transform .75s cubic-bezier(.45,.05,.25,1)';
+    cur.style.transition=instant?'none':'transform '+ms+'ms cubic-bezier(.45,.05,.25,1)';
     cur.style.transform='translate('+(r.left-o.left+r.width*fx)+'px,'+(r.top-o.top+r.height*fy)+'px)';
-    return sleep(instant?0:800);
+    return sleep(instant?0:ms+50);
   }
+  async function click(){ cur.classList.add('click'); await sleep(170); cur.classList.remove('click'); }
   function persona(p){
     var build=p==='build';
     root.classList.toggle('use',!build);
@@ -227,21 +229,26 @@ document.addEventListener("DOMContentLoaded",function(){
     navSales.classList.remove('peek');
     persona('use'); badge.hidden=true; publish.hidden=true; undo.hidden=true; title.textContent='Customer date changes';
     await cursorTo(zone,.62,.7); if(!live()) return; await sleep(500); if(!live()) return;
-    cur.classList.remove('on');
     file.classList.add('in'); await sleep(700); if(!live()) return;
     zone.classList.add('hot'); await sleep(700); if(!live()) return;
     intake.classList.add('off'); result.classList.add('on'); headMeta.textContent='Reading acme-requested-dates.xlsx…'; await sleep(900); if(!live()) return;
     chipMeta.textContent='7 rows · matched to sales order 48812 · Acme'; headMeta.textContent='Sales order 48812 · Acme'; count.hidden=false; count.textContent='0 of 7 read';
-    var trows=table.querySelectorAll('.xf-t:not(.hdr)');
+    var trows=table.querySelectorAll('.xf-t:not(.hdr)'), picks=0;
     for(var i=0;i<trows.length;i++){ if(!live()) return; var r=ROWS[i];
       trows[i].classList.add('in'); await sleep(140); trows[i].querySelector('.cur').classList.add('old'); trows[i].querySelector('.arrow').textContent='→';
       await fadeIn(trows[i].querySelector('.new'),r[5]);
       var rec=trows[i].querySelector('.rec'); rec.className='rec '+r[6]; rec.innerHTML=(r[6]==='ok'?'On track':'Suggest '+r[8])+'<small>· '+r[7]+'</small>';
-      if(r[6]==='no') trows[i].classList.add('skip'); count.textContent=(i+1)+' of 7 read'; await sleep(220); }
+      count.textContent=(i+1)+' of 7 read';
+      /* Jen reviews each line as it lands: a tick for the ones she accepts, a pass on the two that can't make the date */
+      await cursorTo(trows[i].querySelector('.st'),.5,.5,false,320); if(!live()) return;
+      if(r[6]==='no'){ trows[i].classList.add('skip'); await sleep(260); }
+      else { await click(); trows[i].classList.add('pick'); picks++; status.textContent=picks+' of 7 selected. Nothing changes until you accept.'; await sleep(120); } }
     status.textContent='5 of 7 selected. 2 items can’t make the requested date, so it suggests the earliest date that works.'; accept.disabled=false; accept.classList.add('pulse'); accept.textContent='Update 5 due dates';
-    var t=0; while(t<4200 && !accepted && live()){ await sleep(100); t+=100; }
-    if(!live()) return;
-    if(!accepted) await applyChanges(id);
+    await sleep(500); if(!live()) return;
+    await cursorTo(accept,.5,.55,false,650); if(!live()) return;
+    if(!accepted){ await click(); if(!live()) return; applyChanges(id); }
+    await sleep(500); cur.classList.remove('on');
+    while(!five.classList.contains('on') && live()) await sleep(100);
     await sleep(6500); if(!live()) return;
     cycle();
   }
