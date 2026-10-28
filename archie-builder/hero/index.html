@@ -8381,10 +8381,10 @@ async function startBuildAutoplay(){
    which crossfades (240ms) to the page. Over an existing page (iterations)
    the same visual floats at lower intensity with no status line. */
 const BV_INTENSITY = { fill: { idle: .3, waiting: .3, building: .15 }, overlay: { idle: .2, waiting: .2, building: .09 } };
-const BV_EXIT_MS = 450;
+const BV_EXIT_MS = 350;
 /* Product: each line cycles every 3500ms and holds at least 3500ms. A demo turn is
    compressed to ~3–5s, so the line timing is scaled down to let it move with the turn. */
-const BV_CYCLE_MS = 1400, BV_DWELL_MS = 1100;
+const BV_CYCLE_MS = 1000, BV_DWELL_MS = 800;
 const BV_ORBS = 5, BV_PASS_MIN_S = 7, BV_PASS_MAX_S = 11, BV_STAGGER_S = .8, BV_REACH = 110;
 const BV_LINES = {
   thinking: ["Parsing your request…", "Planning the data model…", "Comparing report and list endpoints…", "Weighing the layout options…"],
@@ -8403,7 +8403,7 @@ const CPS_GENERIC = [
   { kind: "kpi",     left: .74, width: .22, top: 5,   height: 6 },
   { kind: "table",   left: .02, width: .94, top: 13,  height: 28 },
 ];
-const CPS_FADE_MS = 240, CPS_ROW_REM = 2.25, CPS_HOLD_MS = 500;
+const CPS_FADE_MS = 240, CPS_ROW_REM = 2.25, CPS_HOLD_MS = 350;
 /* Hero loop pacing: open on a finished app, hold each finished app ~11s, no countdown. */
 const OPEN_HOLD_MS = 3800, END_HOLD_MS = 11000;
 const REDUCED_MOTION = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -8759,7 +8759,7 @@ async function startBuildFlow(prompt, overrideCfg){
   const stream = sessionEl.querySelector(".working-stream");
   const toolCount = cfg.steps.filter(st => st.kind !== "narration").length;
   let toolIndex = 0;
-  await sleep(250);
+  await sleep(150);
   for (const step of cfg.steps){
     visual.activity(...bvActivityFor(step, toolIndex, toolCount, isIteration));
     if (step.kind !== "narration") toolIndex++;
@@ -8776,7 +8776,7 @@ async function startBuildFlow(prompt, overrideCfg){
     }
     const body = $("#build-leftbody");
     body.scrollTop = body.scrollHeight;
-    await sleep(step.kind === "narration" ? 520 : 320);
+    await sleep(step.kind === "narration" ? 380 : 230);
   }
 
   // Commit, then hand off: a new page fades the orbs out over its loading skeleton,
