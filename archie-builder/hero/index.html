@@ -4399,6 +4399,51 @@
   html.is-booting .app{ visibility: hidden; }
   @media (prefers-reduced-motion: reduce){ .bv-chip-ring{ animation: none; } }
 
+  /* ─── Hero left column: prompt at the top, a tinted pane, Archie's reply + the tool list ─── */
+  .build-left{ background: #f7f8fb; }
+  .build-leftbody{ justify-content: flex-start; transition: opacity .3s ease; }
+  .build-leftbody > :first-child{ margin-top: 0; }
+  .build-leftbody.is-prev > *{ opacity: .45; filter: saturate(.7); }
+  .build-leftbody .msg-user{ margin: 0 0 12px; max-width: 92%; box-shadow: 0 6px 18px -10px rgba(44,92,255,.6); }
+  .build-leftbody .saved-line{ margin: 0 0 10px; }
+  .archie-reply{ display: flex; gap: 10px; align-items: flex-start; margin: 0 0 12px; }
+  .archie-avatar{ flex: none; width: 24px; height: 24px; border-radius: 50%; color: #fff;
+    background: linear-gradient(135deg, #2c5cff, #7b9bff); display: grid; place-items: center; margin-top: 1px; }
+  .archie-avatar svg{ width: 13px; height: 13px; }
+  .archie-reply-body{ font-size: 13.5px; line-height: 1.55; color: #2a2d32; }
+  .done-steps{ display: flex; flex-direction: column; gap: 7px; padding: 10px 12px 11px;
+    background: #fff; border: 1px solid var(--line-2); border-radius: 10px; }
+  .done-steps .hd{ font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: #98a2b3; font-weight: 600; }
+  .done-step{ display: flex; gap: 8px; align-items: flex-start; font-size: 12px; line-height: 1.45; }
+  .done-step .tick{ color: #16a34a; font-weight: 700; flex: none; width: 12px; }
+  .done-step .body{ display: flex; flex-direction: column; min-width: 0; }
+  .done-step .name{ font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: #2c5cff; }
+  .done-step .res{ color: #4a4e55; }
+  .build-composer{ background: #fff; }
+
+  /* ─── Phone layout (frame under 760px): prompt strip up top, the app scaled to width below ─── */
+  html.is-mobile body{ background: #fff; }
+  html.is-mobile .app{ width: 100vw !important; height: 100vh !important; transform: none !important; }
+  html.is-mobile .build-editor-head{ display: none; }
+  html.is-mobile .build-split{ display: block; position: relative; }
+  html.is-mobile .build-left{ height: auto; border-right: 0; border-bottom: 1px solid var(--line-2); }
+  html.is-mobile .build-leftbody{ flex: none; max-height: 168px; padding: 12px 14px 2px; overflow: hidden; }
+  html.is-mobile .build-leftbody .saved-line{ margin-bottom: 6px; }
+  html.is-mobile .build-leftbody .msg-user{ max-width: 100%; font-size: 12.5px; padding: 8px 10px; margin: 0 0 8px; }
+  html.is-mobile .working-stream .status{ font-size: 12.5px; }
+  html.is-mobile .working-stream .narration, html.is-mobile .working-stream .toolcall,
+  html.is-mobile .archie-reply, html.is-mobile .done-steps, html.is-mobile .build-empty,
+  html.is-mobile .composer-tools, html.is-mobile #demo-pause{ display: none !important; }
+  html.is-mobile .build-composer{ padding: 6px 10px 8px; }
+  html.is-mobile .build-composer .composer{ padding: 4px 10px; }
+  html.is-mobile .build-composer .composer textarea{ min-height: 24px; padding: 4px 2px; }
+  html.is-mobile .build-composer .composer textarea{ font-size: 12.5px; line-height: 1.45; max-height: 56px; overflow: hidden; }
+  html.is-mobile .build-right{ position: absolute; left: 0; top: var(--left-h, 226px); border-top: 0;
+    width: calc(100vw / var(--ps, .5)); height: calc((100vh - var(--left-h, 226px)) / var(--ps, .5));
+    transform: scale(var(--ps, .5)); transform-origin: 0 0; }
+  /* status chip reads at native size over the scaled pane */
+  html.is-mobile .bv-chip{ transform: translateX(-50%) scale(calc(1 / var(--ps, .5))); transform-origin: 50% 100%; bottom: 18px; }
+
   /* ============ WHITE-FLASH SESSION TRANSITION (Build autoplay) ============ */
   #session-flash{
     position: fixed; inset: 0; z-index: 99999; background: #fff;
@@ -5159,6 +5204,7 @@ const BUILD_SEQUENCE = [
       { kind: "narration", text: "Now the part a list can't do — flagging the lines with NO source within 5 days of their ship date. Those are the silent misses: nothing on hand, no job running, and the date's already here." },
       { kind: "tool", n: 4, name: "get-operations-missing-material-picks", res: "Found 17 lines with no fulfillment source — 2 already 3+ weeks late" },
     ],
+    reply: "Done. Every open line now shows what's fulfilling it: stock, a direct job, or a stock job. The 17 lines with nothing making them sit at the top, and the two that are already three weeks late are called out in Archie's take.",
     render: () => deliveryHTML(BRANDS.titanforge),
     afterRender: (pane) => appBoardAfter(pane),
   },
@@ -5179,6 +5225,7 @@ const BUILD_SEQUENCE = [
       { kind: "tool", n: 3, name: "get-customer-details", res: "Geocoded ship-to addresses and tagged each by account status" },
       { kind: "narration", text: "Dropping them on a full-screen map you can pan around — colored by account status, with the legend and live counts up top." },
     ],
+    reply: "Here's your customer map: 367 ship-to locations, colored by account status, with 12-month sales on every pin. Pan around and the counts up top follow the view.",
     render: () => customerMapHTML(BRANDS.keelridge),
     afterRender: (pane) => customerMapAfter(pane),
   },
@@ -5202,6 +5249,7 @@ const BUILD_SEQUENCE = [
       { kind: "tool", n: 4, name: "get-certifications-for-entity", res: "AS9102 first-article required for this customer" },
       { kind: "narration", text: "Adding sign-off lines and a one-click Export as PDF so it drops straight into the job folder." },
     ],
+    reply: "Your inspection plan is ready. Type a job number and the header fills itself from the job, the plan drafts from the part's own tolerances and callouts, and Export as PDF drops a signed copy into the job folder.",
     render: () => inspectionFormHTML(BRANDS.keystone),
     afterRender: (pane) => inspectionFormAfter(pane),
   },
@@ -5215,6 +5263,7 @@ const BUILD_SEQUENCE = [
     timestamp: "6/1/26, 8:47 AM",
     desc: "Live mission-control display of every active bay",
     tint: ["#1d1d1d", "#0a0a0a"],
+    reply: "Floor Command is live. Eight bays, current job and operator on each, late and critical-path work pulled to the top. Built for a wall TV, refreshes every 30 seconds.",
     steps: [
       { kind: "narration", text: "Best on a big screen. Pulling live machine status, current jobs, and who's punched in at every active bay." },
       { kind: "tool", n: 1, name: "get-equipment-schedule", res: "Loaded 8 active machines with current operations" },
@@ -5235,6 +5284,7 @@ const BUILD_SEQUENCE = [
     version: "v2",
     timestamp: "6/1/26, 8:52 AM",
     desc: "Live bay status + daily ship-goal celebration",
+    reply: "Added the daily ship goal to the top bar. It's at 24 of 25 right now; the moment the next shipment posts, the board celebrates so the whole crew sees it.",
     tint: ["#1d1d1d", "#0a0a0a"],
     iterates: true,
     endHold: 12000,   // longer finale: count-up + confetti land
@@ -5342,6 +5392,7 @@ async function typewriter(input, text, target){
     const ch = text[i];
     input.value += ch;
     input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.scrollTop = input.scrollHeight;
     // Hero demo: about twice the product's typing speed, so the wait before each build is short.
     let delay = 15 + Math.random() * 18;
     if (ch === " ") delay += 12;
@@ -8344,7 +8395,10 @@ async function startBuildAutoplay(){
       if (!cfg.iterates){
         // New shop: keep the last app on screen, dimmed, while the next prompt types.
         $("#build-right").classList.add("is-prev");
-        clearBuildLog();
+        $("#build-leftbody").classList.add("is-prev");
+        $("#build-title").textContent = "Untitled page";
+        $("#build-version").textContent = "";
+        $("#build-version").classList.remove("pending");
         state.activeSessionId = null;
         state.buildStage = "empty";
         renderBuildSessions();
@@ -8732,6 +8786,9 @@ async function startBuildFlow(prompt, overrideCfg){
   }
   const visual = bvStartTurn(true, true);
 
+  // The dimmed previous conversation makes way for this one
+  const leftbody = $("#build-leftbody");
+  if (leftbody.classList.contains("is-prev")){ leftbody.innerHTML = ""; leftbody.classList.remove("is-prev"); }
   // Hide initial empty state if visible
   const empty = $("#build-leftbody .build-empty");
   if (empty) empty.classList.add("is-hidden");
@@ -8807,9 +8864,13 @@ function finishBuild(cfg, sessionEl){
     if (s.kind === "narration") return `<div class="r-narration">${escapeHTML(s.text)}</div>`;
     return `<div class="r-tool"><span class="n">${s.n}.</span> <span class="name">${escapeHTML(s.name)}</span> <span class="res">— ${escapeHTML(s.res)}</span></div>`;
   }).join("");
+  const toolSteps = cfg.steps.filter(s => s.kind !== "narration");
+  const doneItems = toolSteps.map(s => `<div class="done-step"><span class="tick">✓</span><span class="body"><span class="name">${escapeHTML(s.name)}</span><span class="res">${escapeHTML(s.res)}</span></span></div>`).join("");
+  const replyHTML = cfg.reply ? `
+    <div class="archie-reply"><span class="archie-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/></svg></span><div class="archie-reply-body">${escapeHTML(cfg.reply)}</div></div>` : "";
   stream.outerHTML = `
-    <div class="saved-line">✓ Saved ${cfg.version}</div>
-    <button class="tool-transcript" data-action="toggle-tool-transcript">▸ Tool transcript (${cfg.steps.length})</button>
+    <div class="saved-line">✓ Saved ${cfg.version}</div>${replyHTML}
+    <div class="done-steps"><div class="hd">${toolSteps.length} tool call${toolSteps.length === 1 ? "" : "s"}</div>${doneItems}</div>
     <div class="tool-transcript-panel" hidden data-count="${cfg.steps.length}">${transcriptItems}</div>`;
 
   // Render the result in the right pane
@@ -10064,18 +10125,38 @@ resetBuild();
 startHeroWordCycle();
 
 // EMBED FIT: scale the 1600×1000 canvas to fit the iframe (1280×800).
+/* Desktop: the 1333×833 canvas scales to fit the frame. Phones (frame under 760px wide):
+   the prompt sits in a native-size strip up top and the app pane below is scaled to the
+   frame's width (pane designed at 840px), so a portrait frame shows a readable prompt
+   and the whole app. */
+const MOBILE_BP = 760, MOBILE_PANE_W = 840;
 function fitDemo(){
-  const s = Math.min(window.innerWidth / 1333, window.innerHeight / 833);
-  document.documentElement.style.setProperty("--demo-scale", String(s));
+  const root = document.documentElement;
+  const mobile = window.innerWidth < MOBILE_BP;
+  root.classList.toggle("is-mobile", mobile);
+  if (mobile){
+    root.style.setProperty("--ps", String(window.innerWidth / MOBILE_PANE_W));
+    root.style.setProperty("--demo-scale", "1");
+    const left = document.querySelector("#build-editor .build-left");
+    if (left) root.style.setProperty("--left-h", left.offsetHeight + "px");
+  } else {
+    const s = Math.min(window.innerWidth / 1333, window.innerHeight / 833);
+    root.style.setProperty("--demo-scale", String(s));
+  }
 }
 fitDemo();
 window.addEventListener("resize", fitDemo, { passive: true });
+// Phone layout: the prompt strip sizes to its content, so re-fit whenever it changes height.
+if (window.ResizeObserver){
+  const leftEl = document.querySelector("#build-editor .build-left");
+  if (leftEl) new ResizeObserver(() => { if (document.documentElement.classList.contains("is-mobile")) fitDemo(); }).observe(leftEl);
+}
 
 // NON-INTERACTIVE: block ALL real user input so the mouse does nothing inside
 // the demo (.app is also pointer-events:none). The pause button is the only
 // live control — exempt it. Programmatic events (isTrusted === false) pass.
 ["click","mousedown","mouseup","dblclick","contextmenu","pointerdown","pointerup",
- "touchstart","touchend","wheel","keydown","keyup","submit"].forEach(type => {
+ "keydown","keyup","submit"].forEach(type => {
   document.addEventListener(type, (e) => {
     if (e.isTrusted && !(e.target.closest && e.target.closest("#demo-pause"))){
       e.preventDefault(); e.stopPropagation();
