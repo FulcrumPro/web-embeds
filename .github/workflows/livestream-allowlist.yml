@@ -1,0 +1,29 @@
+name: Sync livestream allowlist
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: livestream-allowlist
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build allow.json from the Google Sheet
+        env:
+          GSHEETS_TOKEN: ${{ secrets.GSHEETS_TOKEN }}
+          ALLOW_SHEET_ID: ${{ vars.LIVESTREAM_OCT2026_SHEET_ID }}
+          OUT: livestream/oct-2026/allow.json
+        run: python3 livestream/oct-2026/sync_allowlist.py
+      - name: Commit if changed
+        run: |
+          git config user.name "allowlist-bot"
+          git config user.email "allowlist-bot@users.noreply.github.com"
+          git add livestream/oct-2026/allow.json
+          git diff --cached --quiet && echo "nothing to commit" && exit 0
+          git commit -m "livestream: update allowlist"
+          git push
