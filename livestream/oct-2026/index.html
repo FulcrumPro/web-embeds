@@ -56,13 +56,13 @@
   <p class="sub">Sunny Han and Alex Troesch show what's new from Fulcrum. This recording is for registered attendees and invited guests.</p>
 
   <section class="card" id="gate">
-    <h2>Enter your email to watch</h2>
-    <p>Use the email you registered with. If a Fulcrum rep invited you, use the email they have on file.</p>
+    <h2>Get your personal link</h2>
+    <p>Enter the email you registered with and we'll send you a private link. If a Fulcrum rep invited you, use the email they have on file.</p>
     <form id="form" novalidate>
       <label for="email">Work email</label>
       <div class="row">
         <input id="email" type="email" autocomplete="email" placeholder="you@company.com" required>
-        <button id="go" type="submit">Watch</button>
+        <button id="go" type="submit">Send my link</button>
       </div>
       <div class="msg" id="msg" role="status" aria-live="polite"></div>
     </form>
@@ -76,7 +76,7 @@
     </div>
     <div class="meta">
       <span>Viewing as <strong id="who"></strong> · <a href="#" id="signout">Not you?</a></span>
-      <span>75 min · Recorded live October 29, 2026</span>
+      <span>Recorded live October 29, 2026 · 75 min</span>
     </div>
     <div class="notice">
       <strong>Want this for your shop?</strong> <a href="https://fulcrumpro.com/demo">Schedule a demo</a> and we'll walk through it on your parts, your routers and your schedule.
@@ -91,63 +91,72 @@
 
 <script>
 (function(){
-  var VIDEO_ID = 'GKm0Om5t0jY';
-  var LIST_URL = 'allow.json';
+  var API = 'APPS_SCRIPT_URL';             // filled in after the backend is deployed
+  var PLAYER = 'youtube:GKm0Om5t0jY';      // becomes 'vimeo:<id>[:<hash>]' once the Vimeo upload is ready
   var KEY = 'fl_oct2026_viewer';
   var form = document.getElementById('form'), input = document.getElementById('email'),
       msg = document.getElementById('msg'), btn = document.getElementById('go'),
       gate = document.getElementById('gate'), player = document.getElementById('player');
 
-  async function sha256(s){
-    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
-    return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+  function api(params){
+    var q = Object.keys(params).map(function(k){ return k + '=' + encodeURIComponent(params[k]); }).join('&');
+    return fetch(API + '?' + q, {cache:'no-store', redirect:'follow'}).then(function(r){ return r.json(); });
   }
-  var listCache = null;
-  async function loadList(){
-    if (listCache) return listCache;
-    var r = await fetch(LIST_URL + '?t=' + Math.floor(Date.now()/60000), {cache:'no-store'});
-    if (!r.ok) throw new Error('list');
-    listCache = await r.json(); return listCache;
+  function playerSrc(){
+    var p = PLAYER.split(':');
+    if (p[0] === 'vimeo') return 'https://player.vimeo.com/video/' + p[1] + (p[2] ? '?h=' + p[2] + '&' : '?') + 'dnt=1&title=0&byline=0&portrait=0&color=3840EA';
+    return 'https://www.youtube-nocookie.com/embed/' + p[1] + '?rel=0&modestbranding=1&playsinline=1&color=white';
   }
-  async function allowed(email){
-    var list = await loadList();
-    var e = email.trim().toLowerCase(); var d = e.split('@')[1] || '';
-    var he = await sha256(e), hd = await sha256(d);
-    return list.emails.indexOf(he) >= 0 || list.domains.indexOf(hd) >= 0;
-  }
-  function show(email){
-    var yt = document.getElementById('yt');
-    yt.src = 'https://www.youtube-nocookie.com/embed/' + VIDEO_ID + '?rel=0&modestbranding=1&playsinline=1&color=white';
+  function show(email, token){
+    document.getElementById('yt').src = playerSrc();
     document.getElementById('who').textContent = email;
     document.getElementById('wm').textContent = 'Licensed to ' + email + ' · Fulcrum';
     gate.style.display = 'none'; player.classList.add('show'); player.setAttribute('aria-hidden','false');
-    try { localStorage.setItem(KEY, email); } catch(e){}
+    try { localStorage.setItem(KEY, JSON.stringify({e:email,k:token})); } catch(e){}
+    if (history.replaceState) history.replaceState(null, '', location.pathname);
   }
   function hide(){
     document.getElementById('yt').src = 'about:blank';
     player.classList.remove('show'); player.setAttribute('aria-hidden','true'); gate.style.display = '';
     try { localStorage.removeItem(KEY); } catch(e){}
-    input.value = ''; msg.textContent = ''; msg.className = 'msg'; input.focus();
+    input.value = ''; setMsg('', ''); input.focus();
   }
-  form.addEventListener('submit', async function(ev){
+  function setMsg(t, cls){ msg.innerHTML = t; msg.className = 'msg' + (cls ? ' ' + cls : ''); }
+
+  // Email form: we email the viewer a personal link rather than unlocking in place,
+  // so only the inbox owner can get in.
+  form.addEventListener('submit', function(ev){
     ev.preventDefault();
     var email = input.value.trim();
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { msg.textContent = 'Please enter a valid email address.'; msg.className = 'msg err'; return; }
-    btn.disabled = true; msg.textContent = 'Checking…'; msg.className = 'msg';
-    try {
-      if (await allowed(email)) { msg.textContent = ''; show(email.toLowerCase()); }
-      else { msg.innerHTML = 'That email isn\'t on the attendee list. Try the address you registered with, or ask your Fulcrum contact to add you.'; msg.className = 'msg err'; }
-    } catch(e) { msg.textContent = 'Couldn\'t check the list right now. Please try again in a minute.'; msg.className = 'msg err'; }
-    btn.disabled = false;
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { setMsg('Please enter a valid email address.', 'err'); return; }
+    btn.disabled = true; setMsg('Checking…', '');
+    api({action:'request', e:email}).then(function(r){
+      if (r.ok && r.sent) {
+        setMsg('<strong>Check your inbox.</strong> We sent a personal link to ' + email.toLowerCase() + '. It may take a minute; check spam if it doesn\'t show up.', 'ok');
+        input.value = '';
+      } else if (r.reason === 'not_listed') {
+        setMsg('That email isn\'t on the attendee list. Try the address you registered with, or ask your Fulcrum contact to add you.', 'err');
+      } else { setMsg('Please enter a valid work email.', 'err'); }
+    }).catch(function(){ setMsg('Couldn\'t reach the access check right now. Please try again in a minute.', 'err'); })
+      .then(function(){ btn.disabled = false; });
   });
   document.getElementById('signout').addEventListener('click', function(ev){ ev.preventDefault(); hide(); });
-  // Returning viewer: re-check against the current list so removals take effect.
-  (async function(){
-    var saved = null; try { saved = localStorage.getItem(KEY); } catch(e){}
-    var q = new URLSearchParams(location.search).get('e');
-    var cand = saved || q;
-    if (!cand) return;
-    try { if (await allowed(cand)) show(cand.toLowerCase()); else { try { localStorage.removeItem(KEY); } catch(e){} if (q) { input.value = q; } } } catch(e){}
+
+  // Arriving with a personal link (?e=&k=) or returning: verify with the backend every time,
+  // so removing a row in the sheet revokes access on the next visit.
+  (function(){
+    var q = new URLSearchParams(location.search), e = q.get('e'), k = q.get('k'), fromLink = !!(e && k);
+    if (!fromLink) { try { var s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s) { e = s.e; k = s.k; } } catch(err){} }
+    if (!(e && k)) { if (q.get('e')) input.value = q.get('e'); return; }
+    setMsg('Checking your link…', '');
+    api({action:'check', e:e, k:k, ua: navigator.userAgent.slice(0,120)}).then(function(r){
+      if (r.ok) { show(r.email, k); return; }
+      try { localStorage.removeItem(KEY); } catch(err){}
+      if (r.reason === 'removed') setMsg('This link no longer has access. Ask your Fulcrum contact if you think that\'s a mistake.', 'err');
+      else if (fromLink) setMsg('That link didn\'t check out. Enter your email below and we\'ll send you a fresh one.', 'err');
+      else setMsg('', '');
+      if (e) input.value = e;
+    }).catch(function(){ setMsg('Couldn\'t reach the access check right now. Please try again in a minute.', 'err'); });
   })();
 })();
 </script>
