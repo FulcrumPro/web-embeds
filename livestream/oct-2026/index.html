@@ -7,85 +7,100 @@
 <title>Software that knows your shop | Fulcrum Livestream Recording</title>
 <link rel="icon" href="https://fulcrumpro.com/favicon.ico">
 <style>
-  :root { --blue:#3840EA; --blue-light:#D7D9FB; --ink:#292932; --muted:#7f7f84; --line:#e2e2e2; --bg:#ffffff; }
+@font-face{font-family:Gilroy;src:url(https://cdn.prod.website-files.com/609461470d1c3e052bc814ee/609461470d1c3e1f88c814fd_Gilroy-Light.ttf)format('truetype');font-weight:300;font-style:normal;font-display:swap;}
+@font-face{font-family:Gilroy;src:url(https://cdn.prod.website-files.com/609461470d1c3e052bc814ee/609461470d1c3ef33bc81501_Gilroy-Regular.ttf)format('truetype');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:Gilroy;src:url(https://cdn.prod.website-files.com/609461470d1c3e052bc814ee/609461470d1c3e57d3c814ff_Gilroy-Medium.ttf)format('truetype');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:Gilroy;src:url(https://cdn.prod.website-files.com/609461470d1c3e052bc814ee/609461470d1c3e0e50c81503_Gilroy-SemiBold.ttf)format('truetype');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:Gilroy;src:url(https://cdn.prod.website-files.com/609461470d1c3e052bc814ee/609461470d1c3e4970c814f9_Gilroy-Bold.ttf)format('truetype');font-weight:700;font-style:normal;font-display:swap;}
   * { box-sizing:border-box; }
-  html,body { margin:0; background:var(--bg); color:var(--ink); font-family: Gilroy, Inter, Arial, sans-serif; -webkit-font-smoothing:antialiased; }
-  a { color:var(--blue); text-decoration:none; } a:hover { text-decoration:underline; }
-  .nav { display:flex; align-items:center; justify-content:space-between; padding:0 5vw; min-height:72px; border-bottom:1px solid var(--line); }
-  .nav .logo { font-weight:700; font-size:22px; letter-spacing:-.5px; color:#000; }
-  .nav .logo span { color:var(--blue); }
-  .wrap { max-width:1100px; margin:0 auto; padding:48px 5vw 80px; }
-  .eyebrow { font-size:13px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#a0a0a0; margin:0 0 12px; }
-  h1 { font-size:clamp(28px,4vw,44px); font-weight:600; letter-spacing:-.75px; line-height:1.1; margin:0 0 12px; color:#000; }
-  .sub { font-size:18px; font-weight:300; line-height:1.5; margin:0 0 32px; color:var(--ink); max-width:720px; }
-  .card { border:1px solid var(--line); border-radius:10px; padding:32px; max-width:560px; box-shadow:0 3px 20px #7051ef0a, 0 10px 28px #27194d08; }
-  .card h2 { font-size:22px; font-weight:600; margin:0 0 6px; color:#000; }
-  .card p { margin:0 0 20px; font-weight:300; line-height:1.5; color:var(--ink); }
-  label { display:block; font-size:14px; font-weight:600; margin-bottom:8px; }
-  .row { display:flex; gap:10px; flex-wrap:wrap; }
-  input[type=email] { flex:1 1 240px; font:inherit; font-size:17px; padding:12px 14px; border:1.5px solid #cfcfd4; border-radius:8px; color:var(--ink); outline:none; }
-  input[type=email]:focus { border-color:var(--blue); box-shadow:0 0 0 3px var(--blue-light); }
-  button { font:inherit; font-size:17px; font-weight:500; padding:12px 22px; border-radius:24px; border:1.5px solid var(--blue); background:var(--blue); color:#fff; cursor:pointer; transition:background .2s,color .2s; }
-  button:hover { background:#fff; color:var(--blue); }
-  button[disabled] { opacity:.6; cursor:wait; }
-  .msg { margin-top:14px; font-size:15px; line-height:1.45; min-height:1.4em; }
-  .msg.err { color:#c0392b; }
-  .msg.ok { color:#1f8a4c; }
-  .fine { margin-top:18px; font-size:13px; color:var(--muted); line-height:1.5; }
-  .player { display:none; }
-  .player.show { display:block; }
-  .frame { position:relative; width:100%; aspect-ratio:1994/1250; background:#000; border:2px solid #000; border-radius:10px; overflow:hidden; box-shadow:0 40px 86px rgba(0,0,0,.10), 0 10px 28px rgba(0,0,0,.08); }
-  .frame iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
-  .wm { position:absolute; left:0; right:0; bottom:0; padding:6px 12px; font-size:11px; letter-spacing:.02em; color:rgba(255,255,255,.72); background:linear-gradient(transparent, rgba(0,0,0,.45)); pointer-events:none; text-align:right; }
-  .meta { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-top:16px; font-size:14px; color:var(--muted); }
-  .meta a { font-weight:500; }
-  .notice { margin-top:28px; padding:16px 20px; border:1px solid var(--blue-light); background:linear-gradient(150deg,#D7D9FB -12%,#fff 116%); border-radius:8px; font-size:15px; line-height:1.5; max-width:760px; }
-  .foot { border-top:1px solid #dcdcdc; padding:24px 5vw; font-size:13px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
-  @media (max-width:600px) { .card { padding:24px; } .wrap { padding-top:32px; } }
+  html,body { margin:0; background:#fff; }
+  body { font-family: Gilroy, Arial, sans-serif; color:#292932; }
+  .lsg-nav { display:flex; align-items:center; justify-content:space-between; padding:0 5vw; min-height:80px; background:#fff; }
+  .lsg-nav a { text-decoration:none; }
+  .lsg-logo { display:block; height:26px; width:auto; }
+  .lsg-navcta { font-size:15px; font-weight:500; color:#fff; background:#0F0F14; border-radius:20px; padding:9px 15px; line-height:1; }
+  .lsg-navcta:hover { background:#3840EA; text-decoration:none !important; }
+  .lsg-foot { max-width:1200px; margin:0 auto; border-top:1px solid #dcdcdc; padding:40px 2rem; font-size:15px; font-weight:500; color:#333; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  .lsg-foot a { color:#333; text-decoration:none; transition:color .2s; } .lsg-foot a:hover { color:#3840EA; }
+
+  #lsg { --blue:#3840EA; --blue-light:#D7D9FB; --ink:#292932; --grey:#a0a0a0; --dark-grey:#6b6b6b; --light-grey:#e2e2e2; font-family: Gilroy, Arial, sans-serif; color:var(--ink); -webkit-font-smoothing:antialiased; }
+  #lsg a { color:var(--blue); text-decoration:none; } #lsg a:hover { text-decoration:underline; }
+  .lsg-wrap { max-width:1200px; margin:0 auto; padding:60px 5vw 100px; }
+  .lsg-eyebrow { font-size:14px; font-weight:500; line-height:17px; text-transform:uppercase; color:var(--grey); margin:0 0 16px; }
+  #lsg h1 { font-family: Gilroy, Arial, sans-serif; font-size:40px; font-weight:600; line-height:48px; letter-spacing:-.75px; margin:0 0 16px; color:#000; }
+  .lsg-sub { font-size:1.2rem; font-weight:300; line-height:1.5; margin:0 0 40px; color:var(--ink); max-width:720px; }
+  .lsg-card { background:#fff; border:1px solid var(--light-grey); border-radius:8px; padding:24px; max-width:560px; box-shadow:0 0 5px #27194d05, 0 3px 20px #7051ef0a, 0 10px 28px #27194d08; }
+  .lsg-card h2 { font-family: Gilroy, Arial, sans-serif; font-size:20px; font-weight:600; line-height:32px; margin:0 0 4px; color:#000; }
+  .lsg-card p { margin:0 0 20px; font-size:1.05rem; font-weight:300; line-height:1.5; color:var(--ink); }
+  #lsg label { display:block; font-size:14px; font-weight:500; margin-bottom:8px; color:var(--ink); }
+  .lsg-row { display:flex; gap:12px; flex-wrap:wrap; align-items:stretch; }
+  #lsg input[type=email] { flex:1 1 240px; font:inherit; font-size:1.05rem; font-weight:400; padding:9px 15px; border:1px solid var(--light-grey); border-radius:20px; color:var(--ink); background:#fff; outline:none; min-height:42px; }
+  #lsg input[type=email]:focus { border-color:var(--blue); box-shadow:0 0 0 3px var(--blue-light); }
+  #lsg .lsg-btn { font-family: Gilroy, Arial, sans-serif; font-size:1.2rem; font-weight:500; line-height:1.2rem; padding:9px 15px; border-radius:20px; border:1.5px solid var(--blue); background:transparent; color:#000; cursor:pointer; transition:color .2s, background-color .2s; }
+  #lsg .lsg-btn:hover { background:var(--blue); color:#fff; }
+  #lsg .lsg-btn[disabled] { opacity:.6; cursor:wait; }
+  .lsg-msg { margin-top:14px; font-size:15px; font-weight:400; line-height:1.45; min-height:1.4em; }
+  .lsg-msg.lsg-err { color:#c0392b; } .lsg-msg.lsg-ok { color:#1f8a4c; }
+  .lsg-fine { margin-top:16px; font-size:14px; font-weight:400; color:var(--dark-grey); line-height:1.5; }
+  .lsg-player { display:none; } .lsg-player.lsg-show { display:block; }
+  .lsg-frame { position:relative; width:100%; aspect-ratio:1994/1250; background:#000; border:2px solid var(--light-grey); border-radius:10px; overflow:hidden; box-shadow:0 4px 18px #00000026; }
+  .lsg-frame iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .lsg-wm { position:absolute; left:0; right:0; bottom:0; padding:6px 12px; font-size:11px; font-weight:500; letter-spacing:.02em; color:rgba(255,255,255,.72); background:linear-gradient(transparent, rgba(0,0,0,.45)); pointer-events:none; text-align:right; }
+  .lsg-meta { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-top:16px; font-size:14px; font-weight:400; color:var(--dark-grey); }
+  .lsg-meta strong { font-weight:600; color:var(--ink); }
+  @media (max-width:600px) { #lsg h1 { font-size:32px; line-height:38px; } .lsg-wrap { padding-top:40px; } }
 </style>
 </head>
 <body>
-<div class="nav">
-  <a class="logo" href="https://fulcrumpro.com" aria-label="Fulcrum">fulcrum<span>.</span></a>
-  <a href="https://fulcrumpro.com/demo" style="font-size:15px;font-weight:600;">Schedule a demo</a>
-</div>
+<div id="lsg">
+<nav class="lsg-nav">
+  <a href="https://fulcrumpro.com" title="fulcrum manufacturing software" aria-label="Fulcrum home"><svg class="lsg-logo" alt="fulcrum manufacturing logo" data-name="fulcrum logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 258 59">
 
-<main class="wrap">
-  <p class="eyebrow">Livestream recording · October 29, 2026</p>
+<path fill="#000" d="M120.23,44.77,117.09,43a.35.35,0,0,0-.43.15c-.14.29-.35.57-.49.86a3.24,3.24,0,0,1-.43.5,6.76,6.76,0,0,1-.64.72c-.36.36-.72.65-1.07.94a7.77,7.77,0,0,1-.79.5A10.68,10.68,0,0,1,107.76,48a11.27,11.27,0,0,1-4.49-.87l-.43-.21c-.22-.14-.5-.29-.71-.43a10.14,10.14,0,0,1-2-1.58,5.06,5.06,0,0,1-.78-.94c-.07-.07-.15-.22-.22-.29s-.21-.28-.28-.43-.22-.29-.29-.43a11.5,11.5,0,0,1-1.42-5.75,11.42,11.42,0,0,1,1.21-5.33c.07-.14.14-.21.21-.36a11.77,11.77,0,0,1,1.64-2.22,10.1,10.1,0,0,1,7.63-3.1,8.77,8.77,0,0,1,2.42.29c.14,0,.21.07.36.07a8.69,8.69,0,0,1,2.63,1.08A9.72,9.72,0,0,1,115.1,29l.28.29.22.21a8.34,8.34,0,0,1,1.06,1.66.35.35,0,0,0,.43.14l3-1.73.22-.14,5.06-3a.35.35,0,0,0,.14-.43,17.35,17.35,0,0,0-5.2-6c-.29-.22-.64-.43-.93-.65a10.88,10.88,0,0,0-1-.64,6.94,6.94,0,0,0-1.06-.58c-.15-.07-.22-.14-.36-.14l-1-.44c-.43-.14-.85-.35-1.28-.5L114,16.8c-.29-.08-.5-.15-.79-.22l-1.07-.22a4.22,4.22,0,0,0-1-.14c-.36-.07-.79-.07-1.14-.14a1.39,1.39,0,0,1-.57-.08,12.86,12.86,0,0,0-1.64-.07c-.79,0-1.5,0-2.28.07-.29,0-.65.08-.93.08h-.14c-.15,0-.36.07-.5.07a9.92,9.92,0,0,0-1.5.29,2.13,2.13,0,0,1-.71.14,7.81,7.81,0,0,0-1.85.65,19.88,19.88,0,0,0-7.06,4.67,20.14,20.14,0,0,0-4.49,6.76A22.49,22.49,0,0,0,86.88,37a22.51,22.51,0,0,0,1.49,8.35c.14.36.36.79.5,1.15s.21.5.36.72.21.43.35.64.22.36.36.58a22.91,22.91,0,0,0,2.85,3.67l.43.43a20.11,20.11,0,0,0,6.34,4.17,5.18,5.18,0,0,0,.5.22c.5.14.93.36,1.42.5.15.07.36.07.5.14a21.87,21.87,0,0,0,5.85.72c.92,0,1.85-.07,2.78-.14.21,0,.35-.07.57-.07.5-.08,1.07-.22,1.56-.29a18.51,18.51,0,0,0,5.7-2.3c.65-.43,1.29-.79,1.93-1.3a19.42,19.42,0,0,0,5.34-6,.34.34,0,0,0-.14-.43Z"/>
+<path fill="#000" d="M23.87,27.15a.3.3,0,0,0,.29-.29V17.59a.3.3,0,0,0-.29-.29H16.11a.3.3,0,0,1-.29-.29v-.07c0-4.89,2.71-7.12,8.05-6.83a.33.33,0,0,0,.36-.29V0h-.57c-5.91-.29-10.33,1-13.4,3.88A12.68,12.68,0,0,0,7.55,7.59,18.38,18.38,0,0,0,5.7,15a14.8,14.8,0,0,0-.07,1.8v.07a.31.31,0,0,1-.29.29h-5a.3.3,0,0,0-.29.28v9.35a.3.3,0,0,0,.29.29H5.34a.3.3,0,0,1,.29.29V56.85a.3.3,0,0,0,.28.29h9.63a.3.3,0,0,0,.28-.29V27.37a.3.3,0,0,1,.29-.29h3.7Z"/>
+<path fill="#000" d="M66.21,17.53a.31.31,0,0,0-.28-.29H56.3a.31.31,0,0,0-.28.29V38.82c0,3.31-.78,5.82-2.35,7.48a7.67,7.67,0,0,1-4.92,2.37,9.25,9.25,0,0,1-1.42.07A8,8,0,0,1,45,48.45c-.07,0-.14-.07-.21-.07s-.36-.07-.57-.14a6.23,6.23,0,0,1-1.14-.5,1.55,1.55,0,0,1-.29-.22,7.91,7.91,0,0,1-1.14-.94,8.27,8.27,0,0,1-2.13-6.11V17.24H29.58a.31.31,0,0,0-.28.29V41.77a22.1,22.1,0,0,0,.64,5.53c0,.15.07.22.07.36a14.85,14.85,0,0,0,2.21,4.68c.07.07.07.14.14.14a4,4,0,0,1,.36.51c.28.28.5.64.78.93.07.07.14.22.29.29a10.41,10.41,0,0,0,2.49,1.94c.07.07.14.07.21.14a2.87,2.87,0,0,0,.5.29,1.31,1.31,0,0,1,.36.22,7.41,7.41,0,0,0,1.57.64H39a15.5,15.5,0,0,0,5.27.87A20.25,20.25,0,0,0,49,57.73a2.13,2.13,0,0,1,.57-.14c.07,0,.14-.07.28-.07a5.24,5.24,0,0,0,.86-.36c.14-.08.21-.08.35-.15a10.71,10.71,0,0,0,2.64-1.65c.14-.15.36-.29.5-.43l.07-.07c.43-.44.85-.87,1.28-1.37a.33.33,0,0,1,.57.21v3.17a.31.31,0,0,0,.29.29H66a.31.31,0,0,0,.28-.29Z"/>
+<path fill="#000" d="M82.68,0H72.42V56.93a.3.3,0,0,0,.28.28h9.62a.31.31,0,0,0,.29-.28V0Z"/>
+<path fill="#000" d="M146,17.59a3.14,3.14,0,0,1-.5.21l-.43.22c-.21.14-.42.22-.64.36a11.61,11.61,0,0,0-2.49,2s0,.08-.07.08a9,9,0,0,0-1,1.36c-.07.07-.07.15-.14.22s-.29.5-.43.72a.3.3,0,0,1-.57-.15v-5.1a.3.3,0,0,0-.29-.29h-9.62a.3.3,0,0,0-.28.29V56.93a.31.31,0,0,0,.28.29h9.62a.31.31,0,0,0,.29-.29V38.09a8.48,8.48,0,0,1,.07-1.37c0-.22.07-.43.07-.65a11.34,11.34,0,0,1,.79-2.8.07.07,0,0,1,.07-.07,8.21,8.21,0,0,1,2.78-3.31c.14-.07.28-.22.42-.29s.08-.07.15-.07a.55.55,0,0,1,.28-.15c.07,0,.07-.07.14-.07s.22-.07.29-.14.07-.07.14-.07a.7.7,0,0,1,.36-.15.07.07,0,0,0,.07-.07l.43-.22c.07,0,.07,0,.14-.07s.21-.07.36-.14.14,0,.14-.07.21-.08.28-.08a11.08,11.08,0,0,1,4.64-.35.33.33,0,0,0,.35-.29V16.73a.3.3,0,0,0-.28-.29,13.15,13.15,0,0,0-4.71.86A2,2,0,0,0,146,17.59Z"/>
+<path fill="#000" d="M193.19,17.52a.31.31,0,0,0-.29-.28h-9.62a.3.3,0,0,0-.28.28V38.81a6,6,0,0,1-.07,1.15,1.82,1.82,0,0,1-.08.65,12.08,12.08,0,0,1-1,3.81,2.21,2.21,0,0,1-.29.51,6,6,0,0,1-1,1.29,7.57,7.57,0,0,1-4.91,2.37,8.17,8.17,0,0,1-1.43.08h-.85c-.29,0-.58-.08-.86-.08s-.28-.07-.43-.07a2.1,2.1,0,0,0-.64-.14.24.24,0,0,1-.14-.07,5.93,5.93,0,0,1-.93-.36c-.07-.08-.21-.08-.28-.15L169,47.15c-.07-.07-.22-.14-.29-.21s-.21-.14-.28-.29a5.93,5.93,0,0,1-.64-.79.35.35,0,0,1-.15-.29.37.37,0,0,1-.14-.29,7.1,7.1,0,0,1-.93-2.51c-.07-.29-.07-.58-.14-.94s-.07-.57-.07-.86V17.38a.31.31,0,0,0-.28-.29h-9.62a.31.31,0,0,0-.29.29V41.62c0,5.18,1.42,9.2,4.28,12.15a14.26,14.26,0,0,0,10.76,4.39,18.56,18.56,0,0,0,4.63-.58l.86-.21,1.14-.43.85-.44c.07-.07.21-.07.29-.14A9.15,9.15,0,0,0,180.93,55a2.21,2.21,0,0,0,.57-.57,7.86,7.86,0,0,0,1-1.15.33.33,0,0,1,.57.21v3.17a.31.31,0,0,0,.28.29H193a.31.31,0,0,0,.29-.29V17.52Z"/>
+<path fill="#000" d="M256.62,25.78c-.14-.36-.21-.64-.36-1a1.31,1.31,0,0,1-.14-.29,1.33,1.33,0,0,1-.14-.36,7,7,0,0,0-.43-.79,15.54,15.54,0,0,0-1.5-2.23c-.14-.22-.35-.36-.49-.58l-.65-.64a1.68,1.68,0,0,0-.42-.36,3.32,3.32,0,0,1-.57-.51c-.22-.14-.36-.29-.57-.43l-.64-.43c-.22-.14-.43-.22-.65-.36a18.4,18.4,0,0,0-2.7-1.15,6.23,6.23,0,0,0-1.22-.29c-.21-.07-.42-.07-.71-.14a6.35,6.35,0,0,0-1.21-.15c-.29,0-.57-.07-.85-.07h-.86a17.6,17.6,0,0,0-1.92.07c-.15,0-.36.08-.5.08l-1.21.21a5.85,5.85,0,0,0-1.07.29l-.72.21c-.35.15-.64.22-.92.36l-.43.22-1.28.65c-.15.07-.22.14-.36.21a12.45,12.45,0,0,0-3.28,3.17c-.14.14-.42.14-.5,0a11,11,0,0,0-2-2.38,9.51,9.51,0,0,0-2.21-1.51c-.22-.14-.43-.21-.71-.36s-.5-.21-.72-.28a4.76,4.76,0,0,0-1.14-.36c-.14,0-.28-.07-.42-.07a9.31,9.31,0,0,0-2.07-.29c-.43,0-.86-.07-1.35-.07a8.41,8.41,0,0,0-1.36.07,14.63,14.63,0,0,0-3.7.72c-.15.07-.22.07-.36.14a11.56,11.56,0,0,0-4.14,2.66l-.42.43a3.54,3.54,0,0,0-.5.65.32.32,0,0,1-.57-.22V17.66a.3.3,0,0,0-.29-.29h-9.55V57.43h9.91a.31.31,0,0,0,.28-.29V34.7a11.35,11.35,0,0,1,1.14-5.47c.22-.35.43-.71.65-1,.07-.07.14-.22.21-.29s.14-.22.29-.29a1.84,1.84,0,0,1,.57-.5,7,7,0,0,1,4.63-1.51,7.88,7.88,0,0,1,1.85.21c.14,0,.22.08.36.08l1.07.43a.53.53,0,0,0,.28.14,5,5,0,0,1,1.35,1.15,1.06,1.06,0,0,1,.15.15,1,1,0,0,1,.21.28,7.6,7.6,0,0,1,1.36,4,7.14,7.14,0,0,1,.07,1.22V56.85a.3.3,0,0,0,.28.29h9.62a.31.31,0,0,0,.29-.29V34.7a15.3,15.3,0,0,1,.43-3.81c0-.07.07-.14.07-.22a5.05,5.05,0,0,1,.21-.57c.07-.15.14-.36.21-.51a5.1,5.1,0,0,1,.57-1l.43-.65a4,4,0,0,1,1-.93,5.94,5.94,0,0,1,2.28-1.08.24.24,0,0,0,.21-.08,8.58,8.58,0,0,1,1.93-.21,7.88,7.88,0,0,1,1.85.21c.14,0,.21.08.36.08l1.07.43a.53.53,0,0,0,.28.14,5.18,5.18,0,0,1,1.36,1.15l.14.15a1,1,0,0,1,.21.28,8,8,0,0,1,1.28,3.38c0,.22.08.36.08.58a7.14,7.14,0,0,1,.07,1.22V56.85a.3.3,0,0,0,.28.29h9.62a.3.3,0,0,0,.29-.29V32.54a22,22,0,0,0-.79-6A1.7,1.7,0,0,0,256.62,25.78Z"/>
+</svg></a>
+  <a class="lsg-navcta" href="https://fulcrumpro.com/demo">Schedule a demo</a>
+</nav>
+<main class="lsg-wrap">
+  <h6 class="lsg-eyebrow">Livestream recording · October 29, 2026</h6>
   <h1>Software that knows your shop</h1>
-  <p class="sub">Sunny Han and Alex Troesch show what's new from Fulcrum. This recording is for registered attendees and invited guests.</p>
+  <p class="lsg-sub">Sunny Han and Alex Troesch show what's new from Fulcrum. This recording is for registered attendees and invited guests.</p>
 
-  <section class="card" id="gate">
+  <section class="lsg-card" id="gate">
     <h2>Get your personal link</h2>
     <p>Enter the email you registered with and we'll send you a private link. If a Fulcrum rep invited you, use the email they have on file.</p>
     <form id="form" novalidate>
       <label for="email">Work email</label>
-      <div class="row">
+      <div class="lsg-row">
         <input id="email" type="email" autocomplete="email" placeholder="you@company.com" required>
-        <button id="go" type="submit">Send my link</button>
+        <button id="go" class="lsg-btn" type="submit">Send my link</button>
       </div>
-      <div class="msg" id="msg" role="status" aria-live="polite"></div>
+      <div class="lsg-msg" id="msg" role="status" aria-live="polite"></div>
     </form>
-    <p class="fine">Not on the list? Ask the Fulcrum person who invited you, or email <a href="mailto:carolyn@fulcrumpro.com?subject=Livestream%20recording%20access">carolyn@fulcrumpro.com</a>. Please don't forward this page; access is tied to your email.</p>
+    <p class="lsg-fine">Not on the list? Ask the Fulcrum person who invited you, or email <a href="mailto:carolyn@fulcrumpro.com?subject=Livestream%20recording%20access">carolyn@fulcrumpro.com</a>. Please don't forward this page; access is tied to your email.</p>
   </section>
 
-  <section class="player" id="player" aria-hidden="true">
-    <div class="frame">
+  <section class="lsg-player" id="player" aria-hidden="true">
+    <div class="lsg-frame">
       <iframe id="yt" src="about:blank" title="Software that knows your shop, Fulcrum livestream recording" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
-      <div class="wm" id="wm"></div>
+      <div class="lsg-wm" id="wm"></div>
     </div>
-    <div class="meta">
+    <div class="lsg-meta">
       <span>Viewing as <strong id="who"></strong> · <a href="#" id="signout">Not you?</a></span>
       <span>Recorded live October 29, 2026 · 75 min</span>
     </div>
   </section>
 </main>
-
-<div class="foot">
+<footer class="lsg-foot">
   <span>© 2026 Fulcrum. For registered attendees and invited guests only.</span>
   <a href="https://fulcrumpro.com">fulcrumpro.com</a>
+</footer>
 </div>
-
 <script>
 (function(){
   var API = 'https://script.google.com/macros/s/AKfycbyhvp6OxnlKJQH2y15FCC9rRu6dQ_2dPG5wBRIPECxPK4ijbbr4jlYYsVH7KOl64SI/exec';
