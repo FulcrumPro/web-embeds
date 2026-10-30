@@ -123,17 +123,17 @@
     document.getElementById('yt').src = playerSrc();
     document.getElementById('who').textContent = email;
     document.getElementById('wm').textContent = 'Licensed to ' + email + ' · Fulcrum';
-    gate.style.display = 'none'; player.classList.add('show'); player.setAttribute('aria-hidden','false');
+    gate.style.display = 'none'; player.classList.add('lsg-show'); player.setAttribute('aria-hidden','false');
     try { localStorage.setItem(KEY, JSON.stringify({e:email,k:token})); } catch(e){}
     if (history.replaceState) history.replaceState(null, '', location.pathname);
   }
   function hide(){
     document.getElementById('yt').src = 'about:blank';
-    player.classList.remove('show'); player.setAttribute('aria-hidden','true'); gate.style.display = '';
+    player.classList.remove('lsg-show'); player.setAttribute('aria-hidden','true'); gate.style.display = '';
     try { localStorage.removeItem(KEY); } catch(e){}
     input.value = ''; setMsg('', ''); input.focus();
   }
-  function setMsg(t, cls){ msg.innerHTML = t; msg.className = 'msg' + (cls ? ' ' + cls : ''); }
+  function setMsg(t, cls){ msg.innerHTML = t; msg.className = 'lsg-msg' + (cls ? ' lsg-' + cls : ''); }
 
   // Email form: we email the viewer a personal link rather than unlocking in place,
   // so only the inbox owner can get in.
