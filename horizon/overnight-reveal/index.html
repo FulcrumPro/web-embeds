@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<!--
+  Horizon landing page — loop 4: overnight-reveal ("it learns your shop, by itself")
+  Design size 1200×750, scales to the root width. Loop length 28s (first play), 25s per cycle after.
+
+  Beats (seconds):
+    0.0  resolved: counters at 18,402 / 3,115 / 7,980, clock at Mon 7 am, drawer "Read", full result card + 3 Rule chips (hold 3s)
+    3.0  clear: counters 0, clock Fri 6 pm, drawer "Reading", card lines empty, chips hidden
+    3.4  reading starts: cards flow into the drawer, counters climb and the clock sweeps Fri 6 pm → Mon 7 am (14s)
+    9.0  line 1 types  "Fab shop. 14 people."
+   10.4  line 2 types  "Press brake rate $118/hr."
+   12.0  line 3 types  "You inspect before and after powder coat."
+   14.0  line 4 types  "Iridite on the drawing means an outside process: Dakota Plating, 4 days."
+   16.6  line 5 types  "You quote repeat parts off the last job."
+   17.6  reading done: flow stops, drawer flips to "Read · 29,497 items", sun up
+   19.2  Rule chip 1 lands (Expedite fee · your call)
+   20.0  Rule chip 2 lands (Revision mismatch · your call)
+   20.8  Rule chip 3 lands (Discount below floor · your call)
+   22.4  footer line: "Correct anything that's off. Nobody typed any of this in."
+   24.0  resolved again (hold 4s)
+   28.0  loop → back to 3.0
+
+  ?still=1  jumps to the resolved state and stops.   ?at=<seconds> seeks the timeline and freezes.
+  prefers-reduced-motion: resolved state only.
+-->
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Horizon — it learns your shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<style>
+  /* standalone page wrapper only — nothing here ships in fragment.html */
+  html, body { margin: 0; padding: 0; background: #fff; }
+  body { display: flex; justify-content: center; align-items: flex-start; }
+  .hz-overnight-reveal { width: 100%; max-width: 1200px; }
+</style>
+</head>
+<body>
+<!-- hz:fragment -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+.hz-overnight-reveal{
+  --s:1; --ink:#292932; --muted:#6b6b6b; --line:#e2e2e2; --pane:#f5f7fa; --blue:#1d63ed;
+  --ok:#16a34a; --ok-bg:#ecfdf5; --warn:#d97706; --warn-bg:#fff7ed; --brand:#3840EA; --brand-light:#D7D9FB; --neon:#DDF83B;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  position:relative; display:block; width:100%; color:var(--ink);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; line-height:1.3;
+}
+.hz-overnight-reveal *,.hz-overnight-reveal *::before,.hz-overnight-reveal *::after{ box-sizing:border-box; }
+.hz-overnight-reveal-frame{ position:relative; width:100%; aspect-ratio:1200/750; overflow:hidden; background:#fff; }
+.hz-overnight-reveal-stage{ position:absolute; left:0; top:0; width:1200px; height:750px; overflow:hidden; background:#fff;
+  transform-origin:0 0; transform:scale(var(--s)); pointer-events:none; user-select:none; }
+.hz-overnight-reveal.is-noanim *,.hz-overnight-reveal.is-noanim *::before,.hz-overnight-reveal.is-noanim *::after{ transition:none !important; animation:none !important; }
+
+/* title row */
+.hz-overnight-reveal-title{ position:absolute; left:40px; top:40px; display:flex; align-items:center; gap:10px; font-size:14px; }
+.hz-overnight-reveal-mark{ width:24px; height:24px; border-radius:7px; background:var(--blue); display:grid; place-items:center; }
+.hz-overnight-reveal-mark svg{ width:14px; height:14px; }
+.hz-overnight-reveal-title b{ font-weight:600; }
+.hz-overnight-reveal-title span{ color:var(--muted); }
+.hz-overnight-reveal-title i{ font-style:normal; color:var(--line); }
+
+/* ---- left: reading panel ---- */
+.hz-overnight-reveal-left{ position:absolute; left:40px; top:100px; width:520px; height:560px; border-radius:14px; background:var(--pane);
+  border:1px solid var(--line); overflow:hidden; }
+.hz-overnight-reveal-clock{ position:absolute; left:24px; right:24px; top:22px; height:58px; }
+.hz-overnight-reveal-clock .hz-overnight-reveal-cl{ position:absolute; top:46px; font-size:12px; font-weight:600; color:var(--muted); transition:color .4s var(--ease); }
+.hz-overnight-reveal-clock .hz-overnight-reveal-cl.is-r{ right:0; }
+.hz-overnight-reveal-clock .hz-overnight-reveal-cl.is-lit{ color:var(--ink); }
+.hz-overnight-reveal-ctrack{ position:absolute; left:0; right:0; top:30px; height:2px; background:var(--line); border-radius:1px; }
+.hz-overnight-reveal-cfill{ position:absolute; left:0; top:30px; height:2px; width:calc(var(--p) * 100%); background:var(--ink); border-radius:1px; }
+.hz-overnight-reveal-knob{ position:absolute; top:31px; left:calc(var(--p) * 100%); width:26px; height:26px; margin:-13px 0 0 -13px; border-radius:50%;
+  background:#fff; border:1px solid var(--line); box-shadow:0 2px 6px rgba(0,0,0,.12); display:grid; place-items:center; }
+.hz-overnight-reveal-knob svg{ position:absolute; width:14px; height:14px; transition:opacity .4s var(--ease); }
+.hz-overnight-reveal-knob .hz-overnight-reveal-sun{ opacity:0; }
+.hz-overnight-reveal-left.is-day .hz-overnight-reveal-knob .hz-overnight-reveal-sun{ opacity:1; }
+.hz-overnight-reveal-left.is-day .hz-overnight-reveal-knob .hz-overnight-reveal-moon{ opacity:0; }
+.hz-overnight-reveal-now{ position:absolute; top:-8px; left:calc(var(--p) * (100% - 76px)); width:76px; text-align:center; font-size:11.5px; font-weight:600; line-height:1;
+  padding:5px 0; border-radius:5px; background:var(--ink); color:#fff; white-space:nowrap; }
+
+.hz-overnight-reveal-stats{ position:absolute; left:24px; right:24px; top:104px; display:flex; gap:10px; }
+.hz-overnight-reveal-stat{ flex:1 1 0; background:#fff; border:1px solid var(--line); border-radius:10px; padding:10px 12px 9px; }
+.hz-overnight-reveal-stat small{ display:block; font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); }
+.hz-overnight-reveal-stat b{ display:block; margin-top:3px; font-size:21px; font-weight:600; font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
+
+.hz-overnight-reveal-flow{ position:absolute; left:0; right:0; top:184px; height:284px; overflow:hidden; opacity:0; transition:opacity .5s var(--ease); }
+.hz-overnight-reveal-left.is-reading .hz-overnight-reveal-flow{ opacity:1; }
+.hz-overnight-reveal-fc{ position:absolute; left:50%; top:8px; width:300px; margin-left:-150px; height:34px; padding:0 12px; display:flex; align-items:center; gap:9px;
+  background:#fff; border:1px solid var(--line); border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.08); font-size:12.5px; white-space:nowrap; opacity:0;
+  animation:hz-overnight-reveal-flow 4.2s linear infinite; animation-play-state:paused; }
+.hz-overnight-reveal-left.is-reading .hz-overnight-reveal-fc{ animation-play-state:running; }
+.hz-overnight-reveal-fc:nth-child(1){ animation-delay:-0.0s; margin-left:-172px; } .hz-overnight-reveal-fc:nth-child(2){ animation-delay:-0.6s; margin-left:-126px; }
+.hz-overnight-reveal-fc:nth-child(3){ animation-delay:-1.2s; margin-left:-158px; } .hz-overnight-reveal-fc:nth-child(4){ animation-delay:-1.8s; margin-left:-140px; }
+.hz-overnight-reveal-fc:nth-child(5){ animation-delay:-2.4s; margin-left:-176px; } .hz-overnight-reveal-fc:nth-child(6){ animation-delay:-3.0s; margin-left:-122px; }
+.hz-overnight-reveal-fc:nth-child(7){ animation-delay:-3.6s; margin-left:-152px; } 
+@keyframes hz-overnight-reveal-flow{
+  0%{ transform:translateY(0) scale(1); opacity:0; } 10%{ opacity:1; }
+  84%{ opacity:1; transform:translateY(216px) scale(.94); }
+  100%{ transform:translateY(258px) scale(.6); opacity:0; }
+}
+.hz-overnight-reveal-fc svg{ width:16px; height:16px; flex:0 0 auto; }
+.hz-overnight-reveal-fc b{ font-weight:600; }
+.hz-overnight-reveal-fc span{ color:var(--muted); overflow:hidden; text-overflow:ellipsis; }
+
+.hz-overnight-reveal-read{ position:absolute; left:24px; right:24px; top:206px; opacity:0; transition:opacity .5s var(--ease) .2s; }
+.hz-overnight-reveal-left:not(.is-reading) .hz-overnight-reveal-read{ opacity:1; }
+.hz-overnight-reveal-left.is-reading .hz-overnight-reveal-read{ transition-delay:0s; }
+.hz-overnight-reveal-rr{ display:flex; align-items:center; gap:10px; height:44px; padding:0 12px; margin-bottom:8px; background:#fff; border:1px solid var(--line); border-radius:8px; font-size:13px; }
+.hz-overnight-reveal-rr svg{ width:16px; height:16px; flex:0 0 auto; }
+.hz-overnight-reveal-rr b{ font-weight:600; }
+.hz-overnight-reveal-rr span{ color:var(--muted); margin-left:auto; }
+.hz-overnight-reveal-rr i{ flex:0 0 auto; width:18px; height:18px; border-radius:50%; background:var(--ok-bg); border:1px solid #bbf0d0; display:grid; place-items:center; }
+.hz-overnight-reveal-rr i svg{ width:10px; height:10px; }
+.hz-overnight-reveal-drawer{ position:absolute; left:24px; right:24px; bottom:22px; height:62px; }
+.hz-overnight-reveal-funnel{ position:absolute; left:0; right:0; top:-22px; height:24px; }
+.hz-overnight-reveal-funnel svg{ width:100%; height:100%; display:block; }
+.hz-overnight-reveal-dbox{ position:absolute; inset:0; border-radius:10px; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:space-between; padding:0 16px; }
+.hz-overnight-reveal-dbox::before{ content:''; position:absolute; left:16px; right:16px; top:-1px; height:4px; border-radius:2px; background:var(--neon); opacity:.9; }
+.hz-overnight-reveal-dbox b{ font-size:13.5px; font-weight:600; display:inline-flex; align-items:center; gap:8px; }
+.hz-overnight-reveal-dot{ width:8px; height:8px; border-radius:50%; background:var(--neon); animation:hz-overnight-reveal-pulse 1.2s ease-in-out infinite; }
+.hz-overnight-reveal-left:not(.is-reading) .hz-overnight-reveal-dot{ animation:none; background:#16a34a; }
+@keyframes hz-overnight-reveal-pulse{ 50%{ opacity:.3; } }
+.hz-overnight-reveal-dbox span{ font-size:12.5px; color:#c9c9d1; font-variant-numeric:tabular-nums; }
+
+/* ---- right: the result card ---- */
+.hz-overnight-reveal-right{ position:absolute; left:600px; top:100px; width:560px; height:560px; border-radius:10px; background:#fff; border:1px solid var(--line);
+  box-shadow:0 4px 18px rgba(0,0,0,.15); padding:22px 26px; }
+.hz-overnight-reveal-rhead{ display:flex; align-items:center; gap:10px; }
+.hz-overnight-reveal-av{ width:30px; height:30px; border-radius:50%; background:var(--blue); color:#fff; display:grid; place-items:center; font-size:13px; font-weight:600; }
+.hz-overnight-reveal-rhead b{ display:block; font-size:13.5px; font-weight:600; }
+.hz-overnight-reveal-rhead span{ display:block; font-size:11.5px; color:var(--muted); }
+.hz-overnight-reveal-rhead .hz-overnight-reveal-when{ margin-left:auto; font-size:11.5px; color:var(--muted); }
+.hz-overnight-reveal-h{ margin-top:18px; font-size:19px; font-weight:600; letter-spacing:-.01em; }
+.hz-overnight-reveal-lines{ margin-top:12px; }
+.hz-overnight-reveal-line{ display:flex; gap:10px; align-items:flex-start; padding:7px 0; font-size:15px; line-height:1.45; min-height:36px; opacity:0; transition:opacity .25s var(--ease); }
+.hz-overnight-reveal-line.is-on{ opacity:1; }
+.hz-overnight-reveal-line i{ flex:0 0 auto; width:18px; height:18px; margin-top:2px; border-radius:50%; background:var(--pane); border:1px solid var(--line); display:grid; place-items:center; }
+.hz-overnight-reveal-line i svg{ width:10px; height:10px; opacity:0; transition:opacity .25s var(--ease); }
+.hz-overnight-reveal-line.is-done i{ background:var(--ok-bg); border-color:#bbf0d0; }
+.hz-overnight-reveal-line.is-done i svg{ opacity:1; }
+.hz-overnight-reveal-caret{ display:inline-block; width:1.5px; height:15px; margin-left:2px; vertical-align:-2px; background:var(--ink); opacity:0;
+  animation:hz-overnight-reveal-blink .9s steps(1) infinite; }
+.hz-overnight-reveal-line.is-typing .hz-overnight-reveal-caret{ opacity:1; }
+@keyframes hz-overnight-reveal-blink{ 50%{ opacity:0; } }
+.hz-overnight-reveal-rules{ margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+.hz-overnight-reveal-rules small{ display:block; font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); }
+.hz-overnight-reveal-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.hz-overnight-reveal-chip{ display:inline-flex; align-items:center; gap:7px; height:32px; padding:0 10px 0 6px; border-radius:16px; border:1px solid var(--line); background:#fff;
+  font-size:13px; font-weight:500; white-space:nowrap; opacity:0; transform:translateY(8px); transition:opacity .4s var(--ease), transform .4s var(--ease); }
+.hz-overnight-reveal-chip.is-on{ opacity:1; transform:none; }
+.hz-overnight-reveal-chip em{ font-style:normal; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; line-height:1; padding:5px 6px; border-radius:10px;
+  background:var(--warn-bg); color:var(--warn); }
+.hz-overnight-reveal-foot{ margin-top:22px; font-size:12.5px; color:var(--muted); opacity:0; transition:opacity .4s var(--ease); }
+.hz-overnight-reveal-foot.is-on{ opacity:1; }
+
+/* marketing accent behind the result card */
+.hz-overnight-reveal-glow{ position:absolute; left:560px; top:40px; width:680px; height:680px; border-radius:50%;
+  background:radial-gradient(closest-side, var(--brand-light), rgba(215,217,251,0)); opacity:.55; }
+
+@media (prefers-reduced-motion: reduce){
+  .hz-overnight-reveal *,.hz-overnight-reveal *::before,.hz-overnight-reveal *::after{ transition:none !important; animation:none !important; }
+}
+</style>
+
+<div class="hz-overnight-reveal">
+  <div class="hz-overnight-reveal-frame">
+    <div class="hz-overnight-reveal-stage">
+
+      <div class="hz-overnight-reveal-title">
+        <span class="hz-overnight-reveal-mark"><svg viewBox="0 0 16 16" fill="none"><path d="M2 11.5a6 6 0 0 1 12 0" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M1.5 13.5h13" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <b>Horizon</b><i>|</i><span>First weekend on the shop's inbox and files</span>
+      </div>
+
+      <div class="hz-overnight-reveal-glow"></div>
+
+      <div class="hz-overnight-reveal-left" id="hz-overnight-reveal-left" style="--p:1">
+        <div class="hz-overnight-reveal-clock">
+          <div class="hz-overnight-reveal-ctrack"></div>
+          <div class="hz-overnight-reveal-cfill"></div>
+          <div class="hz-overnight-reveal-now" id="hz-overnight-reveal-now">Mon 7 am</div>
+          <div class="hz-overnight-reveal-knob">
+            <svg class="hz-overnight-reveal-moon" viewBox="0 0 16 16" fill="none"><path d="M13.5 10.2A6 6 0 0 1 5.8 2.5a6 6 0 1 0 7.7 7.7Z" fill="#292932"/></svg>
+            <svg class="hz-overnight-reveal-sun" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3.2" fill="#d97706"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4" stroke="#d97706" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <span class="hz-overnight-reveal-cl" id="hz-overnight-reveal-cl0">Fri 6 pm</span>
+          <span class="hz-overnight-reveal-cl is-r" id="hz-overnight-reveal-cl1">Mon 7 am</span>
+        </div>
+
+        <div class="hz-overnight-reveal-stats">
+          <div class="hz-overnight-reveal-stat"><small>Emails</small><b id="hz-overnight-reveal-n0">18,402</b></div>
+          <div class="hz-overnight-reveal-stat"><small>Drawings</small><b id="hz-overnight-reveal-n1">3,115</b></div>
+          <div class="hz-overnight-reveal-stat"><small>Jobs</small><b id="hz-overnight-reveal-n2">7,980</b></div>
+        </div>
+
+        <div class="hz-overnight-reveal-flow" id="hz-overnight-reveal-flow"></div>
+        <div class="hz-overnight-reveal-read" id="hz-overnight-reveal-read"></div>
+
+        <div class="hz-overnight-reveal-drawer">
+          <div class="hz-overnight-reveal-funnel"><svg viewBox="0 0 472 24" preserveAspectRatio="none" fill="none"><path d="M0 0 L472 0 L440 24 L32 24 Z" fill="#fff" stroke="#e2e2e2"/></svg></div>
+          <div class="hz-overnight-reveal-dbox"><b><span class="hz-overnight-reveal-dot"></span><span id="hz-overnight-reveal-dlabel">Read</span></b><span id="hz-overnight-reveal-dcount">29,497 items · done</span></div>
+        </div>
+      </div>
+
+      <div class="hz-overnight-reveal-right">
+        <div class="hz-overnight-reveal-rhead">
+          <div class="hz-overnight-reveal-av">H</div>
+          <div><b>Horizon</b><span>to Pat, estimator</span></div>
+          <span class="hz-overnight-reveal-when" id="hz-overnight-reveal-when">Mon 7:02 am</span>
+        </div>
+        <div class="hz-overnight-reveal-h">Pat, here is your shop as I read it.</div>
+        <div class="hz-overnight-reveal-lines" id="hz-overnight-reveal-lines">
+          <div class="hz-overnight-reveal-line"><i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#16a34a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i><div><span></span><span class="hz-overnight-reveal-caret"></span></div></div>
+          <div class="hz-overnight-reveal-line"><i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#16a34a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i><div><span></span><span class="hz-overnight-reveal-caret"></span></div></div>
+          <div class="hz-overnight-reveal-line"><i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#16a34a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i><div><span></span><span class="hz-overnight-reveal-caret"></span></div></div>
+          <div class="hz-overnight-reveal-line"><i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#16a34a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i><div><span></span><span class="hz-overnight-reveal-caret"></span></div></div>
+          <div class="hz-overnight-reveal-line"><i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#16a34a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i><div><span></span><span class="hz-overnight-reveal-caret"></span></div></div>
+        </div>
+        <div class="hz-overnight-reveal-rules">
+          <small>Rules you set &middot; these come to you</small>
+          <div class="hz-overnight-reveal-chips">
+            <span class="hz-overnight-reveal-chip"><em>Rule</em>Expedite fee &middot; your call</span>
+            <span class="hz-overnight-reveal-chip"><em>Rule</em>Revision mismatch &middot; your call</span>
+            <span class="hz-overnight-reveal-chip"><em>Rule</em>Discount below floor &middot; your call</span>
+          </div>
+        </div>
+        <div class="hz-overnight-reveal-foot" id="hz-overnight-reveal-foot">Correct anything that's off. Nobody typed any of this in.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var SLUG = 'hz-overnight-reveal';
+  var CHAR_MS = 25;            // typing speed
+  var LOOP = 28, RESTART = 3;  // seconds; after the end hold the loop re-enters at the clear beat
+  var READ_MS = 14000;         // counters + clock sweep
+  var TOTALS = [18402, 3115, 7980];
+  var LINES = [
+    'Fab shop. 14 people.',
+    'Press brake rate $118/hr.',
+    'You inspect before and after powder coat.',
+    'Iridite on the drawing means an outside process: Dakota Plating, 4 days.',
+    'You quote repeat parts off the last job.'
+  ];
+  var ICONS = {
+    mail: '<svg viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3" width="13" height="10" rx="2" stroke="#1d63ed" stroke-width="1.5"/><path d="M2 4.5l6 4.5 6-4.5" stroke="#1d63ed" stroke-width="1.5"/></svg>',
+    pdf:  '<svg viewBox="0 0 16 16" fill="none"><path d="M3.5 1.5h6l3 3v10h-9z" stroke="#dc2626" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 10.5h4M6 8h4M9.5 1.5v3h3" stroke="#dc2626" stroke-width="1.3"/></svg>',
+    timer:'<svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="9" r="5.5" stroke="#d97706" stroke-width="1.5"/><path d="M8 6v3l2 1.5M6 1.5h4" stroke="#d97706" stroke-width="1.5" stroke-linecap="round"/></svg>',
+    quote:'<svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="#16a34a" stroke-width="1.5"/><path d="M5 6h6M5 8.5h6M5 11h3" stroke="#16a34a" stroke-width="1.3" stroke-linecap="round"/></svg>'
+  };
+  var FLOW = [
+    ['mail',  'RFQ: Bracket 4410 Rev B', 'dana@crestline-aero.com'],
+    ['pdf',   'Weldment 2207.pdf', 'drawing, 2 sheets'],
+    ['timer', 'Job 24-0871 · brake', '42 min'],
+    ['quote', 'Q-0912 · Northgate Fab', '$1,240.00'],
+    ['mail',  'PO 55821', 'halvorsen-machine.com'],
+    ['pdf',   'Mount plate 118.pdf', 'Rev A, iridite note'],
+    ['timer', 'Job 25-0113 · laser', '18 min']
+  ];
+
+  var READ = [
+    ['mail',  'Inbox', 'quotes@yourshop.com, 2024–2026'],
+    ['pdf',   'Drawings', 'every PDF on the RFQs'],
+    ['timer', 'Job timers', 'laser, brake, weld, powder coat'],
+    ['quote', 'Old quotes', 'won and lost']
+  ];
+
+  function init(root){
+    var $ = function(id){ return root.querySelector('#' + SLUG + '-' + id); };
+    var frame = root.querySelector('.' + SLUG + '-frame');
+    var left = $('left'), lines = Array.prototype.slice.call(root.querySelectorAll('#' + SLUG + '-lines > .' + SLUG + '-line'));
+    var chips = Array.prototype.slice.call(root.querySelectorAll('.' + SLUG + '-chip'));
+    var nums = [$('n0'), $('n1'), $('n2')];
+
+    // build the flow cards and the "what it read" list once
+    $('flow').innerHTML = FLOW.map(function(f){ return '<div class="' + SLUG + '-fc">' + ICONS[f[0]] + '<b>' + f[1] + '</b><span>' + f[2] + '</span></div>'; }).join('');
+    var CHECK = '<i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#16a34a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i>';
+    $('read').innerHTML = READ.map(function(r){ return '<div class="' + SLUG + '-rr">' + ICONS[r[0]] + '<b>' + r[1] + '</b><span>' + r[2] + '</span>' + CHECK + '</div>'; }).join('');
+
+    /* ---- scale the 1200×750 stage to the root width ---- */
+    function fit(){
+      var w = root.clientWidth || 1200, s = w / 1200;
+      root.style.setProperty('--s', s.toFixed(5));
+      if (!(window.CSS && CSS.supports && CSS.supports('aspect-ratio', '1 / 1'))) frame.style.height = (750 * s) + 'px';
+    }
+    fit();
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(root); else window.addEventListener('resize', fit);
+
+    /* ---- tiny runtime: timers, tweens, typing, seeking ---- */
+    var timers = [], rafs = [], typers = [], tl = [], instant = false;   // tl: the timeline itself; the rest live inside beats
+    function later(ms, fn, off){ if (instant){ if (ms <= (off || 0) * 1000) fn(); return; } timers.push(setTimeout(fn, ms)); }
+    function stopAll(){ timers.forEach(clearTimeout); timers = []; rafs.forEach(cancelAnimationFrame); rafs = []; typers.forEach(clearTimeout); typers = []; }
+    function tween(durMs, offSec, fn){
+      var p0 = Math.min(1, (offSec || 0) * 1000 / durMs); fn(p0);
+      if (instant || p0 >= 1) return;
+      var t0 = performance.now() - p0 * durMs;
+      (function frame(){ rafs.push(requestAnimationFrame(function(){ var p = Math.min(1, (performance.now() - t0) / durMs); fn(p); if (p < 1) frame(); })); })();
+    }
+    function typeInto(line, text, offSec){
+      var el = line.firstElementChild.nextElementSibling.firstElementChild;
+      var n = Math.max(0, Math.floor(offSec * 1000 / CHAR_MS));
+      line.classList.add('is-on');
+      if (n >= text.length){ el.textContent = text; line.classList.remove('is-typing'); line.classList.add('is-done'); return; }
+      el.textContent = text.slice(0, n); line.classList.add('is-typing');
+      if (instant) return;
+      (function step(){
+        typers.push(setTimeout(function(){
+          n++; el.textContent = text.slice(0, n);
+          if (n < text.length) step(); else { line.classList.remove('is-typing'); line.classList.add('is-done'); }
+        }, CHAR_MS));
+      })();
+    }
+    var fmt = function(n){ return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
+    var DAYS = ['Fri', 'Sat', 'Sun', 'Mon'];
+    function clockLabel(p){
+      var h = 18 + p * 61, d = DAYS[Math.min(3, Math.floor(h / 24))], hr = Math.floor(h % 24);
+      return d + ' ' + ((hr % 12) || 12) + ' ' + (hr < 12 ? 'am' : 'pm');
+    }
+    function setProgress(p){
+      var e = 1 - Math.pow(1 - p, 2);
+      nums.forEach(function(el, i){ el.textContent = fmt(TOTALS[i] * e); });
+      left.style.setProperty('--p', p.toFixed(4));
+      $('now').textContent = p >= 1 ? 'Mon 7 am' : clockLabel(p);
+      $('dcount').textContent = p >= 1 ? fmt(TOTALS[0] + TOTALS[1] + TOTALS[2]) + ' items · done' : fmt((TOTALS[0] + TOTALS[1] + TOTALS[2]) * e) + ' items';
+      left.classList.toggle('is-day', p >= .93);
+      $('cl0').classList.toggle('is-lit', p < .5); $('cl1').classList.toggle('is-lit', p >= .5);
+    }
+
+    /* ---- state setters ---- */
+    function startReading(off){ left.classList.add('is-reading'); $('dlabel').textContent = 'Reading'; $('when').textContent = 'draft'; tween(READ_MS, off, setProgress); }
+    function doneReading(){ left.classList.remove('is-reading'); $('dlabel').textContent = 'Read'; $('when').textContent = 'Mon 7:02 am'; setProgress(1); }
+    function showLine(i, off){ typeInto(lines[i], LINES[i], off); }
+    function showChip(i){ chips[i].classList.add('is-on'); }
+    function resolved(){
+      doneReading();
+      lines.forEach(function(l, i){ typeInto(l, LINES[i], 999); });
+      chips.forEach(function(c){ c.classList.add('is-on'); });
+      $('foot').classList.add('is-on');
+    }
+    function clear(){
+      stopAll();
+      left.classList.remove('is-reading', 'is-day'); $('dlabel').textContent = 'Reading'; $('when').textContent = 'draft'; setProgress(0);
+      lines.forEach(function(l){ l.classList.remove('is-on', 'is-typing', 'is-done'); l.firstElementChild.nextElementSibling.firstElementChild.textContent = ''; });
+      chips.forEach(function(c){ c.classList.remove('is-on'); });
+      $('foot').classList.remove('is-on');
+    }
+
+    /* ---- the timeline: one array of {t, fn(offsetSeconds)} ---- */
+    var TL = [
+      { t: 0,    fn: resolved },
+      { t: 3,    fn: clear },
+      { t: 3.4,  fn: startReading },
+      { t: 9.0,  fn: function(o){ showLine(0, o); } },
+      { t: 10.4, fn: function(o){ showLine(1, o); } },
+      { t: 12.0, fn: function(o){ showLine(2, o); } },
+      { t: 14.0, fn: function(o){ showLine(3, o); } },
+      { t: 16.6, fn: function(o){ showLine(4, o); } },
+      { t: 17.6, fn: doneReading },
+      { t: 19.2, fn: function(){ showChip(0); } },
+      { t: 20.0, fn: function(){ showChip(1); } },
+      { t: 20.8, fn: function(){ showChip(2); } },
+      { t: 22.4, fn: function(){ $('foot').classList.add('is-on'); } },
+      { t: 24,   fn: resolved }
+    ];
+
+    function seek(at){
+      instant = true; root.classList.add('is-noanim'); stopAll(); clear();
+      TL.forEach(function(b){ if (b.t <= at) b.fn(at - b.t); });
+      void root.offsetWidth; root.classList.remove('is-noanim'); instant = false;
+    }
+    function play(from, inclusive){
+      stopAll(); tl.forEach(clearTimeout); tl = [];
+      TL.forEach(function(b){ if (b.t > from || (inclusive && b.t === from)) tl.push(setTimeout(function(){ b.fn(0); }, (b.t - from) * 1000)); });
+      tl.push(setTimeout(function(){ play(RESTART, true); }, (LOOP - from) * 1000));
+    }
+
+    /* ---- boot ---- */
+    var q = {}; try { q = Object.fromEntries(new URLSearchParams(window.location.search)); } catch (e) {}
+    var reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    if (q.still || reduced){ seek(0); }
+    else if (q.at !== undefined){ seek(((parseFloat(q.at) || 0) % LOOP + LOOP) % LOOP); }
+    else { seek(0); play(0, false); }
+  }
+
+  document.querySelectorAll('.' + SLUG).forEach(init);
+})();
+</script>
+<!-- /hz:fragment -->
+</body>
+</html>

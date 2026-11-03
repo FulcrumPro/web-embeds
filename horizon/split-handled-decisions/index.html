@@ -1,0 +1,256 @@
+<!doctype html>
+<!--
+  Horizon — split-handled-decisions — "Handled / Needs you"
+  Design 1200x750, scales to width. Loop 28.0s. No libraries, no images, no audio.
+
+  Beats (seconds):
+   0.0  resolved: counter "This week: 47 handled · 5 decisions"; left "Handled" feed (12 items, duplicated for a
+        seamless wrap) scrolling up at ~28 px/s; right "Needs you" holds exactly three cards:
+        Expedite fee (Northgate, 6 days) · Revision mismatch (PO Rev A, quote Rev B) · Discount below floor (Halvorsen, 12%).
+   2.3  feed: next handled item enters from the bottom with a soft green tint for 1.8s (then every 2.33s:
+        4.6, 7.0, 9.3, 11.6, 14.0, 16.3, 18.6, 21.0, 23.3, 25.6, 28.0)
+   9.0  decision pulse: the "Needs you" badge rings once and the column tints for ~1.4s. Still three cards.
+  20.0  decision pulse again. Still three cards.
+  28.0  loop -> 0 (the feed wraps on the duplicated list; nothing on the right ever moves)
+
+  ?still=1  resolved state, feed stopped.   ?at=<sec>  seeks to that time and stops.
+  prefers-reduced-motion: resolved state only, feed stopped.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Horizon — handled / needs you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #fff; }
+  body { display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
+</style>
+</head>
+<body>
+<!-- hz:fragment-start -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+.hz-split-handled-decisions { --s: 1; --feed-dur: 28s; position: relative; width: 100%; max-width: 1200px; overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #292932;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 13px; line-height: 1.35;
+  pointer-events: none; user-select: none; }
+.hz-split-handled-decisions *, .hz-split-handled-decisions *::before, .hz-split-handled-decisions *::after { box-sizing: border-box; }
+.hz-split-handled-decisions-stage { position: absolute; top: 0; left: 0; width: 1200px; height: 750px;
+  transform: scale(var(--s)); transform-origin: 0 0; background: #f5f7fa; overflow: hidden; }
+
+.hz-split-handled-decisions .s-glow { position: absolute; left: 120px; top: 60px; width: 960px; height: 560px; border-radius: 50%;
+  background: radial-gradient(closest-side, #D7D9FB 0%, rgba(215,217,251,.5) 45%, rgba(215,217,251,0) 100%); }
+.hz-split-handled-decisions .s-neon { position: absolute; left: 150px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: #DDF83B; }
+
+.hz-split-handled-decisions .s-win { position: absolute; left: 30px; top: 30px; width: 1140px; height: 690px; background: #fff;
+  border: 1px solid #e2e2e2; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,0,0,.15); overflow: hidden; display: flex; flex-direction: column; }
+.hz-split-handled-decisions .s-title { flex: 0 0 44px; display: flex; align-items: center; gap: 10px; padding: 0 16px; border-bottom: 1px solid #e2e2e2; font-size: 12.5px; color: #6b6b6b; }
+.hz-split-handled-decisions .s-dots { display: inline-flex; gap: 6px; margin-right: 6px; }
+.hz-split-handled-decisions .s-dots i { width: 11px; height: 11px; border-radius: 50%; background: #e2e2e2; display: block; }
+.hz-split-handled-decisions .s-brand { font-weight: 700; color: #292932; }
+.hz-split-handled-decisions .s-prod { font-weight: 600; color: #292932; }
+.hz-split-handled-decisions .s-acct { margin-left: 10px; padding-left: 12px; border-left: 1px solid #e2e2e2; }
+
+/* quiet counter */
+.hz-split-handled-decisions .s-counter { flex: 0 0 52px; display: flex; align-items: center; justify-content: center; gap: 10px; border-bottom: 1px solid #e2e2e2; font-size: 13.5px; color: #6b6b6b; background: #fff; }
+.hz-split-handled-decisions .s-counter b { color: #292932; font-weight: 600; font-variant-numeric: tabular-nums; }
+.hz-split-handled-decisions .s-counter .ok { color: #16a34a; }
+.hz-split-handled-decisions .s-counter .warn { color: #d97706; }
+.hz-split-handled-decisions .s-counter .sep { color: #e2e2e2; }
+
+.hz-split-handled-decisions .s-body { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 1fr 430px; }
+.hz-split-handled-decisions .s-col-head { height: 48px; display: flex; align-items: center; gap: 9px; padding: 0 20px; border-bottom: 1px solid #e2e2e2; font-weight: 600; font-size: 14px; }
+.hz-split-handled-decisions .s-col-head small { color: #6b6b6b; font-weight: 500; font-size: 12px; margin-left: auto; }
+.hz-split-handled-decisions .s-col-head .ico { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; }
+.hz-split-handled-decisions .s-col-head .ico svg { width: 11px; height: 11px; }
+.hz-split-handled-decisions .s-col-head .ico.ok { background: #16a34a; color: #fff; }
+.hz-split-handled-decisions .s-badge { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 7px; border-radius: 999px; background: #fff7ed; color: #d97706; font-size: 11.5px; font-weight: 700; position: relative; }
+.hz-split-handled-decisions .s-badge::after { content: ''; position: absolute; inset: -2px; border-radius: 999px; border: 2px solid #d97706; opacity: 0; }
+.hz-split-handled-decisions .s-badge.is-pulse::after { animation: hz-shd-ring 1.3s cubic-bezier(.2,.7,.2,1) 1; }
+@keyframes hz-shd-ring { 0% { opacity: .8; transform: scale(1); } 100% { opacity: 0; transform: scale(2.1); } }
+
+/* handled feed */
+.hz-split-handled-decisions .s-handled { border-right: 1px solid #e2e2e2; background: #fff; display: flex; flex-direction: column; min-height: 0; }
+.hz-split-handled-decisions .s-feedwrap { flex: 1 1 auto; min-height: 0; overflow: hidden; position: relative;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 26px, #000 calc(100% - 70px), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 26px, #000 calc(100% - 70px), transparent 100%); }
+.hz-split-handled-decisions .s-feed { list-style: none; margin: 0; padding: 0; animation: hz-shd-scroll var(--feed-dur) linear infinite; will-change: transform; }
+@keyframes hz-shd-scroll { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+.hz-split-handled-decisions .s-item { height: 66px; display: grid; grid-template-columns: 26px 1fr auto; gap: 12px; align-items: center; padding: 0 20px; border-bottom: 1px solid #eeeeee; transition: background 1.2s ease; }
+.hz-split-handled-decisions .s-item.is-new { background: #ecfdf5; transition: background .3s ease; }
+.hz-split-handled-decisions .s-item .ck { width: 22px; height: 22px; border-radius: 50%; background: #ecfdf5; color: #16a34a; display: grid; place-items: center; }
+.hz-split-handled-decisions .s-item .ck svg { width: 11px; height: 11px; }
+.hz-split-handled-decisions .s-item b { display: block; font-weight: 600; font-size: 13.5px; }
+.hz-split-handled-decisions .s-item span { display: block; color: #6b6b6b; font-size: 12.5px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hz-split-handled-decisions .s-kind { line-height: 1; padding: 5px 8px; border-radius: 4px; background: #f5f7fa; color: #6b6b6b; font-size: 10.5px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+
+/* needs you */
+.hz-split-handled-decisions .s-needs { background: #f5f7fa; display: flex; flex-direction: column; min-height: 0; transition: background .6s ease; }
+.hz-split-handled-decisions .s-needs.is-pulse { background: #eef3ff; }
+.hz-split-handled-decisions .s-cards { padding: 14px 16px 0; display: flex; flex-direction: column; gap: 12px; }
+.hz-split-handled-decisions .s-card { background: #fff; border: 1px solid #e2e2e2; border-radius: 10px; padding: 14px 16px 14px; box-shadow: 0 1px 2px rgba(0,0,0,.04); transition: box-shadow .6s ease, border-color .6s ease; }
+.hz-split-handled-decisions .s-card.is-pulse { border-color: #3840EA; box-shadow: 0 0 0 4px #D7D9FB; }
+.hz-split-handled-decisions .s-card .t { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
+.hz-split-handled-decisions .s-card .t i { width: 9px; height: 9px; border-radius: 50%; background: #d97706; display: block; flex: none; }
+.hz-split-handled-decisions .s-card .t em { margin-left: auto; font-style: normal; font-size: 11px; color: #6b6b6b; font-weight: 500; }
+.hz-split-handled-decisions .s-card p { margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: #292932; }
+.hz-split-handled-decisions .s-card .rule { margin-top: 8px; font-size: 12px; color: #6b6b6b; }
+.hz-split-handled-decisions .s-card .rule b { color: #292932; font-weight: 500; }
+.hz-split-handled-decisions .s-opts { display: flex; gap: 8px; margin-top: 12px; }
+.hz-split-handled-decisions .s-opt { line-height: 1; padding: 9px 12px; border-radius: 7px; border: 1px solid #e2e2e2; background: #fff; font-size: 12.5px; font-weight: 600; color: #292932; }
+.hz-split-handled-decisions .s-opt.blue { border-color: #1d63ed; color: #1d63ed; }
+.hz-split-handled-decisions .s-needs-foot { margin-top: auto; padding: 14px 16px 16px; font-size: 12px; color: #6b6b6b; line-height: 1.5; border-top: 1px solid #e2e2e2; }
+.hz-split-handled-decisions .s-needs-foot b { color: #292932; font-weight: 600; }
+
+.hz-split-handled-decisions.is-seek *, .hz-split-handled-decisions.is-seek *::before, .hz-split-handled-decisions.is-seek *::after { transition: none !important; animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .hz-split-handled-decisions *, .hz-split-handled-decisions *::before, .hz-split-handled-decisions *::after { transition: none !important; animation: none !important; }
+}
+</style>
+
+<div class="hz-split-handled-decisions">
+  <div class="hz-split-handled-decisions-stage">
+    <div class="s-glow"></div>
+    <div class="s-neon"></div>
+    <div class="s-win">
+      <div class="s-title">
+        <span class="s-dots"><i></i><i></i><i></i></span>
+        <span class="s-brand">fulcrum</span><span>·</span><span class="s-prod">Horizon</span>
+        <span class="s-acct">quotes@yourshop.com</span>
+      </div>
+      <div class="s-counter">This week: <b class="ok">47</b> handled <span class="sep">·</span> <b class="warn">5</b> decisions</div>
+      <div class="s-body">
+
+        <section class="s-handled">
+          <div class="s-col-head"><span class="ico ok"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span>Handled <small>went out on its own</small></div>
+          <div class="s-feedwrap">
+            <ul class="s-feed" data-feed>
+              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>RFQ ingested</b><span>Crestline Aerospace · Bracket 4410 Rev B, qty 250 · drawing read</span></div><span class="s-kind">RFQ</span></li>
+              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Repeat part priced from history</b><span>Redwing Equipment · Housing 3310, qty 40 · from job 25-0310</span></div><span class="s-kind">Priced</span></li>
+              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Vendor emails sent</b><span>Lakeshore Laser, Midwest Anodizing · lead time for 250 pcs</span></div><span class="s-kind">Vendor</span></li>
+              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>PO checked against quote</b><span>Northgate Fab · PO 5521 matches Q-1163 · sales order SO-2290 opened</span></div><span class="s-kind">PO</span></li>
+              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Status reply sent</b><span>Halvorsen Machine · Mount plate 118 ships Thursday</span></div><span class="s-kind">Status</span></li>
+              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Lead time logged</b><span>Midwest Anodizing · clear anodize, 5 days</span></div><span class="s-kind">Lead time</span></li>
+              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Quote drafted</b><span>Crestline Aerospace · 250 pcs at $86.50 ea · Pat sends</span></div><span class="s-kind">Quote</span></li>
+              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>RFQ ingested</b><span>Halvorsen Machine · Weldment 2207, qty 12 · drawing read</span></div><span class="s-kind">RFQ</span></li>
+              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Vendor reply logged</b><span>Prairie Powder Coat · black texture, 3 days</span></div><span class="s-kind">Vendor</span></li>
+              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Repeat part priced from history</b><span>Northgate Fab · Mount plate 118, qty 60 · from job 25-0922</span></div><span class="s-kind">Priced</span></li>
+              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>PO checked against quote</b><span>Crestline Aerospace · PO 7781 matches Q-1140 · sales order SO-2291 opened</span></div><span class="s-kind">PO</span></li>
+              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Status reply sent</b><span>Redwing Equipment · Housing 3310 ships Nov 6</span></div><span class="s-kind">Status</span></li>
+            </ul>
+          </div>
+        </section>
+
+        <aside class="s-needs" data-needs>
+          <div class="s-col-head"><span class="s-badge" data-badge>3</span>Needs you <small>your rules flagged these</small></div>
+          <div class="s-cards">
+            <div class="s-card" data-card>
+              <div class="t"><i></i>Expedite fee <em>Northgate Fab</em></div>
+              <p>Northgate wants Weldment 2207 in 6 days. Your rule adds 15% under 10 days.</p>
+              <div class="rule">Reply drafted with the fee · <b>Pat decides</b></div>
+              <div class="s-opts"><span class="s-opt blue">Add 15%</span><span class="s-opt">Waive it</span></div>
+            </div>
+            <div class="s-card" data-card>
+              <div class="t"><i></i>Revision mismatch <em>Crestline Aerospace</em></div>
+              <p>PO 7784 says Bracket 4410 Rev A. The quote was Rev B.</p>
+              <div class="rule">Question to Dana drafted · <b>Pat decides</b></div>
+              <div class="s-opts"><span class="s-opt blue">Ask Dana</span><span class="s-opt">Hold the PO</span></div>
+            </div>
+            <div class="s-card" data-card>
+              <div class="t"><i></i>Discount below floor <em>Halvorsen Machine</em></div>
+              <p>Halvorsen asks 12% off Mount plate 118. Your floor is 8%.</p>
+              <div class="rule">Reply drafted at 8% · <b>Pat decides</b></div>
+              <div class="s-opts"><span class="s-opt blue">Hold at 8%</span><span class="s-opt">Allow 12%</span></div>
+            </div>
+          </div>
+          <div class="s-needs-foot"><b>Three decisions. Everything else went out.</b><br>Horizon drafted the reply for each one; you pick, Pat sends.</div>
+        </aside>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var LOOP_END = 28.0;      // seconds; also the feed's scroll period (--feed-dur)
+  var ITEM_H = 66, FEED_VIEW = 546, N = 12;   // feed geometry: item height, visible height, items per half
+
+  function init(root) {
+    var $ = function (sel) { return root.querySelector(sel); };
+    var $$ = function (sel) { return Array.prototype.slice.call(root.querySelectorAll(sel)); };
+
+    function fit() {
+      var w = root.clientWidth || 1200;
+      var s = w / 1200;
+      root.style.setProperty('--s', String(s));
+      root.style.height = Math.round(750 * s) + 'px';
+    }
+    fit();
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(root);
+    else window.addEventListener('resize', fit);
+
+    var feed = $('[data-feed]');
+    var needs = $('[data-needs]'), badge = $('[data-badge]'), cards = $$('[data-card]');
+    root.style.setProperty('--feed-dur', LOOP_END + 's');
+
+    // duplicate the feed so translateY(-50%) wraps seamlessly
+    var items = $$('.s-item');
+    items.forEach(function (li) { feed.appendChild(li.cloneNode(true)); });
+    var all = $$('.s-item');
+
+    var timers = [], instant = false, seekAt = 0, curT = 0;
+    // in seek mode a delayed callback runs only if it would already have fired by seekAt
+    function later(ms, fn) { if (instant) { if (curT + ms / 1000 <= seekAt) fn(); return; } timers.push(setTimeout(fn, ms)); }
+    function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+    function speed() { return (ITEM_H * N) / LOOP_END; }          // px per second
+    function enterTime(k) { return (ITEM_H * k - FEED_VIEW) / speed() + 0.6; }   // item k is ~17px into view
+    function arrive(k) { var li = all[k]; if (!li) return; li.classList.add('is-new'); later(1800, function () { li.classList.remove('is-new'); }); }
+    function pulse() {
+      badge.classList.add('is-pulse'); needs.classList.add('is-pulse'); cards[0].classList.add('is-pulse');
+      later(1400, function () { badge.classList.remove('is-pulse'); needs.classList.remove('is-pulse'); cards[0].classList.remove('is-pulse'); });
+    }
+
+    // ----- timeline: one array of {t, fn} -----
+    var timeline = [
+      { t: 0.0,  fn: function () { /* resolved state is authored in the DOM; feed scrolls via CSS */ } },
+      { t: 9.0,  fn: pulse },     // a decision would arrive; column stays at three
+      { t: 20.0, fn: pulse }
+    ];
+    for (var k = 9; k <= 20; k++) {               // handled items entering from the bottom
+      (function (k) { var t = enterTime(k); if (t >= 0 && t < LOOP_END) timeline.push({ t: t, fn: function () { arrive(k); } }); })(k);
+    }
+    timeline.sort(function (a, b) { return a.t - b.t; });
+
+    var q = (typeof location !== 'undefined' && location.search) || '';
+    var mStill = /[?&]still=1/.test(q);
+    var mAt = /[?&]at=([\d.]+)/.exec(q);
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (mAt) {
+      var at = parseFloat(mAt[1]) % LOOP_END;
+      root.classList.add('is-seek'); instant = true; seekAt = at;
+      feed.style.transform = 'translateY(' + (-(ITEM_H * N) * (at / LOOP_END)).toFixed(1) + 'px)';
+      timeline.forEach(function (b) { if (b.t <= at) { curT = b.t; b.fn(); } });
+      return;
+    }
+    if (mStill || reduced) { root.classList.add('is-seek'); return; }
+
+    function play() {
+      clearTimers();
+      feed.style.animation = 'none'; void feed.offsetHeight; feed.style.animation = '';   // resync the CSS scroll
+      timeline.forEach(function (b) { timers.push(setTimeout(b.fn, b.t * 1000)); });
+      timers.push(setTimeout(play, LOOP_END * 1000));
+    }
+    play();
+  }
+
+  document.querySelectorAll('.hz-split-handled-decisions').forEach(init);
+})();
+</script>
+<!-- hz:fragment-end -->
+</body>
+</html>
