@@ -2,16 +2,23 @@
 <!--
   Horizon landing page loop 5 — same-reply-two-voices ("you manage, it works")
   Root class: hz-same-reply-two-voices   Design size 1200x750   Loop 21s (first pass holds resolved 3s, then 3s..21s repeats)
+  Review pass Nov 3 2026: one window-chrome grammar, brand palette (orange/green/neon), Inter in the window,
+  "from Outlook" on the decision line, inline highlights on the two facts in both voices, no phone layout
+  (the embed box scales as a whole, side-by-side at every width).
 
   Beats (seconds from page open; the loop jumps back to 3.0 after 21.0):
-   0.0  resolved: decision card, both drafts complete, "Matches how you write to each customer.", "Pat sends" chip. Hold 3s.
-   3.0  reset: everything clears (window stays).
-   3.5  decision card slides in: "Dana asked for 6-day turnaround. Expedite fee: 15% (your rule)."
-   4.8  rule chip lights on the card.
-   5.5  the two draft frames appear (Formal / Terse, To + Subject).
-   6.5  both bodies type at once: Formal 25 ms/char (done ~13.8s), Terse 30 ms/char (done ~9.5s).
+   0.0  resolved: decision banner, both drafts complete with "$92.00 ea" / "Ships Nov 9" highlighted,
+        "Matches how you write to each customer.", "Pat sends" chip, status "2 drafts ready". Hold 3s.
+   3.0  reset: everything clears (window stays), status "Reading the request".
+   3.5  decision banner slides in: "Dana asked for 6-day turnaround. Expedite fee: 15% (your rule)."
+        + "from Outlook · Crestline Aerospace · Bracket 4410, Rev B · qty 250 · ships Nov 9" + "Needs you" pill.
+   4.8  rule chip lights: "Rule · rush under 10 days → +15%".
+   5.5  the two draft frames appear (Formal / Terse, To + Subject). Status "Drafting 2 replies".
+   6.5  both bodies type at once: Formal 25 ms/char (~295 chars, done ~13.9s), Terse 30 ms/char (~102 chars, done ~9.6s).
+   ~10.0 Terse highlights fade in ("$92.00 ea", "Ships Nov 9").
+   ~14.3 Formal highlights fade in (same two facts). Status "2 drafts ready".
   15.0  label: "Matches how you write to each customer."
-  16.5  "Pat sends" chip. Resolved state; hold 4s.
+  16.5  "Pat sends" chip. Resolved state; both bodies readable from 13.9s to 21.0s (7.1s). Hold.
   21.0  loop -> 3.0
 
   Standalone page params: ?still=1 (resolved state, no motion)   ?at=<seconds> (seek, no transitions, stop)
@@ -33,66 +40,67 @@
 </head>
 <body>
 <div class="hz-page">
-<!-- hz-fragment-start -->
+<!-- hz:fragment-start -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 .hz-same-reply-two-voices{position:relative;width:100%;max-width:1200px;margin:0 auto;overflow:hidden;aspect-ratio:1200/750;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#292932;line-height:1.4;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#f5f7fa}
 .hz-same-reply-two-voices *,.hz-same-reply-two-voices *::before,.hz-same-reply-two-voices *::after{box-sizing:border-box}
 .hz-same-reply-two-voices-stage{position:absolute;top:0;left:0;width:1200px;height:750px;transform-origin:0 0;transform:scale(var(--s,1));background:#f5f7fa;overflow:hidden}
 .hz-same-reply-two-voices .sr-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(520px 320px at 88% 8%,#D7D9FB 0%,rgba(215,217,251,0) 70%),radial-gradient(420px 260px at 6% 96%,#D7D9FB 0%,rgba(215,217,251,0) 70%)}
-.hz-same-reply-two-voices .sr-win{position:absolute;left:30px;top:30px;width:1140px;height:690px;background:#fff;border:1px solid #e2e2e2;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.15);overflow:hidden;display:flex;flex-direction:column}
-.hz-same-reply-two-voices .sr-bar{flex:0 0 44px;display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:1px solid #e2e2e2;font-size:13px;color:#6b6b6b}
+/* window */
+.hz-same-reply-two-voices .sr-win{position:absolute;left:32px;top:32px;width:1136px;height:686px;background:#fff;border:1px solid #e2e2e2;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.15);overflow:hidden;display:flex;flex-direction:column}
+.hz-same-reply-two-voices .sr-bar{flex:0 0 44px;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid #e2e2e2;font-size:13px;color:#6b6b6b}
 .hz-same-reply-two-voices .sr-dots{display:inline-flex;gap:6px;margin-right:4px}
 .hz-same-reply-two-voices .sr-dots i{width:11px;height:11px;border-radius:50%;background:#e2e2e2;display:block}
-.hz-same-reply-two-voices .sr-title{font-weight:600;color:#292932;font-size:14px}
-.hz-same-reply-two-voices .sr-acct{color:#6b6b6b}
-.hz-same-reply-two-voices .sr-brand{margin-left:auto;font-weight:700;letter-spacing:-.02em;color:#292932;font-size:15px}
-.hz-same-reply-two-voices .sr-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:18px;padding:22px 24px}
-/* decision card */
-.hz-same-reply-two-voices .sr-decision{display:flex;align-items:center;gap:16px;padding:16px 20px;border:1px solid #f3d9b4;border-left:4px solid #d97706;border-radius:10px;background:#fff7ed}
-.hz-same-reply-two-voices .sr-dec-icon{flex:0 0 38px;width:38px;height:38px;border-radius:50%;background:#d97706;color:#fff;font-weight:700;font-size:20px;display:grid;place-items:center;line-height:1}
+.hz-same-reply-two-voices .sr-brand{font-weight:700;color:#292932;letter-spacing:-.01em}
+.hz-same-reply-two-voices .sr-prod{font-weight:600;color:#292932}
+.hz-same-reply-two-voices .sr-acct{margin-left:4px;padding-left:12px;border-left:1px solid #e2e2e2;color:#6b6b6b}
+.hz-same-reply-two-voices .sr-status{margin-left:auto;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:#6b6b6b;line-height:1;padding:6px 10px;border-radius:999px;background:#f5f7fa;border:1px solid #e2e2e2;transition:opacity .3s cubic-bezier(.2,.7,.2,1)}
+.hz-same-reply-two-voices .sr-status.is-swap{opacity:0}
+.hz-same-reply-two-voices .sr-status i{width:8px;height:8px;border-radius:50%;background:#1d63ed;display:block}
+.hz-same-reply-two-voices .sr-status.is-busy i{animation:hz-srtv-pulse 1.2s cubic-bezier(.2,.7,.2,1) infinite}
+.hz-same-reply-two-voices .sr-status.is-ready i{background:#3DC975}
+@keyframes hz-srtv-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hz-same-reply-two-voices .sr-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:16px;padding:24px}
+/* decision banner */
+.hz-same-reply-two-voices .sr-decision{display:flex;align-items:center;gap:16px;padding:16px 24px;border:1px solid #FF5C16;border-left:4px solid #FF5C16;border-radius:8px;background:#FFEFE8}
+.hz-same-reply-two-voices .sr-dec-icon{flex:0 0 36px;width:36px;height:36px;border-radius:50%;background:#FF5C16;color:#fff;font-weight:700;font-size:20px;display:grid;place-items:center;line-height:1}
 .hz-same-reply-two-voices .sr-dec-text{flex:1 1 auto;min-width:0}
-.hz-same-reply-two-voices .sr-dec-kicker{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#d97706;margin-bottom:3px}
-.hz-same-reply-two-voices .sr-dec-head{font-size:19px;font-weight:600;color:#292932;line-height:1.3}
+.hz-same-reply-two-voices .sr-dec-kicker{font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#FF5C16;margin-bottom:4px;line-height:1}
+.hz-same-reply-two-voices .sr-dec-head{font-size:17px;font-weight:600;color:#292932;line-height:1.3}
 .hz-same-reply-two-voices .sr-dec-head em{font-style:normal;color:#6b6b6b;font-weight:500}
 .hz-same-reply-two-voices .sr-dec-meta{font-size:13px;color:#6b6b6b;margin-top:4px}
+.hz-same-reply-two-voices .sr-dec-meta b{font-weight:600;color:#292932}
 .hz-same-reply-two-voices .sr-dec-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-.hz-same-reply-two-voices .sr-tag{display:inline-block;font-size:12px;font-weight:600;line-height:1;padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #f3d9b4;color:#d97706;white-space:nowrap}
-.hz-same-reply-two-voices .sr-rule{display:inline-block;font-size:12px;font-weight:500;line-height:1;padding:6px 10px;border-radius:6px;background:#fff;border:1px solid #e2e2e2;color:#6b6b6b;white-space:nowrap;transition:background .5s cubic-bezier(.2,.7,.2,1),color .5s cubic-bezier(.2,.7,.2,1),border-color .5s cubic-bezier(.2,.7,.2,1)}
+.hz-same-reply-two-voices .sr-tag{display:inline-block;font-size:12px;font-weight:600;line-height:1;padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #FF5C16;color:#292932;white-space:nowrap}
+.hz-same-reply-two-voices .sr-rule{display:inline-block;font-size:12px;font-weight:500;line-height:1;padding:6px 8px;border-radius:4px;background:#fff;border:1px solid #e2e2e2;color:#6b6b6b;white-space:nowrap;transition:background .5s cubic-bezier(.2,.7,.2,1),color .5s cubic-bezier(.2,.7,.2,1),border-color .5s cubic-bezier(.2,.7,.2,1)}
 .hz-same-reply-two-voices .sr-rule.is-on{background:#292932;border-color:#292932;color:#fff}
 /* drafts */
-.hz-same-reply-two-voices .sr-drafts{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.hz-same-reply-two-voices .sr-draft{display:flex;flex-direction:column;min-height:0;border:1px solid #e2e2e2;border-radius:10px;background:#fff;overflow:hidden}
-.hz-same-reply-two-voices .sr-draft-head{display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:1px solid #e2e2e2;background:#f5f7fa;font-size:13px;color:#6b6b6b}
-.hz-same-reply-two-voices .sr-voice{display:inline-block;font-size:12px;font-weight:700;line-height:1;padding:6px 10px;border-radius:999px;background:#292932;color:#fff;letter-spacing:.02em}
+.hz-same-reply-two-voices .sr-drafts{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hz-same-reply-two-voices .sr-draft{display:flex;flex-direction:column;min-height:0;border:1px solid #e2e2e2;border-radius:8px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06);overflow:hidden}
+.hz-same-reply-two-voices .sr-draft-head{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #e2e2e2;background:#f5f7fa;font-size:13px;color:#6b6b6b}
+.hz-same-reply-two-voices .sr-voice{display:inline-block;font-size:12px;font-weight:600;line-height:1;padding:6px 10px;border-radius:999px;background:#292932;color:#fff;letter-spacing:.02em}
 .hz-same-reply-two-voices .sr-draft--terse .sr-voice{background:#1d63ed}
-.hz-same-reply-two-voices .sr-field{padding:7px 18px;font-size:13px;color:#292932;border-bottom:1px solid #f0f0f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hz-same-reply-two-voices .sr-field b{font-weight:500;color:#6b6b6b;display:inline-block;width:58px}
-.hz-same-reply-two-voices .sr-draft-body{flex:1 1 auto;min-height:0;padding:14px 18px;font-size:15px;line-height:1.55;color:#292932;white-space:pre-wrap;overflow:hidden}
+.hz-same-reply-two-voices .sr-field{padding:8px 16px;font-size:13px;color:#292932;border-bottom:1px solid #e2e2e2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hz-same-reply-two-voices .sr-field b{font-weight:500;color:#6b6b6b;display:inline-block;width:64px}
+.hz-same-reply-two-voices .sr-draft-body{flex:1 1 auto;min-height:0;padding:16px;font-size:14px;line-height:1.6;color:#292932;white-space:pre-wrap;overflow:hidden}
 .hz-same-reply-two-voices .sr-draft-body.is-typing::after{content:'';display:inline-block;width:2px;height:1em;background:#1d63ed;vertical-align:-.15em;margin-left:2px;animation:hz-srtv-blink 1s steps(2,start) infinite}
 @keyframes hz-srtv-blink{to{visibility:hidden}}
+/* inline highlight on the two facts (neon tint) */
+.hz-same-reply-two-voices .sr-hl{line-height:1;padding:2px 3px;margin:0 -2px;border-radius:4px;background:transparent;color:inherit;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-color .6s cubic-bezier(.2,.7,.2,1)}
+.hz-same-reply-two-voices .sr-hl.is-on{background:#F4FFB0}
 /* footer */
-.hz-same-reply-two-voices .sr-foot{flex:0 0 40px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.hz-same-reply-two-voices .sr-label{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:#6b6b6b}
-.hz-same-reply-two-voices .sr-label svg{width:18px;height:18px;flex:0 0 18px}
-.hz-same-reply-two-voices .sr-send{display:inline-flex;align-items:center;gap:9px;padding:7px 16px 7px 7px;border-radius:999px;background:#ecfdf5;color:#16a34a;font-size:14px;font-weight:600;line-height:1;border:1px solid #bbf0d3}
-.hz-same-reply-two-voices .sr-avatar{width:26px;height:26px;border-radius:50%;background:#16a34a;color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;line-height:1}
+.hz-same-reply-two-voices .sr-foot{flex:0 0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.hz-same-reply-two-voices .sr-label{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:#6b6b6b}
+.hz-same-reply-two-voices .sr-label svg{width:16px;height:16px;flex:0 0 16px}
+.hz-same-reply-two-voices .sr-send{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#D8F4E3;color:#292932;font-size:12px;font-weight:600;line-height:1;border:1px solid #3DC975}
+.hz-same-reply-two-voices .sr-send i{width:8px;height:8px;border-radius:50%;background:#3DC975;display:block}
 /* motion */
 .hz-same-reply-two-voices .sr-anim{transition:opacity .55s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1)}
 .hz-same-reply-two-voices .sr-anim.is-hidden{opacity:0;transform:translateY(10px)}
 .hz-same-reply-two-voices .sr-send.is-hidden{transform:translateY(0) scale(.92)}
 .hz-same-reply-two-voices--notrans *,.hz-same-reply-two-voices--notrans *::before,.hz-same-reply-two-voices--notrans *::after{transition:none!important;animation:none!important}
 @media (prefers-reduced-motion:reduce){.hz-same-reply-two-voices *,.hz-same-reply-two-voices *::before,.hz-same-reply-two-voices *::after{transition:none!important;animation:none!important}}
-/* phone (<700px wide): 600px-wide stacked stage, height follows content */
-.hz-same-reply-two-voices--phone{aspect-ratio:auto}
-.hz-same-reply-two-voices--phone .hz-same-reply-two-voices-stage{width:600px;height:auto;min-height:0}
-.hz-same-reply-two-voices--phone .sr-win{position:relative;left:auto;top:auto;width:auto;height:auto;margin:16px}
-.hz-same-reply-two-voices--phone .sr-body{padding:16px}
-.hz-same-reply-two-voices--phone .sr-decision{flex-wrap:wrap}
-.hz-same-reply-two-voices--phone .sr-dec-side{flex-direction:row;width:100%;align-items:center}
-.hz-same-reply-two-voices--phone .sr-drafts{grid-template-columns:1fr}
-.hz-same-reply-two-voices--phone .sr-draft-body{min-height:120px}
-.hz-same-reply-two-voices--phone .sr-foot{flex-direction:column;align-items:flex-start;height:auto;flex-basis:auto;gap:12px}
 </style>
 <div class="hz-same-reply-two-voices">
   <div class="hz-same-reply-two-voices-stage">
@@ -100,9 +108,9 @@
     <div class="sr-win">
       <div class="sr-bar">
         <span class="sr-dots"><i></i><i></i><i></i></span>
-        <span class="sr-title">Horizon</span>
+        <span class="sr-brand">fulcrum</span><span>·</span><span class="sr-prod">Horizon</span>
         <span class="sr-acct">quotes@yourshop.com</span>
-        <span class="sr-brand">fulcrum</span>
+        <span class="sr-status is-ready"><i></i><span class="sr-status-text">2 drafts ready</span></span>
       </div>
       <div class="sr-body">
         <div class="sr-decision sr-anim">
@@ -110,7 +118,7 @@
           <div class="sr-dec-text">
             <div class="sr-dec-kicker">Decision</div>
             <div class="sr-dec-head">Dana asked for 6-day turnaround. Expedite fee: 15% <em>(your rule)</em>.</div>
-            <div class="sr-dec-meta">Crestline Aerospace · Bracket 4410, Rev B · qty 250 · ships Nov 9</div>
+            <div class="sr-dec-meta"><b>from Outlook</b> · Crestline Aerospace · Bracket 4410, Rev B · qty 250 · ships Nov 9</div>
           </div>
           <div class="sr-dec-side">
             <span class="sr-tag">Needs you</span>
@@ -124,7 +132,7 @@
             <div class="sr-field"><b>Subject</b>RE: RFQ Bracket 4410, Rev B — 6-day turnaround</div>
             <div class="sr-draft-body">Hi Dana,
 
-Thank you for the request. We can hold a 6-day turnaround on 250 pcs of Bracket 4410, Rev B, shipping Nov 9.
+Thank you for the request. We can hold a 6-day turnaround on 250 pcs of Bracket 4410, Rev B. Ships Nov 9.
 
 That is inside our standard lead time, so a 15% expedite fee applies: $92.00 ea, $23,000.00 total.
 
@@ -146,7 +154,7 @@ Pat</div>
         </div>
         <div class="sr-foot">
           <div class="sr-label sr-anim"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8.5" stroke="#1d63ed" stroke-width="1.5"/><path d="M6.2 10.3l2.5 2.5 5.1-5.3" stroke="#1d63ed" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Matches how you write to each customer.</div>
-          <div class="sr-send sr-anim"><span class="sr-avatar">P</span>Pat sends</div>
+          <div class="sr-send sr-anim"><i></i>Pat sends</div>
         </div>
       </div>
     </div>
@@ -155,8 +163,10 @@ Pat</div>
 <script>
 (function(){
   var SLUG = 'hz-same-reply-two-voices';
-  var DW = 1200, DH = 750, PW = 600, PHONE_BP = 700;
+  var DW = 1200, DH = 750;
   var LOOP_START = 3, LOOP_END = 21;   // seconds; after the first pass the loop repeats 3.0 -> 21.0
+  var HL_DELAY = 400;                  // ms after a body finishes typing before its highlights fade in
+  var FACTS = ['$92.00 ea', 'Ships Nov 9'];
 
   Array.prototype.slice.call(document.querySelectorAll('.' + SLUG)).forEach(init);
 
@@ -166,16 +176,14 @@ Pat</div>
     var $$ = function(s){ return Array.prototype.slice.call(root.querySelectorAll(s)); };
     var stage = $('.' + SLUG + '-stage');
 
-    /* ---------- scale the 1200x750 stage to the root width ---------- */
+    /* ---------- scale the 1200x750 stage to the root width (one layout at every width) ---------- */
     function fit(){
       var w = root.clientWidth || DW;
-      var phone = w < PHONE_BP;
-      root.classList.toggle(SLUG + '--phone', phone);
-      var s = w / (phone ? PW : DW);
+      var s = w / DW;
       stage.style.setProperty('--s', s.toFixed(4));
-      root.style.height = ((phone ? stage.offsetHeight : DH) * s) + 'px';
+      root.style.height = (DH * s) + 'px';
     }
-    if (window.ResizeObserver){ var ro = new ResizeObserver(fit); ro.observe(root); ro.observe(stage); }
+    if (window.ResizeObserver){ var ro = new ResizeObserver(fit); ro.observe(root); }
     window.addEventListener('resize', fit, { passive: true });
     fit();
 
@@ -186,37 +194,73 @@ Pat</div>
     var bodies = $$('.sr-draft-body');
     var label  = $('.sr-label');
     var send   = $('.sr-send');
+    var status = $('.sr-status');
+    var statusText = $('.sr-status-text');
     var texts  = bodies.map(function(b){ return b.textContent; });
+    /* same text with the two facts wrapped for the highlight */
+    function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    var htmls = texts.map(function(t){
+      var h = esc(t);
+      FACTS.forEach(function(f){ h = h.split(esc(f)).join('<span class="sr-hl">' + esc(f) + '</span>'); });
+      return h;
+    });
 
     var INSTANT = false, timers = [];
     function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
     function show(el){ el.classList.remove('is-hidden'); }
     function hide(el){ el.classList.add('is-hidden'); }
+    function setStatus(txt, state){
+      var apply = function(){
+        statusText.textContent = txt;
+        status.classList.remove('is-busy','is-ready');
+        if (state) status.classList.add(state);
+        status.classList.remove('is-swap');
+      };
+      if (INSTANT || statusText.textContent === txt){ apply(); return; }
+      status.classList.add('is-swap');
+      timers.push(setTimeout(apply, 300));
+    }
+    /* a finished body: swap in the marked-up text; highlights fade in after HL_DELAY */
+    function finishBody(el, idx, hlOn){
+      el.classList.remove('is-typing');
+      el.innerHTML = htmls[idx];
+      var marks = Array.prototype.slice.call(el.querySelectorAll('.sr-hl'));
+      var on = function(){ marks.forEach(function(m){ m.classList.add('is-on'); }); };
+      if (hlOn) on();
+      else if (!INSTANT) timers.push(setTimeout(on, HL_DELAY));
+    }
     /* typewriter: ms per char; when seeking (INSTANT) it lands on the state for `elapsed` seconds */
-    function typeInto(el, text, ms, elapsed){
+    function typeInto(el, idx, ms, elapsed){
+      var text = texts[idx];
       el.textContent = '';
       el.classList.add('is-typing');
       if (INSTANT){
-        var n = (elapsed === Infinity || elapsed == null) ? text.length : Math.min(text.length, Math.floor(elapsed * 1000 / ms));
+        var msIn = (elapsed === Infinity || elapsed == null) ? Infinity : elapsed * 1000;
+        var n = Math.min(text.length, Math.floor(msIn / ms));
         el.textContent = text.slice(0, n);
-        if (n >= text.length) el.classList.remove('is-typing');
+        if (n >= text.length) finishBody(el, idx, msIn - text.length * ms >= HL_DELAY);
         return;
       }
       var i = 0;
       var id = setInterval(function(){
         i++; el.textContent = text.slice(0, i);
-        if (i >= text.length){ clearInterval(id); el.classList.remove('is-typing'); }
+        if (i >= text.length){ clearInterval(id); finishBody(el, idx, false); }
       }, ms);
       timers.push(id);
     }
+    /* the slower body (Formal) finishing is when the window reports ready */
+    var SPEEDS = [25, 30];
+    var doneAt = texts.map(function(t, i){ return 6.5 + t.length * SPEEDS[i] / 1000; });
+    var slowest = Math.max.apply(null, doneAt);
 
     /* ---------- timeline: {t: seconds, fn(elapsed)} ---------- */
     function resolved(){
       clearTimers();
       show(dec); rule.classList.add('is-on');
       drafts.forEach(show);
-      bodies.forEach(function(b, i){ b.classList.remove('is-typing'); b.textContent = texts[i]; });
+      bodies.forEach(function(b, i){ finishBody(b, i, true); });
       show(label); show(send);
+      setStatus('2 drafts ready', 'is-ready');
     }
     function reset(){
       clearTimers();
@@ -224,17 +268,20 @@ Pat</div>
       drafts.forEach(hide);
       bodies.forEach(function(b){ b.classList.remove('is-typing'); b.textContent = ''; });
       hide(label); hide(send);
+      setStatus('Reading the request', 'is-busy');
     }
     var TL = [
       { t: 0.0,  fn: resolved },
       { t: 3.0,  fn: reset },
       { t: 3.5,  fn: function(){ show(dec); } },
       { t: 4.8,  fn: function(){ rule.classList.add('is-on'); } },
-      { t: 5.5,  fn: function(){ drafts.forEach(show); } },
-      { t: 6.5,  fn: function(e){ typeInto(bodies[0], texts[0], 25, e); typeInto(bodies[1], texts[1], 30, e); } },
+      { t: 5.5,  fn: function(){ drafts.forEach(show); setStatus('Drafting 2 replies', 'is-busy'); } },
+      { t: 6.5,  fn: function(e){ typeInto(bodies[0], 0, SPEEDS[0], e); typeInto(bodies[1], 1, SPEEDS[1], e); } },
+      { t: slowest + HL_DELAY / 1000, fn: function(){ setStatus('2 drafts ready', 'is-ready'); } },
       { t: 15.0, fn: function(){ show(label); } },
       { t: 16.5, fn: function(){ show(send); } }
     ];
+    TL.sort(function(a, b){ return a.t - b.t; });
 
     /* apply every beat with t <= T; instant = no transitions, typing lands mid-word */
     function seek(T, instant){
@@ -279,7 +326,7 @@ Pat</div>
   }
 })();
 </script>
-<!-- hz-fragment-end -->
+<!-- hz:fragment-end -->
 </div>
 </body>
 </html>

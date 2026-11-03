@@ -2,23 +2,27 @@
 <html lang="en">
 <!--
   Horizon landing page — loop 3: conversation-ribbon ("the whole conversation")
-  Design size 1200×750, scales to the root width. Loop length 35s (first play), 32s per cycle after.
+  Design size 1200×750, scales to the root width. Loop length 51.9s (first play), 48.9s per cycle after.
+  Review pass Nov 3 2026: Gilroy on the canvas / Inter in the email card, brand palette, 11px type floor,
+  inbound beats show the incoming email (via Outlook) before Horizon's typed work, Status beat is Jon's
+  "where are they" scenario with the ship date highlighted, every beat holds 2.5s after it finishes typing.
+  (Beat times are computed in the script from the body lengths: intro + chars × 22ms + 2.5s hold.)
 
-  Beats (seconds):
+  Beats (seconds; each beat = card in → incoming line (inbound beats) → Horizon types → status chip → 2.5s hold):
     0.0  resolved: full ribbon, every status chip shown, loop-back arrow drawn, "Learned" card (hold 3s)
-    3.0  clear: card fades, statuses hide, progress line and arrow reset
-    3.5  RFQ in           — Dana's RFQ lands                 → "checked"
-    6.5  Vendor RFQs out  — lead-time ask to Midwest Anodizing → "sent"
-    9.5  Quote            — Q-1187 to Dana                   → "sent"
-   12.5  PO check         — PO 55821 matched to the quote    → "checked"
-   15.5  Status           — progress reply to Dana           → "sent"
-   18.5  Revision (next)  — Rev C compared to Rev B          → "drafting · next"
-   21.5  Ship docs & certs (next)                            → "drafting · next"
-   24.5  Invoice (next)                                      → "drafting · next"
-   27.5  Learns           — what the order taught Horizon    → "logged"
-   30.3  loop-back arrow draws from Learns to RFQ in
-   31.0  resolved again (hold 4s)
-   35.0  loop → back to 3.0
+    3.0  clear: card fades, statuses hide, progress line and arrow reset (ribbon stays on screen)
+    3.5  RFQ in           — Dana's RFQ arrives via Outlook; drawing opened, last job found   → "checked"
+    8.7  Vendor RFQs out  — lead-time ask to Midwest Anodizing, sent from Horizon           → "sent"
+   13.3  Quote            — Q-1187 to Dana                                                  → "sent"
+   17.8  PO check         — Dana's PO arrives via Outlook; matched to the quote             → "checked"
+   23.1  Status           — Dana asks "Where are the 4410s?"; answer from the floor timers  → "sent"
+   29.0  Revision (next)  — Rev C arrives via Outlook; compared to Rev B, Pat decides       → "drafting · next"
+   34.3  Ship docs & certs (next)                                                           → "drafting · next"
+   38.8  Invoice (next)                                                                     → "drafting · next"
+   43.1  Learns           — what the order taught Horizon                                   → "logged"
+   46.6  loop-back arrow draws from Learns to RFQ in
+   47.9  resolved again (hold 4s)
+   51.9  loop → back to 3.0
 
   ?still=1  jumps to the resolved state and stops.   ?at=<seconds> seeks the timeline and freezes.
   prefers-reduced-motion: resolved state only.
@@ -37,15 +41,20 @@
 </style>
 </head>
 <body>
-<!-- hz:fragment -->
+<!-- hz:fragment-start -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@font-face{font-family:'Gilroy';src:url(https://cdn.prod.website-files.com/609461470d1c3e052bc814ee/609461470d1c3e57d3c814ff_Gilroy-Medium.ttf) format('truetype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Gilroy';src:url(https://cdn.prod.website-files.com/609461470d1c3e052bc814ee/609461470d1c3e0e50c81503_Gilroy-SemiBold.ttf) format('truetype');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Gilroy';src:url(https://cdn.prod.website-files.com/609461470d1c3e052bc814ee/609461470d1c3e4970c814f9_Gilroy-Bold.ttf) format('truetype');font-weight:700;font-style:normal;font-display:swap}
 .hz-conversation-ribbon{
-  --s:1; --ink:#292932; --muted:#6b6b6b; --line:#e2e2e2; --pane:#f5f7fa; --blue:#1d63ed;
-  --ok:#16a34a; --ok-bg:#ecfdf5; --warn:#d97706; --warn-bg:#fff7ed; --brand:#3840EA; --brand-light:#D7D9FB;
+  --s:1; --ink:#292932; --muted:#6b6b6b; --line:#e2e2e2; --pane:#f5f7fa;
+  --blue:#1d63ed; --blue-bg:#eef3ff;                 /* product interaction blue: inside the email card only */
+  --brand:#3840EA; --brand-light:#D7D9FB;            /* brand blue: canvas pills, stem, glow, mark */
+  --ok:#3DC975; --ok-bg:#D8F4E3; --next:#FF5C16; --next-bg:#FFEFE8; --hl:#F4FFB0;
   --ease:cubic-bezier(.2,.7,.2,1);
   position:relative; display:block; width:100%; color:var(--ink);
-  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-family:'Gilroy','Inter',Arial,sans-serif;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; line-height:1.3;
 }
 .hz-conversation-ribbon *,.hz-conversation-ribbon *::before,.hz-conversation-ribbon *::after{ box-sizing:border-box; }
@@ -54,93 +63,100 @@
   transform-origin:0 0; transform:scale(var(--s)); pointer-events:none; user-select:none; }
 .hz-conversation-ribbon.is-noanim *,.hz-conversation-ribbon.is-noanim *::before,.hz-conversation-ribbon.is-noanim *::after{ transition:none !important; animation:none !important; }
 
-/* title row */
-.hz-conversation-ribbon-title{ position:absolute; left:40px; top:40px; display:flex; align-items:center; gap:10px; font-size:14px; }
-.hz-conversation-ribbon-mark{ width:24px; height:24px; border-radius:7px; background:var(--blue); display:grid; place-items:center; }
-.hz-conversation-ribbon-mark svg{ width:14px; height:14px; }
+/* title row (canvas → Gilroy) */
+.hz-conversation-ribbon-title{ position:absolute; left:40px; top:40px; display:flex; align-items:center; gap:12px; font-size:15px; }
+.hz-conversation-ribbon-mark{ width:24px; height:24px; border-radius:6px; background:var(--brand); color:#fff; display:grid; place-items:center;
+  font-size:14px; font-weight:700; line-height:1; }
 .hz-conversation-ribbon-title b{ font-weight:600; }
-.hz-conversation-ribbon-title span{ color:var(--muted); }
+.hz-conversation-ribbon-title span{ color:var(--muted); font-weight:500; font-size:14px; }
 .hz-conversation-ribbon-title i{ font-style:normal; color:var(--line); }
 
 /* marketing glow behind the active card */
-.hz-conversation-ribbon-glow{ position:absolute; top:60px; width:560px; height:360px; margin-left:-80px; border-radius:50%;
+.hz-conversation-ribbon-glow{ position:absolute; top:40px; width:620px; height:380px; margin-left:-60px; border-radius:50%;
   background:radial-gradient(closest-side, var(--brand-light), rgba(215,217,251,0)); opacity:0;
   transition:opacity .6s var(--ease), left .5s var(--ease); }
 .hz-conversation-ribbon-glow.is-on{ opacity:.7; }
 
-/* email card */
-.hz-conversation-ribbon-card{ position:absolute; top:130px; left:400px; width:430px; height:180px; padding:14px 18px 16px;
-  background:#fff; border:1px solid var(--line); border-radius:10px; box-shadow:0 4px 18px rgba(0,0,0,.15);
-  opacity:0; transform:translateY(8px); transition:opacity .3s var(--ease), transform .3s var(--ease), left .5s var(--ease); }
+/* email card (product content → Inter) */
+.hz-conversation-ribbon-card{ position:absolute; top:120px; left:350px; width:520px; min-height:184px; padding:16px 16px 48px;
+  background:#fff; border:1px solid var(--line); border-radius:8px; box-shadow:0 8px 28px rgba(0,0,0,.14);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  opacity:0; transform:translateY(8px); transition:opacity .35s var(--ease), transform .35s var(--ease), left .5s var(--ease); }
 .hz-conversation-ribbon-card.is-on{ opacity:1; transform:none; }
-.hz-conversation-ribbon-chead{ display:flex; align-items:center; gap:10px; }
+.hz-conversation-ribbon-chead{ display:flex; align-items:flex-start; gap:12px; }
 .hz-conversation-ribbon-av{ width:28px; height:28px; border-radius:50%; background:var(--pane); border:1px solid var(--line);
   display:grid; place-items:center; font-size:12px; font-weight:600; color:var(--ink); flex:0 0 auto; }
 .hz-conversation-ribbon-av.is-hz{ background:var(--blue); border-color:var(--blue); color:#fff; }
 .hz-conversation-ribbon-who{ min-width:0; flex:1 1 auto; }
-.hz-conversation-ribbon-who b{ display:block; font-size:13px; font-weight:600; white-space:nowrap; }
-.hz-conversation-ribbon-who span{ display:block; font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.hz-conversation-ribbon-dir{ flex:0 0 auto; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; line-height:1;
-  padding:5px 6px; border-radius:4px; background:var(--pane); color:var(--muted); }
-.hz-conversation-ribbon-dir.is-out{ background:#eef3ff; color:var(--blue); }
-.hz-conversation-ribbon-subj{ margin-top:12px; font-size:15.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.hz-conversation-ribbon-body{ margin-top:5px; font-size:14px; color:var(--muted); line-height:1.45; min-height:40px; }
+.hz-conversation-ribbon-who b{ display:block; padding-right:84px; font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hz-conversation-ribbon-who span{ display:block; margin-top:2px; font-size:12px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hz-conversation-ribbon-dir{ position:absolute; top:16px; right:16px; display:inline-block; font-size:11.5px; font-weight:600; letter-spacing:.04em;
+  text-transform:uppercase; line-height:1; padding:5px 6px; border-radius:4px; background:var(--pane); color:var(--muted); }
+.hz-conversation-ribbon-dir.is-out{ background:var(--blue-bg); color:var(--blue); }
+.hz-conversation-ribbon-subj{ margin-top:12px; font-size:15px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hz-conversation-ribbon-quote{ display:none; margin-top:8px; padding:8px 12px; background:var(--pane); border-left:2px solid var(--line); border-radius:4px; }
+.hz-conversation-ribbon-card.has-quote .hz-conversation-ribbon-quote{ display:block; }
+.hz-conversation-ribbon-quote small{ display:block; font-size:11.5px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); line-height:1; }
+.hz-conversation-ribbon-quote p{ margin:6px 0 0; font-size:13px; color:var(--ink); line-height:1.4; }
+.hz-conversation-ribbon-body{ margin-top:8px; font-size:14px; color:var(--ink); line-height:1.5; min-height:42px; }
+.hz-conversation-ribbon-hl{ background:var(--hl); line-height:1; padding:2px 4px; border-radius:3px; font-weight:600;
+  -webkit-box-decoration-break:clone; box-decoration-break:clone; }
 .hz-conversation-ribbon-caret{ display:inline-block; width:1.5px; height:14px; margin-left:2px; vertical-align:-2px; background:var(--ink);
   opacity:0; animation:hz-conversation-ribbon-blink .9s steps(1) infinite; }
 .hz-conversation-ribbon-card.is-typing .hz-conversation-ribbon-caret{ opacity:1; }
 @keyframes hz-conversation-ribbon-blink{ 50%{ opacity:0; } }
-.hz-conversation-ribbon-cfoot{ position:absolute; left:18px; right:18px; bottom:14px; display:flex; align-items:center; justify-content:space-between; }
-.hz-conversation-ribbon-chip{ display:inline-block; font-size:11.5px; font-weight:600; line-height:1; padding:6px 8px; border-radius:6px;
-  background:var(--ok-bg); color:var(--ok); opacity:0; transform:translateY(4px); transition:opacity .3s var(--ease), transform .3s var(--ease); }
+.hz-conversation-ribbon-cfoot{ position:absolute; left:16px; right:16px; bottom:16px; display:flex; align-items:center; justify-content:space-between; }
+.hz-conversation-ribbon-chip{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; line-height:1; padding:5px 7px; border-radius:4px;
+  background:var(--ok-bg); color:var(--ink); opacity:0; transform:translateY(4px); transition:opacity .3s var(--ease), transform .3s var(--ease); }
 .hz-conversation-ribbon-chip.is-on{ opacity:1; transform:none; }
-.hz-conversation-ribbon-chip.is-next{ background:var(--warn-bg); color:var(--warn); }
-.hz-conversation-ribbon-chip.is-learn{ background:var(--pane); color:var(--blue); }
-.hz-conversation-ribbon-cfoot small{ font-size:11.5px; color:var(--muted); }
+.hz-conversation-ribbon-chip.is-next{ background:var(--next-bg); }
+.hz-conversation-ribbon-chip.is-next::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--next); }
+.hz-conversation-ribbon-cfoot small{ font-size:12px; color:var(--muted); }
 
 /* stem from card to the active pill */
-.hz-conversation-ribbon-stem{ position:absolute; top:310px; left:600px; width:2px; height:142px; margin-left:-1px; background:var(--blue);
+.hz-conversation-ribbon-stem{ position:absolute; top:304px; left:600px; width:2px; height:106px; margin-left:-1px; background:var(--brand);
   transform-origin:50% 0; transform:scaleY(0); transition:transform .35s var(--ease), left .5s var(--ease); }
 .hz-conversation-ribbon-stem.is-on{ transform:scaleY(1); }
 
-/* ribbon */
-.hz-conversation-ribbon-ribbon{ position:absolute; left:40px; right:40px; top:452px; height:40px; }
+/* ribbon (canvas → Gilroy) */
+.hz-conversation-ribbon-ribbon{ position:absolute; left:40px; right:40px; top:410px; height:40px; }
 .hz-conversation-ribbon-track{ position:absolute; left:24px; right:24px; top:19px; height:2px; background:var(--line); }
-.hz-conversation-ribbon-prog{ position:absolute; left:24px; top:19px; height:2px; width:0; background:var(--blue); transition:width .6s var(--ease); }
+.hz-conversation-ribbon-prog{ position:absolute; left:24px; top:19px; height:2px; width:0; background:var(--brand); transition:width .6s var(--ease); }
 .hz-conversation-ribbon-ribbon ul{ list-style:none; margin:0; padding:0; display:flex; justify-content:space-between; position:relative; }
 .hz-conversation-ribbon-ribbon li{ position:relative; }
-.hz-conversation-ribbon-pill{ display:inline-flex; align-items:center; gap:7px; height:40px; padding:0 15px; border-radius:20px;
-  font-size:13.5px; font-weight:600; white-space:nowrap; background:var(--ink); color:#fff; border:1.5px solid var(--ink);
+.hz-conversation-ribbon-pill{ display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border-radius:999px;
+  font-size:14px; font-weight:600; white-space:nowrap; background:var(--ink); color:#fff; border:1.5px solid var(--ink);
   box-shadow:0 0 0 4px #fff; transition:background .4s var(--ease), border-color .4s var(--ease), color .4s var(--ease); }
 .hz-conversation-ribbon-pill svg{ width:15px; height:15px; }
 .hz-conversation-ribbon-ribbon li.is-next .hz-conversation-ribbon-pill{ background:#fff; color:var(--ink); }
-.hz-conversation-ribbon-tag{ font-size:9.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; line-height:1; padding:4px 5px;
-  border-radius:4px; background:var(--warn-bg); color:var(--warn); }
-.hz-conversation-ribbon-ribbon li.is-active .hz-conversation-ribbon-pill{ background:var(--blue); border-color:var(--blue); color:#fff;
+.hz-conversation-ribbon-tag{ display:inline-block; font-size:11.5px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; line-height:1; padding:4px 5px;
+  border-radius:4px; background:var(--next-bg); color:var(--ink); }
+.hz-conversation-ribbon-ribbon li.is-active .hz-conversation-ribbon-pill{ background:var(--brand); border-color:var(--brand); color:#fff;
   animation:hz-conversation-ribbon-ring .9s var(--ease); }
-@keyframes hz-conversation-ribbon-ring{ 0%{ box-shadow:0 0 0 4px #fff, 0 0 0 5px rgba(29,99,237,.45); } 100%{ box-shadow:0 0 0 4px #fff, 0 0 0 18px rgba(29,99,237,0); } }
+@keyframes hz-conversation-ribbon-ring{ 0%{ box-shadow:0 0 0 4px #fff, 0 0 0 5px rgba(56,64,234,.45); } 100%{ box-shadow:0 0 0 4px #fff, 0 0 0 18px rgba(56,64,234,0); } }
 .hz-conversation-ribbon-st{ position:absolute; top:48px; left:50%; transform:translate(-50%,-4px); opacity:0; white-space:nowrap;
-  font-size:11.5px; font-weight:600; line-height:1; padding:6px 8px; border-radius:6px; background:var(--ok-bg); color:var(--ok);
-  transition:opacity .35s var(--ease), transform .35s var(--ease); }
+  display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; line-height:1; padding:5px 7px; border-radius:4px;
+  background:var(--ok-bg); color:var(--ink); transition:opacity .35s var(--ease), transform .35s var(--ease); }
 .hz-conversation-ribbon-ribbon li.has-status .hz-conversation-ribbon-st{ opacity:1; transform:translate(-50%,0); }
-.hz-conversation-ribbon-st.is-next{ background:var(--warn-bg); color:var(--warn); }
-.hz-conversation-ribbon-st.is-learn{ background:var(--pane); color:var(--blue); }
+.hz-conversation-ribbon-st.is-next{ background:var(--next-bg); }
+.hz-conversation-ribbon-st.is-next::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--next); }
 
 /* loop-back arrow */
 .hz-conversation-ribbon-arrow{ position:absolute; left:0; top:0; width:1200px; height:750px; overflow:visible; }
 .hz-conversation-ribbon-arrow path{ fill:none; stroke:var(--ink); stroke-width:2; stroke-linecap:round; transition:stroke-dashoffset 1.2s var(--ease); }
 .hz-conversation-ribbon-arrow .hz-conversation-ribbon-ahead{ fill:var(--ink); opacity:0; transition:opacity .25s var(--ease) 1s; }
 .hz-conversation-ribbon-arrow.is-on .hz-conversation-ribbon-ahead{ opacity:1; }
-.hz-conversation-ribbon-aword{ position:absolute; top:596px; left:50%; transform:translateX(-50%); font-size:12px; color:var(--muted);
+.hz-conversation-ribbon-aword{ position:absolute; top:566px; left:50%; transform:translateX(-50%); font-size:13px; font-weight:500; color:var(--muted);
   background:#fff; padding:0 8px; line-height:1; opacity:0; transition:opacity .3s var(--ease) .9s; }
 .hz-conversation-ribbon-aword.is-on{ opacity:1; }
 
-/* legend */
-.hz-conversation-ribbon-legend{ position:absolute; left:40px; bottom:40px; display:flex; gap:22px; font-size:12.5px; color:var(--muted); }
-.hz-conversation-ribbon-legend span{ display:inline-flex; align-items:center; gap:7px; }
+/* legend (canvas → Gilroy) */
+.hz-conversation-ribbon-legend{ position:absolute; left:40px; top:636px; display:flex; gap:24px; font-size:13px; font-weight:500; color:var(--muted); }
+.hz-conversation-ribbon-legend span{ display:inline-flex; align-items:center; gap:8px; }
 .hz-conversation-ribbon-legend i{ width:11px; height:11px; border-radius:50%; border:1.5px solid var(--ink); background:var(--ink); }
 .hz-conversation-ribbon-legend i.is-next{ background:#fff; }
-.hz-conversation-ribbon-legend em{ font-style:normal; display:inline-block; font-size:9.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
-  line-height:1; padding:4px 5px; border-radius:4px; background:var(--warn-bg); color:var(--warn); }
+.hz-conversation-ribbon-legend em{ font-style:normal; display:inline-block; font-size:11.5px; font-weight:600; letter-spacing:.04em; text-transform:uppercase;
+  line-height:1; padding:4px 5px; border-radius:4px; background:var(--next-bg); color:var(--ink); }
 
 @media (prefers-reduced-motion: reduce){
   .hz-conversation-ribbon *,.hz-conversation-ribbon *::before,.hz-conversation-ribbon *::after{ transition:none !important; animation:none !important; }
@@ -152,7 +168,7 @@
     <div class="hz-conversation-ribbon-stage">
 
       <div class="hz-conversation-ribbon-title">
-        <span class="hz-conversation-ribbon-mark"><svg viewBox="0 0 16 16" fill="none"><path d="M2 11.5a6 6 0 0 1 12 0" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M1.5 13.5h13" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <span class="hz-conversation-ribbon-mark">H</span>
         <b>Horizon</b><i>|</i><span>Crestline Aerospace &middot; Bracket 4410, Rev B &middot; one thread</span>
       </div>
 
@@ -162,9 +178,10 @@
         <div class="hz-conversation-ribbon-chead">
           <div class="hz-conversation-ribbon-av" id="hz-conversation-ribbon-av">D</div>
           <div class="hz-conversation-ribbon-who"><b id="hz-conversation-ribbon-who"></b><span id="hz-conversation-ribbon-addr"></span></div>
-          <div class="hz-conversation-ribbon-dir" id="hz-conversation-ribbon-dir">in</div>
         </div>
+        <div class="hz-conversation-ribbon-dir" id="hz-conversation-ribbon-dir">in</div>
         <div class="hz-conversation-ribbon-subj" id="hz-conversation-ribbon-subj"></div>
+        <div class="hz-conversation-ribbon-quote"><small id="hz-conversation-ribbon-qfrom"></small><p id="hz-conversation-ribbon-qtext"></p></div>
         <div class="hz-conversation-ribbon-body"><span id="hz-conversation-ribbon-body"></span><span class="hz-conversation-ribbon-caret"></span></div>
         <div class="hz-conversation-ribbon-cfoot">
           <span class="hz-conversation-ribbon-chip" id="hz-conversation-ribbon-chip">sent</span>
@@ -185,7 +202,7 @@
           <li class="is-next"><span class="hz-conversation-ribbon-pill">Revision <span class="hz-conversation-ribbon-tag">next</span></span><span class="hz-conversation-ribbon-st is-next">drafting &middot; next</span></li>
           <li class="is-next"><span class="hz-conversation-ribbon-pill">Ship docs &amp; certs <span class="hz-conversation-ribbon-tag">next</span></span><span class="hz-conversation-ribbon-st is-next">drafting &middot; next</span></li>
           <li class="is-next"><span class="hz-conversation-ribbon-pill">Invoice <span class="hz-conversation-ribbon-tag">next</span></span><span class="hz-conversation-ribbon-st is-next">drafting &middot; next</span></li>
-          <li><span class="hz-conversation-ribbon-pill"><svg viewBox="0 0 16 16" fill="none"><path d="M13 8a5 5 0 1 1-1.6-3.66" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12.6 1.6v3.2H9.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Learns</span><span class="hz-conversation-ribbon-st is-learn">logged</span></li>
+          <li><span class="hz-conversation-ribbon-pill"><svg viewBox="0 0 16 16" fill="none"><path d="M13 8a5 5 0 1 1-1.6-3.66" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12.6 1.6v3.2H9.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Learns</span><span class="hz-conversation-ribbon-st">logged</span></li>
         </ul>
       </div>
 
@@ -207,29 +224,59 @@
 <script>
 (function(){
   var SLUG = 'hz-conversation-ribbon';
-  var CHAR_MS = 25;            // typing speed
-  var LOOP = 35, RESTART = 3;  // seconds; after the end hold the loop re-enters at the clear beat
+  var CHAR_MS = 22;            // typing speed (spec: 20–30ms/char)
+  var HOLD = 2.5;              // seconds a beat stays after its body finishes typing (Carolyn's "too fast" rule)
+  var CARD_TOP = 120, RIBBON_TOP = 410, CARD_W = 520;
+  var RESTART = 3;             // after the end hold the loop re-enters at the clear beat
 
+  // body text: [brackets] mark an inline highlight (the important bit of the answer)
   var BEATS = [
-    { who:'From Dana · Crestline Aerospace', addr:'dana@crestline-aero.com → quotes@yourshop.com', av:'D', dir:'in',
-      subj:'RFQ: Bracket 4410 Rev B, qty 250, need by Nov 21', body:'Drawing attached. Same bracket as last year, now Rev B.', status:'checked', kind:'ok', note:'drawing opened · last job found' },
-    { who:'To Luis · Midwest Anodizing', addr:'quotes@yourshop.com → luis@midwest-anodizing.com', av:'L', dir:'out',
-      subj:'Lead time: clear anodize, 250 pcs, Bracket 4410', body:'Drawing attached. Need days to turn 250, delivered by Nov 18.', status:'sent', kind:'ok', note:'also sent to Lakeshore Laser' },
-    { who:'To Dana · Crestline Aerospace', addr:'quotes@yourshop.com → dana@crestline-aero.com', av:'D', dir:'out',
-      subj:'Quote Q-1187: Bracket 4410 Rev B, 250 pcs', body:'$86.50 ea, ships in 9 working days. Pat reviewed and sent.', status:'sent', kind:'ok', note:'priced off job 24-0871' },
-    { who:'From Dana · Crestline Aerospace', addr:'dana@crestline-aero.com → quotes@yourshop.com', av:'D', dir:'in',
-      subj:'PO 55821: Bracket 4410 Rev B', body:'Matches Q-1187: qty 250, $86.50 ea, Rev B. Sales order 2291 opened.', status:'checked', kind:'ok', note:'qty, price, rev all match' },
-    { who:'To Dana · Crestline Aerospace', addr:'quotes@yourshop.com → dana@crestline-aero.com', av:'D', dir:'out',
-      subj:'Status: PO 55821, laser done, in brake today', body:'Anodize ships Nov 17. Still on track for Nov 21.', status:'sent', kind:'ok', note:'from the shop floor timers' },
-    { who:'From Dana · Crestline Aerospace', addr:'dana@crestline-aero.com → quotes@yourshop.com', av:'D', dir:'in',
-      subj:'Rev C drawing: Bracket 4410', body:'Rev C vs Rev B: two holes moved 3 mm. Quote Q-1187 was Rev B. Pat decides.', status:'drafting · next', kind:'next', note:'revision mismatch → decision' },
-    { who:'To Dana · Crestline Aerospace', addr:'quotes@yourshop.com → dana@crestline-aero.com', av:'D', dir:'out',
-      subj:'Packing list + material cert, PO 55821', body:'250 pcs in 4 cartons. 6061-T6 cert and anodize cert attached.', status:'drafting · next', kind:'next', note:'' },
-    { who:'To Crestline Aerospace · AP', addr:'quotes@yourshop.com → ap@crestline-aero.com', av:'C', dir:'out',
-      subj:'Invoice 20419 for PO 55821', body:'$21,625.00, net 30, same terms as the last order.', status:'drafting · next', kind:'next', note:'' },
+    { who:'From Dana · Crestline Aerospace', addr:'dana@crestline-aero.com → quotes@yourshop.com · via Outlook', av:'D', dir:'in',
+      subj:'RFQ: Bracket 4410 Rev B, qty 250, need by Nov 21', quote:{ from:'Dana · via Outlook', text:'Drawing attached. Same bracket as last year, now Rev B.' },
+      body:'Drawing opened, Rev B read. Last job 24-0871, Mar 2024, found. Quote started.', status:'checked', kind:'ok', note:'nobody opened the email' },
+    { who:'To Luis · Midwest Anodizing', addr:'quotes@yourshop.com → luis@midwest-anodizing.com · sent from Horizon', av:'L', dir:'out',
+      subj:'Lead time: clear anodize, 250 pcs, Bracket 4410',
+      body:'Drawing attached. How many days to turn 250, delivered by Nov 18?', status:'sent', kind:'ok', note:'also sent to Lakeshore Laser' },
+    { who:'To Dana · Crestline Aerospace', addr:'quotes@yourshop.com → dana@crestline-aero.com · sent from Horizon', av:'D', dir:'out',
+      subj:'Quote Q-1187: Bracket 4410 Rev B, 250 pcs',
+      body:'$86.50 ea, ships in 9 working days. Pat reviewed and sent.', status:'sent', kind:'ok', note:'priced off job 24-0871' },
+    { who:'From Dana · Crestline Aerospace', addr:'dana@crestline-aero.com → quotes@yourshop.com · via Outlook', av:'D', dir:'in',
+      subj:'PO 55821: Bracket 4410 Rev B', quote:{ from:'Dana · via Outlook', text:'PO attached. Please confirm.' },
+      body:'Matches Q-1187: qty 250, $86.50 ea, Rev B. Sales order 2291 opened.', status:'checked', kind:'ok', note:'qty, price, rev all match' },
+    { who:'To Dana · Crestline Aerospace', addr:'quotes@yourshop.com → dana@crestline-aero.com · sent from Horizon', av:'D', dir:'out',
+      subj:'Re: Where are the 4410s?', quote:{ from:'Dana asked · via Outlook', text:'Where are the 4410s? Need to plan the install.' },
+      body:'Laser done, in brake today, anodize back Nov 17. [Ships Nov 19] — two days ahead of your Nov 21.', status:'sent', kind:'ok', note:'from the shop floor timers' },
+    { who:'From Dana · Crestline Aerospace', addr:'dana@crestline-aero.com → quotes@yourshop.com · via Outlook', av:'D', dir:'in',
+      subj:'Rev C drawing: Bracket 4410', quote:{ from:'Dana · via Outlook', text:'Rev C attached. Please requote.' },
+      body:'Rev C vs Rev B: two holes moved 3 mm. Q-1187 was Rev B. Pat decides.', status:'drafting · next', kind:'next', note:'revision mismatch → decision' },
+    { who:'To Dana · Crestline Aerospace', addr:'quotes@yourshop.com → dana@crestline-aero.com · sent from Horizon', av:'D', dir:'out',
+      subj:'Packing list + material cert, PO 55821',
+      body:'250 pcs in 4 cartons. 6061-T6 cert and anodize cert attached.', status:'drafting · next', kind:'next', note:'' },
+    { who:'To Crestline Aerospace · AP', addr:'quotes@yourshop.com → ap@crestline-aero.com · sent from Horizon', av:'C', dir:'out',
+      subj:'Invoice 20419 for PO 55821',
+      body:'$21,625.00, net 30, same terms as the last order.', status:'drafting · next', kind:'next', note:'' },
     { who:'Horizon · remembered', addr:'for the next Crestline Aerospace RFQ', av:'H', dir:'learned',
-      subj:'What this order taught Horizon', body:'Usual run 250 pcs. Anodize: Midwest Anodizing, 5 days. Invoices go to AP.', status:'logged', kind:'learn', note:'nobody typed this in' }
+      subj:'What this order taught Horizon',
+      body:'Usual run 250 pcs. Anodize: Midwest Anodizing, 5 days. Invoices go to Crestline AP.', status:'logged', kind:'ok', note:'nobody typed this in' }
   ];
+
+  /* ---- body text → segments (plain / highlighted) ---- */
+  function segs(text){ var out = [], re = /\[([^\]]+)\]/g, last = 0, m;
+    while ((m = re.exec(text))){ if (m.index > last) out.push({ t:text.slice(last, m.index), hl:false }); out.push({ t:m[1], hl:true }); last = re.lastIndex; }
+    if (last < text.length) out.push({ t:text.slice(last), hl:false }); return out; }
+  function plainLen(text){ return text.replace(/[\[\]]/g, '').length; }
+  function esc(s){ return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function renderTyped(el, text, n){ var html = '', left = n;
+    segs(text).forEach(function(s){ if (left <= 0) return; var part = s.t.slice(0, left); left -= part.length;
+      html += s.hl ? '<span class="' + SLUG + '-hl">' + esc(part) + '</span>' : esc(part); });
+    el.innerHTML = html; }
+
+  /* ---- timeline math (so the header comment and the runtime agree) ---- */
+  function introSec(i){ return (i > 0 ? 0.28 : 0) + 0.42 + (BEATS[i].quote ? 0.6 : 0); }   // card swap + card in + time to read the incoming line
+  function typeSec(i){ return plainLen(BEATS[i].body) * CHAR_MS / 1000; }
+  var BEAT_T = [], t = 3.5;
+  for (var k = 0; k < BEATS.length; k++){ BEAT_T.push(+t.toFixed(1)); t += introSec(k) + typeSec(k) + HOLD; }
+  var ARROW_T = +(BEAT_T[8] + introSec(8) + typeSec(8) + 1.0).toFixed(1), RESOLVED_T = +(ARROW_T + 1.3).toFixed(1), LOOP = +(RESOLVED_T + 4).toFixed(1);
 
   function init(root){
     var $ = function(id){ return root.querySelector('#' + SLUG + '-' + id); };
@@ -253,14 +300,14 @@
     function later(ms, fn, off){ if (instant){ if (ms <= (off || 0) * 1000) fn(); return; } timers.push(setTimeout(fn, ms)); }
     function stopAll(){ timers.forEach(clearTimeout); timers = []; if (typingTimer){ clearTimeout(typingTimer); typingTimer = null; } }
     function typeInto(el, text, offSec, done){
-      var n = Math.max(0, Math.floor(offSec * 1000 / CHAR_MS));
-      if (n >= text.length){ el.textContent = text; card.classList.remove('is-typing'); if (!instant && done) done(); return; }
-      el.textContent = text.slice(0, n); card.classList.add('is-typing');
+      var total = plainLen(text), n = Math.max(0, Math.floor(offSec * 1000 / CHAR_MS));
+      if (n >= total){ renderTyped(el, text, total); card.classList.remove('is-typing'); if (!instant && done) done(); return; }
+      renderTyped(el, text, n); card.classList.add('is-typing');
       if (instant) return;
       (function step(){
         typingTimer = setTimeout(function(){
-          n++; el.textContent = text.slice(0, n);
-          if (n < text.length) step(); else { card.classList.remove('is-typing'); typingTimer = null; if (done) done(); }
+          n++; renderTyped(el, text, n);
+          if (n < total) step(); else { card.classList.remove('is-typing'); typingTimer = null; if (done) done(); }
         }, CHAR_MS);
       })();
     }
@@ -268,12 +315,14 @@
     /* ---- geometry helpers (unscaled stage px) ---- */
     function pillCenter(i){ var p = items[i].firstElementChild; return 40 + items[i].offsetLeft + p.offsetLeft + p.offsetWidth / 2; }
     function placeCard(i){
-      var cx = pillCenter(i), left = Math.max(40, Math.min(1200 - 40 - 430, cx - 215));
+      var cx = pillCenter(i), left = Math.max(40, Math.min(1200 - 40 - CARD_W, cx - CARD_W / 2));
       card.style.left = left + 'px'; glow.style.left = left + 'px'; stem.style.left = cx + 'px';
+      var bottom = CARD_TOP + card.offsetHeight;                 // card height follows its content (inbound beats carry the incoming line)
+      stem.style.top = bottom + 'px'; stem.style.height = Math.max(0, RIBBON_TOP - bottom) + 'px';
       prog.style.width = Math.max(0, cx - 40 - 24) + 'px';
     }
     function drawArrow(){
-      var x1 = pillCenter(8), x0 = pillCenter(0), y0 = 532, y1 = 640;
+      var x1 = pillCenter(8), x0 = pillCenter(0), y0 = RIBBON_TOP + 80, y1 = RIBBON_TOP + 190;
       apath.setAttribute('d', 'M' + x1 + ' ' + y0 + ' C ' + x1 + ' ' + y1 + ', ' + x0 + ' ' + y1 + ', ' + x0 + ' ' + (y0 + 2));
       ahead.setAttribute('d', 'M' + (x0 - 6) + ' ' + (y0 + 10) + ' L' + x0 + ' ' + (y0 - 1) + ' L' + (x0 + 6) + ' ' + (y0 + 10) + ' Z');
       var len = apath.getTotalLength ? apath.getTotalLength() : 1400;
@@ -286,7 +335,9 @@
       $('who').textContent = b.who; $('addr').textContent = b.addr;
       $('dir').textContent = b.dir; $('dir').className = SLUG + '-dir' + (b.dir === 'out' ? ' is-out' : '');
       $('subj').textContent = b.subj; $('note').textContent = b.note;
-      chip.textContent = b.status; chip.className = SLUG + '-chip' + (b.kind === 'next' ? ' is-next' : b.kind === 'learn' ? ' is-learn' : '');
+      card.classList.toggle('has-quote', !!b.quote);
+      $('qfrom').textContent = b.quote ? b.quote.from : ''; $('qtext').textContent = b.quote ? b.quote.text : '';
+      chip.textContent = b.status; chip.className = SLUG + '-chip' + (b.kind === 'next' ? ' is-next' : '');
     }
     function showBeat(i, off){
       off = off || 0;
@@ -294,18 +345,18 @@
       items.forEach(function(li, j){ li.classList.toggle('is-active', j === i); if (j < i) li.classList.add('has-status'); });
       if (card.classList.contains('is-on') && !instant){ card.classList.remove('is-on'); stem.classList.remove('is-on'); prevMs = 280; }
       later(prevMs, function(){
-        fillCard(b); placeCard(i);
-        card.classList.add('is-on'); glow.classList.add('is-on'); stem.classList.add('is-on');
-        $('body').textContent = ''; chip.classList.remove('is-on');
+        fillCard(b); $('body').textContent = ''; placeCard(i);
+        card.classList.add('is-on', 'is-typing'); glow.classList.add('is-on'); stem.classList.add('is-on');
+        chip.classList.remove('is-on');
       }, off);
-      var typeAt = prevMs + 420, statusAt = typeAt + b.body.length * CHAR_MS + 350;
+      var typeAt = prevMs + 420 + (b.quote ? 600 : 0), statusAt = typeAt + plainLen(b.body) * CHAR_MS + 350;
       later(typeAt, function(){ typeInto($('body'), b.body, Math.max(0, off - typeAt / 1000)); }, off);
       later(statusAt, function(){ chip.classList.add('is-on'); items[i].classList.add('has-status'); }, off);
     }
     function showArrow(){ drawArrow(); arrow.classList.add('is-on'); apath.style.strokeDashoffset = 0; aword.classList.add('is-on'); }
     function resolved(){
       items.forEach(function(li){ li.classList.remove('is-active'); li.classList.add('has-status'); });
-      var b = BEATS[8]; fillCard(b); placeCard(8); $('body').textContent = b.body; card.classList.remove('is-typing');
+      var b = BEATS[8]; fillCard(b); renderTyped($('body'), b.body, plainLen(b.body)); card.classList.remove('is-typing'); placeCard(8);
       card.classList.add('is-on'); glow.classList.add('is-on'); stem.classList.add('is-on'); chip.classList.add('is-on');
       prog.style.width = (pillCenter(8) - 64) + 'px';
       showArrow();
@@ -318,21 +369,10 @@
     }
 
     /* ---- the timeline: one array of {t, fn(offsetSeconds)} ---- */
-    var TL = [
-      { t: 0,    fn: resolved },
-      { t: 3,    fn: clear },
-      { t: 3.5,  fn: function(o){ showBeat(0, o); } },
-      { t: 6.5,  fn: function(o){ showBeat(1, o); } },
-      { t: 9.5,  fn: function(o){ showBeat(2, o); } },
-      { t: 12.5, fn: function(o){ showBeat(3, o); } },
-      { t: 15.5, fn: function(o){ showBeat(4, o); } },
-      { t: 18.5, fn: function(o){ showBeat(5, o); } },
-      { t: 21.5, fn: function(o){ showBeat(6, o); } },
-      { t: 24.5, fn: function(o){ showBeat(7, o); } },
-      { t: 27.5, fn: function(o){ showBeat(8, o); } },
-      { t: 30.3, fn: showArrow },
-      { t: 31,   fn: resolved }
-    ];
+    var TL = [ { t: 0, fn: resolved }, { t: 3, fn: clear } ];
+    BEATS.forEach(function(b, i){ TL.push({ t: BEAT_T[i], fn: function(o){ showBeat(i, o); } }); });
+    TL.push({ t: ARROW_T, fn: showArrow });
+    TL.push({ t: RESOLVED_T, fn: resolved });
 
     function seek(at){
       instant = true; root.classList.add('is-noanim'); stopAll(); clear();
@@ -348,6 +388,7 @@
     /* ---- boot ---- */
     var q = {}; try { q = Object.fromEntries(new URLSearchParams(window.location.search)); } catch (e) {}
     var reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    if (q.beats !== undefined && window.console) console.log(SLUG + ' beats', BEAT_T.join(' '), 'arrow', ARROW_T, 'resolved', RESOLVED_T, 'loop', LOOP);
     function start(){
       if (q.still || reduced){ seek(0); return; }
       if (q.at !== undefined){ seek(((parseFloat(q.at) || 0) % LOOP + LOOP) % LOOP); return; }
@@ -361,6 +402,6 @@
   document.querySelectorAll('.' + SLUG).forEach(init);
 })();
 </script>
-<!-- /hz:fragment -->
+<!-- hz:fragment-end -->
 </body>
 </html>

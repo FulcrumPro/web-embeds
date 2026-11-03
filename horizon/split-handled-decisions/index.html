@@ -1,19 +1,23 @@
 <!doctype html>
 <!--
   Horizon — split-handled-decisions — "Handled / Needs you"
-  Design 1200x750, scales to width. Loop 28.0s. No libraries, no images, no audio.
+  Design 1200x750, scales to width. Loop 30.0s. No libraries, no images, no audio.
 
   Beats (seconds):
-   0.0  resolved: counter "This week: 47 handled · 5 decisions"; left "Handled" feed (12 items, duplicated for a
-        seamless wrap) scrolling up at ~28 px/s; right "Needs you" holds exactly three cards:
+   0.0  resolved: counter "Today: 14 handled · 3 need you"; left "Handled" feed (12 items, duplicated for a
+        seamless wrap) scrolling up at ~32 px/s; right "Needs you" holds exactly three cards:
         Expedite fee (Northgate, 6 days) · Revision mismatch (PO Rev A, quote Rev B) · Discount below floor (Halvorsen, 12%).
-   2.3  feed: next handled item enters from the bottom with a soft green tint for 1.8s (then every 2.33s:
-        4.6, 7.0, 9.3, 11.6, 14.0, 16.3, 18.6, 21.0, 23.3, 25.6, 28.0)
+   2.0  feed: next handled item enters from the bottom with a soft green tint for 1.8s
+        (then 4.0, 6.1, 8.1, 10.2, 12.2 · after the pause 19.7, 21.7, 23.8, 25.8, 27.9)
    9.0  decision pulse: the "Needs you" badge rings once and the column tints for ~1.4s. Still three cards.
-  20.0  decision pulse again. Still three cards.
-  28.0  loop -> 0 (the feed wraps on the duplicated list; nothing on the right ever moves)
+  13.0  get in the weeds: the "Quote drafted · Crestline Aerospace" row opens in place (height eases 0.6s) and the
+        feed pauses. Four trail steps check in at 13.3 / 13.6 / 13.9 / 14.2; caption "Open any one. Every step is
+        there." fades in at 14.6. Nobody clicked.
+  17.8  the row collapses (0.6s, same easing); the feed resumes at 18.4.
+  23.0  decision pulse again. Still three cards.
+  30.0  loop -> 0 (the feed wraps on the duplicated list; nothing on the right ever moves)
 
-  ?still=1  resolved state, feed stopped.   ?at=<sec>  seeks to that time and stops.
+  ?still=1  resolved state, feed stopped, row collapsed.   ?at=<sec>  seeks to that time and stops.
   prefers-reduced-motion: resolved state only, feed stopped.
 -->
 <html lang="en">
@@ -33,7 +37,7 @@
 <!-- hz:fragment-start -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-.hz-split-handled-decisions { --s: 1; --feed-dur: 28s; position: relative; width: 100%; max-width: 1200px; overflow: hidden;
+.hz-split-handled-decisions { --s: 1; --feed-dur: 24.6s; position: relative; width: 100%; max-width: 1200px; overflow: hidden;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #292932;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 13px; line-height: 1.35;
   pointer-events: none; user-select: none; }
@@ -41,34 +45,38 @@
 .hz-split-handled-decisions-stage { position: absolute; top: 0; left: 0; width: 1200px; height: 750px;
   transform: scale(var(--s)); transform-origin: 0 0; background: #f5f7fa; overflow: hidden; }
 
+/* marketing accents live outside the window only */
 .hz-split-handled-decisions .s-glow { position: absolute; left: 120px; top: 60px; width: 960px; height: 560px; border-radius: 50%;
   background: radial-gradient(closest-side, #D7D9FB 0%, rgba(215,217,251,.5) 45%, rgba(215,217,251,0) 100%); }
 .hz-split-handled-decisions .s-neon { position: absolute; left: 150px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: #DDF83B; }
 
+/* window chrome */
 .hz-split-handled-decisions .s-win { position: absolute; left: 30px; top: 30px; width: 1140px; height: 690px; background: #fff;
   border: 1px solid #e2e2e2; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,0,0,.15); overflow: hidden; display: flex; flex-direction: column; }
-.hz-split-handled-decisions .s-title { flex: 0 0 44px; display: flex; align-items: center; gap: 10px; padding: 0 16px; border-bottom: 1px solid #e2e2e2; font-size: 12.5px; color: #6b6b6b; }
-.hz-split-handled-decisions .s-dots { display: inline-flex; gap: 6px; margin-right: 6px; }
+.hz-split-handled-decisions .s-title { flex: 0 0 44px; display: flex; align-items: center; gap: 8px; padding: 0 16px; border-bottom: 1px solid #e2e2e2; font-size: 12.5px; color: #6b6b6b; }
+.hz-split-handled-decisions .s-dots { display: inline-flex; gap: 6px; margin-right: 8px; }
 .hz-split-handled-decisions .s-dots i { width: 11px; height: 11px; border-radius: 50%; background: #e2e2e2; display: block; }
 .hz-split-handled-decisions .s-brand { font-weight: 700; color: #292932; }
 .hz-split-handled-decisions .s-prod { font-weight: 600; color: #292932; }
-.hz-split-handled-decisions .s-acct { margin-left: 10px; padding-left: 12px; border-left: 1px solid #e2e2e2; }
+.hz-split-handled-decisions .s-acct { margin-left: 8px; padding-left: 12px; border-left: 1px solid #e2e2e2; }
+.hz-split-handled-decisions .s-status { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; color: #292932; font-weight: 500; }
+.hz-split-handled-decisions .s-status i { width: 8px; height: 8px; border-radius: 50%; background: #3DC975; display: block; }
 
 /* quiet counter */
-.hz-split-handled-decisions .s-counter { flex: 0 0 52px; display: flex; align-items: center; justify-content: center; gap: 10px; border-bottom: 1px solid #e2e2e2; font-size: 13.5px; color: #6b6b6b; background: #fff; }
+.hz-split-handled-decisions .s-counter { flex: 0 0 48px; display: flex; align-items: center; justify-content: center; gap: 8px; border-bottom: 1px solid #e2e2e2; font-size: 14px; color: #6b6b6b; background: #fff; }
 .hz-split-handled-decisions .s-counter b { color: #292932; font-weight: 600; font-variant-numeric: tabular-nums; }
-.hz-split-handled-decisions .s-counter .ok { color: #16a34a; }
-.hz-split-handled-decisions .s-counter .warn { color: #d97706; }
+.hz-split-handled-decisions .s-counter .ok { color: #1f8a4c; }
+.hz-split-handled-decisions .s-counter .warn { color: #FF5C16; }
 .hz-split-handled-decisions .s-counter .sep { color: #e2e2e2; }
 
 .hz-split-handled-decisions .s-body { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 1fr 430px; }
-.hz-split-handled-decisions .s-col-head { height: 48px; display: flex; align-items: center; gap: 9px; padding: 0 20px; border-bottom: 1px solid #e2e2e2; font-weight: 600; font-size: 14px; }
+.hz-split-handled-decisions .s-col-head { height: 48px; display: flex; align-items: center; gap: 8px; padding: 0 20px; border-bottom: 1px solid #e2e2e2; font-weight: 600; font-size: 14px; }
 .hz-split-handled-decisions .s-col-head small { color: #6b6b6b; font-weight: 500; font-size: 12px; margin-left: auto; }
 .hz-split-handled-decisions .s-col-head .ico { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; }
 .hz-split-handled-decisions .s-col-head .ico svg { width: 11px; height: 11px; }
-.hz-split-handled-decisions .s-col-head .ico.ok { background: #16a34a; color: #fff; }
-.hz-split-handled-decisions .s-badge { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 7px; border-radius: 999px; background: #fff7ed; color: #d97706; font-size: 11.5px; font-weight: 700; position: relative; }
-.hz-split-handled-decisions .s-badge::after { content: ''; position: absolute; inset: -2px; border-radius: 999px; border: 2px solid #d97706; opacity: 0; }
+.hz-split-handled-decisions .s-col-head .ico.ok { background: #3DC975; color: #fff; }
+.hz-split-handled-decisions .s-badge { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 8px; line-height: 1; border-radius: 999px; background: #FFEFE8; color: #292932; font-size: 11.5px; font-weight: 700; position: relative; }
+.hz-split-handled-decisions .s-badge::after { content: ''; position: absolute; inset: -2px; border-radius: 999px; border: 2px solid #FF5C16; opacity: 0; }
 .hz-split-handled-decisions .s-badge.is-pulse::after { animation: hz-shd-ring 1.3s cubic-bezier(.2,.7,.2,1) 1; }
 @keyframes hz-shd-ring { 0% { opacity: .8; transform: scale(1); } 100% { opacity: 0; transform: scale(2.1); } }
 
@@ -76,32 +84,49 @@
 .hz-split-handled-decisions .s-handled { border-right: 1px solid #e2e2e2; background: #fff; display: flex; flex-direction: column; min-height: 0; }
 .hz-split-handled-decisions .s-feedwrap { flex: 1 1 auto; min-height: 0; overflow: hidden; position: relative;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 26px, #000 calc(100% - 70px), transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, #000 26px, #000 calc(100% - 70px), transparent 100%); }
+/* scrolls a fixed 792px (12 items x 66px) so an item opening mid-feed never shifts the wrap point */
 .hz-split-handled-decisions .s-feed { list-style: none; margin: 0; padding: 0; animation: hz-shd-scroll var(--feed-dur) linear infinite; will-change: transform; }
-@keyframes hz-shd-scroll { from { transform: translateY(0); } to { transform: translateY(-50%); } }
-.hz-split-handled-decisions .s-item { height: 66px; display: grid; grid-template-columns: 26px 1fr auto; gap: 12px; align-items: center; padding: 0 20px; border-bottom: 1px solid #eeeeee; transition: background 1.2s ease; }
-.hz-split-handled-decisions .s-item.is-new { background: #ecfdf5; transition: background .3s ease; }
-.hz-split-handled-decisions .s-item .ck { width: 22px; height: 22px; border-radius: 50%; background: #ecfdf5; color: #16a34a; display: grid; place-items: center; }
+@keyframes hz-shd-scroll { from { transform: translateY(0); } to { transform: translateY(-792px); } }
+.hz-split-handled-decisions .s-item { border-bottom: 1px solid #eeeeee; transition: background 1.2s ease; }
+.hz-split-handled-decisions .s-item.is-new { background: #D8F4E3; transition: background .3s ease; }
+.hz-split-handled-decisions .s-item .row { height: 66px; display: grid; grid-template-columns: 26px 1fr auto; gap: 12px; align-items: center; padding: 0 20px; }
+.hz-split-handled-decisions .s-item .ck { width: 22px; height: 22px; border-radius: 50%; background: #D8F4E3; color: #1f8a4c; display: grid; place-items: center; }
 .hz-split-handled-decisions .s-item .ck svg { width: 11px; height: 11px; }
-.hz-split-handled-decisions .s-item b { display: block; font-weight: 600; font-size: 13.5px; }
-.hz-split-handled-decisions .s-item span { display: block; color: #6b6b6b; font-size: 12.5px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.hz-split-handled-decisions .s-kind { line-height: 1; padding: 5px 8px; border-radius: 4px; background: #f5f7fa; color: #6b6b6b; font-size: 10.5px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+.hz-split-handled-decisions .s-item .tx { min-width: 0; }
+.hz-split-handled-decisions .s-item .tx b { display: block; font-weight: 600; font-size: 13.5px; transition: color .4s cubic-bezier(.2,.7,.2,1); }
+.hz-split-handled-decisions .s-item .tx span { display: block; color: #6b6b6b; font-size: 12.5px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hz-split-handled-decisions .s-item.is-open .tx b { color: #1d63ed; }
+.hz-split-handled-decisions .s-kind { line-height: 1; padding: 4px 8px; border-radius: 4px; background: #f5f7fa; color: #6b6b6b; font-size: 11.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+
+/* the trail: one handled row opened in place */
+.hz-split-handled-decisions .s-trail { height: 0; overflow: hidden; transition: height .6s cubic-bezier(.2,.7,.2,1); }
+.hz-split-handled-decisions .s-trail-box { margin: 0 20px 12px 58px; padding: 8px 12px; background: #f5f7fa; border-radius: 8px; }
+.hz-split-handled-decisions .s-step { display: flex; align-items: center; gap: 8px; min-height: 26px; font-size: 12.5px; color: #292932;
+  opacity: 0; transform: translateY(4px); transition: opacity .35s cubic-bezier(.2,.7,.2,1), transform .35s cubic-bezier(.2,.7,.2,1); }
+.hz-split-handled-decisions .s-step.is-in { opacity: 1; transform: none; }
+.hz-split-handled-decisions .s-step .sck { width: 16px; height: 16px; border-radius: 50%; background: #D8F4E3; color: #1f8a4c; display: grid; place-items: center; flex: none; }
+.hz-split-handled-decisions .s-step .sck svg { width: 9px; height: 9px; }
+.hz-split-handled-decisions .s-step em { font-style: normal; color: #6b6b6b; }
+.hz-split-handled-decisions .s-cap { margin-top: 8px; font-size: 12px; color: #6b6b6b; opacity: 0; transition: opacity .4s cubic-bezier(.2,.7,.2,1); }
+.hz-split-handled-decisions .s-cap.is-in { opacity: 1; }
+.hz-split-handled-decisions .s-cap b { color: #292932; font-weight: 600; }
 
 /* needs you */
 .hz-split-handled-decisions .s-needs { background: #f5f7fa; display: flex; flex-direction: column; min-height: 0; transition: background .6s ease; }
 .hz-split-handled-decisions .s-needs.is-pulse { background: #eef3ff; }
-.hz-split-handled-decisions .s-cards { padding: 14px 16px 0; display: flex; flex-direction: column; gap: 12px; }
-.hz-split-handled-decisions .s-card { background: #fff; border: 1px solid #e2e2e2; border-radius: 10px; padding: 14px 16px 14px; box-shadow: 0 1px 2px rgba(0,0,0,.04); transition: box-shadow .6s ease, border-color .6s ease; }
-.hz-split-handled-decisions .s-card.is-pulse { border-color: #3840EA; box-shadow: 0 0 0 4px #D7D9FB; }
-.hz-split-handled-decisions .s-card .t { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; }
-.hz-split-handled-decisions .s-card .t i { width: 9px; height: 9px; border-radius: 50%; background: #d97706; display: block; flex: none; }
-.hz-split-handled-decisions .s-card .t em { margin-left: auto; font-style: normal; font-size: 11px; color: #6b6b6b; font-weight: 500; }
+.hz-split-handled-decisions .s-cards { padding: 16px 16px 0; display: flex; flex-direction: column; gap: 12px; }
+.hz-split-handled-decisions .s-card { background: #fff; border: 1px solid #e2e2e2; border-radius: 8px; padding: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.06); transition: box-shadow .6s ease, border-color .6s ease; }
+.hz-split-handled-decisions .s-card.is-pulse { border-color: #1d63ed; box-shadow: 0 0 0 4px rgba(29,99,237,.16); }
+.hz-split-handled-decisions .s-card .t { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; }
+.hz-split-handled-decisions .s-card .t i { width: 9px; height: 9px; border-radius: 50%; background: #FF5C16; display: block; flex: none; }
+.hz-split-handled-decisions .s-card .t em { margin-left: auto; font-style: normal; font-size: 11.5px; color: #6b6b6b; font-weight: 500; }
 .hz-split-handled-decisions .s-card p { margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: #292932; }
 .hz-split-handled-decisions .s-card .rule { margin-top: 8px; font-size: 12px; color: #6b6b6b; }
 .hz-split-handled-decisions .s-card .rule b { color: #292932; font-weight: 500; }
-.hz-split-handled-decisions .s-opts { display: flex; gap: 8px; margin-top: 12px; }
-.hz-split-handled-decisions .s-opt { line-height: 1; padding: 9px 12px; border-radius: 7px; border: 1px solid #e2e2e2; background: #fff; font-size: 12.5px; font-weight: 600; color: #292932; }
+.hz-split-handled-decisions .s-opts { display: flex; gap: 8px; margin-top: 8px; }
+.hz-split-handled-decisions .s-opt { display: inline-block; line-height: 1; padding: 8px 12px; border-radius: 999px; border: 1px solid #e2e2e2; background: #fff; font-size: 12.5px; font-weight: 600; color: #292932; }
 .hz-split-handled-decisions .s-opt.blue { border-color: #1d63ed; color: #1d63ed; }
-.hz-split-handled-decisions .s-needs-foot { margin-top: auto; padding: 14px 16px 16px; font-size: 12px; color: #6b6b6b; line-height: 1.5; border-top: 1px solid #e2e2e2; }
+.hz-split-handled-decisions .s-needs-foot { margin-top: auto; padding: 16px; font-size: 12px; color: #6b6b6b; line-height: 1.5; border-top: 1px solid #e2e2e2; }
 .hz-split-handled-decisions .s-needs-foot b { color: #292932; font-weight: 600; }
 
 .hz-split-handled-decisions.is-seek *, .hz-split-handled-decisions.is-seek *::before, .hz-split-handled-decisions.is-seek *::after { transition: none !important; animation: none !important; }
@@ -119,26 +144,38 @@
         <span class="s-dots"><i></i><i></i><i></i></span>
         <span class="s-brand">fulcrum</span><span>·</span><span class="s-prod">Horizon</span>
         <span class="s-acct">quotes@yourshop.com</span>
+        <span class="s-status"><i></i><span>Working</span></span>
       </div>
-      <div class="s-counter">This week: <b class="ok">47</b> handled <span class="sep">·</span> <b class="warn">5</b> decisions</div>
+      <div class="s-counter">Today: <b class="ok">14</b> handled <span class="sep">·</span> <b class="warn">3</b> need you</div>
       <div class="s-body">
 
         <section class="s-handled">
           <div class="s-col-head"><span class="ico ok"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span>Handled <small>went out on its own</small></div>
           <div class="s-feedwrap">
             <ul class="s-feed" data-feed>
-              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>RFQ ingested</b><span>Crestline Aerospace · Bracket 4410 Rev B, qty 250 · drawing read</span></div><span class="s-kind">RFQ</span></li>
-              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Repeat part priced from history</b><span>Redwing Equipment · Housing 3310, qty 40 · from job 25-0310</span></div><span class="s-kind">Priced</span></li>
-              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Vendor emails sent</b><span>Lakeshore Laser, Midwest Anodizing · lead time for 250 pcs</span></div><span class="s-kind">Vendor</span></li>
-              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>PO checked against quote</b><span>Northgate Fab · PO 5521 matches Q-1163 · sales order SO-2290 opened</span></div><span class="s-kind">PO</span></li>
-              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Status reply sent</b><span>Halvorsen Machine · Mount plate 118 ships Thursday</span></div><span class="s-kind">Status</span></li>
-              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Lead time logged</b><span>Midwest Anodizing · clear anodize, 5 days</span></div><span class="s-kind">Lead time</span></li>
-              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Quote drafted</b><span>Crestline Aerospace · 250 pcs at $86.50 ea · Pat sends</span></div><span class="s-kind">Quote</span></li>
-              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>RFQ ingested</b><span>Halvorsen Machine · Weldment 2207, qty 12 · drawing read</span></div><span class="s-kind">RFQ</span></li>
-              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Vendor reply logged</b><span>Prairie Powder Coat · black texture, 3 days</span></div><span class="s-kind">Vendor</span></li>
-              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Repeat part priced from history</b><span>Northgate Fab · Mount plate 118, qty 60 · from job 25-0922</span></div><span class="s-kind">Priced</span></li>
-              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>PO checked against quote</b><span>Crestline Aerospace · PO 7781 matches Q-1140 · sales order SO-2291 opened</span></div><span class="s-kind">PO</span></li>
-              <li class="s-item"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div><b>Status reply sent</b><span>Redwing Equipment · Housing 3310 ships Nov 6</span></div><span class="s-kind">Status</span></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>RFQ ingested</b><span>from Outlook · Crestline Aerospace · Bracket 4410 Rev B, qty 250 · drawing read</span></div><span class="s-kind">RFQ</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Repeat part priced from history</b><span>Redwing Equipment · Housing 3310, qty 40 · from job 25-0310</span></div><span class="s-kind">Priced</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Vendor emails sent</b><span>Lakeshore Laser, Midwest Anodizing · lead time for 250 pcs</span></div><span class="s-kind">Vendor</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>PO checked against quote</b><span>Northgate Fab · PO 5521 matches Q-1163 · sales order SO-2290 opened</span></div><span class="s-kind">PO</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Status reply sent</b><span>Halvorsen Machine · Mount plate 118 ships Thursday</span></div><span class="s-kind">Status</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Lead time logged</b><span>Midwest Anodizing · clear anodize, 5 days</span></div><span class="s-kind">Lead time</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Repeat part priced from history</b><span>Northgate Fab · Mount plate 118, qty 60 · from job 25-0922</span></div><span class="s-kind">Priced</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>RFQ ingested</b><span>Halvorsen Machine · Weldment 2207, qty 12 · drawing read</span></div><span class="s-kind">RFQ</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Vendor reply logged</b><span>Prairie Powder Coat · black texture, 3 days</span></div><span class="s-kind">Vendor</span></div></li>
+              <li class="s-item" data-open-row>
+                <div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Quote drafted</b><span>Crestline Aerospace · 250 pcs at $86.50 ea · Pat sends</span></div><span class="s-kind">Quote</span></div>
+                <div class="s-trail" data-trail>
+                  <div class="s-trail-box">
+                    <div class="s-step" data-step><span class="sck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><span>RFQ read <em>2:14 pm</em> · drawing opened</span></div>
+                    <div class="s-step" data-step><span class="sck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><span>Last job 24-0871 found · <em>Mar 2024 · $82.00 ea</em></span></div>
+                    <div class="s-step" data-step><span class="sck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><span>Lakeshore Laser + Midwest Anodizing asked · <em>lead time 5 days</em></span></div>
+                    <div class="s-step" data-step><span class="sck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><span>Quote Q-1182 drafted · reply to Dana written</span></div>
+                    <div class="s-cap" data-cap><b>Open any one.</b> Every step is there.</div>
+                  </div>
+                </div>
+              </li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>PO checked against quote</b><span>Crestline Aerospace · PO 7781 matches Q-1140 · sales order SO-2291 opened</span></div><span class="s-kind">PO</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Status reply sent</b><span>Redwing Equipment · Housing 3310 ships Nov 6</span></div><span class="s-kind">Status</span></div></li>
             </ul>
           </div>
         </section>
@@ -165,7 +202,7 @@
               <div class="s-opts"><span class="s-opt blue">Hold at 8%</span><span class="s-opt">Allow 12%</span></div>
             </div>
           </div>
-          <div class="s-needs-foot"><b>Three decisions. Everything else went out.</b><br>Horizon drafted the reply for each one; you pick, Pat sends.</div>
+          <div class="s-needs-foot"><b>Three decisions. Everything else went out.</b><br>Horizon drafted the reply for each one. You pick, Pat sends.</div>
         </aside>
 
       </div>
@@ -176,8 +213,10 @@
 <script>
 (function () {
   'use strict';
-  var LOOP_END = 28.0;      // seconds; also the feed's scroll period (--feed-dur)
-  var ITEM_H = 66, FEED_VIEW = 546, N = 12;   // feed geometry: item height, visible height, items per half
+  var LOOP_END = 30.0;                       // seconds
+  var OPEN_AT = 13.0, CLOSE_AT = 17.8, PAUSE = 5.4;   // the trail opens at 13.0; feed pauses 13.0 -> 18.4 (collapse ends)
+  var SCROLL_DUR = LOOP_END - PAUSE;         // the feed scrolls 792px in 24.6s (--feed-dur)
+  var ITEM_H = 66, FEED_VIEW = 550, N = 12;  // feed geometry: item height, visible height, items per half
 
   function init(root) {
     var $ = function (sel) { return root.querySelector(sel); };
@@ -195,9 +234,10 @@
 
     var feed = $('[data-feed]');
     var needs = $('[data-needs]'), badge = $('[data-badge]'), cards = $$('[data-card]');
-    root.style.setProperty('--feed-dur', LOOP_END + 's');
+    var openRow = $('[data-open-row]'), trail = $('[data-trail]'), steps = $$('[data-step]'), cap = $('[data-cap]');
+    root.style.setProperty('--feed-dur', SCROLL_DUR + 's');
 
-    // duplicate the feed so translateY(-50%) wraps seamlessly
+    // duplicate the feed so translateY(-792px) wraps seamlessly
     var items = $$('.s-item');
     items.forEach(function (li) { feed.appendChild(li.cloneNode(true)); });
     var all = $$('.s-item');
@@ -206,22 +246,44 @@
     // in seek mode a delayed callback runs only if it would already have fired by seekAt
     function later(ms, fn) { if (instant) { if (curT + ms / 1000 <= seekAt) fn(); return; } timers.push(setTimeout(fn, ms)); }
     function clearTimers() { timers.forEach(clearTimeout); timers = []; }
-    function speed() { return (ITEM_H * N) / LOOP_END; }          // px per second
-    function enterTime(k) { return (ITEM_H * k - FEED_VIEW) / speed() + 0.6; }   // item k is ~17px into view
+    function speed() { return (ITEM_H * N) / SCROLL_DUR; }                 // px per second while scrolling
+    function wall(ts) { return ts < OPEN_AT ? ts : ts + PAUSE; }           // scroll-time -> wall-clock time
+    function scrollT(at) { return at < OPEN_AT ? at : at < OPEN_AT + PAUSE ? OPEN_AT : at - PAUSE; }
+    function enterTime(k) { return wall((ITEM_H * k - FEED_VIEW) / speed() + 0.6); }   // item k is ~19px into view
     function arrive(k) { var li = all[k]; if (!li) return; li.classList.add('is-new'); later(1800, function () { li.classList.remove('is-new'); }); }
     function pulse() {
       badge.classList.add('is-pulse'); needs.classList.add('is-pulse'); cards[0].classList.add('is-pulse');
       later(1400, function () { badge.classList.remove('is-pulse'); needs.classList.remove('is-pulse'); cards[0].classList.remove('is-pulse'); });
     }
+    function openTrail() {                    // get in the weeds: the row opens, the feed waits
+      feed.style.animationPlayState = 'paused';
+      openRow.classList.add('is-open');
+      trail.style.height = trail.scrollHeight + 'px';
+      steps.forEach(function (s, i) { later(300 + i * 300, function () { s.classList.add('is-in'); }); });
+      later(1600, function () { cap.classList.add('is-in'); });
+    }
+    function closeTrail() {
+      cap.classList.remove('is-in');
+      steps.forEach(function (s) { s.classList.remove('is-in'); });
+      trail.style.height = '0px';
+      openRow.classList.remove('is-open');
+      later(600, function () { feed.style.animationPlayState = 'running'; });
+    }
+    function reset() {
+      all.forEach(function (li) { li.classList.remove('is-new'); });
+      closeTrail();
+    }
 
     // ----- timeline: one array of {t, fn} -----
     var timeline = [
       { t: 0.0,  fn: function () { /* resolved state is authored in the DOM; feed scrolls via CSS */ } },
-      { t: 9.0,  fn: pulse },     // a decision would arrive; column stays at three
-      { t: 20.0, fn: pulse }
+      { t: 9.0,  fn: pulse },                 // a decision would arrive; column stays at three
+      { t: OPEN_AT,  fn: openTrail },
+      { t: CLOSE_AT, fn: closeTrail },
+      { t: 23.0, fn: pulse }
     ];
-    for (var k = 9; k <= 20; k++) {               // handled items entering from the bottom
-      (function (k) { var t = enterTime(k); if (t >= 0 && t < LOOP_END) timeline.push({ t: t, fn: function () { arrive(k); } }); })(k);
+    for (var k = 9; k <= 20; k++) {           // handled items entering from the bottom
+      (function (k) { var t = enterTime(k); if (t >= 0 && t < LOOP_END - 1.8) timeline.push({ t: t, fn: function () { arrive(k); } }); })(k);
     }
     timeline.sort(function (a, b) { return a.t - b.t; });
 
@@ -233,7 +295,7 @@
     if (mAt) {
       var at = parseFloat(mAt[1]) % LOOP_END;
       root.classList.add('is-seek'); instant = true; seekAt = at;
-      feed.style.transform = 'translateY(' + (-(ITEM_H * N) * (at / LOOP_END)).toFixed(1) + 'px)';
+      feed.style.transform = 'translateY(' + (-(ITEM_H * N) * (scrollT(at) / SCROLL_DUR)).toFixed(1) + 'px)';
       timeline.forEach(function (b) { if (b.t <= at) { curT = b.t; b.fn(); } });
       return;
     }
@@ -241,7 +303,9 @@
 
     function play() {
       clearTimers();
+      instant = true; seekAt = -1; reset(); instant = false;      // clear any residue without scheduling timers
       feed.style.animation = 'none'; void feed.offsetHeight; feed.style.animation = '';   // resync the CSS scroll
+      feed.style.animationPlayState = 'running';
       timeline.forEach(function (b) { timers.push(setTimeout(b.fn, b.t * 1000)); });
       timers.push(setTimeout(play, LOOP_END * 1000));
     }

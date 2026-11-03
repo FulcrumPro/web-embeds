@@ -1,25 +1,30 @@
 <!doctype html>
 <!--
   Horizon — hero-email-lands — "The email lands and it starts"
-  Design 1200x750, scales to width. Loop 32.2s. No libraries, no images, no audio.
+  Design 1200x750, scales to width. Loop 32.8s. Shows the email arriving in Outlook first, then entering Horizon. No libraries, no images, no audio.
 
   Beats (seconds):
    0.0  resolved: drafted quote for Crestline Aerospace, Bracket 4410 Rev B, qty 250, $86.50 ea,
         Why panel filled, status chip "Drafted. Pat reviews before it goes." Send NOT pressed. Hold 3s.
-   3.0  reset: Dana's email leaves the inbox, center goes quiet ("Horizon is watching quotes@yourshop.com")
-   4.2  beat 1: new email slides into the inbox — "RFQ: Bracket 4410 Rev B, qty 250, need by Nov 21" (Dana)
-   5.4  beat 1b: the email opens in the center by itself. Nobody clicks. Status: Reading RFQ…
+   3.0  reset: the Horizon window drops back and an Outlook window (quotes@yourshop.com) fills the stage:
+        folder nav, Focused inbox list with the day's mail, empty reading pane. Nobody is in it.
+   4.2  beat 1: Dana's email lands in OUTLOOK — unread row slides in at the top, a new-mail toast pops top right:
+        "RFQ: Bracket 4410 Rev B, qty 250, need by Nov 21". The reading pane stays empty. Nobody clicks.
+   5.0  beat 1a: a small "Horizon · reading" chip lands on the Outlook row (Horizon is connected to the mailbox)
+   5.4  beat 1b: handoff — the row lifts out of Outlook and flies into Horizon's inbox rail while Outlook slides
+        away behind and the Horizon window comes forward. Same email, now in Horizon, tagged "new RFQ".
+   6.2  beat 1c: the email opens in Horizon's center by itself. Status: Reading RFQ…
    8.4  beat 2: the attached drawing opens (SVG part outline). Status: Opening drawing…
    9.4  beat 2b: "REV B" highlighted on the title block
-  12.4  beat 3: "Found: last job 24-0871 · Mar 2024" card with the old price
-  16.0  beat 4: two vendor emails go OUT — Lakeshore Laser / Midwest Anodizing, lead time for 250 pcs?
-  17.2  beat 4b: "Sent" chips land on both
-  20.0  beat 5: quote view; lines draft one at a time (20.8 material, 21.8 laser, 22.8 brake, 23.8 anodize)
-  24.8  beat 5b: qty price line: 250 pcs · $86.50 ea · $21,625.00
-  25.8  beat 6: Why panel fills, three rows typed (25.8 / 27.0 / 28.2)
-  29.0  beat 6b: the reply to Dana drafts under the quote (typed, 18ms/char)
-  31.0  beat 7: status chip "Drafted. Pat reviews before it goes." Send button ready, not pressed.
-  32.2  loop -> 0 (resolved holds 31.0 -> 35.2 across the wrap, about 4s)
+ 13.0  beat 3: "Found: last job 24-0871 · Mar 2024" card with the old price
+ 16.6  beat 4: two vendor emails go OUT — Lakeshore Laser / Midwest Anodizing, lead time for 250 pcs?
+ 17.8  beat 4b: "Sent" chips land on both
+ 20.6  beat 5: quote view; lines draft one at a time (21.4 material, 22.4 laser, 23.4 brake, 24.4 anodize)
+ 25.4  beat 5b: qty price line: 250 pcs · $86.50 ea · $21,625.00
+ 26.4  beat 6: Why panel fills, three rows typed (26.4 / 27.6 / 28.8)
+ 29.6  beat 6b: the reply to Dana drafts under the quote (typed, 18ms/char)
+ 31.6  beat 7: status chip "Drafted. Pat reviews before it goes." Send button ready, not pressed.
+  32.8  loop -> 0 (resolved holds 31.6 -> 35.8 across the wrap, about 4s)
 
   ?still=1  jumps to the resolved state and stops.   ?at=<sec>  seeks to that time and stops.
   prefers-reduced-motion: resolved state only.
@@ -57,7 +62,89 @@
 /* window */
 .hz-hero-email-lands .h-win { position: absolute; left: 30px; top: 30px; width: 1140px; height: 690px; background: #fff;
   border: 1px solid #e2e2e2; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,0,0,.15); overflow: hidden;
-  display: flex; flex-direction: column; }
+  display: flex; flex-direction: column; z-index: 2; transform-origin: 50% 60%;
+  transition: opacity .6s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+.hz-hero-email-lands .h-win.is-back { opacity: 0; transform: translateY(22px) scale(.965); z-index: 1; }
+
+/* the other client: an Outlook-style window the RFQ lands in first */
+.hz-hero-email-lands .o-win { position: absolute; left: 30px; top: 30px; width: 1140px; height: 690px; background: #fff;
+  border: 1px solid #d6d6d6; border-radius: 10px; box-shadow: 0 4px 18px rgba(0,0,0,.15); overflow: hidden;
+  display: flex; flex-direction: column; z-index: 3; opacity: 0; transform: translateY(16px) scale(.97); transform-origin: 50% 50%;
+  font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: opacity .6s cubic-bezier(.2,.7,.2,1), transform .75s cubic-bezier(.2,.7,.2,1); }
+.hz-hero-email-lands .o-win.is-on { opacity: 1; transform: none; }
+.hz-hero-email-lands .o-win.is-away { opacity: 0; transform: translate(-90px, 70px) scale(.86); z-index: 1; }
+.hz-hero-email-lands .o-top { flex: 0 0 48px; display: flex; align-items: center; gap: 14px; padding: 0 16px; background: #0f6cbd; color: #fff; }
+.hz-hero-email-lands .o-waffle { display: grid; grid-template-columns: repeat(3, 4px); gap: 3px; }
+.hz-hero-email-lands .o-waffle i { width: 4px; height: 4px; background: #fff; border-radius: 1px; display: block; opacity: .95; }
+.hz-hero-email-lands .o-name { font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
+.hz-hero-email-lands .o-search { margin-left: 120px; width: 460px; height: 32px; border-radius: 4px; background: #fff; color: #616161; display: flex; align-items: center; gap: 8px; padding: 0 12px; font-size: 13px; }
+.hz-hero-email-lands .o-search svg { width: 14px; height: 14px; }
+.hz-hero-email-lands .o-topr { margin-left: auto; display: flex; align-items: center; gap: 16px; }
+.hz-hero-email-lands .o-topr svg { width: 18px; height: 18px; opacity: .9; }
+.hz-hero-email-lands .o-ava { width: 30px; height: 30px; border-radius: 50%; background: #ffd37a; color: #4a3200; font-weight: 700; font-size: 13px; display: grid; place-items: center; }
+.hz-hero-email-lands .o-bar { flex: 0 0 46px; display: flex; align-items: center; gap: 22px; padding: 0 16px; border-bottom: 1px solid #e1e1e1; font-size: 13px; color: #424242; }
+.hz-hero-email-lands .o-newmail { display: inline-flex; align-items: center; gap: 8px; line-height: 1; padding: 8px 12px; border-radius: 4px; background: #0f6cbd; color: #fff; font-weight: 600; }
+.hz-hero-email-lands .o-newmail svg { width: 12px; height: 12px; }
+.hz-hero-email-lands .o-bar span { display: inline-flex; align-items: center; gap: 6px; }
+.hz-hero-email-lands .o-bar span svg { width: 15px; height: 15px; color: #616161; }
+.hz-hero-email-lands .o-body { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 200px 350px 1fr; }
+.hz-hero-email-lands .o-nav { border-right: 1px solid #e1e1e1; padding: 10px 0; font-size: 13px; color: #242424; background: #fafafa; }
+.hz-hero-email-lands .o-navh { padding: 8px 16px 4px; font-size: 12px; font-weight: 600; color: #616161; display: flex; align-items: center; gap: 6px; }
+.hz-hero-email-lands .o-navh svg { width: 10px; height: 10px; }
+.hz-hero-email-lands .o-navi { display: flex; align-items: center; gap: 10px; padding: 7px 16px 7px 30px; position: relative; }
+.hz-hero-email-lands .o-navi svg { width: 15px; height: 15px; color: #616161; }
+.hz-hero-email-lands .o-navi.is-sel { background: #e9eef5; font-weight: 600; }
+.hz-hero-email-lands .o-navi.is-sel::before { content: ''; position: absolute; left: 0; top: 7px; bottom: 7px; width: 3px; border-radius: 2px; background: #0f6cbd; }
+.hz-hero-email-lands .o-navi b { margin-left: auto; font-size: 12px; font-weight: 600; color: #0f6cbd; }
+.hz-hero-email-lands .o-list { border-right: 1px solid #e1e1e1; display: flex; flex-direction: column; min-height: 0; }
+.hz-hero-email-lands .o-tabs { flex: 0 0 40px; display: flex; align-items: center; gap: 18px; padding: 0 16px; border-bottom: 1px solid #e1e1e1; font-size: 13px; color: #616161; }
+.hz-hero-email-lands .o-tab { position: relative; padding: 11px 2px; }
+.hz-hero-email-lands .o-tab.is-sel { color: #242424; font-weight: 600; }
+.hz-hero-email-lands .o-tab.is-sel::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; border-radius: 2px 2px 0 0; background: #0f6cbd; }
+.hz-hero-email-lands .o-tabs span:last-child { margin-left: auto; display: inline-flex; align-items: center; gap: 5px; }
+.hz-hero-email-lands .o-tabs span:last-child svg { width: 14px; height: 14px; }
+.hz-hero-email-lands .o-day { padding: 6px 16px 4px; font-size: 12px; font-weight: 600; color: #616161; }
+.hz-hero-email-lands .o-rows { list-style: none; margin: 0; padding: 0; overflow: hidden; }
+.hz-hero-email-lands .o-row { position: relative; height: 74px; padding: 10px 14px 0 18px; border-bottom: 1px solid #ededed; font-size: 12.5px; color: #424242; overflow: hidden;
+  transition: height .55s cubic-bezier(.2,.7,.2,1), padding .55s cubic-bezier(.2,.7,.2,1), opacity .45s, background .35s; }
+.hz-hero-email-lands .o-row::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #0f6cbd; opacity: 0; transition: opacity .3s; }
+.hz-hero-email-lands .o-row.is-unread::before { opacity: 1; }
+.hz-hero-email-lands .o-row.o-new { height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; border-bottom-width: 0; }
+.hz-hero-email-lands .o-row.o-new.is-in { height: 74px; padding-top: 10px; opacity: 1; border-bottom-width: 1px; }
+.hz-hero-email-lands .o-row.is-lift { opacity: 0; }
+.hz-hero-email-lands .o-r1 { display: flex; justify-content: space-between; gap: 8px; color: #242424; white-space: nowrap; }
+.hz-hero-email-lands .o-r1 span { overflow: hidden; text-overflow: ellipsis; }
+.hz-hero-email-lands .o-r1 small { font-size: 11.5px; color: #616161; flex: none; }
+.hz-hero-email-lands .o-row.is-unread .o-r1 span { font-weight: 700; }
+.hz-hero-email-lands .o-r2 { margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #242424; }
+.hz-hero-email-lands .o-row.is-unread .o-r2 { color: #0f6cbd; font-weight: 600; }
+.hz-hero-email-lands .o-r3 { margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #616161; font-size: 12px; display: flex; gap: 6px; align-items: center; }
+.hz-hero-email-lands .o-r3 svg { width: 12px; height: 12px; flex: none; }
+.hz-hero-email-lands .o-hz { position: absolute; right: 12px; bottom: 9px; display: inline-flex; align-items: center; gap: 6px; line-height: 1; padding: 5px 8px; border-radius: 999px;
+  background: #eef3ff; color: #1d63ed; font-size: 11.5px; font-weight: 700; opacity: 0; transform: translateY(6px); transition: all .4s cubic-bezier(.2,.7,.2,1); }
+.hz-hero-email-lands .o-hz i { width: 6px; height: 6px; border-radius: 50%; background: #1d63ed; display: block; animation: hz-hel-blink 1.1s ease-in-out infinite; }
+.hz-hero-email-lands .o-hz.is-on { opacity: 1; transform: none; }
+.hz-hero-email-lands .o-read { display: grid; place-items: center; text-align: center; color: #616161; font-size: 13px; background: #fff; }
+.hz-hero-email-lands .o-read b { display: block; color: #242424; font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.hz-hero-email-lands .o-read svg { width: 120px; height: 90px; display: block; margin: 0 auto 16px; }
+/* new-mail toast, top right of the stage */
+.hz-hero-email-lands .o-toast { position: absolute; right: 48px; top: 92px; z-index: 5; width: 340px; display: grid; grid-template-columns: 36px 1fr; gap: 12px; align-items: start;
+  padding: 12px 14px 12px 12px; background: #fff; border: 1px solid #e1e1e1; border-radius: 8px; box-shadow: 0 8px 28px rgba(0,0,0,.18);
+  font-family: 'Segoe UI', 'Inter', sans-serif; opacity: 0; transform: translateX(40px); transition: opacity .45s cubic-bezier(.2,.7,.2,1), transform .5s cubic-bezier(.2,.7,.2,1); }
+.hz-hero-email-lands .o-toast.is-on { opacity: 1; transform: none; }
+.hz-hero-email-lands .o-toast .ic { width: 36px; height: 36px; border-radius: 8px; background: #0f6cbd; display: grid; place-items: center; }
+.hz-hero-email-lands .o-toast .ic svg { width: 18px; height: 18px; color: #fff; }
+.hz-hero-email-lands .o-toast small { display: block; font-size: 11px; color: #616161; margin-bottom: 2px; }
+.hz-hero-email-lands .o-toast b { display: block; font-size: 13px; color: #242424; font-weight: 600; }
+.hz-hero-email-lands .o-toast span { display: block; font-size: 12.5px; color: #424242; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* the row that flies from Outlook into Horizon */
+.hz-hero-email-lands .h-fly { position: absolute; z-index: 6; left: 230px; top: 198px; width: 350px; height: 74px; padding: 10px 14px 0 18px; background: #fff;
+  border: 1px solid #e1e1e1; border-left: 4px solid #0f6cbd; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,.2); font-size: 12.5px; color: #424242; overflow: hidden;
+  opacity: 0; transition: left .85s cubic-bezier(.3,.7,.2,1), top .85s cubic-bezier(.3,.7,.2,1), width .85s cubic-bezier(.3,.7,.2,1), height .85s cubic-bezier(.3,.7,.2,1), opacity .3s, border-color .6s; }
+.hz-hero-email-lands .h-fly.is-on { opacity: 1; }
+.hz-hero-email-lands .h-fly.is-go { left: 31px; top: 119px; width: 240px; height: 68px; border-left-color: #1d63ed; }
+.hz-hero-email-lands .h-fly .o-r2 { color: #0f6cbd; font-weight: 600; }
 .hz-hero-email-lands .h-title { flex: 0 0 44px; display: flex; align-items: center; gap: 10px; padding: 0 16px;
   border-bottom: 1px solid #e2e2e2; background: #fff; font-size: 12.5px; color: #6b6b6b; }
 .hz-hero-email-lands .h-dots { display: inline-flex; gap: 6px; margin-right: 6px; }
@@ -66,7 +153,7 @@
 .hz-hero-email-lands .h-prod { font-weight: 600; color: #292932; }
 .hz-hero-email-lands .h-acct { margin-left: 10px; padding-left: 12px; border-left: 1px solid #e2e2e2; }
 .hz-hero-email-lands .h-status { margin-left: auto; display: inline-flex; align-items: center; gap: 7px; color: #292932; font-weight: 500; }
-.hz-hero-email-lands .h-status i { width: 8px; height: 8px; border-radius: 50%; background: #16a34a; display: block; }
+.hz-hero-email-lands .h-status i { width: 8px; height: 8px; border-radius: 50%; background: #3DC975; display: block; }
 .hz-hero-email-lands .h-status.is-busy i { background: #1d63ed; animation: hz-hel-blink 1.1s ease-in-out infinite; }
 @keyframes hz-hel-blink { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
 
@@ -84,18 +171,18 @@
 .hz-hero-email-lands .h-mail.is-sel { background: #eef3ff; }
 .hz-hero-email-lands .h-mail .h-m1 { display: flex; justify-content: space-between; gap: 6px; font-weight: 600; font-size: 12.5px; white-space: nowrap; }
 .hz-hero-email-lands .h-mail .h-m1 span { overflow: hidden; text-overflow: ellipsis; }
-.hz-hero-email-lands .h-mail .h-m1 small { font-weight: 400; color: #6b6b6b; font-size: 11px; flex: none; }
+.hz-hero-email-lands .h-mail .h-m1 small { font-weight: 400; color: #6b6b6b; font-size: 11.5px; flex: none; }
 .hz-hero-email-lands .h-mail .h-m2 { font-size: 12px; color: #292932; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
 .hz-hero-email-lands .h-mail .h-m3 { font-size: 11px; color: #6b6b6b; margin-top: 3px; display: flex; gap: 6px; align-items: center; }
 .hz-hero-email-lands .h-mail .h-dot { position: absolute; left: 10px; top: 16px; width: 7px; height: 7px; border-radius: 50%; background: #1d63ed; opacity: 0; transition: opacity .4s; }
 .hz-hero-email-lands .h-mail.is-unread .h-dot { opacity: 1; }
-.hz-hero-email-lands .h-tag { display: inline-block; line-height: 1; padding: 3px 6px; border-radius: 4px; font-size: 10.5px; font-weight: 600; }
-.hz-hero-email-lands .h-tag.ok { color: #16a34a; background: #ecfdf5; }
+.hz-hero-email-lands .h-tag { display: inline-block; line-height: 1; padding: 4px 6px; border-radius: 4px; font-size: 11.5px; font-weight: 600; }
+.hz-hero-email-lands .h-tag.ok { color: #292932; background: #D8F4E3; }
 .hz-hero-email-lands .h-tag.blue { color: #1d63ed; background: #eef3ff; }
-.hz-hero-email-lands .h-tag.warn { color: #d97706; background: #fff7ed; }
+.hz-hero-email-lands .h-tag.warn { color: #292932; background: #FFEFE8; }
 
 /* center work */
-.hz-hero-email-lands .h-work { display: flex; flex-direction: column; padding: 16px 20px 16px; min-width: 0; background: #fff; }
+.hz-hero-email-lands .h-work { display: flex; flex-direction: column; padding: 16px 24px; min-width: 0; background: #fff; }
 .hz-hero-email-lands .h-work-head { flex: 0 0 auto; height: 46px; }
 .hz-hero-email-lands .h-wh-title { font-size: 16px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity .35s; }
 .hz-hero-email-lands .h-wh-sub { font-size: 12.5px; color: #6b6b6b; margin-top: 3px; transition: opacity .35s; }
@@ -106,15 +193,15 @@
 .hz-hero-email-lands .h-step i svg { width: 9px; height: 9px; opacity: 0; transition: opacity .3s; }
 .hz-hero-email-lands .h-step.is-live { border-color: #1d63ed; color: #1d63ed; }
 .hz-hero-email-lands .h-step.is-live i { border-color: #1d63ed; }
-.hz-hero-email-lands .h-step.is-done { border-color: #ecfdf5; background: #ecfdf5; color: #16a34a; }
-.hz-hero-email-lands .h-step.is-done i { background: #16a34a; border-color: #16a34a; }
+.hz-hero-email-lands .h-step.is-done { border-color: #D8F4E3; background: #D8F4E3; color: #292932; }
+.hz-hero-email-lands .h-step.is-done i { background: #3DC975; border-color: #3DC975; }
 .hz-hero-email-lands .h-step.is-done i svg { opacity: 1; }
 
 .hz-hero-email-lands .h-main { flex: 1 1 auto; min-height: 0; position: relative; }
 .hz-hero-email-lands .h-focus, .hz-hero-email-lands .h-quote-wrap, .hz-hero-email-lands .h-idle { position: absolute; inset: 0; }
 
 /* focus cards (one at a time) */
-.hz-hero-email-lands .h-card { position: absolute; inset: 0; border: 1px solid #e2e2e2; border-radius: 10px; background: #fff; padding: 18px 20px;
+.hz-hero-email-lands .h-card { position: absolute; inset: 0; border: 1px solid #e2e2e2; border-radius: 8px; background: #fff; padding: 16px 24px;
   opacity: 0; transform: translateY(14px); transition: opacity .5s cubic-bezier(.2,.7,.2,1), transform .5s cubic-bezier(.2,.7,.2,1); overflow: hidden; }
 .hz-hero-email-lands .h-card.is-on { opacity: 1; transform: none; }
 .hz-hero-email-lands .h-card.is-off { opacity: 0; transform: translateY(-10px); }
@@ -130,18 +217,18 @@
 .hz-hero-email-lands .h-mailhead time { color: #6b6b6b; font-size: 12px; }
 .hz-hero-email-lands .h-subj { font-size: 17px; font-weight: 600; margin: 16px 0 10px; letter-spacing: -.01em; }
 .hz-hero-email-lands .h-mailbody { font-size: 14px; line-height: 1.6; color: #292932; max-width: 520px; }
-.hz-hero-email-lands .h-attach { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; padding: 8px 12px; border: 1px solid #e2e2e2; border-radius: 8px; font-size: 12.5px; font-weight: 500; background: #f5f7fa; }
-.hz-hero-email-lands .h-attach svg { width: 16px; height: 16px; color: #dc2626; }
+.hz-hero-email-lands .h-attach { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 8px 12px; border: 1px solid #e2e2e2; border-radius: 8px; font-size: 12.5px; font-weight: 500; background: #f5f7fa; }
+.hz-hero-email-lands .h-attach svg { width: 16px; height: 16px; color: #6b6b6b; }
 .hz-hero-email-lands .h-nobody { position: absolute; right: 20px; bottom: 16px; font-size: 12px; color: #6b6b6b; display: inline-flex; align-items: center; gap: 7px; }
 .hz-hero-email-lands .h-nobody i { width: 8px; height: 8px; border-radius: 50%; background: #1d63ed; display: block; }
 
 /* drawing card */
-.hz-hero-email-lands .h-card-draw { padding: 14px; }
+.hz-hero-email-lands .h-card-draw { padding: 12px; }
 .hz-hero-email-lands .h-drawing { width: 100%; height: 100%; display: block; }
 .hz-hero-email-lands .h-drawing text { font-family: 'Inter', sans-serif; fill: #292932; }
-.hz-hero-email-lands .h-drawing .dim { fill: #6b6b6b; font-size: 10px; }
-.hz-hero-email-lands .h-drawing .tb { font-size: 10.5px; }
-.hz-hero-email-lands .h-drawing .tbk { font-size: 8.5px; fill: #6b6b6b; letter-spacing: .04em; }
+.hz-hero-email-lands .h-drawing .dim { fill: #6b6b6b; font-size: 11px; }
+.hz-hero-email-lands .h-drawing .tb { font-size: 11px; }
+.hz-hero-email-lands .h-drawing .tbk { font-size: 9.5px; fill: #6b6b6b; letter-spacing: .04em; }  /* drawing title block: engineering print, intentionally small */
 .hz-hero-email-lands .h-drawing .tbb { font-size: 12.5px; font-weight: 600; }
 .hz-hero-email-lands .h-drawing .rev-hi { fill: rgba(29,99,237,.1); stroke: #1d63ed; stroke-width: 2; opacity: 0; transition: opacity .4s; }
 .hz-hero-email-lands .h-drawing .rev-hi.is-on { opacity: 1; animation: hz-hel-revpulse 1.6s cubic-bezier(.2,.7,.2,1) 2; }
@@ -153,13 +240,13 @@
 /* found card */
 .hz-hero-email-lands .h-found-head { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
 .hz-hero-email-lands .h-found-head .h-tag { font-size: 11px; padding: 5px 8px; }
-.hz-hero-email-lands .h-found-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 18px; }
-.hz-hero-email-lands .h-kpi { border: 1px solid #e2e2e2; border-radius: 8px; padding: 14px 14px 12px; background: #f5f7fa; }
+.hz-hero-email-lands .h-found-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 16px; }
+.hz-hero-email-lands .h-kpi { border: 1px solid #e2e2e2; border-radius: 8px; padding: 12px 16px; background: #f5f7fa; }
 .hz-hero-email-lands .h-kpi small { display: block; font-size: 11px; color: #6b6b6b; font-weight: 500; letter-spacing: .02em; text-transform: uppercase; }
 .hz-hero-email-lands .h-kpi b { display: block; font-size: 22px; font-weight: 600; margin-top: 6px; letter-spacing: -.02em; }
 .hz-hero-email-lands .h-kpi span { display: block; font-size: 12px; color: #6b6b6b; margin-top: 3px; }
-.hz-hero-email-lands .h-jobs { margin-top: 18px; border: 1px solid #e2e2e2; border-radius: 8px; overflow: hidden; }
-.hz-hero-email-lands .h-job { display: grid; grid-template-columns: 90px 1fr 110px 90px; gap: 10px; padding: 9px 14px; font-size: 12.5px; border-top: 1px solid #e2e2e2; }
+.hz-hero-email-lands .h-jobs { margin-top: 16px; border: 1px solid #e2e2e2; border-radius: 8px; overflow: hidden; }
+.hz-hero-email-lands .h-job { display: grid; grid-template-columns: 90px 1fr 110px 90px; gap: 12px; padding: 8px 16px; font-size: 12.5px; border-top: 1px solid #e2e2e2; }
 .hz-hero-email-lands .h-job:first-child { border-top: 0; background: #f5f7fa; color: #6b6b6b; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .02em; }
 .hz-hero-email-lands .h-job.is-pick { background: #eef3ff; }
 .hz-hero-email-lands .h-job b { font-weight: 600; }
@@ -168,20 +255,20 @@
 /* vendor card */
 .hz-hero-email-lands .h-vend-head { font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
 .hz-hero-email-lands .h-vend-sub { font-size: 12.5px; color: #6b6b6b; margin-top: 2px; }
-.hz-hero-email-lands .h-vmail { position: relative; border: 1px solid #e2e2e2; border-radius: 8px; padding: 12px 14px; margin-top: 14px; background: #fff; }
+.hz-hero-email-lands .h-vmail { position: relative; border: 1px solid #e2e2e2; border-radius: 8px; padding: 12px 16px; margin-top: 12px; background: #fff; }
 .hz-hero-email-lands .h-vmail .to { font-size: 12px; color: #6b6b6b; }
 .hz-hero-email-lands .h-vmail .to b { color: #292932; font-weight: 500; }
 .hz-hero-email-lands .h-vmail .sj { font-size: 13.5px; font-weight: 600; margin-top: 4px; }
 .hz-hero-email-lands .h-vmail .bd { font-size: 12.5px; color: #292932; margin-top: 4px; line-height: 1.5; }
-.hz-hero-email-lands .h-sent { position: absolute; right: 14px; top: 12px; display: inline-flex; align-items: center; gap: 6px; line-height: 1; padding: 6px 9px; border-radius: 999px;
-  background: #ecfdf5; color: #16a34a; font-size: 11.5px; font-weight: 600; opacity: 0; transform: translateX(-18px); transition: all .55s cubic-bezier(.2,.7,.2,1); }
-.hz-hero-email-lands .h-sent svg { width: 12px; height: 12px; }
+.hz-hero-email-lands .h-sent { position: absolute; right: 16px; top: 12px; display: inline-flex; align-items: center; gap: 6px; line-height: 1; padding: 6px 9px; border-radius: 999px;
+  background: #D8F4E3; color: #292932; font-size: 11.5px; font-weight: 600; opacity: 0; transform: translateX(-18px); transition: all .55s cubic-bezier(.2,.7,.2,1); }
+.hz-hero-email-lands .h-sent svg { width: 12px; height: 12px; color: #1f8a4c; }
 .hz-hero-email-lands .h-sent.is-on { opacity: 1; transform: none; }
 
 /* quote + why */
 .hz-hero-email-lands .h-quote-wrap { display: grid; grid-template-columns: 1fr 252px; grid-template-rows: auto auto; align-content: start; gap: 16px; opacity: 0; transform: translateY(10px); transition: opacity .5s cubic-bezier(.2,.7,.2,1), transform .5s cubic-bezier(.2,.7,.2,1); }
 .hz-hero-email-lands .h-quote-wrap.is-on { opacity: 1; transform: none; }
-.hz-hero-email-lands .h-quote { border: 1px solid #e2e2e2; border-radius: 10px; background: #fff; overflow: hidden; align-self: start; }
+.hz-hero-email-lands .h-quote { border: 1px solid #e2e2e2; border-radius: 8px; background: #fff; overflow: hidden; align-self: start; }
 .hz-hero-email-lands .h-q-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #e2e2e2; font-weight: 600; font-size: 13.5px; }
 .hz-hero-email-lands .h-q-head span { color: #6b6b6b; font-weight: 500; font-size: 12px; }
 .hz-hero-email-lands .h-q-line { display: flex; justify-content: space-between; align-items: baseline; padding: 11px 16px; border-bottom: 1px solid #f0f0f0; font-size: 13px;
@@ -194,39 +281,39 @@
 .hz-hero-email-lands .h-q-total.is-on { opacity: 1; }
 .hz-hero-email-lands .h-q-total b { font-weight: 600; }
 .hz-hero-email-lands .h-q-sum { font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
-.hz-hero-email-lands .h-why { border-radius: 10px; background: #f5f7fa; padding: 14px 16px; align-self: start; }
+.hz-hero-email-lands .h-why { border-radius: 8px; background: #f5f7fa; padding: 12px 16px; align-self: start; }
 .hz-hero-email-lands .h-why-head { font-size: 11px; font-weight: 600; color: #6b6b6b; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 8px; }
 .hz-hero-email-lands .h-why-row { display: grid; grid-template-columns: 16px 1fr; gap: 8px; padding: 8px 0; border-top: 1px solid #e2e2e2; font-size: 12.5px; line-height: 1.45; min-height: 46px; opacity: 0; transition: opacity .35s; }
 .hz-hero-email-lands .h-why-row.is-on { opacity: 1; }
 .hz-hero-email-lands .h-why-row i { width: 16px; height: 16px; border-radius: 50%; background: #fff; border: 1px solid #e2e2e2; display: grid; place-items: center; margin-top: 1px; }
 .hz-hero-email-lands .h-why-row i svg { width: 9px; height: 9px; color: #1d63ed; }
 
-.hz-hero-email-lands .h-reply { grid-column: 1 / -1; border: 1px solid #e2e2e2; border-radius: 10px; background: #fff; padding: 12px 16px 14px; opacity: 0; transform: translateY(8px); transition: opacity .45s cubic-bezier(.2,.7,.2,1), transform .45s cubic-bezier(.2,.7,.2,1); }
+.hz-hero-email-lands .h-reply { grid-column: 1 / -1; border: 1px solid #e2e2e2; border-radius: 8px; background: #fff; padding: 12px 16px 16px; opacity: 0; transform: translateY(8px); transition: opacity .45s cubic-bezier(.2,.7,.2,1), transform .45s cubic-bezier(.2,.7,.2,1); }
 .hz-hero-email-lands .h-reply.is-on { opacity: 1; transform: none; }
 .hz-hero-email-lands .h-reply .to { display: flex; justify-content: space-between; font-size: 12px; color: #6b6b6b; }
 .hz-hero-email-lands .h-reply .to b { color: #292932; font-weight: 600; font-size: 12.5px; }
 .hz-hero-email-lands .h-reply .bd { font-size: 13px; line-height: 1.5; margin-top: 6px; min-height: 40px; }
 /* footer: send + chip */
-.hz-hero-email-lands .h-foot { flex: 0 0 auto; display: flex; align-items: center; gap: 14px; margin-top: 14px; height: 40px; }
+.hz-hero-email-lands .h-foot { flex: 0 0 auto; display: flex; align-items: center; gap: 16px; margin-top: 12px; height: 40px; }
 .hz-hero-email-lands .h-send { font: inherit; font-size: 13px; font-weight: 600; line-height: 1; padding: 11px 18px; border-radius: 8px; border: 0; background: #e2e2e2; color: #6b6b6b; transition: all .4s; }
 .hz-hero-email-lands .h-send.is-ready { background: #1d63ed; color: #fff; box-shadow: 0 1px 2px rgba(29,99,237,.3); }
-.hz-hero-email-lands .h-chip { display: inline-flex; align-items: center; gap: 8px; line-height: 1; padding: 9px 12px; border-radius: 999px; background: #fff7ed; color: #d97706; font-size: 12.5px; font-weight: 600;
+.hz-hero-email-lands .h-chip { display: inline-flex; align-items: center; gap: 8px; line-height: 1; padding: 9px 12px; border-radius: 999px; background: #FFEFE8; color: #292932; font-size: 12.5px; font-weight: 600;
   opacity: 0; transform: translateX(-8px); transition: all .5s cubic-bezier(.2,.7,.2,1); white-space: nowrap; }
 .hz-hero-email-lands .h-chip.is-on { opacity: 1; transform: none; }
-.hz-hero-email-lands .h-chip i { width: 7px; height: 7px; border-radius: 50%; background: #d97706; display: block; }
+.hz-hero-email-lands .h-chip i { width: 7px; height: 7px; border-radius: 50%; background: #FF5C16; display: block; }
 
 /* decisions column */
 .hz-hero-email-lands .h-dec { border-left: 1px solid #e2e2e2; background: #f5f7fa; display: flex; flex-direction: column; }
 .hz-hero-email-lands .h-dec-head { height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 14px; font-weight: 600; font-size: 13px; border-bottom: 1px solid #e2e2e2; }
-.hz-hero-email-lands .h-dec-head b { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #fff7ed; color: #d97706; font-size: 11px; font-weight: 700; }
+.hz-hero-email-lands .h-dec-head b { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #FFEFE8; color: #292932; font-size: 11.5px; font-weight: 700; }
 .hz-hero-email-lands .h-dcard { margin: 12px 12px 0; background: #fff; border: 1px solid #e2e2e2; border-radius: 8px; padding: 12px 12px 10px; }
 .hz-hero-email-lands .h-dcard .t { display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 12.5px; }
-.hz-hero-email-lands .h-dcard .t i { width: 8px; height: 8px; border-radius: 50%; background: #d97706; display: block; flex: none; }
+.hz-hero-email-lands .h-dcard .t i { width: 8px; height: 8px; border-radius: 50%; background: #FF5C16; display: block; flex: none; }
 .hz-hero-email-lands .h-dcard p { margin: 6px 0 0; font-size: 12px; color: #292932; line-height: 1.45; }
 .hz-hero-email-lands .h-dcard .r { margin-top: 8px; font-size: 11px; color: #6b6b6b; }
 .hz-hero-email-lands .h-dcard .r b { color: #292932; font-weight: 500; }
-.hz-hero-email-lands .h-dec-foot { margin-top: auto; padding: 14px; font-size: 11.5px; color: #6b6b6b; border-top: 1px solid #e2e2e2; line-height: 1.5; }
-.hz-hero-email-lands .h-dec-foot b { display: block; color: #16a34a; font-weight: 600; }
+.hz-hero-email-lands .h-dec-foot { margin-top: auto; padding: 16px; font-size: 11.5px; color: #6b6b6b; border-top: 1px solid #e2e2e2; line-height: 1.5; }
+.hz-hero-email-lands .h-dec-foot b { display: block; color: #1f8a4c; font-weight: 600; }
 
 /* seek / still: no motion */
 .hz-hero-email-lands.is-seek *, .hz-hero-email-lands.is-seek *::before, .hz-hero-email-lands.is-seek *::after { transition: none !important; animation: none !important; }
@@ -239,17 +326,79 @@
   <div class="hz-hero-email-lands-stage">
     <div class="h-glow"></div>
     <div class="h-neon"></div>
-    <div class="h-win">
+    <div class="o-win" data-owin>
+      <div class="o-top">
+        <span class="o-waffle"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        <span class="o-name">Outlook</span>
+        <span class="o-search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3.5 3.5"/></svg>Search</span>
+        <span class="o-topr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 1.5"/></svg><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 2v2M8 12v2M2 8h2M12 8h2"/><circle cx="8" cy="8" r="2.5"/></svg><span class="o-ava">P</span></span>
+      </div>
+      <div class="o-bar">
+        <span class="o-newmail"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2v8M2 6h8"/></svg>New mail</span>
+        <span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 4h10M6 4V2.5h4V4M4.5 4l.7 9.5h5.6l.7-9.5"/></svg>Delete</span>
+        <span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="2" y="3" width="12" height="3"/><path d="M3 6v7h10V6M6.5 9h3"/></svg>Archive</span>
+        <span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 13V3h9l-2 3 2 3H3"/></svg>Report</span>
+        <span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 8h8M2 4h12M2 12h5"/></svg>Sweep</span>
+        <span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h4l1.5 1.5H14v8H2z"/></svg>Move to</span>
+        <span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4 2 8l4 4M2 8h7a5 5 0 0 1 5 5"/></svg>Reply</span>
+        <span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="m10 4 4 4-4 4M14 8H7a5 5 0 0 0-5 5"/></svg>Forward</span>
+      </div>
+      <div class="o-body">
+        <nav class="o-nav">
+          <div class="o-navh"><svg viewBox="0 0 10 10" fill="currentColor"><path d="M2 3h6L5 7z"/></svg>Favorites</div>
+          <div class="o-navi is-sel"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="m1.5 4.5 6.5 4.5 6.5-4.5"/></svg><span>Inbox</span><b>7</b></div>
+          <div class="o-navi"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="m1.5 4.5 6.5 4.5 6.5-4.5"/></svg><span>Sent Items</span></div>
+          <div class="o-navi"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="m1.5 4.5 6.5 4.5 6.5-4.5"/></svg><span>Drafts</span></div>
+          <div class="o-navh" style="margin-top:10px"><svg viewBox="0 0 10 10" fill="currentColor"><path d="M2 3h6L5 7z"/></svg>quotes@yourshop.com</div>
+          <div class="o-navi"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="m1.5 4.5 6.5 4.5 6.5-4.5"/></svg><span>Inbox</span><b>7</b></div>
+          <div class="o-navi"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="m1.5 4.5 6.5 4.5 6.5-4.5"/></svg><span>Junk Email</span></div>
+          <div class="o-navi"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="m1.5 4.5 6.5 4.5 6.5-4.5"/></svg><span>Deleted Items</span></div>
+          <div class="o-navi"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="m1.5 4.5 6.5 4.5 6.5-4.5"/></svg><span>Archive</span></div>
+          <div class="o-navi"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="m1.5 4.5 6.5 4.5 6.5-4.5"/></svg><span>Vendors</span></div>
+          <div class="o-navi"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="m1.5 4.5 6.5 4.5 6.5-4.5"/></svg><span>Customers</span></div>
+        </nav>
+        <section class="o-list">
+          <div class="o-tabs"><span class="o-tab is-sel">Focused</span><span class="o-tab">Other</span><span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4h12M4 8h8M6 12h4"/></svg>Filter</span></div>
+          <div class="o-day">Today</div>
+          <ul class="o-rows">
+            <li class="o-row o-new is-unread"><div class="o-r1"><span>Dana Whitfield</span><small>2:14 PM</small></div><div class="o-r2">RFQ: Bracket 4410 Rev B, qty 250, need by Nov 21</div><div class="o-r3"><svg viewBox="0 0 16 16" fill="none" stroke="#616161" stroke-width="1.4" stroke-linejoin="round"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13"/></svg><span>Hi Pat — can you quote 250 of the Bracket 4410, Rev B? Drawing attached.</span></div><span class="o-hz" data-ohz><i></i>Horizon · reading</span></li>
+            <li class="o-row"><div class="o-r1"><span>Northgate Fab</span><small>1:48 PM</small></div><div class="o-r2">PO 5521 — Weldment 2207</div><div class="o-r3"><svg viewBox="0 0 16 16" fill="none" stroke="#616161" stroke-width="1.4" stroke-linejoin="round"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13"/></svg><span>Please find attached PO 5521 for the Weldment 2207 per quote Q-1160.</span></div></li>
+            <li class="o-row"><div class="o-r1"><span>Halvorsen Machine</span><small>1:21 PM</small></div><div class="o-r2">Status on Mount plate 118?</div><div class="o-r3"><span>Any update on where the 118s are at? Need to plan the install.</span></div></li>
+            <li class="o-row"><div class="o-r1"><span>Redwing Equipment</span><small>12:05 PM</small></div><div class="o-r2">RFQ: Housing 3310, qty 40</div><div class="o-r3"><svg viewBox="0 0 16 16" fill="none" stroke="#616161" stroke-width="1.4" stroke-linejoin="round"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13"/></svg><span>Looking for a quote on 40 of the Housing 3310, drawing attached.</span></div></li>
+            <li class="o-row"><div class="o-r1"><span>Luis Ortega</span><small>11:32 AM</small></div><div class="o-r2">Re: lead time, clear anodize</div><div class="o-r3"><span>We can hold 5 days on clear anodize for that quantity. — Luis, Midwest Anodizing</span></div></li>
+            <li class="o-row"><div class="o-r1"><span>Prairie Powder Coat</span><small>10:10 AM</small></div><div class="o-r2">Pickup Thursday confirmed</div><div class="o-r3"><span>Driver will be there Thursday between 9 and 11.</span></div></li>
+            <li class="o-row"><div class="o-r1"><span>Northgate Fab</span><small>9:02 AM</small></div><div class="o-r2">Need Weldment 2207 in 6 days</div><div class="o-r3"><span>Can you get the 2207s to us in 6 days instead of 12? Let me know what that does to price.</span></div></li>
+            <li class="o-row"><div class="o-r1"><span>Redwing Equipment</span><small>Yesterday</small></div><div class="o-r2">Re: Housing 3310 drawings</div><div class="o-r3"><svg viewBox="0 0 16 16" fill="none" stroke="#616161" stroke-width="1.4" stroke-linejoin="round"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13"/></svg><span>Rev A attached again, sorry about that.</span></div></li>
+          </ul>
+        </section>
+        <section class="o-read">
+          <div>
+            <svg viewBox="0 0 120 90" fill="none" stroke="#c7c7c7" stroke-width="2" stroke-linejoin="round"><rect x="14" y="18" width="92" height="58" rx="6" fill="#f5f5f5"/><path d="m14 24 46 30 46-30"/><path d="M14 72 46 48M106 72 74 48"/></svg>
+            <b>Select an item to read</b>Nothing is selected
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="o-toast" data-otoast>
+      <span class="ic"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="m1.5 4.5 6.5 4.5 6.5-4.5"/></svg></span>
+      <div><small>Outlook · quotes@yourshop.com · now</small><b>Dana Whitfield · Crestline Aerospace</b><span>RFQ: Bracket 4410 Rev B, qty 250, need by Nov 21</span></div>
+    </div>
+    <div class="h-fly" data-fly>
+      <div class="o-r1"><span style="font-weight:700;color:#242424">Dana Whitfield</span><small>2:14 PM</small></div>
+      <div class="o-r2">RFQ: Bracket 4410 Rev B, qty 250, need by Nov 21</div>
+      <div class="o-r3"><svg viewBox="0 0 16 16" fill="none" stroke="#616161" stroke-width="1.4" stroke-linejoin="round"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13"/></svg><span>Hi Pat — can you quote 250 of the Bracket 4410, Rev B?</span></div>
+    </div>
+    <div class="h-win" data-hwin>
       <div class="h-title">
         <span class="h-dots"><i></i><i></i><i></i></span>
         <span class="h-brand">fulcrum</span><span>·</span><span class="h-prod">Horizon</span>
-        <span class="h-acct">quotes@yourshop.com</span>
+        <span class="h-acct">quotes@yourshop.com · Outlook</span>
         <span class="h-status" data-status><i></i><span>Drafted</span></span>
       </div>
       <div class="h-body">
 
         <aside class="h-rail">
-          <div class="h-rail-head">Inbox <span>Today</span></div>
+          <div class="h-rail-head">Inbox <span>from Outlook · today</span></div>
           <ul class="h-list">
             <li class="h-mail is-sel is-unread" data-newmail>
               <span class="h-dot"></span>
@@ -460,7 +609,7 @@
 <script>
 (function () {
   'use strict';
-  var LOOP_END = 32.2;       // seconds; loop wraps to t=0 (resolved) here
+  var LOOP_END = 32.8;       // seconds; loop wraps to t=0 (resolved) here
   var TYPE_MS = 25;          // ms per character
 
   function init(root) {
@@ -490,6 +639,7 @@
     var quote = $('[data-quote]'), lines = $$('[data-line]'), total = $('[data-total]');
     var whys = $$('[data-why]');
     var chip = $('[data-chip]'), send = $('[data-send]'), reply = $('[data-reply]');
+    var owin = $('[data-owin]'), hwin = $('[data-hwin]'), onew = $('.o-row.o-new'), ohz = $('[data-ohz]'), otoast = $('[data-otoast]'), fly = $('[data-fly]');
     // remember the resolved text of every typed span
     $$('[data-type]').forEach(function (el) { el.setAttribute('data-text', el.textContent); });
 
@@ -539,41 +689,57 @@
         idle.classList.add('is-on');
         setStatus('Watching the inbox', false);
         setHead('Nothing waiting on you', 'Horizon reads every email as it lands');
+        // the other client comes forward: Outlook, nobody in it
+        onew.classList.remove('is-in', 'is-lift'); ohz.classList.remove('is-on'); otoast.classList.remove('is-on');
+        fly.classList.remove('is-on', 'is-go');
+        hwin.classList.add('is-back'); owin.classList.remove('is-away'); owin.classList.add('is-on');
       } },
-      { t: 4.2, fn: function () {           // beat 1: the email lands
-        newmail.classList.remove('is-gone'); newmail.classList.add('is-unread');
-        newtag.textContent = 'new RFQ';
+      { t: 4.2, fn: function () {           // beat 1: the email lands in Outlook
+        onew.classList.add('is-in'); otoast.classList.add('is-on');
         setStatus('New email', true);
       } },
-      { t: 5.4, fn: function () {           // beat 1b: Horizon opens it; nobody clicks
-        newmail.classList.add('is-sel');
+      { t: 5.0, fn: function () { ohz.classList.add('is-on'); otoast.classList.remove('is-on'); } },   // beat 1a: Horizon is on the mailbox
+      { t: 5.4, fn: function () {           // beat 1b: handoff — the row leaves Outlook and enters Horizon
+        if (!instant) {
+          fly.classList.add('is-on'); onew.classList.add('is-lift');
+          later(60, function () { fly.classList.add('is-go'); });
+        }
+        owin.classList.remove('is-on'); owin.classList.add('is-away'); hwin.classList.remove('is-back');
+        later(instant ? 0 : 700, function () {
+          newmail.classList.remove('is-gone'); newmail.classList.add('is-unread');
+          newtag.textContent = 'new RFQ';
+        });
+      } },
+      { t: 6.2, fn: function () {           // beat 1c: Horizon opens it; nobody clicks
+        fly.classList.remove('is-on');
+        newmail.classList.remove('is-gone'); newmail.classList.add('is-unread', 'is-sel');
         idle.classList.remove('is-on');
         showCard('mail'); stepLive(1);
         setStatus('Reading RFQ…', true);
         setHead('RFQ from Dana · Crestline Aerospace', 'Opened by Horizon. Nobody clicked.');
       } },
-      { t: 8.4, fn: function () {           // beat 2: the drawing opens
+      { t: 9.0, fn: function () {           // beat 2: the drawing opens
         stepDone(1); stepLive(2);
         showCard('draw');
         setStatus('Opening drawing…', true);
         setHead('Bracket-4410-RevB.pdf · drawing', 'Reading the title block');
       } },
-      { t: 9.4, fn: function () { revhi.classList.add('is-on'); drawnote.classList.add('is-on'); } },
-      { t: 12.4, fn: function () {          // beat 3: last job found
+      { t: 10.0, fn: function () { revhi.classList.add('is-on'); drawnote.classList.add('is-on'); } },
+      { t: 13.0, fn: function () {          // beat 3: last job found
         stepDone(2); stepLive(3);
         showCard('found');
         setStatus('Checking history…', true);
         setHead('Found: last job 24-0871 · Mar 2024', 'Same part, same rev. Priced from history.');
       } },
-      { t: 16.0, fn: function () {          // beat 4: vendor emails go out
+      { t: 16.6, fn: function () {          // beat 4: vendor emails go out
         stepDone(3); stepLive(4);
         showCard('vend');
         setStatus('Asking vendors…', true);
         setHead('Lead time for 250 pcs?', 'Lakeshore Laser · Midwest Anodizing');
         newtag.textContent = 'vendors asked';
       } },
-      { t: 17.2, fn: function () { sents[0].classList.add('is-on'); later(350, function () { sents[1].classList.add('is-on'); }); } },
-      { t: 20.0, fn: function () {          // beat 5: the quote drafts
+      { t: 17.8, fn: function () { sents[0].classList.add('is-on'); later(350, function () { sents[1].classList.add('is-on'); }); } },
+      { t: 20.6, fn: function () {          // beat 5: the quote drafts
         stepDone(4);
         showCard(null);
         quote.classList.add('is-on');
@@ -581,19 +747,19 @@
         setHead('Crestline Aerospace · Bracket 4410, Rev B · qty 250', 'Quote Q-1182 · drafting');
         newtag.textContent = 'quote drafting';
       } },
-      { t: 20.8, fn: function () { lines[0].classList.add('is-on'); typeInto(lines[0].querySelector('[data-type]')); } },
-      { t: 21.8, fn: function () { lines[1].classList.add('is-on'); typeInto(lines[1].querySelector('[data-type]')); } },
-      { t: 22.8, fn: function () { lines[2].classList.add('is-on'); typeInto(lines[2].querySelector('[data-type]')); } },
-      { t: 23.8, fn: function () { lines[3].classList.add('is-on'); typeInto(lines[3].querySelector('[data-type]')); } },
-      { t: 24.8, fn: function () {          // beat 5b: qty price
+      { t: 21.4, fn: function () { lines[0].classList.add('is-on'); typeInto(lines[0].querySelector('[data-type]')); } },
+      { t: 22.4, fn: function () { lines[1].classList.add('is-on'); typeInto(lines[1].querySelector('[data-type]')); } },
+      { t: 23.4, fn: function () { lines[2].classList.add('is-on'); typeInto(lines[2].querySelector('[data-type]')); } },
+      { t: 24.4, fn: function () { lines[3].classList.add('is-on'); typeInto(lines[3].querySelector('[data-type]')); } },
+      { t: 25.4, fn: function () {          // beat 5b: qty price
         total.classList.add('is-on');
         total.querySelectorAll('[data-type]').forEach(function (el) { typeInto(el); });
       } },
-      { t: 25.8, fn: function () { whys[0].classList.add('is-on'); typeInto(whys[0].querySelector('[data-type]')); setStatus('Writing the why…', true); } },
-      { t: 27.0, fn: function () { whys[1].classList.add('is-on'); typeInto(whys[1].querySelector('[data-type]')); } },
-      { t: 28.2, fn: function () { whys[2].classList.add('is-on'); typeInto(whys[2].querySelector('[data-type]')); } },
-      { t: 29.0, fn: function () { reply.classList.add('is-on'); typeInto(reply.querySelector('[data-type]'), 18); setStatus('Writing the reply…', true); } },
-      { t: 31.0, fn: function () {          // beat 7: drafted, Pat reviews
+      { t: 26.4, fn: function () { whys[0].classList.add('is-on'); typeInto(whys[0].querySelector('[data-type]')); setStatus('Writing the why…', true); } },
+      { t: 27.6, fn: function () { whys[1].classList.add('is-on'); typeInto(whys[1].querySelector('[data-type]')); } },
+      { t: 28.8, fn: function () { whys[2].classList.add('is-on'); typeInto(whys[2].querySelector('[data-type]')); } },
+      { t: 29.6, fn: function () { reply.classList.add('is-on'); typeInto(reply.querySelector('[data-type]'), 18); setStatus('Writing the reply…', true); } },
+      { t: 31.6, fn: function () {          // beat 7: drafted, Pat reviews
         chip.classList.add('is-on'); send.classList.add('is-ready');
         setStatus('Drafted', false);
         setHead('Crestline Aerospace · Bracket 4410, Rev B · qty 250', 'Quote Q-1182 · drafted by Horizon · nobody typed anything');
