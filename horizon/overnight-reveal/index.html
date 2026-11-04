@@ -1,45 +1,48 @@
 <!doctype html>
 <html lang="en">
 <!--
-  Horizon landing page — loop 4: overnight-reveal ("it learns your shop, by itself")
-  Design size 1200×750, scales to the root width. Loop length 28s (first play), 25s per cycle after.
-  Review pass Nov 3 2026 applied (REVIEW-PASS.md A/B/C): Gilroy stage title, brand green/orange tints with ink text,
-  profile → how you work → rules layering, Outlook named as the inbox source, manage-on-exception closing line.
+  Horizon landing page, loop 4: overnight-reveal ("it learns your shop, by itself")
+  Design size 1200x750, scales to the root width. Loop length 28s (first play), 25.4s per cycle after.
+  Rebuild Nov 4 2026 (LOOP-BRIEFS.md 04, WALKTHROUGHS.md 1 and 12, UI-SPEC 2): canvas piece, not a product window.
+  Content = the shop-learning facts from the demos (profile, how you work, learned rules with the real "Evaluating" flag),
+  Halden Metalworks sample data, Outlook named as the inbox source, purple spark for the AI (no "H" avatar), one lime
+  accent dot, lines rise 6px / 350ms (no typing: there is no drafted email in this loop), in-view + tab-hidden pause.
 
   Beats (seconds):
-    0.0  resolved: counters at 18,402 / 3,115 / 7,980, clock at Mon 7 am, drawer "Read", full result card (3 eyebrows,
-         5 lines, 3 Rule chips, both closing lines) — hold 3s
+    0.0  resolved: counters at 18,402 / 3,115 / 7,980, clock at Mon 7 am, drawer "Read", full result card
+         (3 eyebrows, 4 facts, 4 rules with 2 "Evaluating" flags, both closing lines), hold 3s
     2.6  soft reset: stats, clock and the card body fade out (0.4s) so the restart is not a hard jump
-    3.0  clear: counters 0, clock Fri 6 pm, drawer "Reading", card lines empty, eyebrows/chips/closing lines hidden
-    3.4  reading starts: cards flow into the drawer, counters climb and the clock sweeps Fri 6 pm → Mon 7 am (14s)
-    7.8  eyebrow "YOUR SHOP"
-    8.4  line 1 types  "Fab shop. 14 people."                                   (25ms/char, done 8.9)
-    9.8  line 2 types  "Press brake rate $118/hr."                              (done 10.4)
-   11.4  eyebrow "HOW YOU WORK"
-   12.0  line 3 types  "You inspect before and after powder coat."              (done 13.0)
-   13.8  line 4 types  "Iridite on the drawing means an outside process: Dakota Plating, 4 days."  (done 15.6)
-   16.4  line 5 types  "You quote repeat parts off the last job."               (done 17.4)
-   17.6  reading done: flow stops, drawer flips to "Read · 29,497 items", sun up, card stamped Mon 7:02 am
-   18.8  eyebrow "RULES YOU SET · THESE COME TO YOU"
-   19.4  Rule chip 1 lands (Expedite fee · your call)
-   20.2  Rule chip 2 lands (Revision mismatch · your call)
-   21.0  Rule chip 3 lands (Discount below floor · your call)
-   22.0  closing line 1: "Correct anything that's off. Nobody typed any of this in."   (on screen 6s)
-   24.0  closing line 2: "From here on, only what these rules flag comes to you."      (on screen 4s)
-   26.0  resolved (safety re-sync; nothing visible changes) — hold to 28.0
-   28.0  loop → back to 2.6
+    3.0  clear: counters 0, clock Fri 6 pm, drawer "Reading", card empty, spark pulsing
+    3.4  reading starts: cards flow into the drawer, counters climb, clock sweeps Fri 6 pm to Mon 7 am (16s)
+    5.0  eyebrow "YOUR SHOP"
+    5.6  fact 1   "Fab shop: fiber laser, press brake, powder coat in house. Machining on one VF-4."
+    7.2  fact 2   "Repeat work for 6 customers; Larkspur every spring."
+    9.4  eyebrow "HOW YOU WORK"
+   10.0  fact 3   "Timers left running over lunch don't count."
+   11.6  fact 4   "Machined parts get a FAIR on the first piece."
+   13.8  eyebrow "RULES"
+   14.4  rule 1   "Drawing says chem film or iridite: add an outside process."   + Evaluating
+   15.8  rule 2   "A repeat part quoted over a year ago gets repriced."          + Evaluating
+   17.2  rule 3   "Expedites, fees and discounts always come to you."
+   18.6  rule 4   "Quotes over $60,000 wait for your OK."
+   19.4  reading done: flow stops, drawer "Read · 29,497 items · done", sun up, card stamped Mon 7:02 am, spark still
+   21.6  closing line 1: "Nobody typed any of this in. A rule stays Evaluating until finished jobs prove it."
+   24.2  closing line 2: "From here on, only what these rules flag comes to you."
+   26.6  resolved (safety re-sync; nothing visible changes), hold to 28.0
+   28.0  loop, back to 2.6
 
-  ?still=1  jumps to the resolved state and stops.   ?at=<seconds> seeks the timeline and freezes.
-  prefers-reduced-motion: resolved state only.
+  ?still=1  jumps to the resolved state and stops.   ?at=<seconds> seeks the timeline and freezes (root gets .is-seek).
+  prefers-reduced-motion: resolved state only.  The timeline pauses (keeping its position) while the root is less than
+  10% visible or the tab is hidden, and resumes where it left off.
 -->
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Horizon — it learns your shop</title>
+<title>Horizon: it learns your shop</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <style>
-  /* standalone page wrapper only — nothing here ships in fragment.html */
+  /* standalone page wrapper only; nothing here ships in fragment.html */
   html, body { margin: 0; padding: 0; background: #fff; }
   body { display: flex; justify-content: center; align-items: flex-start; }
   .hz-overnight-reveal { width: 100%; max-width: 1200px; }
@@ -55,6 +58,7 @@
 .hz-overnight-reveal{
   --s:1; --ink:#292932; --muted:#6b6b6b; --line:#e2e2e2; --pane:#f5f7fa; --blue:#1d63ed;
   --ok:#3DC975; --ok-bg:#D8F4E3; --ok-text:#1f8a4c; --warn:#FF5C16; --warn-bg:#FFEFE8; --brand:#3840EA; --brand-light:#D7D9FB; --neon:#DDF83B;
+  --spark:#7a68d6; --spark-bg:#EFECFB; --spark-dark:#c4baf5;
   --ease:cubic-bezier(.2,.7,.2,1);
   position:relative; display:block; width:100%; color:var(--ink);
   font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -66,17 +70,16 @@
   transform-origin:0 0; transform:scale(var(--s)); pointer-events:none; user-select:none; }
 .hz-overnight-reveal.is-noanim *,.hz-overnight-reveal.is-noanim *::before,.hz-overnight-reveal.is-noanim *::after{ transition:none !important; animation:none !important; }
 
-/* title row — on the canvas, outside any product window: Gilroy */
+/* title row, on the canvas, outside any product window: Gilroy. The lime dot is the one marketing accent. */
 .hz-overnight-reveal-title{ position:absolute; left:40px; top:40px; display:flex; align-items:center; gap:10px; font-size:14px;
   font-family:'Gilroy','Inter',Arial,sans-serif; font-weight:500; }
-.hz-overnight-reveal-mark{ width:24px; height:24px; border-radius:6px; background:var(--brand); display:grid; place-items:center; }
-.hz-overnight-reveal-mark svg{ width:14px; height:14px; }
+.hz-overnight-reveal-mark{ width:10px; height:10px; border-radius:50%; background:var(--neon); flex:0 0 auto; }
 .hz-overnight-reveal-title b{ font-weight:600; }
 .hz-overnight-reveal-title span{ color:var(--muted); }
 .hz-overnight-reveal-title i{ font-style:normal; color:var(--line); }
 
 /* ---- left: reading panel (product content: Inter) ---- */
-.hz-overnight-reveal-left{ position:absolute; left:40px; top:100px; width:520px; height:560px; border-radius:10px; background:var(--pane);
+.hz-overnight-reveal-left{ position:absolute; left:40px; top:90px; width:520px; height:600px; border-radius:10px; background:var(--pane);
   border:1px solid var(--line); overflow:hidden; }
 .hz-overnight-reveal-clock{ position:absolute; left:24px; right:24px; top:24px; height:58px; transition:opacity .4s var(--ease); }
 .hz-overnight-reveal-clock .hz-overnight-reveal-cl{ position:absolute; top:46px; font-size:12px; font-weight:600; color:var(--muted); transition:color .4s var(--ease); }
@@ -98,26 +101,27 @@
 .hz-overnight-reveal-stat small{ display:block; font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); }
 .hz-overnight-reveal-stat b{ display:block; margin-top:4px; font-size:21px; font-weight:600; font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
 
-.hz-overnight-reveal-flow{ position:absolute; left:0; right:0; top:188px; height:280px; overflow:hidden; opacity:0; transition:opacity .5s var(--ease); }
+.hz-overnight-reveal-flow{ position:absolute; left:0; right:0; top:188px; height:300px; overflow:hidden; opacity:0; transition:opacity .5s var(--ease); }
 .hz-overnight-reveal-left.is-reading .hz-overnight-reveal-flow{ opacity:1; }
 .hz-overnight-reveal-fc{ position:absolute; left:50%; top:8px; width:300px; margin-left:-150px; height:34px; padding:0 12px; display:flex; align-items:center; gap:8px;
   background:#fff; border:1px solid var(--line); border-radius:8px; box-shadow:0 1px 2px rgba(0,0,0,.06); font-size:12.5px; white-space:nowrap; opacity:0;
   animation:hz-overnight-reveal-flow 4.2s linear infinite; animation-play-state:paused; }
 .hz-overnight-reveal-left.is-reading .hz-overnight-reveal-fc{ animation-play-state:running; }
+.hz-overnight-reveal.is-paused .hz-overnight-reveal-fc{ animation-play-state:paused; }
 .hz-overnight-reveal-fc:nth-child(1){ animation-delay:-0.0s; margin-left:-172px; } .hz-overnight-reveal-fc:nth-child(2){ animation-delay:-0.6s; margin-left:-126px; }
 .hz-overnight-reveal-fc:nth-child(3){ animation-delay:-1.2s; margin-left:-158px; } .hz-overnight-reveal-fc:nth-child(4){ animation-delay:-1.8s; margin-left:-140px; }
 .hz-overnight-reveal-fc:nth-child(5){ animation-delay:-2.4s; margin-left:-176px; } .hz-overnight-reveal-fc:nth-child(6){ animation-delay:-3.0s; margin-left:-122px; }
 .hz-overnight-reveal-fc:nth-child(7){ animation-delay:-3.6s; margin-left:-152px; }
 @keyframes hz-overnight-reveal-flow{
   0%{ transform:translateY(0) scale(1); opacity:0; } 10%{ opacity:1; }
-  84%{ opacity:1; transform:translateY(212px) scale(.94); }
-  100%{ transform:translateY(254px) scale(.6); opacity:0; }
+  84%{ opacity:1; transform:translateY(252px) scale(.94); }
+  100%{ transform:translateY(294px) scale(.6); opacity:0; }
 }
 .hz-overnight-reveal-fc svg{ width:16px; height:16px; flex:0 0 auto; }
 .hz-overnight-reveal-fc b{ font-weight:600; }
 .hz-overnight-reveal-fc span{ color:var(--muted); overflow:hidden; text-overflow:ellipsis; }
 
-.hz-overnight-reveal-read{ position:absolute; left:24px; right:24px; top:208px; opacity:0; transition:opacity .5s var(--ease) .2s; }
+.hz-overnight-reveal-read{ position:absolute; left:24px; right:24px; top:220px; opacity:0; transition:opacity .5s var(--ease) .2s; }
 .hz-overnight-reveal-left:not(.is-reading) .hz-overnight-reveal-read{ opacity:1; }
 .hz-overnight-reveal-left.is-reading .hz-overnight-reveal-read{ transition-delay:0s; }
 .hz-overnight-reveal-rr{ display:flex; align-items:center; gap:8px; height:44px; padding:0 12px; margin-bottom:8px; background:#fff; border:1px solid var(--line); border-radius:8px; font-size:13px;
@@ -131,48 +135,44 @@
 .hz-overnight-reveal-funnel{ position:absolute; left:0; right:0; top:-22px; height:24px; }
 .hz-overnight-reveal-funnel svg{ width:100%; height:100%; display:block; }
 .hz-overnight-reveal-dbox{ position:absolute; inset:0; border-radius:8px; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:space-between; padding:0 16px; }
-.hz-overnight-reveal-dbox::before{ content:''; position:absolute; left:16px; right:16px; top:-1px; height:4px; border-radius:2px; background:var(--neon); opacity:.9; }
 .hz-overnight-reveal-dbox b{ font-size:13.5px; font-weight:600; display:inline-flex; align-items:center; gap:8px; }
-.hz-overnight-reveal-dot{ width:8px; height:8px; border-radius:50%; background:var(--neon); animation:hz-overnight-reveal-pulse 1.2s ease-in-out infinite; }
-.hz-overnight-reveal-left:not(.is-reading) .hz-overnight-reveal-dot{ animation:none; background:var(--ok); }
-@keyframes hz-overnight-reveal-pulse{ 50%{ opacity:.3; } }
+.hz-overnight-reveal-dbox b > span:first-child{ width:14px; display:inline-grid; place-items:center; }
+.hz-overnight-reveal-dot{ width:8px; height:8px; border-radius:50%; background:var(--ok); }
+.hz-overnight-reveal-dspark{ display:none; font-size:14px; line-height:1; color:var(--spark-dark); animation:hz-overnight-reveal-pulse 1.2s ease-in-out infinite; }
+.hz-overnight-reveal-left.is-reading .hz-overnight-reveal-dspark{ display:inline; }
+.hz-overnight-reveal-left.is-reading .hz-overnight-reveal-dot{ display:none; }
+.hz-overnight-reveal.is-paused .hz-overnight-reveal-dspark{ animation-play-state:paused; }
+@keyframes hz-overnight-reveal-pulse{ 50%{ opacity:.35; } }
 .hz-overnight-reveal-dbox span{ font-size:12.5px; color:#c9c9d1; font-variant-numeric:tabular-nums; }
 
 /* ---- right: the result card (product content: Inter) ---- */
-.hz-overnight-reveal-right{ position:absolute; left:600px; top:100px; width:560px; height:560px; border-radius:10px; background:#fff; border:1px solid var(--line);
+.hz-overnight-reveal-right{ position:absolute; left:600px; top:90px; width:560px; height:600px; border-radius:10px; background:#fff; border:1px solid var(--line);
   box-shadow:0 4px 18px rgba(0,0,0,.15); padding:24px; }
 .hz-overnight-reveal-rhead{ display:flex; align-items:center; gap:10px; }
-.hz-overnight-reveal-av{ width:30px; height:30px; border-radius:50%; background:var(--blue); color:#fff; display:grid; place-items:center; font-size:13px; font-weight:600; }
+.hz-overnight-reveal-av{ width:30px; height:30px; border-radius:50%; background:var(--spark-bg); color:var(--spark); display:grid; place-items:center; font-size:15px; line-height:1; }
+.hz-overnight-reveal.is-reading .hz-overnight-reveal-av{ animation:hz-overnight-reveal-pulse 1.2s ease-in-out infinite; }
+.hz-overnight-reveal.is-paused .hz-overnight-reveal-av{ animation-play-state:paused; }
 .hz-overnight-reveal-rhead b{ display:block; font-size:13.5px; font-weight:600; }
 .hz-overnight-reveal-rhead span{ display:block; font-size:11.5px; color:var(--muted); }
 .hz-overnight-reveal-rhead .hz-overnight-reveal-when{ margin-left:auto; font-size:11.5px; color:var(--muted); }
 .hz-overnight-reveal-h{ margin-top:16px; font-size:17px; font-weight:600; letter-spacing:-.01em; }
 .hz-overnight-reveal-body{ transition:opacity .4s var(--ease); }
-.hz-overnight-reveal-eb{ display:block; margin:16px 0 2px; font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); line-height:1.3;
-  opacity:0; transition:opacity .4s var(--ease); }
-.hz-overnight-reveal-eb.is-on{ opacity:1; }
-.hz-overnight-reveal-line{ display:flex; gap:10px; align-items:flex-start; padding:6px 0; font-size:14px; line-height:1.45; min-height:32px; opacity:0; transition:opacity .4s var(--ease); }
-.hz-overnight-reveal-line.is-on{ opacity:1; }
-.hz-overnight-reveal-line i{ flex:0 0 auto; width:18px; height:18px; margin-top:1px; border-radius:50%; background:var(--pane); border:1px solid var(--line); display:grid; place-items:center;
-  transition:background .4s var(--ease), border-color .4s var(--ease); }
-.hz-overnight-reveal-line i svg{ width:10px; height:10px; opacity:0; transition:opacity .4s var(--ease); }
-.hz-overnight-reveal-line.is-done i{ background:var(--ok-bg); border-color:var(--ok); }
-.hz-overnight-reveal-line.is-done i svg{ opacity:1; }
-.hz-overnight-reveal-caret{ display:inline-block; width:1.5px; height:14px; margin-left:2px; vertical-align:-2px; background:var(--ink); opacity:0;
-  animation:hz-overnight-reveal-blink .9s steps(1) infinite; }
-.hz-overnight-reveal-line.is-typing .hz-overnight-reveal-caret{ opacity:1; }
-@keyframes hz-overnight-reveal-blink{ 50%{ opacity:0; } }
-.hz-overnight-reveal-rules{ margin-top:16px; padding-top:16px; border-top:1px solid var(--line); }
+/* everything that appears rises 6px with a 350ms ease-out fade (kit .hzk-in) */
+.hz-overnight-reveal-in{ opacity:0; transform:translateY(6px); transition:opacity .35s ease-out, transform .35s ease-out; }
+.hz-overnight-reveal-in.is-on{ opacity:1; transform:none; }
+.hz-overnight-reveal-eb{ display:block; margin:14px 0 2px; font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); line-height:1.3; }
+.hz-overnight-reveal-line{ display:flex; gap:10px; align-items:flex-start; padding:6px 0; font-size:14px; line-height:1.45; min-height:32px; }
+.hz-overnight-reveal-line > div{ flex:1 1 auto; }
+.hz-overnight-reveal-line i{ flex:0 0 auto; width:18px; height:18px; margin-top:1px; border-radius:50%; background:var(--ok-bg); border:1px solid var(--ok); display:grid; place-items:center; }
+.hz-overnight-reveal-line i svg{ width:10px; height:10px; }
+/* the real "Evaluating" flag on a learned rule: dot + text, no chip */
+.hz-overnight-reveal-flag{ flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; margin-top:3px; margin-left:4px; font-size:11.5px; font-weight:500; color:var(--muted); white-space:nowrap; line-height:1.3; }
+.hz-overnight-reveal-flag::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--warn); }
+.hz-overnight-reveal-rules{ margin-top:16px; padding-top:12px; border-top:1px solid transparent; transition:border-color .35s ease-out; }
+.hz-overnight-reveal-rules.is-on{ border-color:var(--line); }
 .hz-overnight-reveal-rules .hz-overnight-reveal-eb{ margin-top:0; }
-.hz-overnight-reveal-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-.hz-overnight-reveal-chip{ display:inline-flex; align-items:center; gap:8px; height:32px; padding:0 12px 0 4px; border-radius:999px; border:1px solid var(--line); background:#fff;
-  font-size:13px; font-weight:500; white-space:nowrap; opacity:0; transform:translateY(8px); transition:opacity .4s var(--ease), transform .4s var(--ease); }
-.hz-overnight-reveal-chip.is-on{ opacity:1; transform:none; }
-.hz-overnight-reveal-chip em{ display:inline-block; font-style:normal; font-size:11.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; line-height:1; padding:4px 6px; border-radius:4px;
-  background:var(--warn-bg); color:var(--ink); }
-.hz-overnight-reveal-foot{ margin-top:24px; font-size:12.5px; line-height:1.4; }
-.hz-overnight-reveal-foot span{ display:block; color:var(--muted); opacity:0; transition:opacity .4s var(--ease); }
-.hz-overnight-reveal-foot span.is-on{ opacity:1; }
+.hz-overnight-reveal-foot{ margin-top:16px; font-size:12.5px; line-height:1.4; }
+.hz-overnight-reveal-foot span{ display:block; color:var(--muted); }
 .hz-overnight-reveal-foot span + span{ margin-top:4px; color:var(--ink); font-weight:500; }
 
 /* soft reset before the loop restarts: fade instead of a hard jump */
@@ -194,7 +194,7 @@
     <div class="hz-overnight-reveal-stage">
 
       <div class="hz-overnight-reveal-title">
-        <span class="hz-overnight-reveal-mark"><svg viewBox="0 0 16 16" fill="none"><path d="M2 11.5a6 6 0 0 1 12 0" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M1.5 13.5h13" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <span class="hz-overnight-reveal-mark"></span>
         <b>Horizon</b><i>|</i><span>First weekend on the shop's inbox and files</span>
       </div>
 
@@ -224,38 +224,26 @@
 
         <div class="hz-overnight-reveal-drawer">
           <div class="hz-overnight-reveal-funnel"><svg viewBox="0 0 472 24" preserveAspectRatio="none" fill="none"><path d="M0 0 L472 0 L440 24 L32 24 Z" fill="#fff" stroke="#e2e2e2"/></svg></div>
-          <div class="hz-overnight-reveal-dbox"><b><span class="hz-overnight-reveal-dot"></span><span id="hz-overnight-reveal-dlabel">Read</span></b><span id="hz-overnight-reveal-dcount">29,497 items · done</span></div>
+          <div class="hz-overnight-reveal-dbox"><b><span><span class="hz-overnight-reveal-dot"></span><span class="hz-overnight-reveal-dspark">&#10022;</span></span><span id="hz-overnight-reveal-dlabel">Read</span></b><span id="hz-overnight-reveal-dcount">29,497 items · done</span></div>
         </div>
       </div>
 
       <div class="hz-overnight-reveal-right">
         <div class="hz-overnight-reveal-rhead">
-          <div class="hz-overnight-reveal-av">H</div>
+          <div class="hz-overnight-reveal-av">&#10022;</div>
           <div><b>Horizon</b><span>to Pat, estimator</span></div>
           <span class="hz-overnight-reveal-when" id="hz-overnight-reveal-when">Mon 7:02 am</span>
         </div>
         <div class="hz-overnight-reveal-h">Pat, here is your shop as I read it.</div>
         <div class="hz-overnight-reveal-body" id="hz-overnight-reveal-body">
-          <div class="hz-overnight-reveal-lines" id="hz-overnight-reveal-lines">
-            <span class="hz-overnight-reveal-eb" id="hz-overnight-reveal-eb0">Your shop</span>
-            <div class="hz-overnight-reveal-line"><i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#1f8a4c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i><div><span></span><span class="hz-overnight-reveal-caret"></span></div></div>
-            <div class="hz-overnight-reveal-line"><i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#1f8a4c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i><div><span></span><span class="hz-overnight-reveal-caret"></span></div></div>
-            <span class="hz-overnight-reveal-eb" id="hz-overnight-reveal-eb1">How you work</span>
-            <div class="hz-overnight-reveal-line"><i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#1f8a4c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i><div><span></span><span class="hz-overnight-reveal-caret"></span></div></div>
-            <div class="hz-overnight-reveal-line"><i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#1f8a4c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i><div><span></span><span class="hz-overnight-reveal-caret"></span></div></div>
-            <div class="hz-overnight-reveal-line"><i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#1f8a4c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i><div><span></span><span class="hz-overnight-reveal-caret"></span></div></div>
-          </div>
+          <div class="hz-overnight-reveal-lines" id="hz-overnight-reveal-lines"></div>
           <div class="hz-overnight-reveal-rules">
-            <span class="hz-overnight-reveal-eb" id="hz-overnight-reveal-eb2">Rules you set &middot; these come to you</span>
-            <div class="hz-overnight-reveal-chips">
-              <span class="hz-overnight-reveal-chip"><em>Rule</em>Expedite fee &middot; your call</span>
-              <span class="hz-overnight-reveal-chip"><em>Rule</em>Revision mismatch &middot; your call</span>
-              <span class="hz-overnight-reveal-chip"><em>Rule</em>Discount below floor &middot; your call</span>
-            </div>
+            <span class="hz-overnight-reveal-eb hz-overnight-reveal-in" id="hz-overnight-reveal-eb2">Rules</span>
+            <div id="hz-overnight-reveal-rulelines"></div>
           </div>
           <div class="hz-overnight-reveal-foot">
-            <span id="hz-overnight-reveal-foot0">Correct anything that's off. Nobody typed any of this in.</span>
-            <span id="hz-overnight-reveal-foot1">From here on, only what these rules flag comes to you.</span>
+            <span class="hz-overnight-reveal-in" id="hz-overnight-reveal-foot0">Nobody typed any of this in. A rule stays Evaluating until finished jobs prove it.</span>
+            <span class="hz-overnight-reveal-in" id="hz-overnight-reveal-foot1">From here on, only what these rules flag comes to you.</span>
           </div>
         </div>
       </div>
@@ -267,16 +255,26 @@
 <script>
 (function(){
   var SLUG = 'hz-overnight-reveal';
-  var CHAR_MS = 25;            // typing speed (≤ 30ms/char)
   var LOOP = 28, RESTART = 2.6; // seconds; after the end hold the loop re-enters at the soft-reset beat
-  var READ_MS = 14000;         // counters + clock sweep
+  var READ_T = 3.4, READ_MS = 16000; // counters + clock sweep: starts at READ_T, lands at 19.4
   var TOTALS = [18402, 3115, 7980];
-  var LINES = [
-    'Fab shop. 14 people.',
-    'Press brake rate $118/hr.',
-    'You inspect before and after powder coat.',
-    'Iridite on the drawing means an outside process: Dakota Plating, 4 days.',
-    'You quote repeat parts off the last job.'
+  // the card: [eyebrow, [lines]] in the order profile -> how you work; rules follow with their own eyebrow
+  var FACTS = [
+    ['Your shop', [
+      'Fab shop: fiber laser, press brake, powder coat in house. Machining on one VF-4.',
+      'Repeat work for 6 customers; Larkspur every spring.'
+    ]],
+    ['How you work', [
+      "Timers left running over lunch don't count.",
+      'Machined parts get a FAIR on the first piece.'
+    ]]
+  ];
+  // [text, evaluating?]  the first two are learned (the app keeps them "Evaluating" until production proves them)
+  var RULES = [
+    ['Drawing says chem film or iridite: add an outside process.', true],
+    ['A repeat part quoted over a year ago gets repriced.', true],
+    ['Expedites, fees and discounts always come to you.', false],
+    ['Quotes over $60,000 wait for your OK.', false]
   ];
   var ICONS = {
     mail: '<svg viewBox="0 0 16 16" fill="none"><rect x="1.5" y="3" width="13" height="10" rx="2" stroke="#1d63ed" stroke-width="1.5"/><path d="M2 4.5l6 4.5 6-4.5" stroke="#1d63ed" stroke-width="1.5"/></svg>',
@@ -284,37 +282,47 @@
     timer:'<svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="9" r="5.5" stroke="#FF5C16" stroke-width="1.5"/><path d="M8 6v3l2 1.5M6 1.5h4" stroke="#FF5C16" stroke-width="1.5" stroke-linecap="round"/></svg>',
     quote:'<svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="#3DC975" stroke-width="1.5"/><path d="M5 6h6M5 8.5h6M5 11h3" stroke="#3DC975" stroke-width="1.3" stroke-linecap="round"/></svg>'
   };
+  // what flows into the drawer: history from the shop's inbox and files (Halden Metalworks sample set)
   var FLOW = [
-    ['mail',  'RFQ: Bracket 4410 Rev B', 'dana@crestline-aero.com'],
-    ['pdf',   'Weldment 2207.pdf', 'drawing, 2 sheets'],
-    ['timer', 'Job 24-0871 · brake', '42 min'],
-    ['quote', 'Q-0912 · Northgate Fab', '$1,240.00'],
-    ['mail',  'PO 55821', 'halvorsen-machine.com'],
-    ['pdf',   'Mount plate 118.pdf', 'Rev A, iridite note'],
-    ['timer', 'Job 25-0113 · laser', '18 min']
+    ['mail',  'RFQ · Larkspur Implement Co.', 'Tessa Brandvold'],
+    ['pdf',   'WS-610.pdf', 'Westbrook Sensors · repeat'],
+    ['timer', 'Job 5218 · Bend', '14 min'],
+    ['quote', 'Quote · Kestrel Medical', 'KM-140 @ $9.85'],
+    ['mail',  'PO · Marlin Marine', 'Dev Castillo'],
+    ['pdf',   'HF-330_REV-A.pdf', 'Harbor Fluid Systems'],
+    ['timer', 'Job 5304 · Powder Coat', '9 min']
   ];
-
   var READ = [
-    ['mail',  'Inbox', 'Outlook · quotes@yourshop.com, 2024–2026'],
+    ['mail',  'Inbox', 'Outlook · quotes@haldenmetal.com, 2024-2026'],
     ['pdf',   'Drawings', 'every PDF on the RFQs'],
-    ['timer', 'Job timers', 'laser, brake, weld, powder coat'],
+    ['timer', 'Job timers', 'laser, brake, powder coat, VF-4'],
     ['quote', 'Old quotes', 'won and lost']
   ];
+  var CHECK = '<i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#1f8a4c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i>';
 
   function init(root){
     var $ = function(id){ return root.querySelector('#' + SLUG + '-' + id); };
     var frame = root.querySelector('.' + SLUG + '-frame');
-    var left = $('left'), lines = Array.prototype.slice.call(root.querySelectorAll('#' + SLUG + '-lines > .' + SLUG + '-line'));
-    var chips = Array.prototype.slice.call(root.querySelectorAll('.' + SLUG + '-chip'));
-    var ebs = [$('eb0'), $('eb1'), $('eb2')], foots = [$('foot0'), $('foot1')];
+    var left = $('left');
     var nums = [$('n0'), $('n1'), $('n2')];
 
-    // build the flow cards and the "what it read" list once
+    // build the flow cards, the "what it read" list and the card lines once
     $('flow').innerHTML = FLOW.map(function(f){ return '<div class="' + SLUG + '-fc">' + ICONS[f[0]] + '<b>' + f[1] + '</b><span>' + f[2] + '</span></div>'; }).join('');
-    var CHECK = '<i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#1f8a4c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i>';
     $('read').innerHTML = READ.map(function(r){ return '<div class="' + SLUG + '-rr">' + ICONS[r[0]] + '<b>' + r[1] + '</b><span>' + r[2] + '</span>' + CHECK + '</div>'; }).join('');
+    $('lines').innerHTML = FACTS.map(function(g){
+      return '<span class="' + SLUG + '-eb ' + SLUG + '-in">' + g[0] + '</span>' +
+        g[1].map(function(t){ return '<div class="' + SLUG + '-line ' + SLUG + '-in">' + CHECK + '<div>' + t + '</div></div>'; }).join('');
+    }).join('');
+    $('rulelines').innerHTML = RULES.map(function(r){
+      return '<div class="' + SLUG + '-line ' + SLUG + '-in">' + CHECK + '<div>' + r[0] + '</div>' + (r[1] ? '<span class="' + SLUG + '-flag">Evaluating</span>' : '') + '</div>';
+    }).join('');
+    // every element that rises in, in timeline order: eb, fact, fact, eb, fact, fact, eb(rules), rule x4, foot x2
+    var INS = Array.prototype.slice.call(root.querySelectorAll('#' + SLUG + '-lines > .' + SLUG + '-in'))
+      .concat([$('eb2')])
+      .concat(Array.prototype.slice.call(root.querySelectorAll('#' + SLUG + '-rulelines > .' + SLUG + '-in')))
+      .concat([$('foot0'), $('foot1')]);
 
-    /* ---- scale the 1200×750 stage to the root width ---- */
+    /* ---- scale the 1200x750 stage to the root width ---- */
     function fit(){
       var w = root.clientWidth || 1200, s = w / 1200;
       root.style.setProperty('--s', s.toFixed(5));
@@ -323,28 +331,14 @@
     fit();
     if (window.ResizeObserver) new ResizeObserver(fit).observe(root); else window.addEventListener('resize', fit);
 
-    /* ---- tiny runtime: timers, tweens, typing, seeking ---- */
-    var timers = [], rafs = [], typers = [], tl = [], instant = false;   // tl: the timeline itself; the rest live inside beats
-    function stopAll(){ timers.forEach(clearTimeout); timers = []; rafs.forEach(cancelAnimationFrame); rafs = []; typers.forEach(clearTimeout); typers = []; }
+    /* ---- tiny runtime: timers, tweens, seeking ---- */
+    var timers = [], rafs = [], tl = [], instant = false;   // tl: the timeline itself; the rest live inside beats
+    function stopAll(){ timers.forEach(clearTimeout); timers = []; rafs.forEach(cancelAnimationFrame); rafs = []; }
     function tween(durMs, offSec, fn){
       var p0 = Math.min(1, (offSec || 0) * 1000 / durMs); fn(p0);
       if (instant || p0 >= 1) return;
       var t0 = performance.now() - p0 * durMs;
       (function frame(){ rafs.push(requestAnimationFrame(function(){ var p = Math.min(1, (performance.now() - t0) / durMs); fn(p); if (p < 1) frame(); })); })();
-    }
-    function typeInto(line, text, offSec){
-      var el = line.firstElementChild.nextElementSibling.firstElementChild;
-      var n = Math.max(0, Math.floor(offSec * 1000 / CHAR_MS));
-      line.classList.add('is-on');
-      if (n >= text.length){ el.textContent = text; line.classList.remove('is-typing'); line.classList.add('is-done'); return; }
-      el.textContent = text.slice(0, n); line.classList.add('is-typing');
-      if (instant) return;
-      (function step(){
-        typers.push(setTimeout(function(){
-          n++; el.textContent = text.slice(0, n);
-          if (n < text.length) step(); else { line.classList.remove('is-typing'); line.classList.add('is-done'); }
-        }, CHAR_MS));
-      })();
     }
     var fmt = function(n){ return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); };
     var DAYS = ['Fri', 'Sat', 'Sun', 'Mon'];
@@ -363,52 +357,45 @@
     }
 
     /* ---- state setters ---- */
-    function startReading(off){ left.classList.add('is-reading'); $('dlabel').textContent = 'Reading'; $('when').textContent = 'draft'; tween(READ_MS, off, setProgress); }
-    function doneReading(){ left.classList.remove('is-reading'); $('dlabel').textContent = 'Read'; $('when').textContent = 'Mon 7:02 am'; setProgress(1); }
-    function showLine(i, off){ typeInto(lines[i], LINES[i], off); }
-    function showEb(i){ ebs[i].classList.add('is-on'); }
-    function showChip(i){ chips[i].classList.add('is-on'); }
-    function showFoot(i){ foots[i].classList.add('is-on'); }
+    function startReading(off){ left.classList.add('is-reading'); root.classList.add('is-reading'); $('dlabel').textContent = 'Reading'; $('when').textContent = 'draft'; tween(READ_MS, off, setProgress); }
+    function doneReading(){ left.classList.remove('is-reading'); root.classList.remove('is-reading'); $('dlabel').textContent = 'Read'; $('when').textContent = 'Mon 7:02 am'; setProgress(1); }
+    var rules = root.querySelector('.' + SLUG + '-rules');
+    function show(i){ return function(){ INS[i].classList.add('is-on'); if (INS[i] === $('eb2')) rules.classList.add('is-on'); }; }
     function softReset(){ root.classList.add('is-reset'); }
     function resolved(){
       root.classList.remove('is-reset');
       doneReading();
-      ebs.forEach(function(e){ e.classList.add('is-on'); });
-      lines.forEach(function(l, i){ typeInto(l, LINES[i], 999); });
-      chips.forEach(function(c){ c.classList.add('is-on'); });
-      foots.forEach(function(f){ f.classList.add('is-on'); });
+      INS.forEach(function(e){ e.classList.add('is-on'); }); rules.classList.add('is-on');
     }
     function clear(){
       stopAll();
       root.classList.remove('is-reset');
-      left.classList.remove('is-reading', 'is-day'); $('dlabel').textContent = 'Reading'; $('when').textContent = 'draft'; setProgress(0);
-      ebs.forEach(function(e){ e.classList.remove('is-on'); });
-      lines.forEach(function(l){ l.classList.remove('is-on', 'is-typing', 'is-done'); l.firstElementChild.nextElementSibling.firstElementChild.textContent = ''; });
-      chips.forEach(function(c){ c.classList.remove('is-on'); });
-      foots.forEach(function(f){ f.classList.remove('is-on'); });
+      left.classList.remove('is-reading', 'is-day'); root.classList.remove('is-reading');
+      $('dlabel').textContent = 'Reading'; $('when').textContent = 'draft'; setProgress(0);
+      INS.forEach(function(e){ e.classList.remove('is-on'); }); rules.classList.remove('is-on');
     }
 
     /* ---- the timeline: one array of {t, fn(offsetSeconds)} ---- */
     var TL = [
-      { t: 0,    fn: resolved },
-      { t: 2.6,  fn: softReset },
-      { t: 3,    fn: clear },
-      { t: 3.4,  fn: startReading },
-      { t: 7.8,  fn: function(){ showEb(0); } },
-      { t: 8.4,  fn: function(o){ showLine(0, o); } },
-      { t: 9.8,  fn: function(o){ showLine(1, o); } },
-      { t: 11.4, fn: function(){ showEb(1); } },
-      { t: 12.0, fn: function(o){ showLine(2, o); } },
-      { t: 13.8, fn: function(o){ showLine(3, o); } },
-      { t: 16.4, fn: function(o){ showLine(4, o); } },
-      { t: 17.6, fn: doneReading },
-      { t: 18.8, fn: function(){ showEb(2); } },
-      { t: 19.4, fn: function(){ showChip(0); } },
-      { t: 20.2, fn: function(){ showChip(1); } },
-      { t: 21.0, fn: function(){ showChip(2); } },
-      { t: 22.0, fn: function(){ showFoot(0); } },
-      { t: 24.0, fn: function(){ showFoot(1); } },
-      { t: 26,   fn: resolved }
+      { t: 0,      fn: resolved },
+      { t: 2.6,    fn: softReset },
+      { t: 3,      fn: clear },
+      { t: READ_T, fn: startReading },
+      { t: 5.0,    fn: show(0) },   // Your shop
+      { t: 5.6,    fn: show(1) },
+      { t: 7.2,    fn: show(2) },
+      { t: 9.4,    fn: show(3) },   // How you work
+      { t: 10.0,   fn: show(4) },
+      { t: 11.6,   fn: show(5) },
+      { t: 13.8,   fn: show(6) },   // Rules
+      { t: 14.4,   fn: show(7) },
+      { t: 15.8,   fn: show(8) },
+      { t: 17.2,   fn: show(9) },
+      { t: 18.6,   fn: show(10) },
+      { t: 19.4,   fn: doneReading },
+      { t: 21.6,   fn: show(11) },  // closing line 1
+      { t: 24.2,   fn: show(12) },  // closing line 2
+      { t: 26.6,   fn: resolved }
     ];
 
     function seek(at){
@@ -416,18 +403,48 @@
       TL.forEach(function(b){ if (b.t <= at) b.fn(at - b.t); });
       void root.offsetWidth; root.classList.remove('is-noanim'); instant = false;
     }
+    var pos0 = 0, t0 = 0, playing = false;
     function play(from, inclusive){
       stopAll(); tl.forEach(clearTimeout); tl = [];
+      pos0 = from; t0 = performance.now(); playing = true;
       TL.forEach(function(b){ if (b.t > from || (inclusive && b.t === from)) tl.push(setTimeout(function(){ b.fn(0); }, (b.t - from) * 1000)); });
       tl.push(setTimeout(function(){ play(RESTART, true); }, (LOOP - from) * 1000));
+    }
+    function position(){ return playing ? Math.min(LOOP, pos0 + (performance.now() - t0) / 1000) : pos0; }
+    function pause(){
+      if (!playing) return;
+      pos0 = position(); playing = false;
+      stopAll(); tl.forEach(clearTimeout); tl = [];
+      root.classList.add('is-paused');
+    }
+    function resume(){
+      if (playing) return;
+      root.classList.remove('is-paused');
+      var at = pos0;
+      seek(at);
+      // a tween that was mid-flight when we paused: restart it from its offset (seek snapped it without animating)
+      if (at > READ_T && at < READ_T + READ_MS / 1000) startReading(at - READ_T);
+      play(at, false);
+    }
+
+    /* ---- in-view gating: pause while <10% visible or the tab is hidden; resume where it left off ---- */
+    var inView = true, hidden = !!document.hidden;
+    function gate(){ if (hidden || !inView) pause(); else resume(); }
+    function enableGating(){
+      document.addEventListener('visibilitychange', function(){ hidden = !!document.hidden; gate(); });
+      if (window.IntersectionObserver){
+        new IntersectionObserver(function(entries){
+          inView = entries[entries.length - 1].intersectionRatio >= 0.1; gate();
+        }, { threshold: [0, 0.1, 0.2] }).observe(root);
+      }
     }
 
     /* ---- boot ---- */
     var q = {}; try { q = Object.fromEntries(new URLSearchParams(window.location.search)); } catch (e) {}
     var reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     if (q.still || reduced){ seek(0); }
-    else if (q.at !== undefined){ seek(((parseFloat(q.at) || 0) % LOOP + LOOP) % LOOP); }
-    else { seek(0); play(0, false); }
+    else if (q.at !== undefined){ root.classList.add('is-seek'); seek(((parseFloat(q.at) || 0) % LOOP + LOOP) % LOOP); }
+    else { seek(0); play(0, false); enableGating(); }
   }
 
   document.querySelectorAll('.' + SLUG).forEach(init);

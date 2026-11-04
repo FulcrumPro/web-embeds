@@ -1,358 +1,449 @@
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-@font-face{font-family:'Gilroy';src:url(https://cdn.prod.website-files.com/609461470d1c3e052bc814ee/609461470d1c3e57d3c814ff_Gilroy-Medium.ttf) format('truetype');font-weight:500;font-style:normal;font-display:swap}
-@font-face{font-family:'Gilroy';src:url(https://cdn.prod.website-files.com/609461470d1c3e052bc814ee/609461470d1c3e0e50c81503_Gilroy-SemiBold.ttf) format('truetype');font-weight:600;font-style:normal;font-display:swap}
-@font-face{font-family:'Gilroy';src:url(https://cdn.prod.website-files.com/609461470d1c3e052bc814ee/609461470d1c3e4970c814f9_Gilroy-Bold.ttf) format('truetype');font-weight:700;font-style:normal;font-display:swap}
-.hz-conversation-ribbon{
-  --s:1; --ink:#292932; --muted:#6b6b6b; --line:#e2e2e2; --pane:#f5f7fa;
-  --blue:#1d63ed; --blue-bg:#eef3ff;                 /* product interaction blue: inside the email card only */
-  --brand:#3840EA; --brand-light:#D7D9FB;            /* brand blue: canvas pills, stem, glow, mark */
-  --ok:#3DC975; --ok-bg:#D8F4E3; --next:#FF5C16; --next-bg:#FFEFE8; --hl:#F4FFB0;
-  --ease:cubic-bezier(.2,.7,.2,1);
-  position:relative; display:block; width:100%; color:var(--ink);
-  font-family:'Gilroy','Inter',Arial,sans-serif;
-  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; line-height:1.3;
-}
-.hz-conversation-ribbon *,.hz-conversation-ribbon *::before,.hz-conversation-ribbon *::after{ box-sizing:border-box; }
-.hz-conversation-ribbon-frame{ position:relative; width:100%; aspect-ratio:1200/750; overflow:hidden; background:#fff; }
-.hz-conversation-ribbon-stage{ position:absolute; left:0; top:0; width:1200px; height:750px; overflow:hidden; background:#fff;
-  transform-origin:0 0; transform:scale(var(--s)); pointer-events:none; user-select:none; }
-.hz-conversation-ribbon.is-noanim *,.hz-conversation-ribbon.is-noanim *::before,.hz-conversation-ribbon.is-noanim *::after{ transition:none !important; animation:none !important; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* ---------- root + stage ---------- */
+.hz-conversation-ribbon { --s: 1; --ease: cubic-bezier(.2,.7,.2,1); position: relative; display: block; width: 100%; overflow: hidden;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #292932; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  pointer-events: none; user-select: none; }
+.hz-conversation-ribbon *, .hz-conversation-ribbon *::before, .hz-conversation-ribbon *::after { box-sizing: border-box; }
+.hz-conversation-ribbon-stage { position: absolute; left: 0; top: 0; width: 1200px; height: 750px; overflow: hidden; background: #fff;
+  transform-origin: 0 0; transform: scale(var(--s)); }
+.hz-conversation-ribbon .cr-neon { position: absolute; left: 30px; top: 10px; width: 10px; height: 10px; border-radius: 50%; background: #DDF83B; }
+.hz-conversation-ribbon .cr-win { position: absolute; left: 30px; top: 30px; width: 1140px; height: 690px; border-radius: 10px; border: 1px solid #2b2d33;
+  box-shadow: 0 12px 32px -12px rgba(15,17,21,.45); background: #131418; overflow: hidden; display: flex; flex-direction: column; }
+.hz-conversation-ribbon .cr-os { flex: none; height: 36px; background: #1b1d23; display: flex; align-items: center; justify-content: center; position: relative;
+  font-size: 12.5px; color: #a9abae; font-weight: 400; }
+.hz-conversation-ribbon .cr-os i { position: absolute; left: 14px; top: 12.5px; width: 11px; height: 11px; border-radius: 50%; background: #4b4d53; }
+.hz-conversation-ribbon .cr-os i + i { left: 31px; } .hz-conversation-ribbon .cr-os i + i + i { left: 48px; }
+.hz-conversation-ribbon .cr-caption { position: absolute; left: 0; right: 0; top: 727px; text-align: center; font-size: 13px; line-height: 16px; color: #6b6b6b; font-weight: 400; }
 
-/* title row (canvas → Gilroy) */
-.hz-conversation-ribbon-title{ position:absolute; left:40px; top:40px; display:flex; align-items:center; gap:12px; font-size:15px; }
-.hz-conversation-ribbon-mark{ width:24px; height:24px; border-radius:6px; background:var(--brand); color:#fff; display:grid; place-items:center;
-  font-size:14px; font-weight:700; line-height:1; }
-.hz-conversation-ribbon-title b{ font-weight:600; }
-.hz-conversation-ribbon-title span{ color:var(--muted); font-weight:500; font-size:14px; }
-.hz-conversation-ribbon-title i{ font-style:normal; color:var(--line); }
+/* ---------- Horizon UI kit (horizon-ui.css, trimmed to what this loop uses) ---------- */
+.hz-conversation-ribbon { --app: #131418; --list: #191a1f; --card: #191a1f; --line: #2b2d33; --line2: #3b3d43; --edge2: #4b4d53;
+  --fg: #e6e6f0; --fg-strong: #f2f2f8; --mute: rgba(230,230,240,.6); --mute2: rgba(230,230,240,.72); --mute3: rgba(230,230,240,.55);
+  --link: #6788ff; --dot: #6788ff; --send: #3f6fe0; --avatar: #8a8f3a; --active-bg: #162d55;
+  --spark-bg: #2a2740; --spark-fg: #c4baf5; --why: #7a68d6; --warn: #cf976a; --bad: #e0948a; --good-fg: #6da885;
+  --info-bg: #1f2a3a; --info-fg: #8fa8ff; --warn-bg: #452c17; --warn-fg: #c18b5e; --tag-bg: #323335; --tag-fg: #a9abae; --ok-bg: #1d3a2a; --ok-fg: #6da885;
+  --font: "Horizon Inter", Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+.hz-conversation-ribbon .hzk-app { display: flex; flex: 1 1 auto; min-height: 0; width: 100%; background: var(--app); color: var(--fg); font-family: var(--font);
+  font-weight: 300; font-size: 14px; line-height: 1.5; overflow: hidden; }
+.hz-conversation-ribbon .hzk-app button { font: inherit; color: inherit; cursor: default; }
+.hz-conversation-ribbon .hzk-rail { width: 72px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 4px; border-right: 1px solid var(--line); }
+.hz-conversation-ribbon .hzk-rail-item { width: 64px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 0; border: 0; border-radius: 8px; background: none; color: var(--mute2); font-size: 11px; letter-spacing: -.02em; white-space: nowrap; }
+.hz-conversation-ribbon .hzk-rail-item.is-on { background: var(--active-bg); color: var(--link); }
+.hz-conversation-ribbon .hzk-rail-item svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hz-conversation-ribbon .hzk-rail-spacer { flex: 1 1 auto; }
+.hz-conversation-ribbon .hzk-pill { flex: none; padding: 0 8px; border-radius: 12px; line-height: 20px; font-size: 11px; font-weight: 600; background: var(--tag-bg); color: var(--tag-fg); white-space: nowrap; }
+.hz-conversation-ribbon .hzk-pill.ready { background: #0d2d3b; color: #78a6bd; }
+.hz-conversation-ribbon .hzk-pill.sent { background: var(--ok-bg); color: var(--ok-fg); }
+.hz-conversation-ribbon .hzk-pill.po { background: #202f6a; color: #8493c1; }
+.hz-conversation-ribbon .hzk-pill.ordered { background: #1e2e14; color: #8db177; }
+.hz-conversation-ribbon .hzk-pill.info { background: var(--info-bg); color: var(--info-fg); }
+.hz-conversation-ribbon .hzk-pill.good { background: rgba(16,163,116,.18); color: var(--good-fg); }
+.hz-conversation-ribbon .hzk-pill.bad { background: rgba(192,57,43,.22); color: var(--bad); }
+.hz-conversation-ribbon .hzk-tag { display: inline-block; padding: 0 8px; border-radius: 10px; line-height: 19px; font-size: 11px; font-weight: 600; background: var(--info-bg); color: var(--info-fg); white-space: nowrap; }
+.hz-conversation-ribbon .hzk-tag.mute { background: var(--tag-bg); color: var(--tag-fg); }
+.hz-conversation-ribbon .hzk-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--dot); display: inline-block; flex: none; }
+.hz-conversation-ribbon .hzk-composer { flex: none; margin-top: auto; height: 48px; border: 1px solid var(--edge2); border-radius: 8px; background: #1b1d23; display: flex; align-items: center; gap: 10px; padding: 0 8px 0 16px; color: var(--mute); font-size: 15px; }
+.hz-conversation-ribbon .hzk-composer span { flex: 1 1 auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hz-conversation-ribbon .hzk-composer i { width: 32px; height: 32px; border-radius: 8px; background: #2a2d36; color: var(--mute3); display: grid; place-items: center; font-style: normal; font-size: 14px; }
+.hz-conversation-ribbon .hzk-stagehead { padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 6px; border-bottom: 1px solid var(--line); }
+.hz-conversation-ribbon .hzk-stagehead .k { display: flex; align-items: center; font-size: 13px; color: var(--mute2); }
+.hz-conversation-ribbon .hzk-stagehead .k a { margin-left: auto; color: var(--link); font-size: 12.5px; }
+.hz-conversation-ribbon .hzk-stagehead .fig { font-size: 24px; font-weight: 500; line-height: 28px; color: var(--fg-strong); font-variant-numeric: tabular-nums; }
+.hz-conversation-ribbon .hzk-stagehead .sub { font-size: 12.5px; color: var(--mute); }
+.hz-conversation-ribbon .hzk-stagehead .sub a { color: var(--link); }
+.hz-conversation-ribbon .hzk-prog { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 4px; }
+.hz-conversation-ribbon .hzk-prog i { height: 3px; border-radius: 2px; background: var(--line2); display: block; }
+.hz-conversation-ribbon .hzk-prog i.on { background: var(--link); }
+.hz-conversation-ribbon .hzk-detail { margin: 12px; border: 1px solid var(--line2); border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; }
+.hz-conversation-ribbon .hzk-detail div { display: flex; justify-content: space-between; gap: 10px; }
+.hz-conversation-ribbon .hzk-detail span { color: var(--mute); }
+.hz-conversation-ribbon .hzk-detail b { font-weight: 500; color: var(--fg); text-align: right; }
+.hz-conversation-ribbon .hzk-detail b.warn { color: var(--warn); }
+.hz-conversation-ribbon .hzk-detail b a { color: var(--link); }
+.hz-conversation-ribbon .hzk-run { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
+.hz-conversation-ribbon .hzk-run .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-conversation-ribbon .hzk-run .fold { font-size: 14px; font-weight: 500; color: var(--fg); }
+.hz-conversation-ribbon .hzk-run .fold small { display: block; font-size: 12px; font-weight: 300; color: var(--mute); margin-top: 2px; }
+.hz-conversation-ribbon .hzk-run .fold small a { color: var(--link); }
+.hz-conversation-ribbon .hzk-post { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
+.hz-conversation-ribbon .hzk-post .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-conversation-ribbon .hzk-post .box { border: 1px solid var(--line2); border-radius: 8px; background: var(--card); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.hz-conversation-ribbon .hzk-post .box .hd { display: flex; align-items: baseline; gap: 8px; font-size: 12.5px; color: var(--mute2); }
+.hz-conversation-ribbon .hzk-post .box .hd b { font-size: 14px; font-weight: 500; color: var(--fg-strong); }
+.hz-conversation-ribbon .hzk-post .box .hd small { margin-left: auto; font-size: 11.5px; color: var(--mute3); }
+.hz-conversation-ribbon .hzk-post .box .body { font-size: 13.5px; line-height: 1.55; color: rgba(230,230,240,.88); white-space: pre-line; }
+.hz-conversation-ribbon .hzk-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.hz-conversation-ribbon .hzk-btn { height: 28px; padding: 0 12px; border-radius: 7px; border: 1px solid var(--edge2); background: transparent; color: var(--fg); font-size: 12.5px; font-weight: 500; display: inline-flex; align-items: center; }
+.hz-conversation-ribbon .hzk-btn.primary { background: var(--send); border-color: var(--send); color: #fff; }
+.hz-conversation-ribbon .hzk-result { font-size: 13px; color: var(--good-fg); display: flex; align-items: center; gap: 8px; min-height: 28px; }
+.hz-conversation-ribbon .hzk-result small { font-size: 12px; color: var(--mute3); }
+.hz-conversation-ribbon .hzk-mail { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
+.hz-conversation-ribbon .hzk-mail .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: #323335; color: #a9abae; }
+.hz-conversation-ribbon .hzk-mail .card { border: 1px solid var(--line2); border-radius: 8px; background: var(--card); padding: 12px 14px; }
+.hz-conversation-ribbon .hzk-mail .hd { display: flex; gap: 8px; align-items: center; font-size: 12.5px; color: var(--mute2); }
+.hz-conversation-ribbon .hzk-mail .hd b { color: var(--fg-strong); font-weight: 500; font-size: 13.5px; }
+.hz-conversation-ribbon .hzk-mail .hd small { margin-left: auto; font-size: 11.5px; color: var(--mute3); white-space: nowrap; }
+.hz-conversation-ribbon .hzk-mail .sub { font-size: 14px; font-weight: 500; margin-top: 4px; }
+.hz-conversation-ribbon .hzk-mail .body { margin-top: 4px; font-size: 13.5px; line-height: 1.55; color: rgba(230,230,240,.85); white-space: pre-line; }
+.hz-conversation-ribbon .hzk-mail .atts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.hz-conversation-ribbon .hzk-mail .att, .hz-conversation-ribbon .hzk-post .att { display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px 5px 5px; border-radius: 8px; border: 1px solid var(--line2); background: #1e2026; font-size: 12.5px; font-weight: 600; color: var(--fg); }
+.hz-conversation-ribbon .hzk-post .att { align-self: flex-start; }
+.hz-conversation-ribbon .att i { width: 30px; height: 24px; border-radius: 4px; background: #fbfbf8; display: block; position: relative; overflow: hidden; flex: none; }
+.hz-conversation-ribbon .att i::before { content: ''; position: absolute; left: 5px; right: 5px; top: 4px; height: 3px; background: #2a2d33; border-radius: 1px; box-shadow: 0 5px 0 -1px #c9cac4, 0 10px 0 -1px #c9cac4, 0 15px 0 -1px #c9cac4; }
+.hz-conversation-ribbon .att small { font-weight: 400; color: var(--mute3); font-size: 11.5px; margin-left: 4px; }
+.hz-conversation-ribbon .hzk-step { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
+.hz-conversation-ribbon .hzk-step .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-conversation-ribbon .hzk-step .t { font-size: 13.5px; font-weight: 500; }
+.hz-conversation-ribbon .hzk-step .d { font-size: 13px; color: rgba(230,230,240,.75); }
+.hz-conversation-ribbon .hzk-step .m { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 2px; font-size: 11.5px; color: rgba(230,230,240,.58); }
+.hz-conversation-ribbon .hzk-step .m a { color: var(--link); }
+.hz-conversation-ribbon .hzk-table { border: 1px solid var(--line2); border-radius: 10px; overflow: hidden; background: var(--card); }
+.hz-conversation-ribbon .hzk-table .th { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--line2); }
+.hz-conversation-ribbon .hzk-table .th b { font-size: 14px; font-weight: 600; color: var(--fg-strong); flex: 1 1 auto; }
+.hz-conversation-ribbon .hzk-table .th small { font-size: 12px; color: var(--mute); }
+.hz-conversation-ribbon .hzk-table .th .hzk-pill { line-height: 22px; font-size: 12px; padding: 0 8px; border-radius: 10px; }
+.hz-conversation-ribbon .hzk-table .tr { display: grid; gap: 10px; padding: 8px 14px; border-top: 1px solid var(--line); font-size: 12.5px; align-items: center; }
+.hz-conversation-ribbon .hzk-table .tr.head { font-size: 11.5px; color: var(--mute); border-top: 0; padding-bottom: 6px; }
+.hz-conversation-ribbon .hzk-table .tr.bad { background: rgba(192,57,43,.1); }
+.hz-conversation-ribbon .hzk-table .tr .r { text-align: right; font-variant-numeric: tabular-nums; }
+.hz-conversation-ribbon .hzk-table .tr .r.bad, .hz-conversation-ribbon .hzk-table .tr .bad-fg { color: var(--bad); }
+.hz-conversation-ribbon .hzk-table .tr .sub { display: block; font-size: 11.5px; color: var(--mute); }
+.hz-conversation-ribbon .hzk-table .tr .sub.bad { color: var(--bad); }
+.hz-conversation-ribbon .hzk-table .tr .pn { font-weight: 500; color: var(--fg); }
+.hz-conversation-ribbon .hzk-table .tr .pn em { font-style: normal; font-weight: 300; color: var(--mute); }
+.hz-conversation-ribbon .hzk-table .foot { padding: 8px 14px 10px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--mute2); }
+.hz-conversation-ribbon .hzk-table .foot a { color: var(--link); }
+.hz-conversation-ribbon .hzk-decision { border: 1px solid var(--dot); border-radius: 10px; background: var(--list); overflow: hidden; }
+.hz-conversation-ribbon .hzk-decision .hd { display: grid; grid-template-columns: 8px minmax(0,1fr) auto; gap: 12px; align-items: start; padding: 12px 14px; border-bottom: 1px solid rgba(230,230,240,.08); }
+.hz-conversation-ribbon .hzk-decision .hd .hzk-dot { margin-top: 8px; width: 8px; height: 8px; }
+.hz-conversation-ribbon .hzk-decision .hd b { font-size: 15px; font-weight: 600; color: var(--fg-strong); }
+.hz-conversation-ribbon .hzk-decision .hd .sub { font-size: 12.5px; color: var(--mute); }
+.hz-conversation-ribbon .hzk-decision .hd small { font-size: 12px; color: var(--mute3); white-space: nowrap; }
+.hz-conversation-ribbon .hzk-facts { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; padding: 12px 14px 0; }
+.hz-conversation-ribbon .hzk-fact { padding: 8px 10px; background: var(--card); border: 1px solid var(--line2); border-radius: 8px; display: flex; flex-direction: column; gap: 2px; }
+.hz-conversation-ribbon .hzk-fact small { font-size: 11.5px; color: var(--mute); }
+.hz-conversation-ribbon .hzk-fact b { font-size: 16px; font-weight: 600; color: var(--fg-strong); font-variant-numeric: tabular-nums; line-height: 1.2; }
+.hz-conversation-ribbon .hzk-fact.warn b { color: var(--warn); }
+.hz-conversation-ribbon .hzk-fact em { font-style: normal; font-size: 11.5px; color: var(--mute); }
+.hz-conversation-ribbon .hzk-evidence { margin: 10px 14px 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 5px; font-size: 13px; line-height: 1.45; color: rgba(230,230,240,.8); }
+.hz-conversation-ribbon .hzk-evidence li { display: grid; grid-template-columns: 5px minmax(0,1fr); gap: 10px; align-items: baseline; }
+.hz-conversation-ribbon .hzk-evidence li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: rgba(230,230,240,.45); transform: translateY(-2px); }
+.hz-conversation-ribbon .hzk-rec { margin: 12px 14px 0; font-size: 13.5px; font-weight: 600; color: var(--fg-strong); }
+.hz-conversation-ribbon .hzk-limit { margin: 4px 14px 0; font-size: 12px; color: var(--warn); }
+.hz-conversation-ribbon .hzk-decision .hzk-actions { padding: 12px 14px 14px; }
+@keyframes hzk-rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.hz-conversation-ribbon .hzk-in { animation: hzk-rise .35s ease-out both; }
 
-/* marketing glow behind the active card */
-.hz-conversation-ribbon-glow{ position:absolute; top:40px; width:620px; height:380px; margin-left:-60px; border-radius:50%;
-  background:radial-gradient(closest-side, var(--brand-light), rgba(215,217,251,0)); opacity:0;
-  transition:opacity .6s var(--ease), left .5s var(--ease); }
-.hz-conversation-ribbon-glow.is-on{ opacity:.7; }
+/* ---------- this loop's own pieces (project page chrome) ---------- */
+.hz-conversation-ribbon .cr-body { flex: 1 1 auto; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+.hz-conversation-ribbon .cr-head { flex: none; height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 16px; border-bottom: 1px solid var(--line); }
+.hz-conversation-ribbon .cr-logo { width: 26px; height: 26px; border-radius: 6px; background: #fff; color: #292932; font-size: 11px; font-weight: 700; letter-spacing: .02em; display: grid; place-items: center; flex: none; }
+.hz-conversation-ribbon .cr-head h1 { margin: 0; font-size: 19px; font-weight: 500; color: var(--fg-strong); white-space: nowrap; }
+.hz-conversation-ribbon .cr-head .meta { font-size: 13px; color: var(--mute2); white-space: nowrap; }
+.hz-conversation-ribbon .cr-head .cr-pillwrap { display: inline-flex; margin-left: 4px; }
+.hz-conversation-ribbon .cr-head .right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.hz-conversation-ribbon .cr-head .more { width: 28px; height: 28px; border-radius: 7px; display: grid; place-items: center; color: var(--mute2); font-size: 16px; letter-spacing: 1px; font-weight: 600; }
+.hz-conversation-ribbon .cr-me { width: 28px; height: 28px; border-radius: 50%; background: var(--avatar); color: #fff; font-size: 12px; font-weight: 600; display: grid; place-items: center; }
+.hz-conversation-ribbon .cr-cols { flex: 1 1 auto; min-height: 0; display: flex; }
+.hz-conversation-ribbon .cr-rail { width: 300px; flex: none; background: var(--list); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.hz-conversation-ribbon .cr-back { flex: none; display: flex; align-items: center; gap: 6px; padding: 12px 16px 6px; font-size: 13px; color: var(--link); font-weight: 400; }
+.hz-conversation-ribbon .cr-back svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hz-conversation-ribbon .cr-block { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; transition: opacity .2s var(--ease); }
+.hz-conversation-ribbon .cr-block.is-out { opacity: 0; }
+.hz-conversation-ribbon .cr-sec { padding: 0 16px; }
+.hz-conversation-ribbon .cr-sec .t { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--mute2); margin: 6px 0 4px; }
+.hz-conversation-ribbon .cr-sec .t b { font-weight: 500; color: var(--fg); }
+.hz-conversation-ribbon .cr-sec .t small { font-size: 12px; color: var(--mute); }
+.hz-conversation-ribbon .cr-item { display: flex; flex-direction: column; gap: 1px; padding: 7px 0; border-top: 1px solid var(--line); }
+.hz-conversation-ribbon .cr-item:first-of-type { border-top: 0; }
+.hz-conversation-ribbon .cr-item .l1 { display: flex; align-items: baseline; gap: 6px; font-size: 12.5px; }
+.hz-conversation-ribbon .cr-item .l1 b { font-weight: 600; color: var(--fg); white-space: nowrap; }
+.hz-conversation-ribbon .cr-item .l1 em { font-style: normal; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1 1 auto; }
+.hz-conversation-ribbon .cr-item .l1 span { margin-left: auto; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--fg); }
+.hz-conversation-ribbon .cr-item .l2 { display: flex; gap: 6px; font-size: 11.5px; color: var(--mute); }
+.hz-conversation-ribbon .cr-item .l2 i { font-style: normal; color: var(--warn); }
+.hz-conversation-ribbon .cr-item .l2 span { margin-left: auto; font-variant-numeric: tabular-nums; }
+.hz-conversation-ribbon .cr-all { font-size: 12.5px; color: var(--link); padding: 6px 0 12px; }
+.hz-conversation-ribbon .cr-main { flex: 1 1 auto; min-width: 0; min-height: 0; display: flex; flex-direction: column; padding: 0 24px 16px; }
+.hz-conversation-ribbon .cr-view { flex: 1 1 auto; min-height: 0; overflow: hidden; position: relative; }
+.hz-conversation-ribbon .cr-list { display: flex; flex-direction: column; gap: 14px; padding: 16px 0 10px; width: 100%; max-width: 720px; margin: 0 auto;
+  transition: transform .6s var(--ease), opacity .4s var(--ease); will-change: transform; }
+.hz-conversation-ribbon .cr-list.is-out { opacity: 0; }
+.hz-conversation-ribbon .cr-day { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--mute); margin: 2px 0 8px; }
+.hz-conversation-ribbon .cr-day::before, .hz-conversation-ribbon .cr-day::after { content: ''; flex: 1 1 auto; height: 1px; background: var(--line); }
+.hz-conversation-ribbon .cr-main .hzk-composer { margin-top: 12px; }
+.hz-conversation-ribbon .cr-check { width: 16px; height: 16px; border-radius: 50%; background: var(--ok-bg); display: grid; place-items: center; flex: none; }
+.hz-conversation-ribbon .cr-check svg { width: 9px; height: 9px; fill: none; stroke: var(--ok-fg); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* email card (product content → Inter) */
-.hz-conversation-ribbon-card{ position:absolute; top:120px; left:350px; width:520px; min-height:184px; padding:16px 16px 48px;
-  background:#fff; border:1px solid var(--line); border-radius:8px; box-shadow:0 8px 28px rgba(0,0,0,.14);
-  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  opacity:0; transform:translateY(8px); transition:opacity .35s var(--ease), transform .35s var(--ease), left .5s var(--ease); }
-.hz-conversation-ribbon-card.is-on{ opacity:1; transform:none; }
-.hz-conversation-ribbon-chead{ display:flex; align-items:flex-start; gap:12px; }
-.hz-conversation-ribbon-av{ width:28px; height:28px; border-radius:50%; background:var(--pane); border:1px solid var(--line);
-  display:grid; place-items:center; font-size:12px; font-weight:600; color:var(--ink); flex:0 0 auto; }
-.hz-conversation-ribbon-av.is-hz{ background:var(--blue); border-color:var(--blue); color:#fff; }
-.hz-conversation-ribbon-who{ min-width:0; flex:1 1 auto; }
-.hz-conversation-ribbon-who b{ display:block; padding-right:84px; font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.hz-conversation-ribbon-who span{ display:block; margin-top:2px; font-size:12px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.hz-conversation-ribbon-dir{ position:absolute; top:16px; right:16px; display:inline-block; font-size:11.5px; font-weight:600; letter-spacing:.04em;
-  text-transform:uppercase; line-height:1; padding:5px 6px; border-radius:4px; background:var(--pane); color:var(--muted); }
-.hz-conversation-ribbon-dir.is-out{ background:var(--blue-bg); color:var(--blue); }
-.hz-conversation-ribbon-subj{ margin-top:12px; font-size:15px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.hz-conversation-ribbon-quote{ display:none; margin-top:8px; padding:8px 12px; background:var(--pane); border-left:2px solid var(--line); border-radius:4px; }
-.hz-conversation-ribbon-card.has-quote .hz-conversation-ribbon-quote{ display:block; }
-.hz-conversation-ribbon-quote small{ display:block; font-size:11.5px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); line-height:1; }
-.hz-conversation-ribbon-quote p{ margin:6px 0 0; font-size:13px; color:var(--ink); line-height:1.4; }
-.hz-conversation-ribbon-body{ margin-top:8px; font-size:14px; color:var(--ink); line-height:1.5; min-height:42px; }
-.hz-conversation-ribbon-hl{ background:var(--hl); line-height:1; padding:2px 4px; border-radius:3px; font-weight:600;
-  -webkit-box-decoration-break:clone; box-decoration-break:clone; }
-.hz-conversation-ribbon-caret{ display:inline-block; width:1.5px; height:14px; margin-left:2px; vertical-align:-2px; background:var(--ink);
-  opacity:0; animation:hz-conversation-ribbon-blink .9s steps(1) infinite; }
-.hz-conversation-ribbon-card.is-typing .hz-conversation-ribbon-caret{ opacity:1; }
-@keyframes hz-conversation-ribbon-blink{ 50%{ opacity:0; } }
-.hz-conversation-ribbon-cfoot{ position:absolute; left:16px; right:16px; bottom:16px; display:flex; align-items:center; justify-content:space-between; }
-.hz-conversation-ribbon-chip{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; line-height:1; padding:5px 7px; border-radius:4px;
-  background:var(--ok-bg); color:var(--ink); opacity:0; transform:translateY(4px); transition:opacity .3s var(--ease), transform .3s var(--ease); }
-.hz-conversation-ribbon-chip.is-on{ opacity:1; transform:none; }
-.hz-conversation-ribbon-chip.is-next{ background:var(--next-bg); }
-.hz-conversation-ribbon-chip.is-next::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--next); }
-.hz-conversation-ribbon-cfoot small{ font-size:12px; color:var(--muted); }
-
-/* stem from card to the active pill */
-.hz-conversation-ribbon-stem{ position:absolute; top:304px; left:600px; width:2px; height:106px; margin-left:-1px; background:var(--brand);
-  transform-origin:50% 0; transform:scaleY(0); transition:transform .35s var(--ease), left .5s var(--ease); }
-.hz-conversation-ribbon-stem.is-on{ transform:scaleY(1); }
-
-/* ribbon (canvas → Gilroy) */
-.hz-conversation-ribbon-ribbon{ position:absolute; left:40px; right:40px; top:410px; height:40px; }
-.hz-conversation-ribbon-track{ position:absolute; left:24px; right:24px; top:19px; height:2px; background:var(--line); }
-.hz-conversation-ribbon-prog{ position:absolute; left:24px; top:19px; height:2px; width:0; background:var(--brand); transition:width .6s var(--ease); }
-.hz-conversation-ribbon-ribbon ul{ list-style:none; margin:0; padding:0; display:flex; justify-content:space-between; position:relative; }
-.hz-conversation-ribbon-ribbon li{ position:relative; }
-.hz-conversation-ribbon-pill{ display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border-radius:999px;
-  font-size:14px; font-weight:600; white-space:nowrap; background:var(--ink); color:#fff; border:1.5px solid var(--ink);
-  box-shadow:0 0 0 4px #fff; transition:background .4s var(--ease), border-color .4s var(--ease), color .4s var(--ease); }
-.hz-conversation-ribbon-pill svg{ width:15px; height:15px; }
-.hz-conversation-ribbon-ribbon li.is-next .hz-conversation-ribbon-pill{ background:#fff; color:var(--ink); }
-.hz-conversation-ribbon-tag{ display:inline-block; font-size:11.5px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; line-height:1; padding:4px 5px;
-  border-radius:4px; background:var(--next-bg); color:var(--ink); }
-.hz-conversation-ribbon-ribbon li.is-active .hz-conversation-ribbon-pill{ background:var(--brand); border-color:var(--brand); color:#fff;
-  animation:hz-conversation-ribbon-ring .9s var(--ease); }
-@keyframes hz-conversation-ribbon-ring{ 0%{ box-shadow:0 0 0 4px #fff, 0 0 0 5px rgba(56,64,234,.45); } 100%{ box-shadow:0 0 0 4px #fff, 0 0 0 18px rgba(56,64,234,0); } }
-.hz-conversation-ribbon-st{ position:absolute; top:48px; left:50%; transform:translate(-50%,-4px); opacity:0; white-space:nowrap;
-  display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; line-height:1; padding:5px 7px; border-radius:4px;
-  background:var(--ok-bg); color:var(--ink); transition:opacity .35s var(--ease), transform .35s var(--ease); }
-.hz-conversation-ribbon-ribbon li.has-status .hz-conversation-ribbon-st{ opacity:1; transform:translate(-50%,0); }
-.hz-conversation-ribbon-st.is-next{ background:var(--next-bg); }
-.hz-conversation-ribbon-st.is-next::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--next); }
-
-/* loop-back arrow */
-.hz-conversation-ribbon-arrow{ position:absolute; left:0; top:0; width:1200px; height:750px; overflow:visible; }
-.hz-conversation-ribbon-arrow path{ fill:none; stroke:var(--ink); stroke-width:2; stroke-linecap:round; transition:stroke-dashoffset 1.2s var(--ease); }
-.hz-conversation-ribbon-arrow .hz-conversation-ribbon-ahead{ fill:var(--ink); opacity:0; transition:opacity .25s var(--ease) 1s; }
-.hz-conversation-ribbon-arrow.is-on .hz-conversation-ribbon-ahead{ opacity:1; }
-.hz-conversation-ribbon-aword{ position:absolute; top:566px; left:50%; transform:translateX(-50%); font-size:13px; font-weight:500; color:var(--muted);
-  background:#fff; padding:0 8px; line-height:1; opacity:0; transition:opacity .3s var(--ease) .9s; }
-.hz-conversation-ribbon-aword.is-on{ opacity:1; }
-
-/* legend (canvas → Gilroy) */
-.hz-conversation-ribbon-legend{ position:absolute; left:40px; top:636px; display:flex; gap:24px; font-size:13px; font-weight:500; color:var(--muted); }
-.hz-conversation-ribbon-legend span{ display:inline-flex; align-items:center; gap:8px; }
-.hz-conversation-ribbon-legend i{ width:11px; height:11px; border-radius:50%; border:1.5px solid var(--ink); background:var(--ink); }
-.hz-conversation-ribbon-legend i.is-next{ background:#fff; }
-.hz-conversation-ribbon-legend em{ font-style:normal; display:inline-block; font-size:11.5px; font-weight:600; letter-spacing:.04em; text-transform:uppercase;
-  line-height:1; padding:4px 5px; border-radius:4px; background:var(--next-bg); color:var(--ink); }
-
-@media (prefers-reduced-motion: reduce){
-  .hz-conversation-ribbon *,.hz-conversation-ribbon *::before,.hz-conversation-ribbon *::after{ transition:none !important; animation:none !important; }
+.hz-conversation-ribbon.is-seek *, .hz-conversation-ribbon.is-seek *::before, .hz-conversation-ribbon.is-seek *::after { transition: none !important; animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .hz-conversation-ribbon *, .hz-conversation-ribbon *::before, .hz-conversation-ribbon *::after { transition: none !important; animation: none !important; }
 }
 </style>
 
 <div class="hz-conversation-ribbon">
-  <div class="hz-conversation-ribbon-frame">
-    <div class="hz-conversation-ribbon-stage">
-
-      <div class="hz-conversation-ribbon-title">
-        <span class="hz-conversation-ribbon-mark">H</span>
-        <b>Horizon</b><i>|</i><span>Crestline Aerospace &middot; Bracket 4410, Rev B &middot; one thread</span>
-      </div>
-
-      <div class="hz-conversation-ribbon-glow" id="hz-conversation-ribbon-glow"></div>
-
-      <div class="hz-conversation-ribbon-card" id="hz-conversation-ribbon-card">
-        <div class="hz-conversation-ribbon-chead">
-          <div class="hz-conversation-ribbon-av" id="hz-conversation-ribbon-av">D</div>
-          <div class="hz-conversation-ribbon-who"><b id="hz-conversation-ribbon-who"></b><span id="hz-conversation-ribbon-addr"></span></div>
+  <div class="hz-conversation-ribbon-stage">
+    <span class="cr-neon"></span>
+    <div class="cr-win">
+      <div class="cr-os"><i></i><i></i><i></i>Horizon</div>
+      <div class="hzk-app">
+        <nav class="hzk-rail">
+          <button class="hzk-rail-item is-on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/></svg>Projects</button>
+          <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Knowledge</button>
+          <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>Insights</button>
+          <span class="hzk-rail-spacer"></span>
+          <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
+        </nav>
+        <div class="cr-body">
+          <div class="cr-head">
+            <span class="cr-logo">LI</span>
+            <h1>Larkspur Implement Co.</h1>
+            <span class="meta">10 Parts · Tessa Brandvold</span>
+            <span class="cr-pillwrap" id="hz-conversation-ribbon-pill"><span class="hzk-pill ordered">Ordered</span></span>
+            <span class="right"><span class="more">···</span><span class="cr-me">P</span></span>
+          </div>
+          <div class="cr-cols">
+            <aside class="cr-rail">
+              <div class="cr-back"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>All Projects</div>
+              <div class="cr-block" id="hz-conversation-ribbon-rail"></div>
+            </aside>
+            <main class="cr-main">
+              <div class="cr-view"><div class="cr-list" id="hz-conversation-ribbon-list"></div></div>
+              <div class="hzk-composer"><span>Ask Horizon about this project, or tell it what to do</span><i>↑</i></div>
+            </main>
+          </div>
         </div>
-        <div class="hz-conversation-ribbon-dir" id="hz-conversation-ribbon-dir">in</div>
-        <div class="hz-conversation-ribbon-subj" id="hz-conversation-ribbon-subj"></div>
-        <div class="hz-conversation-ribbon-quote"><small id="hz-conversation-ribbon-qfrom"></small><p id="hz-conversation-ribbon-qtext"></p></div>
-        <div class="hz-conversation-ribbon-body"><span id="hz-conversation-ribbon-body"></span><span class="hz-conversation-ribbon-caret"></span></div>
-        <div class="hz-conversation-ribbon-cfoot">
-          <span class="hz-conversation-ribbon-chip" id="hz-conversation-ribbon-chip">sent</span>
-          <small id="hz-conversation-ribbon-note"></small>
-        </div>
       </div>
-      <div class="hz-conversation-ribbon-stem" id="hz-conversation-ribbon-stem"></div>
-
-      <div class="hz-conversation-ribbon-ribbon">
-        <div class="hz-conversation-ribbon-track"></div>
-        <div class="hz-conversation-ribbon-prog" id="hz-conversation-ribbon-prog"></div>
-        <ul id="hz-conversation-ribbon-list">
-          <li><span class="hz-conversation-ribbon-pill">RFQ in</span><span class="hz-conversation-ribbon-st">checked</span></li>
-          <li><span class="hz-conversation-ribbon-pill">Vendor RFQs out</span><span class="hz-conversation-ribbon-st">sent</span></li>
-          <li><span class="hz-conversation-ribbon-pill">Quote</span><span class="hz-conversation-ribbon-st">sent</span></li>
-          <li><span class="hz-conversation-ribbon-pill">PO check</span><span class="hz-conversation-ribbon-st">checked</span></li>
-          <li><span class="hz-conversation-ribbon-pill">Status</span><span class="hz-conversation-ribbon-st">sent</span></li>
-          <li class="is-next"><span class="hz-conversation-ribbon-pill">Revision <span class="hz-conversation-ribbon-tag">next</span></span><span class="hz-conversation-ribbon-st is-next">drafting &middot; next</span></li>
-          <li class="is-next"><span class="hz-conversation-ribbon-pill">Ship docs &amp; certs <span class="hz-conversation-ribbon-tag">next</span></span><span class="hz-conversation-ribbon-st is-next">drafting &middot; next</span></li>
-          <li class="is-next"><span class="hz-conversation-ribbon-pill">Invoice <span class="hz-conversation-ribbon-tag">next</span></span><span class="hz-conversation-ribbon-st is-next">drafting &middot; next</span></li>
-          <li><span class="hz-conversation-ribbon-pill"><svg viewBox="0 0 16 16" fill="none"><path d="M13 8a5 5 0 1 1-1.6-3.66" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12.6 1.6v3.2H9.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Learns</span><span class="hz-conversation-ribbon-st">logged</span></li>
-        </ul>
-      </div>
-
-      <svg class="hz-conversation-ribbon-arrow" id="hz-conversation-ribbon-arrow" viewBox="0 0 1200 750">
-        <path id="hz-conversation-ribbon-apath" d="M0 0"/>
-        <path class="hz-conversation-ribbon-ahead" id="hz-conversation-ribbon-ahead" d="M0 0"/>
-      </svg>
-      <div class="hz-conversation-ribbon-aword" id="hz-conversation-ribbon-aword">next RFQ starts smarter</div>
-
-      <div class="hz-conversation-ribbon-legend">
-        <span><i></i>Horizon does this today</span>
-        <span><i class="is-next"></i>Coming <em>next</em></span>
-      </div>
-
     </div>
+    <div class="cr-caption">RFQ to sales order in one thread. Next: shipping documents and invoices.</div>
   </div>
 </div>
 
 <script>
-(function(){
+(function () {
+  'use strict';
   var SLUG = 'hz-conversation-ribbon';
-  var CHAR_MS = 22;            // typing speed (spec: 20–30ms/char)
-  var HOLD = 2.5;              // seconds a beat stays after its body finishes typing (Carolyn's "too fast" rule)
-  var CARD_TOP = 120, RIBBON_TOP = 410, CARD_W = 520;
-  var RESTART = 3;             // after the end hold the loop re-enters at the clear beat
+  var LOOP_END = 40.0;
+  var EASE_SCROLL = 600;   // ms, thread scroll (transform)
 
-  // body text: [brackets] mark an inline highlight (the important bit of the answer)
-  var BEATS = [
-    { who:'From Dana · Crestline Aerospace', addr:'dana@crestline-aero.com → quotes@yourshop.com · via Outlook', av:'D', dir:'in',
-      subj:'RFQ: Bracket 4410 Rev B, qty 250, need by Nov 21', quote:{ from:'Dana · via Outlook', text:'Drawing attached. Same bracket as last year, now Rev B.' },
-      body:'Drawing opened, Rev B read. Last job 24-0871, Mar 2024, found. Quote started.', status:'checked', kind:'ok', note:'nobody opened the email' },
-    { who:'To Luis · Midwest Anodizing', addr:'quotes@yourshop.com → luis@midwest-anodizing.com · sent from Horizon', av:'L', dir:'out',
-      subj:'Lead time: clear anodize, 250 pcs, Bracket 4410',
-      body:'Drawing attached. How many days to turn 250, delivered by Nov 18?', status:'sent', kind:'ok', note:'also sent to Lakeshore Laser' },
-    { who:'To Dana · Crestline Aerospace', addr:'quotes@yourshop.com → dana@crestline-aero.com · sent from Horizon', av:'D', dir:'out',
-      subj:'Quote Q-1187: Bracket 4410 Rev B, 250 pcs',
-      body:'$86.50 ea, ships in 9 working days. Pat reviewed and sent.', status:'sent', kind:'ok', note:'priced off job 24-0871' },
-    { who:'From Dana · Crestline Aerospace', addr:'dana@crestline-aero.com → quotes@yourshop.com · via Outlook', av:'D', dir:'in',
-      subj:'PO 55821: Bracket 4410 Rev B', quote:{ from:'Dana · via Outlook', text:'PO attached. Please confirm.' },
-      body:'Matches Q-1187: qty 250, $86.50 ea, Rev B. Sales order 2291 opened.', status:'checked', kind:'ok', note:'qty, price, rev all match' },
-    { who:'To Dana · Crestline Aerospace', addr:'quotes@yourshop.com → dana@crestline-aero.com · sent from Horizon', av:'D', dir:'out',
-      subj:'Re: Where are the 4410s?', quote:{ from:'Dana asked · via Outlook', text:'Where are the 4410s? Need to plan the install.' },
-      body:'Laser done, in brake today, anodize back Nov 17. [Ships Nov 19] — two days ahead of your Nov 21.', status:'sent', kind:'ok', note:'from the shop floor timers' },
-    { who:'From Dana · Crestline Aerospace', addr:'dana@crestline-aero.com → quotes@yourshop.com · via Outlook', av:'D', dir:'in',
-      subj:'Rev C drawing: Bracket 4410', quote:{ from:'Dana · via Outlook', text:'Rev C attached. Please requote.' },
-      body:'Rev C vs Rev B: two holes moved 3 mm. Q-1187 was Rev B. Pat decides.', status:'drafting · next', kind:'next', note:'revision mismatch → decision' },
-    { who:'To Dana · Crestline Aerospace', addr:'quotes@yourshop.com → dana@crestline-aero.com · sent from Horizon', av:'D', dir:'out',
-      subj:'Packing list + material cert, PO 55821',
-      body:'250 pcs in 4 cartons. 6061-T6 cert and anodize cert attached.', status:'drafting · next', kind:'next', note:'' },
-    { who:'To Crestline Aerospace · AP', addr:'quotes@yourshop.com → ap@crestline-aero.com · sent from Horizon', av:'C', dir:'out',
-      subj:'Invoice 20419 for PO 55821',
-      body:'$21,625.00, net 30, same terms as the last order.', status:'drafting · next', kind:'next', note:'' },
-    { who:'Horizon · remembered', addr:'for the next Crestline Aerospace RFQ', av:'H', dir:'learned',
-      subj:'What this order taught Horizon',
-      body:'Usual run 250 pcs. Anodize: Midwest Anodizing, 5 days. Invoices go to Crestline AP.', status:'logged', kind:'ok', note:'nobody typed this in' }
-  ];
+  /* ---------- content: WALKTHROUGHS.md sections 5, 6, 7 with the brief's sample data ---------- */
+  var CK = '<span class="cr-check"><svg viewBox="0 0 10 10"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span>';
+  var SPARK = '<span class="av">✦</span>';
+  function mail(o) {
+    return '<div class="hzk-mail"' + (o.id ? ' id="' + SLUG + '-' + o.id + '"' : '') + '><span class="av">' + o.av + '</span><div class="card">' +
+      '<div class="hd"><b>' + o.from + '</b><span>to Pat</span>' + (o.tag ? '<span class="hzk-tag mute">' + o.tag + '</span>' : '') + '<small>' + o.when + '</small></div>' +
+      '<div class="sub">' + o.subject + '</div><div class="body">' + o.body + '</div>' +
+      (o.atts ? '<div class="atts">' + o.atts.map(function (a) { return '<span class="att"><i></i>' + a[0] + '<small>' + a[1] + '</small></span>'; }).join('') + '</div>' : '') +
+      '</div></div>';
+  }
+  function post(o) {
+    return '<div class="hzk-post" id="' + SLUG + '-' + o.id + '">' + SPARK + '<div class="box">' +
+      '<div class="hd"><b>' + o.subject + '</b><span>to Tessa Brandvold</span><small>' + o.when + '</small></div>' +
+      '<div class="body">' + o.body + '</div>' +
+      (o.att ? '<span class="att"><i></i>' + o.att[0] + '<small>' + o.att[1] + '</small></span>' : '') +
+      '<div class="hzk-actions" data-actions><span class="hzk-btn primary">Send</span><span class="hzk-btn">Not Now</span></div>' +
+      '</div></div>';
+  }
+  function step(t, d, m) {
+    return '<div class="hzk-step">' + SPARK + '<div><div class="t">' + t + '</div><div class="d">' + d + '</div><div class="m">' + m + '</div></div></div>';
+  }
+  function day(s) { return '<div class="cr-day">' + s + '</div>'; }
 
-  /* ---- body text → segments (plain / highlighted) ---- */
-  function segs(text){ var out = [], re = /\[([^\]]+)\]/g, last = 0, m;
-    while ((m = re.exec(text))){ if (m.index > last) out.push({ t:text.slice(last, m.index), hl:false }); out.push({ t:m[1], hl:true }); last = re.lastIndex; }
-    if (last < text.length) out.push({ t:text.slice(last), hl:false }); return out; }
-  function plainLen(text){ return text.replace(/[\[\]]/g, '').length; }
-  function esc(s){ return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
-  function renderTyped(el, text, n){ var html = '', left = n;
-    segs(text).forEach(function(s){ if (left <= 0) return; var part = s.t.slice(0, left); left -= part.length;
-      html += s.hl ? '<span class="' + SLUG + '-hl">' + esc(part) + '</span>' : esc(part); });
-    el.innerHTML = html; }
+  var ITEMS = {
+    rfq: day('Thu Oct 29') + mail({ av: 'TB', from: 'Tessa Brandvold', tag: 'RFQ', when: '8:12 AM', subject: 'Request for quote - LA-400 lift arm parts',
+      body: 'Hi Pat, please quote the parts below at 25, 100 and 250 kits. Drawings and models attached. All parts powder coat black RAL 9005 fine texture, same as last time. Hoping to have the first 25 kits by Dec 7.',
+      atts: [['26-1187_parts.xlsx', 'XLSX · 10 lines'], ['LI-2140_REV-B.pdf', 'PDF · 1 page'], ['7 more drawings', '']] }),
+    fold: '<div class="hzk-run">' + SPARK + '<div class="fold">Read the RFQ and estimated all 10 parts<small>3 steps · all automated · 8:12 AM to 8:15 AM · <a>Show Reasoning</a></small></div></div>',
+    parts: '<div class="hzk-table"><div class="th"><b>Parts</b><small>10 lines · Qty 100 each · Due Dec 7</small></div>' +
+      '<div class="tr head" style="grid-template-columns:minmax(0,2.4fr) .5fr .9fr .8fr 1fr"><span>Part</span><span class="r">Qty</span><span>Kind</span><span class="r">Unit</span><span class="r">Lead Time</span></div>' +
+      '<div class="tr" style="grid-template-columns:minmax(0,2.4fr) .5fr .9fr .8fr 1fr"><span class="pn">LI-2104 <em>· Top Access Cover</em></span><span class="r">100</span><span><span class="hzk-pill">Repeat</span></span><span class="r">$53.24</span><span class="r">3 wk · Dec 7</span></div>' +
+      '<div class="tr" style="grid-template-columns:minmax(0,2.4fr) .5fr .9fr .8fr 1fr"><span class="pn">LI-2140 <em>· Lift Arm Pivot Lug, Rev B</em></span><span class="r">200</span><span><span class="hzk-pill info">New Part</span></span><span class="r bad">$105.09</span><span class="r bad">6 wk · Dec 11</span></div>' +
+      '<div class="tr" style="grid-template-columns:minmax(0,2.4fr) .5fr .9fr .8fr 1fr"><span class="pn">LI-2155 <em>· Hitch Mount Clamp Plate</em></span><span class="r">100</span><span><span class="hzk-pill info">New Part</span></span><span class="r">$108.31</span><span class="r">4 wk · Dec 7</span></div>' +
+      '<div class="foot"><a>Show all 10 lines</a></div></div>',
+    quote: post({ id: 'quote', subject: 'Quote 2207: LA-400 lift arm parts', when: 'Drafted 10:52 AM',
+      body: 'Hi Tessa, attached is quote 2207 for the LA-400 lift arm parts. 100 kits come to $59,241.00. 9 of the 10 parts make Dec 7. The pivot lug (LI-2140) needs until Dec 11, so we can ship the rest on Dec 7 and the lugs on Dec 11, or everything on Dec 11.\n\nThanks,\nPat',
+      att: ['Quote-2207.pdf', 'PDF · 1 page'] }),
+    reply: mail({ av: 'TB', from: 'Tessa Brandvold', when: '11:40 AM', subject: 'Re: Quote 2207: LA-400 lift arm parts',
+      body: "Hi Pat, we'll go with 100 kits. Split shipping works, Dec 11 on the lugs is fine. Can you get closer to $54,500 for the 100 kits?" }),
+    margin: step('Worked out the margin at $54,500.', '26.5%, under the 28% floor but well over break-even.', 'Horizon · 11:42 AM · <a>Show Reasoning</a>'),
+    decision: '<div class="hzk-decision" id="' + SLUG + '-decision"><div class="hd"><span class="hzk-dot"></span><div><b>Tessa Asked for About $54,500</b><div class="sub">Quote 2207</div></div><small>Needs You · 11:43 AM</small></div>' +
+      '<div class="hzk-facts"><div class="hzk-fact"><small>At 8% Off</small><b>$54,501.00</b><em>was $59,241.00</em></div><div class="hzk-fact warn"><small>Margin</small><b>26.5%</b><em>Floor 28%</em></div><div class="hzk-fact"><small>Likely Real Margin</small><b>~28%</b><em>Repeats run 3% under</em></div></div>' +
+      '<ul class="hzk-evidence"><li>Laser is 62% loaded the next 4 weeks. This order fills a gap.</li><li>Larkspur pays in 18 days on net 30, with 6 orders in 12 months.</li><li>Tessa already accepted the split ship and Dec 11 on the lugs.</li></ul>' +
+      '<div class="hzk-rec">Recommend: accept 8% off</div><div class="hzk-limit">Discounts always come to you.</div>' +
+      '<div class="hzk-actions" data-actions><span class="hzk-btn primary">Send Acceptance</span><span class="hzk-btn">Counter at 5%</span><span class="hzk-btn">Edit</span></div></div>',
+    po: day('Mon Nov 2') + mail({ av: 'TB', from: 'Tessa Brandvold', tag: 'PO', when: '7:48 AM', subject: 'PO 77812 for quote 2207',
+      body: 'Hi Pat, thanks for the updated pricing. $54,501.00 for the 100 kits works for us. PO 77812 attached. The LI-2170 castings ship to you Friday.',
+      atts: [['PO-77812.pdf', 'PDF · 1 page']] }),
+    pocheck: '<div class="hzk-table"><div class="th"><b>PO 77812 vs Quote 2207 Rev 1</b><span class="hzk-pill bad">1 Line Missing</span></div>' +
+      '<div class="tr head" style="grid-template-columns:minmax(0,2.4fr) .5fr .7fr 1fr .8fr"><span>Part</span><span class="r">Qty</span><span class="r">Unit</span><span class="r">Total</span><span></span></div>' +
+      '<div class="tr" style="grid-template-columns:minmax(0,2.4fr) .5fr .7fr 1fr .8fr"><span class="pn">9 lines<span class="sub">LI-2104 to LI-2171, except LI-2131</span></span><span></span><span></span><span class="r">$53,741.00</span><span style="text-align:right"><span class="hzk-pill good">Match</span></span></div>' +
+      '<div class="tr bad" style="grid-template-columns:minmax(0,2.4fr) .5fr .7fr 1fr .8fr"><span class="pn">LI-2131 <em>· Gusset Angle</em><span class="sub bad">On the quote, not on the PO</span></span><span class="r">400</span><span class="r">$1.90</span><span class="r">$760.00</span><span style="text-align:right"><span class="hzk-pill bad">Missing</span></span></div>' +
+      '<div class="foot">No sales order until the PO matches the quote.</div></div>',
+    ask: post({ id: 'ask', subject: 'Re: PO 77812 for quote 2207', when: 'Drafted 7:49 AM',
+      body: "Hi Tessa, thanks for PO 77812. It doesn't include LI-2131 Gusset Angle (400 at $1.90, $760.00) from quote 2207. Could you send a revised PO with that line? Everything else matches.\n\nThanks,\nPat" }),
+    r1: mail({ av: 'TB', from: 'Tessa Brandvold', tag: 'PO', when: '8:30 AM', subject: 'Re: PO 77812 for quote 2207',
+      body: 'Good catch, thanks. Revised PO 77812-R1 attached.', atts: [['PO-77812-R1.pdf', 'PDF · 1 page']] }),
+    review: step('Passed contract review.', '9 checks: parts, revisions, quantities, prices, dates, terms, quality, customer material and capacity all match quote 2207 Rev 1.', 'Horizon · 8:31 AM · <a>Show Reasoning</a>'),
+    so: step('Created sales order SO3318 in Fulcrum.', 'Quote 2207 marked Won. PO 77812-R1 attached.', 'Horizon · 8:31 AM')
+  };
+  var SENT = {
+    quote: '<div class="hzk-result">' + CK + 'Sent · 10:54 AM</div>',
+    decision: '<div class="hzk-result">' + CK + 'Sent to Tessa at $54,501.00<small>Quote 2207 Rev 1 · 11:55 AM</small></div>',
+    ask: '<div class="hzk-result">' + CK + 'Sent · 7:50 AM</div>'
+  };
 
-  /* ---- timeline math (so the header comment and the runtime agree) ---- */
-  function introSec(i){ return (i > 0 ? 0.28 : 0) + 0.42 + (BEATS[i].quote ? 0.6 : 0); }   // card swap + card in + time to read the incoming line
-  function typeSec(i){ return plainLen(BEATS[i].body) * CHAR_MS / 1000; }
-  var BEAT_T = [], t = 3.5;
-  for (var k = 0; k < BEATS.length; k++){ BEAT_T.push(+t.toFixed(1)); t += introSec(k) + typeSec(k) + HOLD; }
-  var ARROW_T = +(BEAT_T[8] + introSec(8) + typeSec(8) + 1.0).toFixed(1), RESOLVED_T = +(ARROW_T + 1.3).toFixed(1), LOOP = +(RESOLVED_T + 4).toFixed(1);
+  /* ---------- project rail states (stage header + details card + items) ---------- */
+  function railHtml(st) {
+    var lit = { rfq: 1, quote: 2, po: 3, so: 4 }[st.stage];
+    var prog = '<div class="hzk-prog">' + [1, 2, 3, 4].map(function (i) { return '<i' + (i <= lit ? ' class="on"' : '') + '></i>'; }).join('') + '</div>';
+    var det = '<div class="hzk-detail">' + st.rows.map(function (r) { return '<div><span>' + r[0] + '</span><b' + (r[2] ? ' class="' + r[2] + '"' : '') + '>' + r[1] + '</b></div>'; }).join('') + '</div>';
+    var items = '<div class="cr-sec"><div class="t"><b>' + st.itemsTitle + '</b><small>· ' + st.itemsSub + '</small></div>' +
+      st.items.map(function (it) {
+        return '<div class="cr-item"><div class="l1"><b>' + it[0] + '</b><em>' + it[1] + '</em>' + (it[4] ? '<span>' + it[4] + '</span>' : '') + '</div>' +
+          '<div class="l2">' + it[2] + (it[3] ? '<span>' + it[3] + '</span>' : '') + '</div></div>';
+      }).join('') + '<div class="cr-all">All 10</div></div>';
+    return '<div class="hzk-stagehead"><div class="k">' + st.name + '<a>All Stages</a></div><div class="fig">' + st.fig + '</div><div class="sub">' + st.sub + '</div>' + prog + '</div>' + det + items;
+  }
+  var P0 = [['LI-2104', '', 'Repeat · Dec 7', '100 × $53.24', '$5,324.00'], ['LI-2140', 'Rev B', 'New Part · <i>Dec 11</i>', '200 × $105.09', '$21,018.00'], ['LI-2155', '', 'New Part · Dec 7', '100 × $108.31', '$10,831.00']];
+  var P1 = [['LI-2104', '', 'Repeat · Dec 7', '100 × $48.98', '$4,898.00'], ['LI-2140', 'Rev B', 'New Part · Dec 11', '200 × $96.68', '$19,336.00'], ['LI-2155', '', 'New Part · Dec 7', '100 × $99.65', '$9,965.00']];
+  var RAIL = {
+    rfq0: { stage: 'rfq', name: 'RFQ', fig: 'Reading 10 parts', sub: 'RFQ 26-1187 · 10 parts · Due Dec 7',
+      rows: [['Customer', 'Larkspur Implement Co. <a>Change</a>'], ['Due', 'Dec 7'], ['Source', '26-1187_parts.xlsx']],
+      itemsTitle: 'Items', itemsSub: 'Reading 10 parts', items: [['LI-2104', '', 'Qty 100', '', ''], ['LI-2140', 'Rev B', 'Qty 200', '', ''], ['LI-2155', '', 'Qty 100', '', '']] },
+    rfq1: { stage: 'rfq', name: 'RFQ', fig: '10 of 10 priced', sub: 'RFQ 26-1187 · 10 parts · Due Dec 7',
+      rows: [['Customer', 'Larkspur Implement Co. <a>Change</a>'], ['Due', 'Dec 7'], ['Source', '26-1187_parts.xlsx']],
+      itemsTitle: 'Items', itemsSub: '10 parts', items: P0 },
+    quote0: { stage: 'quote', name: 'Quote', fig: '$59,241.00', sub: '<a>Quote 2207</a> · not sent',
+      rows: [['Due', 'Dec 7'], ['Est. Completion', 'Dec 7 · lugs Dec 11'], ['Payment', 'Net 30'], ['Discount', 'None']],
+      itemsTitle: 'Quoted Items', itemsSub: '10 parts', items: P0 },
+    quote1: { stage: 'quote', name: 'Quote', fig: '$59,241.00', sub: '<a>Quote 2207</a> · sent',
+      rows: [['Sent', 'Oct 29, 10:54 AM'], ['Completion', 'Dec 7 · lugs Dec 11'], ['Payment', 'Net 30'], ['Discount', 'None']],
+      itemsTitle: 'Quoted Items', itemsSub: '10 parts', items: P0 },
+    quote2: { stage: 'quote', name: 'Quote', fig: '$54,501.00', sub: '<a>Quote 2207 Rev 1</a> · sent',
+      rows: [['Sent', 'Oct 29, 11:55 AM'], ['Completion', 'Dec 7 · lugs Dec 11'], ['Payment', 'Net 30'], ['Discount', '8%']],
+      itemsTitle: 'Quoted Items', itemsSub: '10 parts', items: P1 },
+    po: { stage: 'po', name: 'PO', fig: '$54,501.00', sub: '<a>PO 77812</a> · Quote 2207 Rev 1',
+      rows: [['PO Date', 'Nov 2'], ['Ship By', 'Dec 7 · lugs Dec 11'], ['Quote', '2207 Rev 1'], ['Lines', '9 of 10', 'warn']],
+      itemsTitle: 'Quoted Items', itemsSub: '10 parts', items: P1 },
+    so: { stage: 'so', name: 'Sales Order', fig: '$54,501.00', sub: '<a>SO3318</a> · PO 77812-R1',
+      rows: [['Order', 'SO3318'], ['Ship By', 'Dec 7 · lugs Dec 11'], ['Payment', 'Net 30'], ['Jobs', '6601 to 6610']],
+      itemsTitle: 'Ordered Items', itemsSub: '10 parts', items: P1 }
+  };
+  var PILL = { rfq0: ['processing', 'Processing'], rfq1: ['processing', 'Processing'], quote0: ['ready', 'Ready'], quote1: ['sent', 'Sent'], quote2: ['sent', 'Sent'], po: ['po', 'PO Received'], so: ['ordered', 'Ordered'] };
 
-  function init(root){
-    var $ = function(id){ return root.querySelector('#' + SLUG + '-' + id); };
-    var frame = root.querySelector('.' + SLUG + '-frame');
-    var items = Array.prototype.slice.call(root.querySelectorAll('#' + SLUG + '-list > li'));
-    var card = $('card'), glow = $('glow'), stem = $('stem'), prog = $('prog'), chip = $('chip');
-    var arrow = $('arrow'), apath = $('apath'), ahead = $('ahead'), aword = $('aword');
-    var typingTimer = null;
+  function init(root) {
+    var $ = function (id) { return root.querySelector('#' + SLUG + '-' + id); };
+    var list = $('list'), view = list.parentNode, rail = $('rail'), pill = $('pill');
 
-    /* ---- scale the 1200×750 stage to the root width ---- */
-    function fit(){
+    function fit() {
       var w = root.clientWidth || 1200, s = w / 1200;
-      root.style.setProperty('--s', s.toFixed(5));
-      if (!(window.CSS && CSS.supports && CSS.supports('aspect-ratio', '1 / 1'))) frame.style.height = (750 * s) + 'px';
+      root.style.setProperty('--s', String(s));
+      root.style.height = Math.round(750 * s) + 'px';
     }
     fit();
     if (window.ResizeObserver) new ResizeObserver(fit).observe(root); else window.addEventListener('resize', fit);
 
-    /* ---- tiny runtime: timers, seeking, typing ---- */
-    var timers = [], tl = [], instant = false;   // timers: inside a beat (typing, chips); tl: the timeline itself
-    function later(ms, fn, off){ if (instant){ if (ms <= (off || 0) * 1000) fn(); return; } timers.push(setTimeout(fn, ms)); }
-    function stopAll(){ timers.forEach(clearTimeout); timers = []; if (typingTimer){ clearTimeout(typingTimer); typingTimer = null; } }
-    function typeInto(el, text, offSec, done){
-      var total = plainLen(text), n = Math.max(0, Math.floor(offSec * 1000 / CHAR_MS));
-      if (n >= total){ renderTyped(el, text, total); card.classList.remove('is-typing'); if (!instant && done) done(); return; }
-      renderTyped(el, text, n); card.classList.add('is-typing');
-      if (instant) return;
-      (function step(){
-        typingTimer = setTimeout(function(){
-          n++; renderTyped(el, text, n);
-          if (n < total) step(); else { card.classList.remove('is-typing'); typingTimer = null; if (done) done(); }
-        }, CHAR_MS);
-      })();
+    /* ---------- tiny runtime: timers that know about seeking ---------- */
+    var timers = [], instant = false, seekAt = 0, curT = 0;
+    function later(ms, fn) { if (instant) { if (curT + ms / 1000 <= seekAt) fn(); return; } timers.push(setTimeout(fn, ms)); }
+    function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+    /* ---------- thread ---------- */
+    function scrollToEnd() {
+      var need = list.offsetHeight - view.clientHeight;
+      list.style.transform = need > 0 ? 'translateY(' + (-need) + 'px)' : 'none';
+    }
+    function add(key) {
+      var wrap = document.createElement('div');
+      wrap.innerHTML = ITEMS[key];
+      var nodes = Array.prototype.slice.call(wrap.childNodes);
+      nodes.forEach(function (n) { if (!instant) n.classList.add('hzk-in'); list.appendChild(n); });
+      scrollToEnd();
+    }
+    function sent(key) {
+      var box = $(key), acts = box && box.querySelector('[data-actions]');
+      if (!acts) return;
+      var wrap = document.createElement('div'); wrap.innerHTML = SENT[key];
+      var el = wrap.firstChild; if (!instant) el.classList.add('hzk-in');
+      acts.parentNode.replaceChild(el, acts);
+    }
+    function setRail(key) {
+      var html = railHtml(RAIL[key]);
+      var apply = function () {
+        rail.innerHTML = html;
+        pill.innerHTML = '<span class="hzk-pill ' + PILL[key][0] + '">' + PILL[key][1] + '</span>';
+        rail.classList.remove('is-out');
+        if (!instant) { rail.classList.add('hzk-in'); later(400, function () { rail.classList.remove('hzk-in'); }); }
+      };
+      if (instant) { apply(); return; }
+      rail.classList.add('is-out'); later(200, apply);
+    }
+    function clearThread() {
+      if (instant) { list.innerHTML = ''; list.style.transform = 'none'; setRail('rfq0'); return; }
+      list.classList.add('is-out');
+      later(400, function () { list.innerHTML = ''; list.style.transition = 'none'; list.style.transform = 'none'; void list.offsetHeight; list.style.transition = ''; list.classList.remove('is-out'); });
+      later(200, function () { setRail('rfq0'); });
+    }
+    function resolved() {
+      list.innerHTML = ''; list.classList.remove('is-out');
+      var was = instant; instant = true;
+      ['rfq', 'fold', 'parts', 'quote', 'reply', 'margin', 'decision', 'po', 'pocheck', 'ask', 'r1', 'review', 'so'].forEach(add);
+      sent('quote'); sent('decision'); sent('ask'); setRail('so'); scrollToEnd();
+      instant = was;
     }
 
-    /* ---- geometry helpers (unscaled stage px) ---- */
-    function pillCenter(i){ var p = items[i].firstElementChild; return 40 + items[i].offsetLeft + p.offsetLeft + p.offsetWidth / 2; }
-    function placeCard(i){
-      var cx = pillCenter(i), left = Math.max(40, Math.min(1200 - 40 - CARD_W, cx - CARD_W / 2));
-      card.style.left = left + 'px'; glow.style.left = left + 'px'; stem.style.left = cx + 'px';
-      var bottom = CARD_TOP + card.offsetHeight;                 // card height follows its content (inbound beats carry the incoming line)
-      stem.style.top = bottom + 'px'; stem.style.height = Math.max(0, RIBBON_TOP - bottom) + 'px';
-      prog.style.width = Math.max(0, cx - 40 - 24) + 'px';
-    }
-    function drawArrow(){
-      var x1 = pillCenter(8), x0 = pillCenter(0), y0 = RIBBON_TOP + 80, y1 = RIBBON_TOP + 190;
-      apath.setAttribute('d', 'M' + x1 + ' ' + y0 + ' C ' + x1 + ' ' + y1 + ', ' + x0 + ' ' + y1 + ', ' + x0 + ' ' + (y0 + 2));
-      ahead.setAttribute('d', 'M' + (x0 - 6) + ' ' + (y0 + 10) + ' L' + x0 + ' ' + (y0 - 1) + ' L' + (x0 + 6) + ' ' + (y0 + 10) + ' Z');
-      var len = apath.getTotalLength ? apath.getTotalLength() : 1400;
-      apath.style.strokeDasharray = len; apath.style.strokeDashoffset = arrow.classList.contains('is-on') ? 0 : len;
-    }
+    /* ---------- timeline ---------- */
+    var TL = [
+      { t: 0.0,  fn: resolved },
+      { t: 3.0,  fn: clearThread },
+      { t: 3.5,  fn: function () { add('rfq'); } },
+      { t: 6.2,  fn: function () { add('fold'); } },
+      { t: 6.9,  fn: function () { add('parts'); later(400, function () { setRail('rfq1'); }); } },
+      { t: 9.6,  fn: function () { add('quote'); later(400, function () { setRail('quote0'); }); } },
+      { t: 12.3, fn: function () { sent('quote'); later(400, function () { setRail('quote1'); }); } },
+      { t: 15.0, fn: function () { add('reply'); } },
+      { t: 17.7, fn: function () { add('margin'); } },
+      { t: 18.2, fn: function () { add('decision'); } },
+      { t: 20.9, fn: function () { sent('decision'); later(400, function () { setRail('quote2'); }); } },
+      { t: 23.6, fn: function () { add('po'); later(400, function () { setRail('po'); }); } },
+      { t: 26.3, fn: function () { add('pocheck'); } },
+      { t: 29.0, fn: function () { add('ask'); } },
+      { t: 31.7, fn: function () { sent('ask'); } },
+      { t: 32.5, fn: function () { add('r1'); } },
+      { t: 35.2, fn: function () { add('review'); } },
+      { t: 36.5, fn: function () { add('so'); later(400, function () { setRail('so'); }); } }
+    ];
 
-    /* ---- state setters ---- */
-    function fillCard(b){
-      $('av').textContent = b.av; $('av').classList.toggle('is-hz', b.av === 'H');
-      $('who').textContent = b.who; $('addr').textContent = b.addr;
-      $('dir').textContent = b.dir; $('dir').className = SLUG + '-dir' + (b.dir === 'out' ? ' is-out' : '');
-      $('subj').textContent = b.subj; $('note').textContent = b.note;
-      card.classList.toggle('has-quote', !!b.quote);
-      $('qfrom').textContent = b.quote ? b.quote.from : ''; $('qtext').textContent = b.quote ? b.quote.text : '';
-      chip.textContent = b.status; chip.className = SLUG + '-chip' + (b.kind === 'next' ? ' is-next' : '');
-    }
-    function showBeat(i, off){
-      off = off || 0;
-      var b = BEATS[i], prevMs = 0;
-      items.forEach(function(li, j){ li.classList.toggle('is-active', j === i); if (j < i) li.classList.add('has-status'); });
-      if (card.classList.contains('is-on') && !instant){ card.classList.remove('is-on'); stem.classList.remove('is-on'); prevMs = 280; }
-      later(prevMs, function(){
-        fillCard(b); $('body').textContent = ''; placeCard(i);
-        card.classList.add('is-on', 'is-typing'); glow.classList.add('is-on'); stem.classList.add('is-on');
-        chip.classList.remove('is-on');
-      }, off);
-      var typeAt = prevMs + 420 + (b.quote ? 600 : 0), statusAt = typeAt + plainLen(b.body) * CHAR_MS + 350;
-      later(typeAt, function(){ typeInto($('body'), b.body, Math.max(0, off - typeAt / 1000)); }, off);
-      later(statusAt, function(){ chip.classList.add('is-on'); items[i].classList.add('has-status'); }, off);
-    }
-    function showArrow(){ drawArrow(); arrow.classList.add('is-on'); apath.style.strokeDashoffset = 0; aword.classList.add('is-on'); }
-    function resolved(){
-      items.forEach(function(li){ li.classList.remove('is-active'); li.classList.add('has-status'); });
-      var b = BEATS[8]; fillCard(b); renderTyped($('body'), b.body, plainLen(b.body)); card.classList.remove('is-typing'); placeCard(8);
-      card.classList.add('is-on'); glow.classList.add('is-on'); stem.classList.add('is-on'); chip.classList.add('is-on');
-      prog.style.width = (pillCenter(8) - 64) + 'px';
-      showArrow();
-    }
-    function clear(){
-      stopAll();
-      items.forEach(function(li){ li.classList.remove('is-active', 'has-status'); });
-      card.classList.remove('is-on', 'is-typing'); glow.classList.remove('is-on'); stem.classList.remove('is-on'); chip.classList.remove('is-on');
-      prog.style.width = '0px'; arrow.classList.remove('is-on'); aword.classList.remove('is-on'); drawArrow();
-    }
+    var q = (typeof location !== 'undefined' && location.search) || '';
+    var mStill = /[?&]still=1/.test(q), mAt = /[?&]at=([\d.]+)/.exec(q);
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* ---- the timeline: one array of {t, fn(offsetSeconds)} ---- */
-    var TL = [ { t: 0, fn: resolved }, { t: 3, fn: clear } ];
-    BEATS.forEach(function(b, i){ TL.push({ t: BEAT_T[i], fn: function(o){ showBeat(i, o); } }); });
-    TL.push({ t: ARROW_T, fn: showArrow });
-    TL.push({ t: RESOLVED_T, fn: resolved });
+    if (mAt) {
+      var at = parseFloat(mAt[1]) % LOOP_END;
+      root.classList.add('is-seek'); instant = true; seekAt = at;
+      TL.forEach(function (b) { if (b.t <= at) { curT = b.t; b.fn(); } });
+      scrollToEnd();
+      return;
+    }
+    if (mStill || reduced) { root.classList.add('is-seek'); resolved(); return; }
 
-    function seek(at){
-      instant = true; root.classList.add('is-noanim'); stopAll(); clear();
-      TL.forEach(function(b){ if (b.t <= at) b.fn(at - b.t); });
-      void root.offsetWidth; root.classList.remove('is-noanim'); instant = false;
+    /* ---------- play, with in-view gating (pause keeps the elapsed time) ---------- */
+    var elapsed = 0, startedAt = 0, running = false;
+    function playFrom(from) {
+      clearTimers(); running = true; startedAt = Date.now() - from * 1000;
+      if (from === 0) { instant = true; resolved(); instant = false; }
+      TL.forEach(function (b) { if (b.t > from || (from === 0 && b.t === 0)) timers.push(setTimeout(b.fn, (b.t - from) * 1000)); });
+      timers.push(setTimeout(function () { playFrom(0); }, (LOOP_END - from) * 1000));
     }
-    function play(from, inclusive){
-      stopAll(); tl.forEach(clearTimeout); tl = [];
-      TL.forEach(function(b){ if (b.t > from || (inclusive && b.t === from)) tl.push(setTimeout(function(){ b.fn(0); }, (b.t - from) * 1000)); });
-      tl.push(setTimeout(function(){ play(RESTART, true); }, (LOOP - from) * 1000));
-    }
+    function pause() { if (!running) return; elapsed = ((Date.now() - startedAt) / 1000) % LOOP_END; clearTimers(); running = false; }
+    function resume() { if (running) return; if (elapsed < 0.5) { playFrom(0); return; } instant = true; seekAt = elapsed; list.innerHTML = ''; TL.forEach(function (b) { if (b.t <= elapsed) { curT = b.t; b.fn(); } }); scrollToEnd(); instant = false; playFrom(elapsed); }
+    var visible = true, hidden = !!document.hidden;
+    function gate() { if (visible && !hidden) resume(); else pause(); }
+    if (window.IntersectionObserver) new IntersectionObserver(function (es) { es.forEach(function (e) { visible = e.intersectionRatio >= 0.1; }); gate(); }, { threshold: [0, 0.1, 0.5] }).observe(root);
+    document.addEventListener('visibilitychange', function () { hidden = !!document.hidden; gate(); });
 
-    /* ---- boot ---- */
-    var q = {}; try { q = Object.fromEntries(new URLSearchParams(window.location.search)); } catch (e) {}
-    var reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    if (q.beats !== undefined && window.console) console.log(SLUG + ' beats', BEAT_T.join(' '), 'arrow', ARROW_T, 'resolved', RESOLVED_T, 'loop', LOOP);
-    function start(){
-      if (q.still || reduced){ seek(0); return; }
-      if (q.at !== undefined){ seek(((parseFloat(q.at) || 0) % LOOP + LOOP) % LOOP); return; }
-      seek(0); play(0, false);
-    }
-    // fonts change pill widths; lay out once they are in, with a fallback timer
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(start, start); else setTimeout(start, 300);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ if (card.classList.contains('is-on')) { var i = items.findIndex(function(li){ return li.classList.contains('is-active'); }); placeCard(i < 0 ? 8 : i); drawArrow(); } });
+    resolved();
+    playFrom(0);
   }
 
   document.querySelectorAll('.' + SLUG).forEach(init);

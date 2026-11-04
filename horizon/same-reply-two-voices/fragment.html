@@ -1,130 +1,203 @@
-
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-.hz-same-reply-two-voices{position:relative;width:100%;max-width:1200px;margin:0 auto;overflow:hidden;aspect-ratio:1200/750;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#292932;line-height:1.4;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#f5f7fa}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* ---------- root + stage (1200x750, scaled to the root width) ---------- */
+.hz-same-reply-two-voices{position:relative;width:100%;max-width:1200px;margin:0 auto;overflow:hidden;aspect-ratio:1200/750;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#292932;line-height:1.4;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#fff}
 .hz-same-reply-two-voices *,.hz-same-reply-two-voices *::before,.hz-same-reply-two-voices *::after{box-sizing:border-box}
-.hz-same-reply-two-voices-stage{position:absolute;top:0;left:0;width:1200px;height:750px;transform-origin:0 0;transform:scale(var(--s,1));background:#f5f7fa;overflow:hidden}
-.hz-same-reply-two-voices .sr-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(520px 320px at 88% 8%,#D7D9FB 0%,rgba(215,217,251,0) 70%),radial-gradient(420px 260px at 6% 96%,#D7D9FB 0%,rgba(215,217,251,0) 70%)}
-/* window */
-.hz-same-reply-two-voices .sr-win{position:absolute;left:32px;top:32px;width:1136px;height:686px;background:#fff;border:1px solid #e2e2e2;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.15);overflow:hidden;display:flex;flex-direction:column}
-.hz-same-reply-two-voices .sr-bar{flex:0 0 44px;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid #e2e2e2;font-size:13px;color:#6b6b6b}
-.hz-same-reply-two-voices .sr-dots{display:inline-flex;gap:6px;margin-right:4px}
-.hz-same-reply-two-voices .sr-dots i{width:11px;height:11px;border-radius:50%;background:#e2e2e2;display:block}
-.hz-same-reply-two-voices .sr-brand{font-weight:700;color:#292932;letter-spacing:-.01em}
-.hz-same-reply-two-voices .sr-prod{font-weight:600;color:#292932}
-.hz-same-reply-two-voices .sr-acct{margin-left:4px;padding-left:12px;border-left:1px solid #e2e2e2;color:#6b6b6b}
-.hz-same-reply-two-voices .sr-status{margin-left:auto;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:#6b6b6b;line-height:1;padding:6px 10px;border-radius:999px;background:#f5f7fa;border:1px solid #e2e2e2;transition:opacity .3s cubic-bezier(.2,.7,.2,1)}
-.hz-same-reply-two-voices .sr-status.is-swap{opacity:0}
-.hz-same-reply-two-voices .sr-status i{width:8px;height:8px;border-radius:50%;background:#1d63ed;display:block}
-.hz-same-reply-two-voices .sr-status.is-busy i{animation:hz-srtv-pulse 1.2s cubic-bezier(.2,.7,.2,1) infinite}
-.hz-same-reply-two-voices .sr-status.is-ready i{background:#3DC975}
-@keyframes hz-srtv-pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.hz-same-reply-two-voices .sr-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:16px;padding:24px}
-/* decision banner */
-.hz-same-reply-two-voices .sr-decision{display:flex;align-items:center;gap:16px;padding:16px 24px;border:1px solid #FF5C16;border-left:4px solid #FF5C16;border-radius:8px;background:#FFEFE8}
-.hz-same-reply-two-voices .sr-dec-icon{flex:0 0 36px;width:36px;height:36px;border-radius:50%;background:#FF5C16;color:#fff;font-weight:700;font-size:20px;display:grid;place-items:center;line-height:1}
-.hz-same-reply-two-voices .sr-dec-text{flex:1 1 auto;min-width:0}
-.hz-same-reply-two-voices .sr-dec-kicker{font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#FF5C16;margin-bottom:4px;line-height:1}
-.hz-same-reply-two-voices .sr-dec-head{font-size:17px;font-weight:600;color:#292932;line-height:1.3}
-.hz-same-reply-two-voices .sr-dec-head em{font-style:normal;color:#6b6b6b;font-weight:500}
-.hz-same-reply-two-voices .sr-dec-meta{font-size:13px;color:#6b6b6b;margin-top:4px}
-.hz-same-reply-two-voices .sr-dec-meta b{font-weight:600;color:#292932}
-.hz-same-reply-two-voices .sr-dec-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-.hz-same-reply-two-voices .sr-tag{display:inline-block;font-size:12px;font-weight:600;line-height:1;padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #FF5C16;color:#292932;white-space:nowrap}
-.hz-same-reply-two-voices .sr-rule{display:inline-block;font-size:12px;font-weight:500;line-height:1;padding:6px 8px;border-radius:4px;background:#fff;border:1px solid #e2e2e2;color:#6b6b6b;white-space:nowrap;transition:background .5s cubic-bezier(.2,.7,.2,1),color .5s cubic-bezier(.2,.7,.2,1),border-color .5s cubic-bezier(.2,.7,.2,1)}
-.hz-same-reply-two-voices .sr-rule.is-on{background:#292932;border-color:#292932;color:#fff}
-/* drafts */
-.hz-same-reply-two-voices .sr-drafts{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.hz-same-reply-two-voices .sr-draft{display:flex;flex-direction:column;min-height:0;border:1px solid #e2e2e2;border-radius:8px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06);overflow:hidden}
-.hz-same-reply-two-voices .sr-draft-head{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #e2e2e2;background:#f5f7fa;font-size:13px;color:#6b6b6b}
-.hz-same-reply-two-voices .sr-voice{display:inline-block;font-size:12px;font-weight:600;line-height:1;padding:6px 10px;border-radius:999px;background:#292932;color:#fff;letter-spacing:.02em}
-.hz-same-reply-two-voices .sr-draft--terse .sr-voice{background:#1d63ed}
-.hz-same-reply-two-voices .sr-field{padding:8px 16px;font-size:13px;color:#292932;border-bottom:1px solid #e2e2e2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hz-same-reply-two-voices .sr-field b{font-weight:500;color:#6b6b6b;display:inline-block;width:64px}
-.hz-same-reply-two-voices .sr-draft-body{flex:1 1 auto;min-height:0;padding:16px;font-size:14px;line-height:1.6;color:#292932;white-space:pre-wrap;overflow:hidden}
-.hz-same-reply-two-voices .sr-draft-body.is-typing::after{content:'';display:inline-block;width:2px;height:1em;background:#1d63ed;vertical-align:-.15em;margin-left:2px;animation:hz-srtv-blink 1s steps(2,start) infinite}
+.hz-same-reply-two-voices-stage{position:absolute;top:0;left:0;width:1200px;height:750px;transform-origin:0 0;transform:scale(var(--s,1));background:#fff;overflow:hidden}
+/* canvas: one lime accent, the window, one caption */
+.hz-same-reply-two-voices .sr-neon{position:absolute;left:12px;top:12px;width:10px;height:10px;border-radius:50%;background:#DDF83B}
+.hz-same-reply-two-voices .sr-win{position:absolute;left:30px;top:30px;width:1140px;height:690px;border-radius:10px;border:1px solid #2b2d33;box-shadow:0 12px 32px -12px rgba(15,17,21,.45);overflow:hidden;display:flex;flex-direction:column;background:#131418}
+.hz-same-reply-two-voices .sr-bar{position:relative;flex:0 0 36px;background:#1b1d23;display:flex;align-items:center;padding:0 14px}
+.hz-same-reply-two-voices .sr-dots{display:inline-flex;gap:7px}
+.hz-same-reply-two-voices .sr-dots i{width:11px;height:11px;border-radius:50%;background:#3b3d43;display:block}
+.hz-same-reply-two-voices .sr-title{position:absolute;left:0;right:0;top:0;height:36px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:500;color:#a9abae;pointer-events:none}
+.hz-same-reply-two-voices .sr-caption{position:absolute;left:0;right:0;top:720px;height:30px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:400;color:#6b6b6b}
+
+/* ---------- Horizon UI kit (from _kit/horizon-ui.css; only the rules this loop uses) ---------- */
+.hz-same-reply-two-voices { --app: #131418; --list: #191a1f; --panel: #191a1f; --card: #191a1f; --card2: #27292e; --line: #2b2d33;
+  --line2: #3b3d43; --edge: #3b3d43; --edge2: #4b4d53; --fg: #e6e6f0; --fg-strong: #f2f2f8; --mute: rgba(230,230,240,.6);
+  --mute2: rgba(230,230,240,.72); --mute3: rgba(230,230,240,.55); --hover: rgba(255,255,255,.06);
+  --link: #6788ff; --dot: #6788ff; --count: #6788ff; --send: #3f6fe0; --avatar: #8a8f3a; --active-bg: #162d55;
+  --spark-bg: #2a2740; --spark-fg: #c4baf5; --working: #a9a2dc; --info-bg: #1f2a3a; --info-fg: #8fa8ff; --tag-bg: #323335; --tag-fg: #a9abae;
+  --font: "Horizon Inter", Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+.hz-same-reply-two-voices .hzk-app { display: flex; width: 100%; height: 100%; flex: 1 1 auto; min-height: 0; background: var(--app); color: var(--fg); font-family: var(--font);
+  font-weight: 300; font-size: 14px; line-height: 1.5; overflow: hidden; -webkit-font-smoothing: antialiased; }
+.hz-same-reply-two-voices .hzk-app * { box-sizing: border-box; }
+.hz-same-reply-two-voices .hzk-app button { font: inherit; color: inherit; cursor: default; }
+.hz-same-reply-two-voices .hzk-rail { width: 64px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 2px; border-right: 1px solid var(--line); }
+.hz-same-reply-two-voices .hzk-rail-item { width: 60px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 0; border: 0; border-radius: 8px; background: none; color: var(--mute2); font-size: 11px; letter-spacing: -.02em; white-space: nowrap; }
+.hz-same-reply-two-voices .hzk-rail-item.is-on { background: var(--active-bg); color: var(--link); }
+.hz-same-reply-two-voices .hzk-rail-item svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hz-same-reply-two-voices .hzk-rail-spacer { flex: 1 1 auto; }
+.hz-same-reply-two-voices .hzk-pill { flex: none; padding: 0 8px; border-radius: 12px; line-height: 20px; font-size: 11px; font-weight: 600; background: var(--tag-bg); color: var(--tag-fg); white-space: nowrap; }
+.hz-same-reply-two-voices .hzk-pill.ready { background: #0d2d3b; color: #78a6bd; }
+.hz-same-reply-two-voices .hzk-pill.processing { background: var(--tag-bg); color: var(--tag-fg); }
+.hz-same-reply-two-voices .hzk-tag { display: inline-block; padding: 0 8px; border-radius: 10px; line-height: 19px; font-size: 11px; font-weight: 600; background: var(--info-bg); color: var(--info-fg); white-space: nowrap; }
+.hz-same-reply-two-voices .hzk-tag.mute { background: var(--tag-bg); color: var(--tag-fg); }
+.hz-same-reply-two-voices .hzk-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--dot); display: inline-block; flex: none; }
+.hz-same-reply-two-voices .hzk-composer { margin-top: auto; height: 40px; border: 1px solid var(--edge2); border-radius: 8px; background: #1b1d23; display: flex; align-items: center; gap: 10px; padding: 0 8px 0 14px; color: var(--mute); font-size: 14px; }
+.hz-same-reply-two-voices .hzk-composer span { flex: 1 1 auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hz-same-reply-two-voices .hzk-composer i { width: 30px; height: 30px; border-radius: 8px; background: #2a2d36; color: var(--mute3); display: grid; place-items: center; font-style: normal; font-size: 14px; }
+.hz-same-reply-two-voices .hzk-run { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
+.hz-same-reply-two-voices .hzk-run .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-same-reply-two-voices .hzk-run .fold { font-size: 14px; font-weight: 500; color: var(--fg); }
+.hz-same-reply-two-voices .hzk-run .fold small { display: block; font-size: 12px; font-weight: 300; color: var(--mute); margin-top: 2px; }
+.hz-same-reply-two-voices .hzk-run .fold small a { color: var(--link); }
+.hz-same-reply-two-voices .hzk-post { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
+.hz-same-reply-two-voices .hzk-post .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-same-reply-two-voices .hzk-post .av.is-live { animation: hzk-pulse 1.2s ease-in-out infinite; }
+.hz-same-reply-two-voices .hzk-post .box { border: 1px solid var(--line2); border-radius: 8px; background: var(--card); padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 8px; }
+.hz-same-reply-two-voices .hzk-post .box .hd { display: flex; align-items: baseline; gap: 8px; font-size: 12.5px; color: var(--mute2); min-width: 0; }
+.hz-same-reply-two-voices .hzk-post .box .hd b { font-size: 14px; font-weight: 500; color: var(--fg-strong); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hz-same-reply-two-voices .hzk-post .box .hd span { white-space: nowrap; }
+.hz-same-reply-two-voices .hzk-post .box .hd small { margin-left: auto; font-size: 11.5px; color: var(--mute3); white-space: nowrap; }
+.hz-same-reply-two-voices .hzk-post .box .body { font-size: 13.5px; line-height: 1.5; color: rgba(230,230,240,.88); white-space: pre-line; }
+.hz-same-reply-two-voices .hzk-mail { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
+.hz-same-reply-two-voices .hzk-mail .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: #323335; color: #a9abae; }
+.hz-same-reply-two-voices .hzk-mail .hd { display: flex; gap: 8px; align-items: baseline; font-size: 12.5px; color: var(--mute2); }
+.hz-same-reply-two-voices .hzk-mail .hd b { color: var(--fg-strong); font-weight: 500; font-size: 13.5px; }
+.hz-same-reply-two-voices .hzk-mail .hd small { margin-left: auto; font-size: 11.5px; color: var(--mute3); white-space: nowrap; }
+.hz-same-reply-two-voices .hzk-mail .sub { font-size: 14px; font-weight: 500; margin-top: 2px; }
+.hz-same-reply-two-voices .hzk-mail .body { margin-top: 4px; font-size: 13.5px; line-height: 1.55; color: rgba(230,230,240,.85); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.hz-same-reply-two-voices .hzk-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.hz-same-reply-two-voices .hzk-btn { height: 28px; padding: 0 12px; border-radius: 7px; border: 1px solid var(--edge2); background: transparent; color: var(--fg); font-size: 12.5px; font-weight: 500; display: inline-flex; align-items: center; }
+.hz-same-reply-two-voices .hzk-btn.primary { background: var(--send); border-color: var(--send); color: #fff; }
+@keyframes hzk-rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes hzk-pulse { 50% { opacity: .35; } }
+
+/* ---------- this loop: two project threads side by side ---------- */
+.hz-same-reply-two-voices .sr-panes{flex:1 1 auto;min-width:0;min-height:0;display:grid;grid-template-columns:1fr 1fr}
+.hz-same-reply-two-voices .sr-pane{display:flex;flex-direction:column;min-width:0;min-height:0;border-right:1px solid var(--line)}
+.hz-same-reply-two-voices .sr-pane:last-child{border-right:0}
+.hz-same-reply-two-voices .sr-pane-hd{flex:0 0 44px;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid var(--line);min-width:0}
+.hz-same-reply-two-voices .sr-logo{width:20px;height:20px;flex:none;border-radius:4px;background:#fff;color:#131418;font-size:11px;font-weight:700;display:grid;place-items:center;line-height:1}
+.hz-same-reply-two-voices .sr-pane-hd b{font-size:14px;font-weight:500;color:var(--fg-strong);white-space:nowrap}
+.hz-same-reply-two-voices .sr-pane-hd .meta{flex:1 1 auto;min-width:0;font-size:12.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hz-same-reply-two-voices .sr-pill{transition:opacity .3s cubic-bezier(.2,.7,.2,1)}
+.hz-same-reply-two-voices .sr-pill.is-swap{opacity:0}
+.hz-same-reply-two-voices .sr-thread{flex:1 1 auto;min-height:0;padding:12px 16px 0;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.hz-same-reply-two-voices .sr-pane .hzk-composer{flex:none;margin:10px 16px 14px}
+/* drafted body: typing caret, inline highlights (Rob's rule: line-height 1, equal padding, clone) */
+.hz-same-reply-two-voices .sr-body{min-height:21px}
+.hz-same-reply-two-voices .sr-body.is-typing::after{content:'';display:inline-block;width:2px;height:1em;background:var(--link);vertical-align:-.15em;margin-left:2px;animation:hz-srtv-blink 1s steps(2,start) infinite}
 @keyframes hz-srtv-blink{to{visibility:hidden}}
-/* inline highlight on the two facts (neon tint) */
-.hz-same-reply-two-voices .sr-hl{line-height:1;padding:2px 3px;margin:0 -2px;border-radius:4px;background:transparent;color:inherit;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-color .6s cubic-bezier(.2,.7,.2,1)}
-.hz-same-reply-two-voices .sr-hl.is-on{background:#F4FFB0}
-/* footer */
-.hz-same-reply-two-voices .sr-foot{flex:0 0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.hz-same-reply-two-voices .sr-label{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:#6b6b6b}
-.hz-same-reply-two-voices .sr-label svg{width:16px;height:16px;flex:0 0 16px}
-.hz-same-reply-two-voices .sr-send{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#D8F4E3;color:#292932;font-size:12px;font-weight:600;line-height:1;border:1px solid #3DC975}
-.hz-same-reply-two-voices .sr-send i{width:8px;height:8px;border-radius:50%;background:#3DC975;display:block}
-/* motion */
-.hz-same-reply-two-voices .sr-anim{transition:opacity .55s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1)}
-.hz-same-reply-two-voices .sr-anim.is-hidden{opacity:0;transform:translateY(10px)}
-.hz-same-reply-two-voices .sr-send.is-hidden{transform:translateY(0) scale(.92)}
+.hz-same-reply-two-voices .sr-hl{line-height:1;padding:2px 3px;margin:0 -2px;border-radius:4px;background:transparent;color:inherit;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-color .6s cubic-bezier(.2,.7,.2,1),color .6s cubic-bezier(.2,.7,.2,1)}
+.hz-same-reply-two-voices .sr-hl.is-on{background:#1f2a3a;color:#6788ff}
+/* ready block: attachment, "Ready to send" (dot + text), Send + Not Now */
+.hz-same-reply-two-voices .sr-ready{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.hz-same-reply-two-voices .sr-att{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;padding:6px 10px 6px 6px;border-radius:8px;border:1px solid var(--line2);background:var(--card);font-size:12.5px;font-weight:600;color:var(--fg)}
+.hz-same-reply-two-voices .sr-att i{width:36px;height:28px;border-radius:4px;background:#fbfbf8;display:block;position:relative;overflow:hidden}
+.hz-same-reply-two-voices .sr-att i::before{content:'';position:absolute;left:6px;right:6px;top:5px;height:3px;background:#2a2d33;border-radius:1px;box-shadow:0 6px 0 -1px #c9cac4,0 11px 0 -1px #c9cac4,0 16px 0 -1px #c9cac4}
+.hz-same-reply-two-voices .sr-att small{font-weight:400;color:var(--mute3);font-size:11px}
+.hz-same-reply-two-voices .sr-ready .hzk-actions{align-items:center}
+.hz-same-reply-two-voices .sr-state{display:inline-flex;align-items:center;gap:8px;margin-left:4px;font-size:12.5px;color:var(--mute2)}
+.hz-same-reply-two-voices .sr-state .hzk-dot{width:8px;height:8px;background:#369bc5}
+/* motion: every new element rises 6px with a 350ms ease-out fade */
+.hz-same-reply-two-voices .sr-anim{transition:opacity .35s ease-out,transform .35s ease-out}
+.hz-same-reply-two-voices .sr-anim.is-hidden{opacity:0;transform:translateY(6px);pointer-events:none}
+.hz-same-reply-two-voices .sr-anim.is-gone{display:none}
 .hz-same-reply-two-voices--notrans *,.hz-same-reply-two-voices--notrans *::before,.hz-same-reply-two-voices--notrans *::after{transition:none!important;animation:none!important}
 @media (prefers-reduced-motion:reduce){.hz-same-reply-two-voices *,.hz-same-reply-two-voices *::before,.hz-same-reply-two-voices *::after{transition:none!important;animation:none!important}}
 </style>
 <div class="hz-same-reply-two-voices">
   <div class="hz-same-reply-two-voices-stage">
-    <div class="sr-bg"></div>
+    <span class="sr-neon"></span>
     <div class="sr-win">
-      <div class="sr-bar">
-        <span class="sr-dots"><i></i><i></i><i></i></span>
-        <span class="sr-brand">fulcrum</span><span>·</span><span class="sr-prod">Horizon</span>
-        <span class="sr-acct">quotes@yourshop.com</span>
-        <span class="sr-status is-ready"><i></i><span class="sr-status-text">2 drafts ready</span></span>
-      </div>
-      <div class="sr-body">
-        <div class="sr-decision sr-anim">
-          <div class="sr-dec-icon">!</div>
-          <div class="sr-dec-text">
-            <div class="sr-dec-kicker">Decision</div>
-            <div class="sr-dec-head">Dana asked for 6-day turnaround. Expedite fee: 15% <em>(your rule)</em>.</div>
-            <div class="sr-dec-meta"><b>from Outlook</b> · Crestline Aerospace · Bracket 4410, Rev B · qty 250 · ships Nov 9</div>
-          </div>
-          <div class="sr-dec-side">
-            <span class="sr-tag">Needs you</span>
-            <span class="sr-rule is-on">Rule · rush under 10 days → +15%</span>
-          </div>
-        </div>
-        <div class="sr-drafts">
-          <div class="sr-draft sr-draft--formal sr-anim">
-            <div class="sr-draft-head"><span class="sr-voice">Formal</span><span>Crestline purchasing writes long emails</span></div>
-            <div class="sr-field"><b>To</b>dana@crestline-aero.com</div>
-            <div class="sr-field"><b>Subject</b>RE: RFQ Bracket 4410, Rev B — 6-day turnaround</div>
-            <div class="sr-draft-body">Hi Dana,
+      <div class="sr-bar"><span class="sr-dots"><i></i><i></i><i></i></span><span class="sr-title">Horizon</span></div>
+      <div class="hzk-app">
+        <nav class="hzk-rail">
+          <button class="hzk-rail-item is-on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/></svg>Projects</button>
+          <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Knowledge</button>
+          <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>Insights</button>
+          <span class="hzk-rail-spacer"></span>
+          <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
+        </nav>
+        <div class="sr-panes">
 
-Thank you for the request. We can hold a 6-day turnaround on 250 pcs of Bracket 4410, Rev B. Ships Nov 9.
+          <!-- left: Larkspur Implement Co. (Tessa writes long, formal) -->
+          <section class="sr-pane" data-pane="0">
+            <div class="sr-pane-hd"><span class="sr-logo">L</span><b>Larkspur Implement Co.</b><span class="meta">10 Parts · Tessa Brandvold</span><span class="hzk-pill ready sr-pill">Ready</span></div>
+            <div class="sr-thread">
+              <div class="hzk-mail">
+                <span class="av">TB</span>
+                <div>
+                  <div class="hd"><b>Tessa Brandvold</b><span>to Pat</span><span class="hzk-tag mute">RFQ</span><small>8:12 AM</small></div>
+                  <div class="sub">Request for quote - LA-400 lift arm parts</div>
+                  <div class="body">Please quote the parts below at 25, 100 and 250 kits. Drawings and models attached. All parts powder coat black RAL 9005 fine texture, same as last time. Hoping to have the first 25 kits by Dec 7.</div>
+                </div>
+              </div>
+              <div class="hzk-run">
+                <span class="av">✦</span>
+                <div class="fold">Read the RFQ and estimated all 10 parts<small>3 steps · all automated · 8:12 AM to 8:15 AM · <a>Show Reasoning</a></small></div>
+              </div>
+              <div class="hzk-post sr-post sr-anim">
+                <span class="av">✦</span>
+                <div class="box">
+                  <div class="hd"><b>Quote 2207: LA-400 lift arm parts</b><span>to Tessa Brandvold</span><small>10:54 AM</small></div>
+                  <div class="body sr-body">Hi Tessa,
 
-That is inside our standard lead time, so a 15% expedite fee applies: $92.00 ea, $23,000.00 total.
+Attached is quote 2207 for the LA-400 lift arm parts. 100 kits come to $59,241.00, black RAL 9005 fine texture included as before.
 
-Please confirm and we will release it to the floor today.
+9 of the 10 parts ship Dec 7. The pivot lug needs until Dec 11; we can send the rest first or hold it all for Dec 11.
 
 Best regards,
 Pat</div>
-          </div>
-          <div class="sr-draft sr-draft--terse sr-anim">
-            <div class="sr-draft-head"><span class="sr-voice">Terse</span><span>Halvorsen writes two-line emails</span></div>
-            <div class="sr-field"><b>To</b>purchasing@halvorsen-machine.com</div>
-            <div class="sr-field"><b>Subject</b>RE: Bracket 4410 Rev B — 6 days</div>
-            <div class="sr-draft-body">Yes on 6 days. Ships Nov 9.
-15% expedite: $92.00 ea, $23,000.00 total.
-Confirm and we start today.
+                  <div class="sr-ready sr-anim">
+                    <span class="sr-att"><i></i>Quote-2207.pdf <small>· 2 pages</small></span>
+                    <div class="hzk-actions"><button class="hzk-btn primary">Send</button><button class="hzk-btn">Not Now</button><span class="sr-state"><span class="hzk-dot"></span>Ready to send</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hzk-composer"><span>Ask Horizon about this project, or tell it what to do</span><i>↑</i></div>
+          </section>
+
+          <!-- right: Marlin Marine (Dev writes two-line emails) -->
+          <section class="sr-pane" data-pane="1">
+            <div class="sr-pane-hd"><span class="sr-logo">M</span><b>Marlin Marine</b><span class="meta">4 Parts · Dev Castillo</span><span class="hzk-pill ready sr-pill">Ready</span></div>
+            <div class="sr-thread">
+              <div class="hzk-mail">
+                <span class="av">DC</span>
+                <div>
+                  <div class="hd"><b>Dev Castillo</b><span>to Pat</span><span class="hzk-tag mute">RFQ</span><small>9:00 AM</small></div>
+                  <div class="sub">MM-220 parts</div>
+                  <div class="body">Pat, need the 4 MM-220 parts again, same as the last run. Dev</div>
+                </div>
+              </div>
+              <div class="hzk-run">
+                <span class="av">✦</span>
+                <div class="fold">Priced all 4 parts from the last run<small>2 steps · all automated · 9:00 AM to 9:02 AM · <a>Show Reasoning</a></small></div>
+              </div>
+              <div class="hzk-post sr-post sr-anim">
+                <span class="av">✦</span>
+                <div class="box">
+                  <div class="hd"><b>Quote 1031: MM-220 parts</b><span>to Dev Castillo</span><small>9:02 AM</small></div>
+                  <div class="body sr-body">Dev, quote 1031 attached. 4 parts, $18,640.00, ships Nov 9.
 
 Pat</div>
-          </div>
-        </div>
-        <div class="sr-foot">
-          <div class="sr-label sr-anim"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8.5" stroke="#1d63ed" stroke-width="1.5"/><path d="M6.2 10.3l2.5 2.5 5.1-5.3" stroke="#1d63ed" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Matches how you write to each customer.</div>
-          <div class="sr-send sr-anim"><i></i>Pat sends</div>
+                  <div class="sr-ready sr-anim">
+                    <span class="sr-att"><i></i>Quote-1031.pdf <small>· 1 page</small></span>
+                    <div class="hzk-actions"><button class="hzk-btn primary">Send</button><button class="hzk-btn">Not Now</button><span class="sr-state"><span class="hzk-dot"></span>Ready to send</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="hzk-composer"><span>Ask Horizon about this project, or tell it what to do</span><i>↑</i></div>
+          </section>
+
         </div>
       </div>
     </div>
+    <div class="sr-caption">Same facts. Each customer's voice.</div>
   </div>
 </div>
 <script>
 (function(){
   var SLUG = 'hz-same-reply-two-voices';
   var DW = 1200, DH = 750;
-  var LOOP_START = 3, LOOP_END = 21;   // seconds; after the first pass the loop repeats 3.0 -> 21.0
-  var HL_DELAY = 400;                  // ms after a body finishes typing before its highlights fade in
-  var FACTS = ['$92.00 ea', 'Ships Nov 9'];
+  var LOOP_START = 3.0;                 // after the first pass the loop repeats LOOP_START -> LOOP_END
+  var TYPE_MS = 25;                     // ms per character for the drafted bodies (readable)
+  var FACTS = [['$59,241.00', 'Dec 7'], ['$18,640.00', 'Nov 9']];   // price + ship date per pane
 
   Array.prototype.slice.call(document.querySelectorAll('.' + SLUG)).forEach(init);
 
@@ -145,21 +218,17 @@ Pat</div>
     window.addEventListener('resize', fit, { passive: true });
     fit();
 
-    /* ---------- elements ---------- */
-    var dec    = $('.sr-decision');
-    var rule   = $('.sr-rule');
-    var drafts = $$('.sr-draft');
-    var bodies = $$('.sr-draft-body');
-    var label  = $('.sr-label');
-    var send   = $('.sr-send');
-    var status = $('.sr-status');
-    var statusText = $('.sr-status-text');
+    /* ---------- elements, per pane ---------- */
+    var posts  = $$('.sr-post');
+    var sparks = posts.map(function(p){ return p.querySelector('.av'); });
+    var bodies = $$('.sr-body');
+    var readys = $$('.sr-ready');
+    var pills  = $$('.sr-pill');
     var texts  = bodies.map(function(b){ return b.textContent; });
-    /* same text with the two facts wrapped for the highlight */
     function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-    var htmls = texts.map(function(t){
+    var htmls = texts.map(function(t, i){
       var h = esc(t);
-      FACTS.forEach(function(f){ h = h.split(esc(f)).join('<span class="sr-hl">' + esc(f) + '</span>'); });
+      FACTS[i].forEach(function(f){ h = h.split(esc(f)).join('<span class="sr-hl">' + esc(f) + '</span>'); });
       return h;
     });
 
@@ -167,94 +236,85 @@ Pat</div>
     function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
     function show(el){ el.classList.remove('is-hidden'); }
     function hide(el){ el.classList.add('is-hidden'); }
-    function setStatus(txt, state){
-      var apply = function(){
-        statusText.textContent = txt;
-        status.classList.remove('is-busy','is-ready');
-        if (state) status.classList.add(state);
-        status.classList.remove('is-swap');
-      };
-      if (INSTANT || statusText.textContent === txt){ apply(); return; }
-      status.classList.add('is-swap');
+    function setPill(i, txt, cls){
+      var p = pills[i];
+      var apply = function(){ p.textContent = txt; p.classList.remove('ready','processing'); p.classList.add(cls); p.classList.remove('is-swap'); };
+      if (INSTANT || p.textContent === txt){ apply(); return; }
+      p.classList.add('is-swap');
       timers.push(setTimeout(apply, 300));
     }
-    /* a finished body: swap in the marked-up text; highlights fade in after HL_DELAY */
-    function finishBody(el, idx, hlOn){
-      el.classList.remove('is-typing');
-      el.innerHTML = htmls[idx];
-      var marks = Array.prototype.slice.call(el.querySelectorAll('.sr-hl'));
-      var on = function(){ marks.forEach(function(m){ m.classList.add('is-on'); }); };
-      if (hlOn) on();
-      else if (!INSTANT) timers.push(setTimeout(on, HL_DELAY));
+    function finishBody(i){
+      bodies[i].classList.remove('is-typing');
+      bodies[i].innerHTML = htmls[i];
+      sparks[i].classList.remove('is-live');
     }
-    /* typewriter: ms per char; when seeking (INSTANT) it lands on the state for `elapsed` seconds */
-    function typeInto(el, idx, ms, elapsed){
-      var text = texts[idx];
-      el.textContent = '';
+    function lightBody(i){ Array.prototype.forEach.call(bodies[i].querySelectorAll('.sr-hl'), function(m){ m.classList.add('is-on'); }); }
+    /* typewriter: lands on the state for `elapsed` seconds; keeps typing from there unless seeking (INSTANT) */
+    function typeInto(i, elapsed){
+      var text = texts[i], el = bodies[i];
+      var n = Math.min(text.length, Math.floor(Math.max(0, elapsed || 0) * 1000 / TYPE_MS));
+      el.textContent = text.slice(0, n);
+      if (n >= text.length){ finishBody(i); return; }
       el.classList.add('is-typing');
-      if (INSTANT){
-        var msIn = (elapsed === Infinity || elapsed == null) ? Infinity : elapsed * 1000;
-        var n = Math.min(text.length, Math.floor(msIn / ms));
-        el.textContent = text.slice(0, n);
-        if (n >= text.length) finishBody(el, idx, msIn - text.length * ms >= HL_DELAY);
-        return;
-      }
-      var i = 0;
+      sparks[i].classList.add('is-live');
+      if (INSTANT) return;
       var id = setInterval(function(){
-        i++; el.textContent = text.slice(0, i);
-        if (i >= text.length){ clearInterval(id); finishBody(el, idx, false); }
-      }, ms);
+        n++; el.textContent = text.slice(0, n);
+        if (n >= text.length){ clearInterval(id); finishBody(i); }
+      }, TYPE_MS);
       timers.push(id);
     }
-    /* the slower body (Formal) finishing is when the window reports ready */
-    var SPEEDS = [25, 30];
-    var doneAt = texts.map(function(t, i){ return 6.5 + t.length * SPEEDS[i] / 1000; });
-    var slowest = Math.max.apply(null, doneAt);
 
-    /* ---------- timeline: {t: seconds, fn(elapsed)} ---------- */
+    /* ---------- timeline (seconds from page open) ---------- */
+    var T_L_POST = 3.6, T_L_TYPE = 4.2;
+    var T_L_DONE = T_L_TYPE + texts[0].length * TYPE_MS / 1000;
+    var T_R_POST = T_L_DONE + 0.8, T_R_TYPE = T_R_POST + 0.6;
+    var T_R_DONE = T_R_TYPE + texts[1].length * TYPE_MS / 1000;
+    var T_HL     = T_R_DONE + 1.2;
+    var T_READY  = T_HL + 2.5;
+    var LOOP_END = T_READY + 0.4 + 3.7;
+
     function resolved(){
       clearTimers();
-      show(dec); rule.classList.add('is-on');
-      drafts.forEach(show);
-      bodies.forEach(function(b, i){ finishBody(b, i, true); });
-      show(label); show(send);
-      setStatus('2 drafts ready', 'is-ready');
+      posts.forEach(show);
+      bodies.forEach(function(b, i){ finishBody(i); lightBody(i); });
+      readys.forEach(show);
+      pills.forEach(function(p, i){ setPill(i, 'Ready', 'ready'); });
     }
     function reset(){
       clearTimers();
-      hide(dec); rule.classList.remove('is-on');
-      drafts.forEach(hide);
-      bodies.forEach(function(b){ b.classList.remove('is-typing'); b.textContent = ''; });
-      hide(label); hide(send);
-      setStatus('Reading the request', 'is-busy');
+      readys.forEach(hide);
+      posts.forEach(hide);
+      bodies.forEach(function(b, i){ b.classList.remove('is-typing'); b.textContent = ''; sparks[i].classList.remove('is-live'); });
+      pills.forEach(function(p, i){ setPill(i, 'Processing', 'processing'); });
     }
     var TL = [
-      { t: 0.0,  fn: resolved },
-      { t: 3.0,  fn: reset },
-      { t: 3.5,  fn: function(){ show(dec); } },
-      { t: 4.8,  fn: function(){ rule.classList.add('is-on'); } },
-      { t: 5.5,  fn: function(){ drafts.forEach(show); setStatus('Drafting 2 replies', 'is-busy'); } },
-      { t: 6.5,  fn: function(e){ typeInto(bodies[0], 0, SPEEDS[0], e); typeInto(bodies[1], 1, SPEEDS[1], e); } },
-      { t: slowest + HL_DELAY / 1000, fn: function(){ setStatus('2 drafts ready', 'is-ready'); } },
-      { t: 15.0, fn: function(){ show(label); } },
-      { t: 16.5, fn: function(){ show(send); } }
+      { t: 0.0,            fn: resolved },
+      { t: LOOP_START,     fn: reset },
+      { t: T_L_POST,       fn: function(){ show(posts[0]); sparks[0].classList.add('is-live'); } },
+      { t: T_L_TYPE,       fn: function(e){ typeInto(0, e); } },
+      { t: T_R_POST,       fn: function(){ show(posts[1]); sparks[1].classList.add('is-live'); } },
+      { t: T_R_TYPE,       fn: function(e){ typeInto(1, e); } },
+      { t: T_HL,           fn: function(){ lightBody(0); } },
+      { t: T_HL + 0.5,     fn: function(){ lightBody(1); } },
+      { t: T_READY,        fn: function(){ show(readys[0]); setPill(0, 'Ready', 'ready'); } },
+      { t: T_READY + 0.4,  fn: function(){ show(readys[1]); setPill(1, 'Ready', 'ready'); } }
     ];
     TL.sort(function(a, b){ return a.t - b.t; });
 
-    /* apply every beat with t <= T; instant = no transitions, typing lands mid-word */
+    /* apply every beat with t <= T without transitions; INSTANT = typing lands mid-word and stays */
     function seek(T, instant){
       clearTimers();
-      INSTANT = true;
-      if (instant) root.classList.add(SLUG + '--notrans');
+      INSTANT = !!instant;
+      root.classList.add(SLUG + '--notrans');
       TL.forEach(function(b){ if (b.t <= T) b.fn(T - b.t); });
       void stage.offsetWidth;
       root.classList.remove(SLUG + '--notrans');
       INSTANT = false;
     }
 
-    var raf = null, t0 = 0, idx = 0;
+    var raf = null, t0 = 0, idx = 0, pausedAt = 0;
     function play(fromT){
-      clearTimers();
       t0 = performance.now() - fromT * 1000;
       idx = 0; while (idx < TL.length && TL[idx].t <= fromT) idx++;
       function tick(now){
@@ -264,6 +324,16 @@ Pat</div>
         raf = requestAnimationFrame(tick);
       }
       raf = requestAnimationFrame(tick);
+    }
+    function pause(){
+      if (!raf) return;
+      pausedAt = (performance.now() - t0) / 1000;
+      cancelAnimationFrame(raf); raf = null; clearTimers();
+    }
+    function resume(){
+      if (raf) return;
+      seek(pausedAt, false);          // re-land on the paused state; typing continues from its offset
+      play(pausedAt);
     }
 
     /* ---------- start ---------- */
@@ -277,10 +347,17 @@ Pat</div>
     seek(0, true);
     play(0);
 
-    document.addEventListener('visibilitychange', function(){
-      if (document.hidden){ if (raf) cancelAnimationFrame(raf); raf = null; clearTimers(); }
-      else { seek(0, true); play(0); }
-    });
+    /* in-view gating: pause (keep elapsed time) when hidden or <10% visible; resume on return */
+    var inView = true, wanted = true;
+    function sync(){ var go = inView && !document.hidden; if (go && !raf) resume(); else if (!go && raf) pause(); }
+    document.addEventListener('visibilitychange', sync);
+    if (window.IntersectionObserver){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){ inView = en.isIntersecting && en.intersectionRatio >= 0.1; });
+        sync();
+      }, { threshold: [0, 0.1, 0.25] });
+      io.observe(root);
+    }
   }
 })();
 </script>
