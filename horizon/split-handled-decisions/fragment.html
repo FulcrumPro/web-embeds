@@ -59,7 +59,18 @@
 .hz-split-handled-decisions .s-item .tx b { display: block; font-weight: 600; font-size: 13.5px; transition: color .4s cubic-bezier(.2,.7,.2,1); }
 .hz-split-handled-decisions .s-item .tx span { display: block; color: #6b6b6b; font-size: 12.5px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hz-split-handled-decisions .s-item.is-open .tx b { color: #1d63ed; }
-.hz-split-handled-decisions .s-kind { line-height: 1; padding: 4px 8px; border-radius: 4px; background: #f5f7fa; color: #6b6b6b; font-size: 11.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.hz-split-handled-decisions .s-kind { display: inline-flex; align-items: center; gap: 6px; line-height: 1; padding: 4px 8px; border-radius: 4px; background: #f5f7fa; color: #292932; font-size: 11.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.hz-split-handled-decisions .s-kind i { width: 7px; height: 7px; border-radius: 50%; background: var(--ag, #a0a0a0); display: block; flex: none; }
+/* seven agents, one accent each (site feature palette) */
+.hz-split-handled-decisions [data-agent="intake"] { --ag: #8ED7E6; }
+.hz-split-handled-decisions [data-agent="pricing"] { --ag: #F0D265; }
+.hz-split-handled-decisions [data-agent="quoting"] { --ag: #DDF83B; }
+.hz-split-handled-decisions [data-agent="vendors"] { --ag: #D58BE1; }
+.hz-split-handled-decisions [data-agent="orders"] { --ag: #3840EA; }
+.hz-split-handled-decisions [data-agent="status"] { --ag: #3DC975; }
+.hz-split-handled-decisions [data-agent="watch"] { --ag: #FF5C16; }
+.hz-split-handled-decisions .s-step .ag { display: inline-flex; align-items: center; gap: 5px; color: #6b6b6b; font-weight: 600; font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; min-width: 74px; }
+.hz-split-handled-decisions .s-step .ag i { width: 7px; height: 7px; border-radius: 50%; background: var(--ag, #a0a0a0); display: block; flex: none; }
 
 /* the trail: one handled row opened in place */
 .hz-split-handled-decisions .s-trail { height: 0; overflow: hidden; transition: height .6s cubic-bezier(.2,.7,.2,1); }
@@ -107,44 +118,44 @@
         <span class="s-dots"><i></i><i></i><i></i></span>
         <span class="s-brand">fulcrum</span><span>·</span><span class="s-prod">Horizon</span>
         <span class="s-acct">quotes@yourshop.com</span>
-        <span class="s-status"><i></i><span>Working</span></span>
+        <span class="s-status"><i></i><span>7 agents working</span></span>
       </div>
-      <div class="s-counter">Today: <b class="ok">14</b> handled <span class="sep">·</span> <b class="warn">3</b> need you</div>
+      <div class="s-counter">Your <b>7</b> agents today: <b class="ok">14</b> handled <span class="sep">·</span> <b class="warn">3</b> need you</div>
       <div class="s-body">
 
         <section class="s-handled">
-          <div class="s-col-head"><span class="ico ok"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span>Handled <small>went out on its own</small></div>
+          <div class="s-col-head"><span class="ico ok"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span>Handled <small>your agents did these on their own</small></div>
           <div class="s-feedwrap">
             <ul class="s-feed" data-feed>
-              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>RFQ ingested</b><span>from Outlook · Crestline Aerospace · Bracket 4410 Rev B, qty 250 · drawing read</span></div><span class="s-kind">RFQ</span></div></li>
-              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Repeat part priced from history</b><span>Redwing Equipment · Housing 3310, qty 40 · from job 25-0310</span></div><span class="s-kind">Priced</span></div></li>
-              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Vendor emails sent</b><span>Lakeshore Laser, Midwest Anodizing · lead time for 250 pcs</span></div><span class="s-kind">Vendor</span></div></li>
-              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>PO checked against quote</b><span>Northgate Fab · PO 5521 matches Q-1163 · sales order SO-2290 opened</span></div><span class="s-kind">PO</span></div></li>
-              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Status reply sent</b><span>Halvorsen Machine · Mount plate 118 ships Thursday</span></div><span class="s-kind">Status</span></div></li>
-              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Lead time logged</b><span>Midwest Anodizing · clear anodize, 5 days</span></div><span class="s-kind">Lead time</span></div></li>
-              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Repeat part priced from history</b><span>Northgate Fab · Mount plate 118, qty 60 · from job 25-0922</span></div><span class="s-kind">Priced</span></div></li>
-              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>RFQ ingested</b><span>Halvorsen Machine · Weldment 2207, qty 12 · drawing read</span></div><span class="s-kind">RFQ</span></div></li>
-              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Vendor reply logged</b><span>Prairie Powder Coat · black texture, 3 days</span></div><span class="s-kind">Vendor</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>RFQ ingested</b><span>from Outlook · Crestline Aerospace · Bracket 4410 Rev B, qty 250 · drawing read</span></div><span class="s-kind" data-agent="intake"><i></i>Intake</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Repeat part priced from history</b><span>Redwing Equipment · Housing 3310, qty 40 · from job 25-0310</span></div><span class="s-kind" data-agent="pricing"><i></i>Pricing</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Vendor emails sent</b><span>Lakeshore Laser, Midwest Anodizing · lead time for 250 pcs</span></div><span class="s-kind" data-agent="vendors"><i></i>Vendors</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>PO checked against quote</b><span>Northgate Fab · PO 5521 matches Q-1163 · sales order SO-2290 opened</span></div><span class="s-kind" data-agent="orders"><i></i>Orders</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Status reply sent</b><span>Halvorsen Machine · Mount plate 118 ships Thursday</span></div><span class="s-kind" data-agent="status"><i></i>Status</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Lead time logged</b><span>Midwest Anodizing · clear anodize, 5 days</span></div><span class="s-kind" data-agent="vendors"><i></i>Vendors</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Repeat part priced from history</b><span>Northgate Fab · Mount plate 118, qty 60 · from job 25-0922</span></div><span class="s-kind" data-agent="pricing"><i></i>Pricing</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>RFQ ingested</b><span>Halvorsen Machine · Weldment 2207, qty 12 · drawing read</span></div><span class="s-kind" data-agent="intake"><i></i>Intake</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Vendor reply logged</b><span>Prairie Powder Coat · black texture, 3 days</span></div><span class="s-kind" data-agent="vendors"><i></i>Vendors</span></div></li>
               <li class="s-item" data-open-row>
-                <div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Quote drafted</b><span>Crestline Aerospace · 250 pcs at $86.50 ea · Pat sends</span></div><span class="s-kind">Quote</span></div>
+                <div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Quote drafted</b><span>Crestline Aerospace · 250 pcs at $86.50 ea · Pat sends</span></div><span class="s-kind" data-agent="quoting"><i></i>Quoting</span></div>
                 <div class="s-trail" data-trail>
                   <div class="s-trail-box">
-                    <div class="s-step" data-step><span class="sck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><span>RFQ read <em>2:14 pm</em> · drawing opened</span></div>
-                    <div class="s-step" data-step><span class="sck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><span>Last job 24-0871 found · <em>Mar 2024 · $82.00 ea</em></span></div>
-                    <div class="s-step" data-step><span class="sck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><span>Lakeshore Laser + Midwest Anodizing asked · <em>lead time 5 days</em></span></div>
-                    <div class="s-step" data-step><span class="sck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><span>Quote Q-1182 drafted · reply to Dana written</span></div>
-                    <div class="s-cap" data-cap><b>Open any one.</b> Every step is there.</div>
+                    <div class="s-step" data-step><span class="sck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><span class="ag" data-agent="intake"><i></i>Intake</span><span>RFQ read <em>2:14 pm</em> · drawing opened</span></div>
+                    <div class="s-step" data-step><span class="sck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><span class="ag" data-agent="pricing"><i></i>Pricing</span><span>Last job 24-0871 found · <em>Mar 2024 · $82.00 ea</em></span></div>
+                    <div class="s-step" data-step><span class="sck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><span class="ag" data-agent="vendors"><i></i>Vendors</span><span>Lakeshore Laser + Midwest Anodizing asked · <em>lead time 5 days</em></span></div>
+                    <div class="s-step" data-step><span class="sck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><span class="ag" data-agent="quoting"><i></i>Quoting</span><span>Quote Q-1182 drafted · reply to Dana written</span></div>
+                    <div class="s-cap" data-cap><b>Open any one.</b> Every step, and which agent took it.</div>
                   </div>
                 </div>
               </li>
-              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>PO checked against quote</b><span>Crestline Aerospace · PO 7781 matches Q-1140 · sales order SO-2291 opened</span></div><span class="s-kind">PO</span></div></li>
-              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Status reply sent</b><span>Redwing Equipment · Housing 3310 ships Nov 6</span></div><span class="s-kind">Status</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>PO checked against quote</b><span>Crestline Aerospace · PO 7781 matches Q-1140 · sales order SO-2291 opened</span></div><span class="s-kind" data-agent="orders"><i></i>Orders</span></div></li>
+              <li class="s-item"><div class="row"><span class="ck"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span><div class="tx"><b>Status reply sent</b><span>Redwing Equipment · Housing 3310 ships Nov 6</span></div><span class="s-kind" data-agent="status"><i></i>Status</span></div></li>
             </ul>
           </div>
         </section>
 
         <aside class="s-needs" data-needs>
-          <div class="s-col-head"><span class="s-badge" data-badge>3</span>Needs you <small>your rules flagged these</small></div>
+          <div class="s-col-head"><span class="s-badge" data-badge>3</span>Needs you <small><span class="s-kind" data-agent="watch" style="margin-right:6px"><i></i>Watch</span>flagged these on your rules</small></div>
           <div class="s-cards">
             <div class="s-card" data-card>
               <div class="t"><i></i>Expedite fee <em>Northgate Fab</em></div>
@@ -165,7 +176,7 @@
               <div class="s-opts"><span class="s-opt blue">Hold at 8%</span><span class="s-opt">Allow 12%</span></div>
             </div>
           </div>
-          <div class="s-needs-foot"><b>Three decisions. Everything else went out.</b><br>Horizon drafted the reply for each one. You pick, Pat sends.</div>
+          <div class="s-needs-foot"><b>Three decisions. Everything else went out.</b><br>Seven agents did the work and drafted a reply for each one. You pick, Pat sends.</div>
         </aside>
 
       </div>
