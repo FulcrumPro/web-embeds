@@ -46,10 +46,9 @@
 /* ---------- root + stage (1200x750, scaled to the root width) ---------- */
 .hz-same-reply-two-voices{position:relative;width:100%;max-width:1200px;margin:0 auto;overflow:hidden;aspect-ratio:1200/750;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#292932;line-height:1.4;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#fff}
 .hz-same-reply-two-voices *,.hz-same-reply-two-voices *::before,.hz-same-reply-two-voices *::after{box-sizing:border-box}
-.hz-same-reply-two-voices-stage{position:absolute;top:0;left:0;width:1200px;height:750px;transform-origin:0 0;transform:scale(var(--s,1));background:#fff;overflow:hidden}
+.hz-same-reply-two-voices-stage{position:absolute;top:0;left:0;width:1200px;height:750px;transform-origin:0 0;transform:scale(var(--s,1));background: #131418;overflow:hidden}
 /* canvas: one lime accent, the window, one caption */
-.hz-same-reply-two-voices .sr-neon{position:absolute;left:12px;top:12px;width:10px;height:10px;border-radius:50%;background:#DDF83B}
-.hz-same-reply-two-voices .sr-win{position:absolute;left:30px;top:30px;width:1140px;height:690px;border-radius:10px;border:1px solid #2b2d33;box-shadow:0 12px 32px -12px rgba(15,17,21,.45);overflow:hidden;display:flex;flex-direction:column;background:#131418}
+.hz-same-reply-two-voices .sr-win{position:absolute;left: 0;top: 0;width: 1200px;height: 750px;overflow:hidden;display:flex;flex-direction:column;background:#131418}
 .hz-same-reply-two-voices .sr-bar{position:relative;flex:0 0 36px;background:#1b1d23;display:flex;align-items:center;padding:0 14px}
 .hz-same-reply-two-voices .sr-dots{display:inline-flex;gap:7px}
 .hz-same-reply-two-voices .sr-dots i{width:11px;height:11px;border-radius:50%;background:#3b3d43;display:block}
@@ -144,7 +143,6 @@
 </style>
 <div class="hz-same-reply-two-voices">
   <div class="hz-same-reply-two-voices-stage">
-    <span class="sr-neon"></span>
     <div class="sr-win">
       <div class="sr-bar"><span class="sr-dots"><i></i><i></i><i></i></span><span class="sr-title">Horizon</span></div>
       <div class="hzk-app">

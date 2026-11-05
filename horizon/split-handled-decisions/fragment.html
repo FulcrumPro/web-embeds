@@ -6,14 +6,13 @@
   pointer-events: none; user-select: none; }
 .hz-split-handled-decisions *, .hz-split-handled-decisions *::before, .hz-split-handled-decisions *::after { box-sizing: border-box; }
 .hz-split-handled-decisions-stage { position: absolute; top: 0; left: 0; width: 1200px; height: 750px;
-  transform: scale(var(--s)); transform-origin: 0 0; background: #fff; overflow: hidden; }
+  transform: scale(var(--s)); transform-origin: 0 0; background: #131418; overflow: hidden; }
 
 /* the one marketing accent, on the canvas */
-.hz-split-handled-decisions .s-neon { position: absolute; left: 150px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: #DDF83B; }
 
 /* the Horizon window: plain OS title bar + the app */
-.hz-split-handled-decisions .s-win { position: absolute; left: 30px; top: 30px; width: 1140px; height: 690px; background: #131418;
-  border: 1px solid #2b2d33; border-radius: 10px; box-shadow: 0 12px 32px -12px rgba(15,17,21,.45); overflow: hidden; display: flex; flex-direction: column; }
+.hz-split-handled-decisions .s-win { position: absolute; left: 0; top: 0; width: 1200px; height: 750px; background: #131418;
+     overflow: hidden; display: flex; flex-direction: column; }
 .hz-split-handled-decisions .s-bar { flex: 0 0 36px; position: relative; display: flex; align-items: center; justify-content: center; background: #1b1d23; border-bottom: 1px solid #2b2d33;
   font-size: 12.5px; color: #a9abae; font-weight: 400; }
 .hz-split-handled-decisions .s-bar .dots { position: absolute; left: 14px; top: 12px; display: flex; gap: 7px; }
@@ -154,7 +153,6 @@
 
 <div class="hz-split-handled-decisions">
   <div class="hz-split-handled-decisions-stage">
-    <div class="s-neon"></div>
     <div class="s-win">
       <div class="s-bar"><span class="dots"><i></i><i></i><i></i></span>Horizon</div>
       <div class="s-app">

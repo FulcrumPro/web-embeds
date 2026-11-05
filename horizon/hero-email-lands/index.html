@@ -60,11 +60,10 @@
   transform: scale(var(--s)); transform-origin: 0 0; background: #fff; overflow: hidden; }
 
 /* the one marketing accent on the canvas */
-.hz-hero-email-lands .h-neon { position: absolute; left: 12px; top: 10px; width: 10px; height: 10px; border-radius: 50%; background: #DDF83B; }
 
 /* ---------- the Horizon window (OS title bar + the app) ---------- */
-.hz-hero-email-lands .h-win { position: absolute; left: 30px; top: 30px; width: 1140px; height: 690px; background: #131418;
-  border: 1px solid #2b2d33; border-radius: 10px; box-shadow: 0 12px 32px -12px rgba(15,17,21,.45); overflow: hidden;
+.hz-hero-email-lands .h-win { position: absolute; left: 0; top: 0; width: 1200px; height: 750px; background: #131418;
+     overflow: hidden;
   display: flex; flex-direction: column; z-index: 2; transform-origin: 50% 60%;
   transition: opacity .6s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
 .hz-hero-email-lands .h-win.is-back { opacity: 0; transform: translateY(22px) scale(.965); z-index: 1; }
@@ -75,8 +74,8 @@
 .hz-hero-email-lands .h-appwrap { flex: 1 1 auto; min-height: 0; }
 
 /* ---------- the other client: Outlook, where the RFQ lands first (light Microsoft look, intentional) ---------- */
-.hz-hero-email-lands .o-win { position: absolute; left: 30px; top: 30px; width: 1140px; height: 690px; background: #fff;
-  border: 1px solid #d6d6d6; border-radius: 10px; box-shadow: 0 12px 32px -12px rgba(15,17,21,.45); overflow: hidden;
+.hz-hero-email-lands .o-win { position: absolute; left: 0; top: 0; width: 1200px; height: 750px; background: #fff;
+  border: 1px solid #d6d6d6;   overflow: hidden;
   display: flex; flex-direction: column; z-index: 3; opacity: 0; transform: translateY(16px) scale(.97); transform-origin: 50% 50%;
   font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #242424;
   transition: opacity .6s cubic-bezier(.2,.7,.2,1), transform .75s cubic-bezier(.2,.7,.2,1); }
@@ -365,7 +364,6 @@
 
 <div class="hz-hero-email-lands">
   <div class="hz-hero-email-lands-stage">
-    <div class="h-neon"></div>
 
     <!-- ===== Outlook (the email arrives here first) ===== -->
     <div class="o-win" data-owin>
