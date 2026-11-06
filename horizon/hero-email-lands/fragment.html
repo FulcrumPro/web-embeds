@@ -529,7 +529,7 @@ Pat</div>
 <script>
 (function () {
   'use strict';
-  var LOOP_END = 40.0;       // seconds; loop wraps to t=0 (resolved) here
+  var LOOP_END = 38.5;       // seconds; loop wraps to t=0 (resolved) here
   var TYPE_MS = 25;          // ms per character (the drafted email body, once per loop)
 
   function init(root) {
@@ -635,22 +635,22 @@ Pat</div>
       } },
       { t: 4.0, fn: function () { onew.classList.add('is-in'); } },                          // Tessa's email lands in Outlook
       { t: 6.5, fn: function () { ocat.classList.add('is-on'); } },                          // Outlook category "Horizon"
-      { t: 9.0, fn: function () {                                                             // Horizon comes forward
+      { t: 7.5, fn: function () {                                                             // Horizon comes forward
         owin.classList.remove('is-on'); owin.classList.add('is-away'); hwin.classList.remove('is-back');
       } },
-      { t: 9.8, fn: function () { newrow.classList.add('is-on'); if (!instant) newrow.classList.add('hzk-in'); } },  // new list row
-      { t: 12.4, fn: function () { home.classList.remove('is-on'); proj.classList.add('is-on'); } },  // the project opens
-      { t: 13.2, fn: function () { tick('Reading the RFQ and its attachments', 'Horizon · 8:12 AM'); } },
-      { t: 15.7, fn: function () { tick('Matching parts · LI-2104, LI-2110, LI-2118…', 'Horizon · 8:13 AM'); } },
-      { t: 18.2, fn: function () { tick('Estimating · LI-2123, LI-2140, LI-2155, LI-2162', 'Horizon · 8:14 AM'); } },
-      { t: 20.7, fn: function () { tick('Checking the schedule', 'Horizon · 8:15 AM'); } },
-      { t: 23.2, fn: function () { fold(); } },
-      { t: 25.8, fn: function () { show(table); } },
-      { t: 28.6, fn: function () { show(alert); } },
-      { t: 31.2, fn: function () { show(post); typeInto(body); scrollThread(); } },
-      { t: 35.8, fn: function () { show(pfoot); } },
-      { t: 36.4, fn: function () { setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · not sent', true); } },
-      { t: 37.0, fn: function () { ppill.textContent = 'Ready'; ppill.className = 'hzk-pill ready'; } }
+      { t: 8.3, fn: function () { newrow.classList.add('is-on'); if (!instant) newrow.classList.add('hzk-in'); } },  // new list row
+      { t: 10.9, fn: function () { home.classList.remove('is-on'); proj.classList.add('is-on'); } },  // the project opens
+      { t: 11.7, fn: function () { tick('Reading the RFQ and its attachments', 'Horizon · 8:12 AM'); } },
+      { t: 14.2, fn: function () { tick('Matching parts · LI-2104, LI-2110, LI-2118…', 'Horizon · 8:13 AM'); } },
+      { t: 16.7, fn: function () { tick('Estimating · LI-2123, LI-2140, LI-2155, LI-2162', 'Horizon · 8:14 AM'); } },
+      { t: 19.2, fn: function () { tick('Checking the schedule', 'Horizon · 8:15 AM'); } },
+      { t: 21.7, fn: function () { fold(); } },
+      { t: 24.3, fn: function () { show(table); } },
+      { t: 27.1, fn: function () { show(alert); } },
+      { t: 29.7, fn: function () { show(post); typeInto(body); scrollThread(); } },
+      { t: 34.3, fn: function () { show(pfoot); } },
+      { t: 34.9, fn: function () { setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · not sent', true); } },
+      { t: 35.5, fn: function () { ppill.textContent = 'Ready'; ppill.className = 'hzk-pill ready'; } }
     ];
 
     // ----- runner -----

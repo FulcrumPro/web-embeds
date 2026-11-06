@@ -13,23 +13,23 @@
    4.0  Tessa Brandvold's email lands at the top of the Outlook list: "Request for quote - LA-400 lift arm parts", 8:12 AM,
         attachments (26-1187_parts.xlsx, LI-2140_REV-B.pdf and drawings).
    6.5  the Outlook category tag "Horizon" lands on the row (the app tags the emails it picked up).
-   9.0  the Horizon window comes forward: All Projects home (rail, Projects list, Needs You cards, All Activity).
-   9.8  a new row rises to the top of the Projects list: Larkspur Implement Co. · 10 parts · Tessa Brandvold · Processing ·
+    7.5  the Horizon window comes forward: All Projects home (rail, Projects list, Needs You cards, All Activity).
+    8.3  a new row rises to the top of the Projects list: Larkspur Implement Co. · 10 parts · Tessa Brandvold · Processing ·
         ✦ Reading 10 parts.
-  12.4  the project opens: project rail (stage header "RFQ · Reading 10 parts", 4-segment bar with RFQ lit, details card,
+  10.9  the project opens: project rail (stage header "RFQ · Reading 10 parts", 4-segment bar with RFQ lit, details card,
         customer), thread with Tessa's RFQ email card.
-  13.2  ✦ live ticker: "Reading the RFQ and its attachments" · Horizon · 8:12 AM
-  15.7  ticker: "Matching parts · LI-2104, LI-2110, LI-2118…" · 8:13 AM
-  18.2  ticker: "Estimating · LI-2123, LI-2140, LI-2155, LI-2162" · 8:14 AM
-  20.7  ticker: "Checking the schedule" · 8:15 AM
-  23.2  the ticker folds: "Read the RFQ and estimated all 10 parts" / "3 steps · all automated · 8:12 AM to 8:15 AM · Show Reasoning"
-  25.8  Parts table card rises in (Parts · 10 lines · 100 kits · Due Dec 7; LI-2140 unit and lead time in red); thread scrolls.
-  28.6  alert: "10 parts estimated. 9 make Dec 7. LI-2140 has 2 issues:" Misses Dec 7 / Stale Price; thread scrolls.
-  31.2  Horizon's post: "To Tessa Brandvold · Quote 2207: LA-400 lift arm parts"; the body types (25ms/char, 4.4s).
-  35.8  Quote-2207.pdf attachment + Send (blue) + Not Now rise in. Nobody clicks.
-  36.4  stage header becomes "Quote · $59,241.00 · Quote 2207 · not sent"; second bar segment lights.
-  37.0  header pill Processing -> Ready. Resolved. Hold.
-  40.0  loop -> 0 (resolved holds 37.0 -> 43.0 across the wrap, about 6s)
+  11.7  ✦ live ticker: "Reading the RFQ and its attachments" · Horizon · 8:12 AM
+  14.2  ticker: "Matching parts · LI-2104, LI-2110, LI-2118…" · 8:13 AM
+  16.7  ticker: "Estimating · LI-2123, LI-2140, LI-2155, LI-2162" · 8:14 AM
+  19.2  ticker: "Checking the schedule" · 8:15 AM
+  21.7  the ticker folds: "Read the RFQ and estimated all 10 parts" / "3 steps · all automated · 8:12 AM to 8:15 AM · Show Reasoning"
+  24.3  Parts table card rises in (Parts · 10 lines · 100 kits · Due Dec 7; LI-2140 unit and lead time in red); thread scrolls.
+  27.1  alert: "10 parts estimated. 9 make Dec 7. LI-2140 has 2 issues:" Misses Dec 7 / Stale Price; thread scrolls.
+  29.7  Horizon's post: "To Tessa Brandvold · Quote 2207: LA-400 lift arm parts"; the body types (25ms/char, 4.4s).
+  34.3  Quote-2207.pdf attachment + Send (blue) + Not Now rise in. Nobody clicks.
+  34.9  stage header becomes "Quote · $59,241.00 · Quote 2207 · not sent"; second bar segment lights.
+  35.5  header pill Processing -> Ready. Resolved. Hold.
+  38.5  loop -> 0 (resolved holds 37.0 -> 43.0 across the wrap, about 6s)
 
   ?still=1  jumps to the resolved state and stops.   ?at=<sec>  seeks to that time and stops.
   prefers-reduced-motion: resolved state only. The timeline pauses when the root is <10% visible or the tab is hidden.
@@ -580,7 +580,7 @@ Pat</div>
 <script>
 (function () {
   'use strict';
-  var LOOP_END = 40.0;       // seconds; loop wraps to t=0 (resolved) here
+  var LOOP_END = 38.5;       // seconds; loop wraps to t=0 (resolved) here
   var TYPE_MS = 25;          // ms per character (the drafted email body, once per loop)
 
   function init(root) {
@@ -686,22 +686,22 @@ Pat</div>
       } },
       { t: 4.0, fn: function () { onew.classList.add('is-in'); } },                          // Tessa's email lands in Outlook
       { t: 6.5, fn: function () { ocat.classList.add('is-on'); } },                          // Outlook category "Horizon"
-      { t: 9.0, fn: function () {                                                             // Horizon comes forward
+      { t: 7.5, fn: function () {                                                             // Horizon comes forward
         owin.classList.remove('is-on'); owin.classList.add('is-away'); hwin.classList.remove('is-back');
       } },
-      { t: 9.8, fn: function () { newrow.classList.add('is-on'); if (!instant) newrow.classList.add('hzk-in'); } },  // new list row
-      { t: 12.4, fn: function () { home.classList.remove('is-on'); proj.classList.add('is-on'); } },  // the project opens
-      { t: 13.2, fn: function () { tick('Reading the RFQ and its attachments', 'Horizon · 8:12 AM'); } },
-      { t: 15.7, fn: function () { tick('Matching parts · LI-2104, LI-2110, LI-2118…', 'Horizon · 8:13 AM'); } },
-      { t: 18.2, fn: function () { tick('Estimating · LI-2123, LI-2140, LI-2155, LI-2162', 'Horizon · 8:14 AM'); } },
-      { t: 20.7, fn: function () { tick('Checking the schedule', 'Horizon · 8:15 AM'); } },
-      { t: 23.2, fn: function () { fold(); } },
-      { t: 25.8, fn: function () { show(table); } },
-      { t: 28.6, fn: function () { show(alert); } },
-      { t: 31.2, fn: function () { show(post); typeInto(body); scrollThread(); } },
-      { t: 35.8, fn: function () { show(pfoot); } },
-      { t: 36.4, fn: function () { setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · not sent', true); } },
-      { t: 37.0, fn: function () { ppill.textContent = 'Ready'; ppill.className = 'hzk-pill ready'; } }
+      { t: 8.3, fn: function () { newrow.classList.add('is-on'); if (!instant) newrow.classList.add('hzk-in'); } },  // new list row
+      { t: 10.9, fn: function () { home.classList.remove('is-on'); proj.classList.add('is-on'); } },  // the project opens
+      { t: 11.7, fn: function () { tick('Reading the RFQ and its attachments', 'Horizon · 8:12 AM'); } },
+      { t: 14.2, fn: function () { tick('Matching parts · LI-2104, LI-2110, LI-2118…', 'Horizon · 8:13 AM'); } },
+      { t: 16.7, fn: function () { tick('Estimating · LI-2123, LI-2140, LI-2155, LI-2162', 'Horizon · 8:14 AM'); } },
+      { t: 19.2, fn: function () { tick('Checking the schedule', 'Horizon · 8:15 AM'); } },
+      { t: 21.7, fn: function () { fold(); } },
+      { t: 24.3, fn: function () { show(table); } },
+      { t: 27.1, fn: function () { show(alert); } },
+      { t: 29.7, fn: function () { show(post); typeInto(body); scrollThread(); } },
+      { t: 34.3, fn: function () { show(pfoot); } },
+      { t: 34.9, fn: function () { setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · not sent', true); } },
+      { t: 35.5, fn: function () { ppill.textContent = 'Ready'; ppill.className = 'hzk-pill ready'; } }
     ];
 
     // ----- runner -----
