@@ -688,10 +688,14 @@ Pat</div>
       seekTo(elapsed); root.classList.remove('is-seek');
       schedule(elapsed);
     }
-    var visible = true;
-    function sync() { if (visible && !document.hidden) resume(); else pause(); }
+    var visible = !window.IntersectionObserver;
+    function sync() { if (visible && !document.hidden && !hzForced) resume(); else pause(); }
+    /* page control (Nov 6): the parent page can pause or play every loop with postMessage('hz:pause' | 'hz:play') */
+    var hzForced = false;
+    window.addEventListener('message', function (e) { if (e.data === 'hz:pause') { hzForced = true; sync(); } else if (e.data === 'hz:play') { hzForced = false; sync(); } });
+
     if (window.IntersectionObserver) {
-      new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; sync(); }, { threshold: 0.1 }).observe(root);
+      new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; sync(); }, { threshold: 0.3 }).observe(root);
     }
     document.addEventListener('visibilitychange', sync);
     sync();

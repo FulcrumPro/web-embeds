@@ -387,14 +387,18 @@ Pat</div>
     play(0);
 
     /* in-view gating: pause (keep elapsed time) when hidden or <10% visible; resume on return */
-    var inView = true, wanted = true;
-    function sync(){ var go = inView && !document.hidden; if (go && !raf) resume(); else if (!go && raf) pause(); }
+    var inView = !window.IntersectionObserver, wanted = true;
+    function sync(){ var go = inView && !document.hidden && !hzForced; if (go && !raf) resume(); else if (!go && raf) pause(); }
+    /* page control (Nov 6): the parent page can pause or play every loop with postMessage('hz:pause' | 'hz:play') */
+    var hzForced = false;
+    window.addEventListener('message', function (e) { if (e.data === 'hz:pause') { hzForced = true; sync(); } else if (e.data === 'hz:play') { hzForced = false; sync(); } });
+
     document.addEventListener('visibilitychange', sync);
     if (window.IntersectionObserver){
       var io = new IntersectionObserver(function(entries){
-        entries.forEach(function(en){ inView = en.isIntersecting && en.intersectionRatio >= 0.1; });
+        entries.forEach(function(en){ inView = en.isIntersecting && en.intersectionRatio >= 0.3; });
         sync();
-      }, { threshold: [0, 0.1, 0.25] });
+      }, { threshold: [0, 0.3, 0.5] });
       io.observe(root);
     }
   }

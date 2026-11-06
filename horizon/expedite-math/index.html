@@ -548,11 +548,15 @@ Pat</div></div>
     play(0);
 
     /* in-view gating: pause (keep elapsed) when the root is <10% visible or the tab is hidden */
-    var inView = true;
-    function gate(){ if (document.hidden || !inView) pause(); else resume(); }
+    var inView = !window.IntersectionObserver;
+    function gate(){ if (document.hidden || !inView || hzForced) pause(); else resume(); }
+    /* page control (Nov 6): the parent page can pause or play every loop with postMessage('hz:pause' | 'hz:play') */
+    var hzForced = false;
+    window.addEventListener('message', function (e) { if (e.data === 'hz:pause') { hzForced = true; gate(); } else if (e.data === 'hz:play') { hzForced = false; gate(); } });
+
     document.addEventListener('visibilitychange', gate);
     if (window.IntersectionObserver){
-      new IntersectionObserver(function(entries){ inView = entries[0].isIntersecting; gate(); }, { threshold: 0.1 }).observe(root);
+      new IntersectionObserver(function(entries){ inView = entries[0].isIntersecting; gate(); }, { threshold: 0.3 }).observe(root);
     }
   }
 })();
