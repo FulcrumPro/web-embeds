@@ -185,9 +185,10 @@
   font-weight: 300; font-size: 14px; line-height: 1.5; overflow: hidden; -webkit-font-smoothing: antialiased; }
 .hz-hero-email-lands .hzk-app * { box-sizing: border-box; }
 .hz-hero-email-lands .hzk-app button { font: inherit; color: inherit; cursor: default; }
-.hz-hero-email-lands .hzk-rail { width: 68px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 2px; border-right: 1px solid var(--line); }
-.hz-hero-email-lands .hzk-rail-item { width: 64px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 0; border: 0; border-radius: 8px; background: none; color: var(--mute2); font-size: 11px; letter-spacing: -.025em; white-space: nowrap; }
+.hz-hero-email-lands .hzk-rail { width: 72px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 4px; border-right: 1px solid var(--line); }
+.hz-hero-email-lands .hzk-rail-item { width: 64px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 2px; border: 0; border-radius: 8px; background: none; color: var(--mute2); font-size: 11px; letter-spacing: -.025em; white-space: nowrap; }
 .hz-hero-email-lands .hzk-rail-item.is-on { background: var(--active-bg); color: var(--link); }
+.hz-hero-email-lands .hzk-app .hzk-rail-item { font-size: 11px; font-weight: 500; letter-spacing: -.01em; line-height: 1.2; white-space: nowrap; }
 .hz-hero-email-lands .hzk-rail-item svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .hz-hero-email-lands .hzk-rail-spacer { flex: 1 1 auto; }
 .hz-hero-email-lands .hzk-list { width: 300px; flex: none; display: flex; flex-direction: column; background: var(--list); border-right: 1px solid var(--line); min-height: 0; }
@@ -730,7 +731,7 @@ Pat</div>
         hwin.classList.add('is-back'); owin.classList.remove('is-away'); owin.classList.add('is-on');
       } },
       { t: 4.0, fn: function () { onew.classList.add('is-in'); } },                          // Tessa's email lands in Outlook
-      { t: 4.8, fn: function () { onew.classList.add('is-scan'); ocat.classList.add('is-on'); } },   // Horizon is reading it: sweep + "Horizon · reading"
+      { t: 4.35, fn: function () { onew.classList.add('is-scan'); ocat.classList.add('is-on'); } },   // Horizon is reading it: sweep + "Horizon · reading"
       { t: 6.5, fn: function () { ocat.classList.add('is-read'); } },                        // "Horizon · read"
       { t: 6.9, fn: function () { if (!instant) flyFrom(); } },                              // the email lifts out of Outlook
       { t: 7.2, fn: function () { if (!instant) fly.classList.add('is-go'); } },             // and flies into Horizon
