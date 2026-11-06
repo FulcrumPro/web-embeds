@@ -301,7 +301,7 @@
 
   var ITEMS = {
     rfq: day('Thu Oct 29') + mail({ av: 'TB', from: 'Tessa Brandvold', tag: 'RFQ', when: '8:12 AM', subject: 'Request for quote - LA-400 lift arm parts',
-      body: 'Hi Pat, please quote the parts below at 25, 100 and 250 kits. Drawings and models attached. All parts powder coat black RAL 9005 fine texture, same as last time. Hoping to have the first 25 kits by Dec 7.',
+      body: 'Hi Pat, please quote the parts below at 25, 100, and 250 kits. Drawings and models attached. All parts powder coat black RAL 9005 fine texture, same as last time. Hoping to have the first 25 kits by Dec 7.',
       atts: [['26-1187_parts.xlsx', 'XLSX · 10 lines'], ['LI-2140_REV-B.pdf', 'PDF · 1 page'], ['7 more drawings', '']] }),
     fold: '<div class="hzk-run">' + SPARK + '<div class="fold">Read the RFQ and estimated all 10 parts<small>3 steps · all automated · 8:12 AM to 8:15 AM · <a>Show Reasoning</a></small></div></div>',
     parts: '<div class="hzk-table"><div class="th"><b>Parts</b><small>10 lines · Qty 100 each · Due Dec 7</small></div>' +
@@ -333,7 +333,7 @@
       body: "Hi Tessa, thanks for PO 77812. It doesn't include LI-2131 Gusset Angle (400 at $1.90, $760.00) from quote 2207. Could you send a revised PO with that line? Everything else matches.\n\nThanks,\nPat" }),
     r1: mail({ av: 'TB', from: 'Tessa Brandvold', tag: 'PO', when: '8:30 AM', subject: 'Re: PO 77812 for quote 2207',
       body: 'Good catch, thanks. Revised PO 77812-R1 attached.', atts: [['PO-77812-R1.pdf', 'PDF · 1 page']] }),
-    review: step('Passed contract review.', '9 checks: parts, revisions, quantities, prices, dates, terms, quality, customer material and capacity all match quote 2207 Rev 1.', 'Horizon · 8:31 AM · <a>Show Reasoning</a>'),
+    review: step('Passed contract review.', '9 checks: parts, revisions, quantities, prices, dates, terms, quality, customer material, and capacity all match quote 2207 Rev 1.', 'Horizon · 8:31 AM · <a>Show Reasoning</a>'),
     so: step('Created sales order SO3318 in Fulcrum.', 'Quote 2207 marked Won. PO 77812-R1 attached.', 'Horizon · 8:31 AM')
   };
   var SENT = {
