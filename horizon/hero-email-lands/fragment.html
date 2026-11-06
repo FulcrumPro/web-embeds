@@ -68,6 +68,7 @@
 .hz-hero-email-lands .o-row.is-unread::before { opacity: 1; }
 .hz-hero-email-lands .o-row.o-new { height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; border-bottom-width: 0; }
 .hz-hero-email-lands .o-row.o-new.is-in { height: 74px; padding-top: 10px; opacity: 1; border-bottom-width: 1px; }
+.hz-hero-email-lands .o-row.o-new .o-r3 { padding-right: 138px; }
 .hz-hero-email-lands .o-r1 { display: flex; justify-content: space-between; gap: 8px; color: #242424; white-space: nowrap; }
 .hz-hero-email-lands .o-r1 span { overflow: hidden; text-overflow: ellipsis; }
 .hz-hero-email-lands .o-r1 small { font-size: 11.5px; color: #616161; flex: none; }
@@ -83,6 +84,34 @@
 .hz-hero-email-lands .o-cat i { width: 7px; height: 7px; border-radius: 50%; background: #0f6cbd; display: block; }
 .hz-hero-email-lands .o-cat.o-late { opacity: 0; transform: translateY(6px); transition: opacity .35s ease-out, transform .35s ease-out; }
 .hz-hero-email-lands .o-cat.o-late.is-on { opacity: 1; transform: none; }
+/* reading and ingest (Nov 6): a sweep crosses the new row while Horizon reads it; the tag says "reading" then "read";
+   a card lifts out of Outlook and flies into Horizon, which confirms the pickup with a toast */
+.hz-hero-email-lands .o-row.is-scan::after { content: ''; position: absolute; top: 0; bottom: 0; left: -45%; width: 45%; pointer-events: none;
+  background: linear-gradient(90deg, rgba(15,108,189,0) 0%, rgba(15,108,189,.16) 50%, rgba(15,108,189,0) 100%); animation: hz-oscan 1.05s ease-in-out 2; }
+@keyframes hz-oscan { from { left: -45%; } to { left: 100%; } }
+.hz-hero-email-lands .o-cat.o-late.is-on i { animation: hz-opulse 1s ease-in-out infinite; }
+.hz-hero-email-lands .o-cat.o-late .o-cat-t::after { content: ' · reading'; font-weight: 500; }
+.hz-hero-email-lands .o-cat.o-late.is-read i { animation: none; background: #107c41; }
+.hz-hero-email-lands .o-cat.o-late.is-read .o-cat-t::after { content: ' · read'; }
+@keyframes hz-opulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.7); } }
+.hz-hero-email-lands .o-fly { position: absolute; left: 0; top: 0; z-index: 50; width: 332px; padding: 10px 12px 11px; border-radius: 8px; background: #fff; color: #242424;
+  box-shadow: 0 18px 50px rgba(0,0,0,.30), 0 2px 6px rgba(0,0,0,.12); font-size: 12.5px; line-height: 1.35; opacity: 0; pointer-events: none;
+  transform: translate(var(--fx, 0px), var(--fy, 0px)); transition: transform 1.35s cubic-bezier(.3,.7,.2,1), opacity .3s ease-out; }
+.hz-hero-email-lands .o-fly.is-up { opacity: 1; transform: translate(var(--fx, 0px), calc(var(--fy, 0px) - 6px)); }
+.hz-hero-email-lands .o-fly.is-go { opacity: 0; transform: translate(var(--tx, 0px), var(--ty, 0px)) scale(.84); transition: transform 1.35s cubic-bezier(.3,.7,.2,1), opacity .45s ease-in .9s; }
+.hz-hero-email-lands .o-fly b { font-weight: 700; }
+.hz-hero-email-lands .o-fly .o-fly-h { display: flex; justify-content: space-between; gap: 8px; }
+.hz-hero-email-lands .o-fly .o-fly-h small { color: #616161; }
+.hz-hero-email-lands .o-fly .o-fly-s { color: #0f6cbd; font-weight: 600; margin-top: 1px; }
+.hz-hero-email-lands .o-fly .o-fly-f { margin-top: 7px; display: flex; gap: 6px; flex-wrap: wrap; }
+.hz-hero-email-lands .o-fly .o-fly-f span { border: 1px solid #e1e1e1; border-radius: 4px; padding: 3px 7px; line-height: 1; font-size: 11px; color: #424242; }
+.hz-hero-email-lands .hz-toast { position: absolute; right: 18px; bottom: 18px; z-index: 6; display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px 10px 12px; border-radius: 10px;
+  background: #1b1d23; border: 1px solid #2b2d33; color: #e6e7ea; font-size: 12.5px; line-height: 1.35; box-shadow: 0 12px 32px rgba(0,0,0,.45);
+  opacity: 0; transform: translateY(10px); transition: opacity .35s ease-out, transform .35s ease-out; }
+.hz-hero-email-lands .hz-toast.is-on { opacity: 1; transform: none; }
+.hz-hero-email-lands .hz-toast b { display: block; font-weight: 600; color: #fff; }
+.hz-hero-email-lands .hz-toast small { color: #a9abae; font-size: 12px; }
+.hz-hero-email-lands .hz-toast .hz-toast-ic { width: 22px; height: 22px; border-radius: 6px; background: #162d55; color: #6788ff; display: grid; place-items: center; flex: none; font-size: 13px; margin-top: 1px; }
 .hz-hero-email-lands .o-read { display: grid; place-items: center; text-align: center; color: #616161; font-size: 13px; background: #fff; }
 .hz-hero-email-lands .o-read b { display: block; color: #242424; font-size: 16px; font-weight: 600; margin-bottom: 4px; }
 .hz-hero-email-lands .o-read svg { width: 120px; height: 90px; display: block; margin: 0 auto 16px; }
@@ -350,7 +379,7 @@
           <div class="o-tabs"><span class="o-tab is-sel">Focused</span><span class="o-tab">Other</span><span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4h12M4 8h8M6 12h4"/></svg>Filter</span></div>
           <div class="o-day">Today</div>
           <ul class="o-rows">
-            <li class="o-row o-new is-unread" data-onew><div class="o-r1"><span>Tessa Brandvold</span><small>8:12 AM</small></div><div class="o-r2">Request for quote - LA-400 lift arm parts</div><div class="o-r3"><svg viewBox="0 0 16 16" fill="none" stroke="#616161" stroke-width="1.4" stroke-linejoin="round"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13"/></svg><span>Good morning Pat, please quote the parts below at 25, 100, and 250 kits. Drawings and models attached.</span></div><span class="o-cat o-late" data-ocat><i></i>Horizon</span></li>
+            <li class="o-row o-new is-unread" data-onew><div class="o-r1"><span>Tessa Brandvold</span><small>8:12 AM</small></div><div class="o-r2">Request for quote - LA-400 lift arm parts</div><div class="o-r3"><svg viewBox="0 0 16 16" fill="none" stroke="#616161" stroke-width="1.4" stroke-linejoin="round"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13"/></svg><span>Good morning Pat, please quote the parts below at 25, 100, and 250 kits. Drawings and models attached.</span></div><span class="o-cat o-late" data-ocat><i></i><span class="o-cat-t">Horizon</span></span></li>
             <li class="o-row"><div class="o-r1"><span>Dev Castillo</span><small>7:48 AM</small></div><div class="o-r2">SO3301: can we get it sooner?</div><div class="o-r3"><span>Hi Pat, our boat show build moved up. Can we get SO3301 by Nov 2 instead of Nov 9?</span></div><span class="o-cat"><i></i>Horizon</span></li>
             <li class="o-row"><div class="o-r1"><span>Hana Sato</span><small>7:40 AM</small></div><div class="o-r2">Repeat order: WS-610, 200 pcs</div><div class="o-r3"><span>Hi Pat, same as last time, 200 of the WS-610. PO to follow once you confirm the price.</span></div><span class="o-cat"><i></i>Horizon</span></li>
             <li class="o-row"><div class="o-r1"><span>Priya Natarajan</span><small>7:35 AM</small></div><div class="o-r2">Re: Quote 1027: KM-140 brackets</div><div class="o-r3"><span>Can you price 750 instead of 500? Trying to cover all of Q1 in one order.</span></div><span class="o-cat"><i></i>Horizon</span></li>
@@ -550,6 +579,19 @@ Pat</div>
     // ----- elements -----
     var owin = $('[data-owin]'), hwin = $('[data-hwin]'), onew = $('[data-onew]'), ocat = $('[data-ocat]');
     var home = $('[data-home]'), proj = $('[data-proj]'), newrow = $('[data-newrow]');
+    var stageEl = root.querySelector('.hz-hero-email-lands-stage') || root;
+    var fly = document.createElement('div'); fly.className = 'o-fly'; fly.setAttribute('aria-hidden', 'true');
+    fly.innerHTML = '<div class="o-fly-h"><b>Tessa Brandvold</b><small>8:12 AM</small></div><div class="o-fly-s">Request for quote - LA-400 lift arm parts</div><div class="o-fly-f"><span>26-1187_parts.xlsx</span><span>LI-2140_REV-B.pdf</span><span>drawings</span></div>';
+    stageEl.appendChild(fly);
+    var toast = document.createElement('div'); toast.className = 'hz-toast'; toast.setAttribute('aria-hidden', 'true');
+    toast.innerHTML = '<span class="hz-toast-ic">\u2726</span><span><b>Picked up from Outlook</b><small>Tessa Brandvold, 8:12 AM \u00b7 email and attachments read</small></span>';
+    hwin.appendChild(toast);
+    function flyFrom() {
+      var r = onew.getBoundingClientRect(), st = stageEl.getBoundingClientRect(), k = st.width / 1200 || 1;
+      fly.style.setProperty('--fx', ((r.left - st.left) / k + 10) + 'px'); fly.style.setProperty('--fy', ((r.top - st.top) / k + 4) + 'px');
+      fly.style.setProperty('--tx', '92px'); fly.style.setProperty('--ty', '128px');
+      fly.style.transition = 'none'; fly.classList.remove('is-go', 'is-up'); reflow(fly); fly.style.transition = ''; fly.classList.add('is-up');
+    }
     var ppill = $('[data-ppill]'), sh = $('[data-sh]'), stage = $('[data-stage]'), fig = $('[data-fig]'), sub = $('[data-sub]'), seg2 = $('[data-seg2]');
     var tvp = $('[data-tvp]'), tin = $('[data-tin]');
     var run = $('[data-run]'), runav = $('[data-runav]'), rt = $('[data-rt]'), tickT = $('[data-tickt]'), tickM = $('[data-tickm]');
@@ -622,7 +664,7 @@ Pat</div>
     var timeline = [
       { t: 0.0, fn: function () { /* resolved state is authored in the DOM */ } },
       { t: 3.0, fn: function () {           // reset everything, then Outlook comes forward
-        onew.classList.remove('is-in'); ocat.classList.remove('is-on');
+        onew.classList.remove('is-in', 'is-scan'); ocat.classList.remove('is-on', 'is-read'); fly.classList.remove('is-up', 'is-go'); toast.classList.remove('is-on');
         newrow.classList.remove('is-on', 'hzk-in');
         proj.classList.remove('is-on'); home.classList.add('is-on');
         ppill.textContent = 'Processing'; ppill.className = 'hzk-pill processing';
@@ -634,10 +676,15 @@ Pat</div>
         hwin.classList.add('is-back'); owin.classList.remove('is-away'); owin.classList.add('is-on');
       } },
       { t: 4.0, fn: function () { onew.classList.add('is-in'); } },                          // Tessa's email lands in Outlook
-      { t: 6.5, fn: function () { ocat.classList.add('is-on'); } },                          // Outlook category "Horizon"
+      { t: 4.8, fn: function () { onew.classList.add('is-scan'); ocat.classList.add('is-on'); } },   // Horizon is reading it: sweep + "Horizon · reading"
+      { t: 6.5, fn: function () { ocat.classList.add('is-read'); } },                        // "Horizon · read"
+      { t: 6.9, fn: function () { if (!instant) flyFrom(); } },                              // the email lifts out of Outlook
+      { t: 7.2, fn: function () { if (!instant) fly.classList.add('is-go'); } },             // and flies into Horizon
       { t: 7.5, fn: function () {                                                             // Horizon comes forward
         owin.classList.remove('is-on'); owin.classList.add('is-away'); hwin.classList.remove('is-back');
       } },
+      { t: 7.9, fn: function () { toast.classList.add('is-on'); } },                         // Horizon confirms the pickup
+      { t: 10.5, fn: function () { toast.classList.remove('is-on'); } },
       { t: 8.3, fn: function () { newrow.classList.add('is-on'); if (!instant) newrow.classList.add('hzk-in'); } },  // new list row
       { t: 10.9, fn: function () { home.classList.remove('is-on'); proj.classList.add('is-on'); } },  // the project opens
       { t: 11.7, fn: function () { tick('Reading the RFQ and its attachments', 'Horizon · 8:12 AM'); } },
