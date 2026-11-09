@@ -393,6 +393,35 @@
 @media (prefers-reduced-motion: reduce) {
   .hz-hero-email-lands *, .hz-hero-email-lands *::before, .hz-hero-email-lands *::after { transition: none !important; animation: none !important; }
 }
+
+/* ---------- phone: a 420x720 stage. One column: the Outlook message list, then the Horizon main pane. ---------- */
+.hz-hero-email-lands.is-phone .hz-hero-email-lands-stage,
+.hz-hero-email-lands.is-phone .o-win,
+.hz-hero-email-lands.is-phone .h-win { width: 420px; height: 720px; }
+.hz-hero-email-lands.is-phone .o-body { grid-template-columns: 1fr; }
+.hz-hero-email-lands.is-phone .o-nav,
+.hz-hero-email-lands.is-phone .o-read { display: none; }
+.hz-hero-email-lands.is-phone .o-list { border-right: 0; }
+.hz-hero-email-lands.is-phone .o-bar span:nth-of-type(n+3) { display: none; }
+.hz-hero-email-lands.is-phone .o-search { display: none; }
+.hz-hero-email-lands.is-phone .hzk-rail,
+.hz-hero-email-lands.is-phone .hzk-list,
+.hz-hero-email-lands.is-phone .hzk-side { display: none; }
+.hz-hero-email-lands.is-phone .hzk-main { padding: 12px 14px 14px; }
+.hz-hero-email-lands.is-phone .hzk-table .tr { grid-template-columns: minmax(0,2fr) .55fr 1fr 1.1fr; }
+.hz-hero-email-lands.is-phone .hzk-table .tr > :nth-child(4) { display: none; }
+.hz-hero-email-lands.is-phone .hzk-alert .it { grid-template-columns: 112px minmax(0,1fr); }
+.hz-hero-email-lands.is-phone .hzk-alert .it i { white-space: nowrap; }
+.hz-hero-email-lands.is-phone .hzk-post .box .hd { flex-wrap: wrap; row-gap: 2px; }
+.hz-hero-email-lands.is-phone .hzk-post .box .hd b { white-space: nowrap; }
+.hz-hero-email-lands.is-phone .hzk-post .box .hd > span { flex: 1 1 100%; order: 3; }
+.hz-hero-email-lands.is-phone .hz-prail { display: none; }
+.hz-hero-email-lands.is-phone .hz-phead { padding: 0 14px; gap: 8px; }
+.hz-hero-email-lands.is-phone .hz-phead h1 { font-size: 16px; }
+.hz-hero-email-lands.is-phone .hz-phead > span:not(.logo):not(.hzk-pill):not(.hz-presence) { display: none; }
+.hz-hero-email-lands.is-phone .hz-phead b { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.hz-hero-email-lands.is-phone .hz-phead .hzk-pill { margin-left: auto; }
+.hz-hero-email-lands.is-phone .hz-tin { padding: 14px 14px 16px; }
 </style>
 
 <div class="hz-hero-email-lands">
@@ -623,9 +652,12 @@ Pat</div>
     // ----- scale the 1200x750 stage to the root's width -----
     function fit() {
       var w = root.clientWidth || 1200;
-      var s = w / 1200;
+      var phone = w < 600 || /[?&]phone=1/.test(location.search);
+      root.classList.toggle('is-phone', phone);
+      var SW = phone ? 420 : 1200, SH = phone ? 720 : 750;
+      var s = w / SW;
       root.style.setProperty('--s', String(s));
-      root.style.height = Math.round(750 * s) + 'px';
+      root.style.height = Math.round(SH * s) + 'px';
     }
     fit();
     if (window.ResizeObserver) new ResizeObserver(fit).observe(root);
@@ -642,9 +674,9 @@ Pat</div>
     toast.innerHTML = '<span class="hz-toast-ic">\u2726</span><span><b>Picked up from Outlook</b><small>Tessa Brandvold, 8:12 AM \u00b7 email and attachments read</small></span>';
     hwin.appendChild(toast);
     function flyFrom() {
-      var r = onew.getBoundingClientRect(), st = stageEl.getBoundingClientRect(), k = st.width / 1200 || 1;
+      var phone = root.classList.contains('is-phone'); var r = onew.getBoundingClientRect(), st = stageEl.getBoundingClientRect(), k = st.width / (phone ? 420 : 1200) || 1;
       fly.style.setProperty('--fx', ((r.left - st.left) / k + 10) + 'px'); fly.style.setProperty('--fy', ((r.top - st.top) / k + 4) + 'px');
-      fly.style.setProperty('--tx', '92px'); fly.style.setProperty('--ty', '128px');
+      fly.style.setProperty('--tx', phone ? '18px' : '92px'); fly.style.setProperty('--ty', phone ? '60px' : '128px');
       fly.style.transition = 'none'; fly.classList.remove('is-go', 'is-up'); reflow(fly); fly.style.transition = ''; fly.classList.add('is-up');
     }
     var ppill = $('[data-ppill]'), sh = $('[data-sh]'), stage = $('[data-stage]'), fig = $('[data-fig]'), sub = $('[data-sub]'), seg2 = $('[data-seg2]');

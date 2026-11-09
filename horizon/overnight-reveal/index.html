@@ -186,6 +186,17 @@
 @media (prefers-reduced-motion: reduce){
   .hz-overnight-reveal *,.hz-overnight-reveal *::before,.hz-overnight-reveal *::after{ transition:none !important; animation:none !important; }
 }
+
+/* ---------- phone: a 420x700 stage showing the shop letter. The reading panel is hidden. ---------- */
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-frame { aspect-ratio: 420/740; }
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-stage { width: 420px; height: 740px; }
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-title { left: 20px; top: 20px; font-size: 13px; }
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-left { left: 20px; top: 56px; width: 380px; height: 664px; transition: opacity .5s var(--ease); }
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-right { opacity: 0; transition: opacity .6s var(--ease); }
+.hz-overnight-reveal.is-phone:has(.hz-overnight-reveal-lines .is-on) .hz-overnight-reveal-left { opacity: 0; }
+.hz-overnight-reveal.is-phone:has(.hz-overnight-reveal-lines .is-on) .hz-overnight-reveal-right { opacity: 1; }
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-glow { left: -120px; top: -60px; width: 660px; height: 660px; }
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-right { left: 20px; top: 56px; width: 380px; height: 664px; padding: 18px; }
 </style>
 
 <div class="hz-overnight-reveal">
@@ -322,9 +333,12 @@
 
     /* ---- scale the 1200x750 stage to the root width ---- */
     function fit(){
-      var w = root.clientWidth || 1200, s = w / 1200;
+      var w = root.clientWidth || 1200;
+      var phone = w < 600 || /[?&]phone=1/.test(location.search);
+      root.classList.toggle('is-phone', phone);
+      var SW = phone ? 420 : 1200, SH = phone ? 740 : 750, s = w / SW;
       root.style.setProperty('--s', s.toFixed(5));
-      if (!(window.CSS && CSS.supports && CSS.supports('aspect-ratio', '1 / 1'))) frame.style.height = (750 * s) + 'px';
+      if (!(window.CSS && CSS.supports && CSS.supports('aspect-ratio', '1 / 1'))) frame.style.height = (SH * s) + 'px';
     }
     fit();
     if (window.ResizeObserver) new ResizeObserver(fit).observe(root); else window.addEventListener('resize', fit);

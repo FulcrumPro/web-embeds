@@ -232,6 +232,17 @@
 @media (prefers-reduced-motion: reduce) {
   .hz-conversation-ribbon *, .hz-conversation-ribbon *::before, .hz-conversation-ribbon *::after { transition: none !important; animation: none !important; }
 }
+
+/* ---------- phone: a 420x720 stage. The thread fills the width; the sales-order panel is hidden. ---------- */
+.hz-conversation-ribbon.is-phone .hz-conversation-ribbon-stage,
+.hz-conversation-ribbon.is-phone .cr-win { width: 420px; height: 720px; }
+.hz-conversation-ribbon.is-phone .hzk-rail,
+.hz-conversation-ribbon.is-phone .cr-rail { display: none; }
+.hz-conversation-ribbon.is-phone .cr-main { padding: 0 14px 14px; }
+.hz-conversation-ribbon.is-phone .cr-head { padding: 0 14px; gap: 8px; }
+.hz-conversation-ribbon.is-phone .cr-head h1 { font-size: 16px; white-space: normal; }
+.hz-conversation-ribbon.is-phone .cr-head .meta { display: none; }
+.hz-conversation-ribbon.is-phone .cr-head .right { display: none; }
 </style>
 
 <div class="hz-conversation-ribbon">
@@ -387,9 +398,12 @@
     var list = $('list'), view = list.parentNode, rail = $('rail'), pill = $('pill');
 
     function fit() {
-      var w = root.clientWidth || 1200, s = w / 1200;
+      var w = root.clientWidth || 1200;
+      var phone = w < 600 || /[?&]phone=1/.test(location.search);
+      root.classList.toggle('is-phone', phone);
+      var SW = phone ? 420 : 1200, SH = phone ? 720 : 750, s = w / SW;
       root.style.setProperty('--s', String(s));
-      root.style.height = Math.round(750 * s) + 'px';
+      root.style.height = Math.round(SH * s) + 'px';
     }
     fit();
     if (window.ResizeObserver) new ResizeObserver(fit).observe(root); else window.addEventListener('resize', fit);
