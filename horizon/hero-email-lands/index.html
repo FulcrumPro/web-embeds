@@ -1,15 +1,16 @@
 <!doctype html>
 <!--
   Horizon - hero-email-lands - "The email lands and it starts"
-  Design 1200x750, scales to width. Loop 40.0s. The RFQ lands in Outlook first, then the Horizon window (the shipped dark
+  Design 1200x750, scales to width. Loop 42.5s. The RFQ lands in Outlook first, then the Horizon window (the shipped dark
   "Projects" UI) comes forward and replays the Larkspur RFQ walkthrough: list row, project opens, live ticker, run fold,
   Parts table, alert, drafted quote with Send + Not Now. Nobody clicks. No libraries, no images, no audio.
 
   Beats (seconds) after the focus pass (Nov 10). One region is lit at a time (focus ring #3840EA, the rest dims to ~45%);
   the now-line in the title bar names the step: 1 The email lands, 2 Reading the drawing, 3 Finding the last job,
   4 Checking the schedule / asking two vendors, 5 Drafting the quote, 6 Pat reviews.
-   0.0  resolved: Larkspur project open, thread at the bottom: Parts table, Horizon's post with the drafted quote, Send + Not Now.
-        Focus on the post. Now-line "6 of 6 · Pat reviews the quote". Hold 3s.
+   0.0  resolved (the sent state): Larkspur project open, thread at the bottom: Horizon's draft with "Sent · 8:19 AM" under it, Pat's sent
+        message "Quote 2207: LA-400 lift arm parts" with Quote-2207.pdf, header "Quote 2207 · sent to Tessa, 8:19 AM", pill Sent.
+        Focus on Pat's message. Now-line "6 of 6 · Pat sends the quote". Hold 3s.
    3.0  reset: Horizon drops back; Outlook comes forward (500ms). Now-line "1 of 6 · The email lands".
    3.3  Tessa's email lands at the top of the list; the row is lit. Hold 1.2s so the sender and subject read.
    4.5  "Horizon · reading" tag + sweep on the row. Hold 0.8s.   5.3 "Horizon · read".
@@ -38,9 +39,13 @@
         Coating and Apex Coatings). Now-line "4 of 6 · Asking two vendors". Focus on the alert. Hold 2.0s.
   28.6  Parts table rises. Now-line "5 of 6 · Drafting the quote". Focus on the table. Hold 2.0s.
   30.6  Horizon's post; the body types (25ms/char, 4.4s). Focus on the post.
-  35.4  Quote-2207.pdf + Send + Not Now rise in. Now-line "6 of 6 · Pat reviews the quote". Nobody clicks.
-  36.0  stage header "Quote · $59,241.00 · Quote 2207 · not sent"; 36.6 pill Ready. Resolved. Hold.
-  40.0  loop -> 0
+  35.4  Quote-2207.pdf + Send + Not Now rise in. Now-line "6 of 6 · Pat sends the quote".
+  36.0  stage header "Quote · $59,241.00 · Quote 2207 · not sent"; 36.6 pill Ready.
+  37.2  Pat's cursor arrives from below-right and parks on the Send button's corner (37.6); 37.8 click (the button presses).
+  38.0  sent: the draft's buttons become "Sent · 8:19 AM"; Pat's message lands under the draft with Quote-2207.pdf; header
+        "Quote 2207 · sent to Tessa, 8:19 AM"; pill Sent. 38.3 toast "You sent quote 2207 · Larkspur Implement Co." (Larkspur mark) to 40.6.
+        Resolved. Hold.
+  42.5  loop -> 0
 
   ?still=1  jumps to the resolved state and stops.   ?at=<sec>  seeks to that time and stops.
   prefers-reduced-motion: resolved state only. The timeline pauses when the root is <10% visible or the tab is hidden.
@@ -537,6 +542,23 @@
 .hz-hero-email-lands.is-phone .hz-sched-lane b { padding: 0 3px; }
 .hz-hero-email-lands.is-phone .hz-sched-h span { display: none; }
 
+/* the send beat (Nov 10): Pat clicks Send; the draft's buttons become the sent line; the sent message lands under the draft */
+.hz-hero-email-lands .hz-pfoot .hzk-result { display: none; align-items: center; gap: 8px; font-size: 13px; color: var(--ok-fg); min-height: 28px; }
+.hz-hero-email-lands .hz-pfoot.is-sent .hzk-actions { display: none; }
+.hz-hero-email-lands .hz-pfoot.is-sent .hzk-result { display: flex; }
+.hz-hero-email-lands .hz-check { width: 16px; height: 16px; border-radius: 50%; background: var(--ok-bg); display: grid; place-items: center; }
+.hz-hero-email-lands .hz-check svg { width: 10px; height: 10px; fill: none; stroke: var(--ok-fg); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.hz-hero-email-lands .hzk-btn.is-pressed { transform: scale(.95); filter: brightness(.85); }
+.hz-hero-email-lands .hzk-btn { transition: transform .12s ease, filter .12s ease; }
+.hz-hero-email-lands .hz-cursor { position: absolute; left: 0; top: 0; width: 30px; height: 30px; z-index: 70; opacity: 0; pointer-events: none; transition: left .4s cubic-bezier(.45,0,.55,1), top .4s cubic-bezier(.45,0,.55,1), opacity .2s ease, transform .12s ease; transform-origin: 6px 4px; }
+.hz-hero-email-lands .hz-cursor.is-on { opacity: 1; }
+.hz-hero-email-lands .hz-cursor.is-click { transform: scale(.86); }
+.hz-hero-email-lands .hz-cursor svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 2px 4px rgba(0,0,0,.45)); }
+.hz-hero-email-lands .hz-toast.hz-toast2 { z-index: 45; }
+.hz-hero-email-lands .hz-toast2 .hz-toast-ic { background: none; }
+.hz-hero-email-lands .hz-toast2 .hz-toast-ic svg { display: block; width: 22px; height: 22px; }
+.hz-hero-email-lands .hz-pcols { position: relative; }
+
 /* seek / still: no motion */
 .hz-hero-email-lands.is-seek *, .hz-hero-email-lands.is-seek *::before, .hz-hero-email-lands.is-seek *::after { transition: none !important; animation: none !important; }
 @media (prefers-reduced-motion: reduce) {
@@ -708,7 +730,7 @@
           <div class="hz-page hz-proj is-on" data-proj>
             <div class="hz-phead">
               <span class="logo has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Larkspur Implement Co."><rect width="24" height="24" rx="6" fill="#3DC975"/><path fill="#fff" d="M5 19C5 10.8 10.6 5.4 19 5c.4 8.4-5.2 14-14 14z"/><path d="M6 18 13.5 10.5" fill="none" stroke="#3DC975" stroke-width="2" stroke-linecap="round"/></svg></span><b>Larkspur Implement Co.</b><span class="sep">·</span><span>10 Parts</span><span class="sep">·</span><span>Tessa Brandvold</span>
-              <span class="hzk-pill ready" data-ppill>Ready</span>
+              <span class="hzk-pill sent" data-ppill>Sent</span>
               <span class="more">···</span><span class="hz-presence has-photo"><img class="hz-photo" src="../shared/people/pat/square-160.webp" srcset="../shared/people/pat/square-320.webp 2x" alt="Pat" width="28" height="28" decoding="async"></span>
             </div>
             <div class="hz-pcols">
@@ -718,7 +740,7 @@
                   <div class="hz-sh" data-sh>
                     <div class="k"><span data-stage>Quote</span><a>All Stages</a></div>
                     <div class="fig" data-fig>$59,241.00</div>
-                    <div class="sub" data-sub><a>Quote 2207</a> · not sent</div>
+                    <div class="sub" data-sub><a>Quote 2207</a> · sent to Tessa, 8:19 AM</div>
                   </div>
                   <div class="hzk-prog"><i class="on"></i><i class="on" data-seg2></i><i></i><i></i></div>
                 </div>
@@ -814,10 +836,20 @@
 
 Thanks,
 Pat</div>
-                          <div class="hz-pfoot is-on" data-pfoot>
+                          <div class="hz-pfoot is-on is-sent" data-pfoot>
                             <span class="att"><i></i>Quote-2207.pdf <small>· 1 page</small></span>
-                            <div class="hzk-actions"><button class="hzk-btn primary" type="button" tabindex="-1">Send</button><button class="hzk-btn" type="button" tabindex="-1">Not Now</button></div>
+                            <div class="hzk-actions"><button class="hzk-btn primary" type="button" tabindex="-1" data-sendbtn>Send</button><button class="hzk-btn" type="button" tabindex="-1">Not Now</button></div>
+                            <div class="hzk-result"><span class="hz-check"><svg viewBox="0 0 10 10"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span>Sent · 8:19 AM</div>
                           </div>
+                        </div>
+                      </div>
+                      <div class="hzk-mail hz-item is-on" data-sentmail>
+                        <span class="av has-photo"><img class="hz-photo" src="../shared/people/pat/square-160.webp" srcset="../shared/people/pat/square-320.webp 2x" alt="Pat" width="28" height="28" decoding="async"></span>
+                        <div class="hz-card">
+                          <div class="hd"><b>Pat</b><span>to Tessa Brandvold</span><small>8:19 AM</small></div>
+                          <div class="sub">Quote 2207: LA-400 lift arm parts</div>
+                          <div class="body">Hi Tessa, quote 2207 attached. 100 kits come to $59,241.00; 9 of 10 parts make Dec 7 and the pivot lug ships Dec 11. Let me know if purchasing needs anything else.</div>
+                          <div class="atts"><span class="att"><i></i>Quote-2207.pdf <small>· 1 page</small></span></div>
                         </div>
                       </div>
                     </div>
@@ -836,7 +868,7 @@ Pat</div>
 <script>
 (function () {
   'use strict';
-  var LOOP_END = 40.0;       // seconds; loop wraps to t=0 (resolved) here
+  var LOOP_END = 42.5;       // seconds; loop wraps to t=0 (resolved, the sent state) here
   var TYPE_MS = 25;          // ms per character (the drafted email body, once per loop)
 
   function init(root) {
@@ -855,6 +887,8 @@ Pat</div>
       if (typeof place === 'function') place();
     }
     fit();
+    // the phone type floor can grow the thread after a beat scrolled it; re-scroll (and re-place the light) whenever it runs
+    if (root.__hzFloor) { (function () { var fl = root.__hzFloor; root.__hzFloor = function () { fl(); if (typeof scrollThread === 'function') scrollThread(); if (typeof place === 'function') place(); }; })(); }
     if (window.ResizeObserver) new ResizeObserver(fit).observe(root);
     else window.addEventListener('resize', fit);
 
@@ -883,6 +917,27 @@ Pat</div>
     var tcol = $('[data-tcol]'), sched = $('[data-sched]'), schedCard = $('[data-schedcard]'), slot = $('[data-slot]'), schedRows = $$('.hz-sched-row');
     var srcFinish = $('[data-src="finish"]'), stepFinish = $('[data-step="finish"]'), link = $('[data-link]'), linkPath = $('[data-linkpath]');
     var mailCard = root.querySelector('.hzk-mail .hz-card'), postBox = post.querySelector('.box'), orows = root.querySelector('.o-rows');
+    var sendBtn = $('[data-sendbtn]'), sentMail = $('[data-sentmail]');
+    var cursor = document.createElement('div'); cursor.className = 'hz-cursor'; cursor.setAttribute('aria-hidden', 'true');
+    cursor.innerHTML = '<svg viewBox="0 0 24 24"><path d="M5 3l14 9-6.5 1.2L16 20l-2.6 1.2-3.3-6.8L5 19z" fill="#fff" stroke="#292932" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+    stageEl.appendChild(cursor);
+    var toast2 = document.createElement('div'); toast2.className = 'hz-toast hz-toast2'; toast2.setAttribute('aria-hidden', 'true');
+    toast2.innerHTML = '<span class="hz-toast-ic">' + '<svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Larkspur Implement Co."><rect width="24" height="24" rx="6" fill="#3DC975"/><path fill="#fff" d="M5 19C5 10.8 10.6 5.4 19 5c.4 8.4-5.2 14-14 14z"/><path d="M6 18 13.5 10.5" fill="none" stroke="#3DC975" stroke-width="2" stroke-linecap="round"/></svg>' + '</span><span><b>You sent quote 2207</b><small>Larkspur Implement Co. \u00b7 Tessa Brandvold, 8:19 AM</small></span>';
+    hwin.appendChild(toast2);
+    // the cursor parks on the Send button's lower-right corner (stage px), arriving from below-right
+    function cursorTo(el, dx, dy, jump) {
+      var sk = stageK(), st = sk[0], k = sk[1], r = el.getBoundingClientRect();
+      var x = (r.right - st.left) / k - 10 + (dx || 0), y = (r.bottom - st.top) / k - 8 + (dy || 0);
+      if (jump) { cursor.style.transition = 'none'; }
+      cursor.style.left = x + 'px'; cursor.style.top = y + 'px';
+      if (jump) { reflow(cursor); cursor.style.transition = ''; }
+    }
+    function sent(on) {
+      pfoot.classList.toggle('is-sent', on);
+      if (on) { sentMail.classList.add('is-on'); if (!instant) { sentMail.classList.remove('hzk-in'); reflow(sentMail); sentMail.classList.add('hzk-in'); } }
+      else sentMail.classList.remove('is-on', 'hzk-in');
+      scrollThread();
+    }
 
     /* ---------- focus system (Nov 10): one lit region; the ring travels; the now-line names the step ---------- */
     var ring = document.createElement('div'); ring.className = 'hz-focus'; ring.setAttribute('aria-hidden', 'true'); stageEl.appendChild(ring);
@@ -1004,7 +1059,7 @@ Pat</div>
     // ----- timeline: one array of {t, fn}; t in seconds from the resolved first frame -----
     var PHONE = function () { return root.classList.contains('is-phone'); };
     var timeline = [
-      { t: 0.0, fn: function () { holdTop = false; outlook(false); schedPanel('out'); sourceLit(false); step(6, 'Pat reviews the quote'); focus([postBox, pfoot], 10); } },
+      { t: 0.0, fn: function () { holdTop = false; outlook(false); schedPanel('out'); sourceLit(false); cursor.classList.remove('is-on', 'is-click'); sendBtn.classList.remove('is-pressed'); toast2.classList.remove('is-on'); sent(true); setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · sent to Tessa, 8:19 AM', true); ppill.textContent = 'Sent'; ppill.className = 'hzk-pill sent'; step(6, 'Pat sends the quote'); focus(sentMail.querySelector('.hz-card'), 10); } },
       { t: 3.0, fn: function () {           // reset everything, then Outlook comes forward
         onew.classList.remove('is-in', 'is-scan'); ocat.classList.remove('is-on', 'is-read'); fly.classList.remove('is-up', 'is-go'); toast.classList.remove('is-on');
         newrow.classList.remove('is-on', 'hzk-in');
@@ -1016,7 +1071,7 @@ Pat</div>
         run.classList.remove('is-fold'); runav.classList.remove('is-live');
         body.textContent = ''; body.style.minHeight = '';
         tin.style.transform = 'translateY(0)';
-        holdTop = false; schedPanel('out'); sourceLit(false);
+        holdTop = false; schedPanel('out'); sourceLit(false); sent(false); cursor.classList.remove('is-on', 'is-click'); sendBtn.classList.remove('is-pressed'); toast2.classList.remove('is-on');
         hwin.classList.add('is-back'); owin.classList.remove('is-away'); owin.classList.add('is-on');
         outlook(true); step(1, 'The email lands'); focus(orows.querySelector('.o-row:not(.o-new)'), 6);   // the top of the list, where it will land
       } },
@@ -1055,9 +1110,17 @@ Pat</div>
       { t: 26.6, fn: function () { show(alert); focus(alert, 8); } },                                        // the two issues, vendors asked; hold 2s
       { t: 28.6, fn: function () { show(table); step(5, 'Drafting the quote'); focus(table, 8); } },
       { t: 30.6, fn: function () { show(post); typeInto(body); scrollThread(); focus(postBox, 10); } },
-      { t: 35.4, fn: function () { show(pfoot); step(6, 'Pat reviews the quote'); focus([postBox, pfoot], 10); } },
+      { t: 35.4, fn: function () { show(pfoot); step(6, 'Pat sends the quote'); focus(postBox, 10); } },
       { t: 36.0, fn: function () { setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · not sent', true); } },
-      { t: 36.6, fn: function () { ppill.textContent = 'Ready'; ppill.className = 'hzk-pill ready'; } }
+      { t: 36.6, fn: function () { ppill.textContent = 'Ready'; ppill.className = 'hzk-pill ready'; } },
+      { t: 37.2, fn: function () { if (instant) return; cursorTo(sendBtn, 140, 110, true); cursor.classList.add('is-on'); later(30, function () { cursorTo(sendBtn, 0, 0); }); } },   // Pat's cursor arrives and parks on Send's corner (37.6)
+      { t: 37.8, fn: function () { if (instant) return; cursor.classList.add('is-click'); sendBtn.classList.add('is-pressed'); later(140, function () { cursor.classList.remove('is-click'); sendBtn.classList.remove('is-pressed'); }); } },   // click
+      { t: 38.0, fn: function () {                                                                                 // sent: the draft's buttons become the sent line, Pat's message lands, header and pill update
+        sent(true); setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · sent to Tessa, 8:19 AM', true); ppill.textContent = 'Sent'; ppill.className = 'hzk-pill sent';
+        focus(sentMail.querySelector('.hz-card'), 10); later(600, function () { cursor.classList.remove('is-on'); });
+      } },
+      { t: 38.3, fn: function () { toast2.classList.add('is-on'); } },                                             // "You sent quote 2207 · Larkspur Implement Co."
+      { t: 40.6, fn: function () { toast2.classList.remove('is-on'); } }
     ];
 
     // ----- runner -----
