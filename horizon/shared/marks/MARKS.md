@@ -19,6 +19,7 @@ Inline rule used in the loops and the band: the `<span>` that used to hold initi
 | `harbor` | Harbor Fluid Systems | `#3840EA` | blue | an anchor |
 | `tri-county` | Tri-County Trailer | `#FF5C16` | orange | a trailer |
 | `summit` | Summit Powder Coating | `#3d414a` | slate | a peak with a snowcap: vendor |
+| `prairie` | Prairie Powder Coat | `#8ED7E6` | aqua | grass blades: vendor; drawn by the video build, copied here unchanged |
 | `person` | Any person (Tessa Brandvold, Dev Castillo, Priya Natarajan, Hana Sato, Tom Reyes, Mia Brooks, Ana Suarez, Emily S., Pat) | `#2a2d36` | avatar gray | head and shoulders |
 
 Fills are shared where there are more companies than palette colors (Harbor with Marlin, Tri-County with Pinecrest, Summit with Halden); the glyph tells them apart.
@@ -95,4 +96,10 @@ Fills are shared where there are more companies than palette colors (Harbor with
 
 ```svg
 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" role="img" aria-label="Any person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.1" fill="#fff"/><path fill="#fff" d="M6 19.5c0-3.6 2.7-6 6-6s6 2.4 6 6z"/></svg>
+```
+
+### Prairie Powder Coat (`prairie.svg`)
+
+```svg
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" role="img" aria-label="Prairie Powder Coat"><rect width="24" height="24" rx="6" fill="#8ED7E6"/><path fill="#fff" d="M11 19.5C11 13.5 11.3 8.5 12 4c.7 4.5 1 9.500 1 15.500zM7.200 19.500C7 15 5.800 11.500 3.800 9c3 2 5.200 5.800 5.600 10.500zM16.800 19.500C17 15 18.200 11.500 20.200 9c-3 2-5.200 5.800-5.600 10.500z"/></svg>
 ```

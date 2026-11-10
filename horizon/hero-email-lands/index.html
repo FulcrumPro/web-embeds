@@ -453,10 +453,10 @@
 /* ---------- focus system (Nov 10): one lit region, the rest dims; the ring travels between beats ---------- */
 .hz-hero-email-lands { --hz-dim: rgba(19,20,24,.55); --hz-ease: cubic-bezier(.45,0,.55,1); }
 .hz-hero-email-lands.is-outlook { --hz-dim: rgba(255,255,255,.6); }
-.hz-hero-email-lands .hz-focus { position: absolute; left: 0; top: 0; width: 0; height: 0; border: 2px solid #3840EA; border-radius: 10px; box-shadow: 0 0 14px 4000px var(--hz-dim); opacity: 0; z-index: 40; pointer-events: none;
-  transition: left .3s var(--hz-ease), top .3s var(--hz-ease), width .3s var(--hz-ease), height .3s var(--hz-ease), opacity .3s ease, box-shadow .3s ease; }
+.hz-hero-email-lands .hz-focus { position: absolute; left: 0; top: 0; width: 0; height: 0; border: 0; border-radius: 10px; box-shadow: 0 0 0 4000px var(--hz-dim); opacity: 0; z-index: 40; pointer-events: none; transition: opacity .3s ease; }
+.hz-hero-email-lands .hz-focus.is-move { transition: left .25s var(--hz-ease), top .25s var(--hz-ease), width .25s var(--hz-ease), height .25s var(--hz-ease), border-radius .25s var(--hz-ease), opacity .3s ease; }
 .hz-hero-email-lands .hz-focus.is-on { opacity: 1; }
-.hz-hero-email-lands .hz-focus.is-slow { transition-duration: 1s, 1s, 1s, 1s, .3s, .3s; }
+.hz-hero-email-lands .hz-focus.is-move.is-slow { transition-duration: 1s, 1s, 1s, 1s, 1s, .3s; }
 .hz-hero-email-lands .o-fly { z-index: 50; }
 .hz-hero-email-lands .hz-now { position: absolute; right: 14px; top: 6px; height: 24px; z-index: 60; display: inline-flex; align-items: center; gap: 8px; padding: 0 10px 0 9px; border-radius: 6px; background: #292932; border: 1px solid #3840EA; color: #fff; font-size: 13px; line-height: 1; white-space: nowrap; pointer-events: none; }
 .hz-hero-email-lands .hz-now b { font-family: 'Gilroy', 'Inter', sans-serif; font-weight: 600; font-variant-numeric: tabular-nums; }
@@ -867,15 +867,15 @@ Pat</div>
       });
       if (!any) return;
       ring.style.left = (x0 - fPad) + 'px'; ring.style.top = (y0 - fPad) + 'px'; ring.style.width = (x1 - x0 + 2 * fPad) + 'px'; ring.style.height = (y1 - y0 + 2 * fPad) + 'px';
+      ring.style.borderRadius = fTargets.length === 1 ? (getComputedStyle(fTargets[0]).borderRadius || '0px') : '10px';
     }
-    function follow() { place(); if (performance.now() < fUntil) fRaf = requestAnimationFrame(follow); }
+    function follow() { place(); if (performance.now() > fUntil) ring.classList.remove('is-move', 'is-slow'); fRaf = requestAnimationFrame(follow); }
     // focus(el | [els], pad, slow): the ring moves to the element(s) over 300ms (1s when slow) and follows them while the thread scrolls
     function focus(els, pad, slow) {
-      fTargets = [].concat(els).filter(Boolean); fPad = pad == null ? 8 : pad;
-      ring.classList.toggle('is-slow', !!slow); ring.classList.add('is-on');
-      cancelAnimationFrame(fRaf);
-      if (instant) { place(); return; }
-      fUntil = performance.now() + (slow ? 1400 : 1100); follow();
+      fTargets = [].concat(els).filter(Boolean); fPad = pad == null ? 0 : pad;
+      ring.classList.add('is-on'); cancelAnimationFrame(fRaf);
+      if (instant) { ring.classList.remove('is-move', 'is-slow'); place(); return; }
+      ring.classList.add('is-move'); ring.classList.toggle('is-slow', !!slow); fUntil = performance.now() + (slow ? 1050 : 320); follow();
     }
     function step(n, label) { nowN.textContent = n + ' of 6'; nowT.textContent = label; }
     function outlook(on) { root.classList.toggle('is-outlook', !!on); }

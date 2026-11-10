@@ -8,8 +8,6 @@
   Halden Metalworks sample data, Outlook named as the inbox source, purple spark for the AI (no "H" avatar), one lime
   accent dot, lines rise 6px / 350ms (no typing: there is no drafted email in this loop), in-view + tab-hidden pause.
 
-  Focus pass (Nov 10): one lit region at a time (ring #3840EA, the canvas dims to ~45%); the now-line counts 5 steps:
-  Reading the shop, Your shop, How you work, Your rules, What comes to you. The reading panel keeps flowing under the dim.
   Beats (seconds):
     0.0  resolved: counters at 18,402 / 3,115 / 7,980, clock at Mon 7 am, drawer "Read", full result card
          (3 eyebrows, 4 facts, 4 rules with 2 "Evaluating" flags, both closing lines), hold 3s
@@ -190,19 +188,6 @@
   .hz-overnight-reveal *,.hz-overnight-reveal *::before,.hz-overnight-reveal *::after{ transition:none !important; animation:none !important; }
 }
 
-
-/* ---------- focus system (Nov 10): one lit region, the rest dims (white canvas: a light dim); the now-line in the title bar ---------- */
-.hz-overnight-reveal{ --hz-dim: rgba(255,255,255,.62); --hz-ease: cubic-bezier(.45,0,.55,1); }
-.hz-overnight-reveal .hz-focus{ position:absolute; left:0; top:0; width:0; height:0; border:2px solid #3840EA; border-radius:10px; box-shadow:0 0 14px 4000px var(--hz-dim); opacity:0; z-index:40; pointer-events:none;
-  transition:left .3s var(--hz-ease), top .3s var(--hz-ease), width .3s var(--hz-ease), height .3s var(--hz-ease), opacity .3s ease; }
-.hz-overnight-reveal .hz-focus.is-on{ opacity:1; }
-.hz-overnight-reveal .hz-now{ position:absolute; right:14px; top:6px; height:24px; z-index:60; display:inline-flex; align-items:center; gap:8px; padding:0 10px 0 9px; border-radius:6px; background:#292932; border:1px solid #3840EA; color:#fff; font-size:13px; line-height:1; white-space:nowrap; pointer-events:none; font-family:'Inter',system-ui,sans-serif; }
-.hz-overnight-reveal .hz-now b{ font-family:'Gilroy','Inter',sans-serif; font-weight:600; font-variant-numeric:tabular-nums; }
-.hz-overnight-reveal .hz-now b::after{ content:''; display:inline-block; width:1px; height:12px; background:#3840EA; margin:0 0 -2px 8px; }
-.hz-overnight-reveal.is-phone .hz-now{ left:0; right:0; top:36px; height:26px; border-radius:0; border-width:0 0 1px; justify-content:center; font-size:16px; }
-.hz-overnight-reveal.is-phone .hz-overnight-reveal-stage .hz-overnight-reveal-title{ top:76px; }
-.hz-overnight-reveal.is-phone .hz-overnight-reveal-stage .hz-overnight-reveal-left, .hz-overnight-reveal.is-phone .hz-overnight-reveal-stage .hz-overnight-reveal-right{ top:106px; height:622px; }
-
 /* ---------- phone: a 420x700 stage showing the shop letter. The reading panel is hidden. ---------- */
 .hz-overnight-reveal.is-phone .hz-overnight-reveal-frame { aspect-ratio: 420/740; }
 .hz-overnight-reveal.is-phone .hz-overnight-reveal-stage { width: 420px; height: 740px; }
@@ -367,24 +352,6 @@
     var $ = function(id){ return root.querySelector('#' + SLUG + '-' + id); };
     var frame = root.querySelector('.' + SLUG + '-frame');
     var left = $('left');
-    var stageEl = root.querySelector('.' + SLUG + '-stage'), right = root.querySelector('.' + SLUG + '-right');
-    var ring = document.createElement('div'); ring.className = 'hz-focus'; ring.setAttribute('aria-hidden', 'true'); stageEl.appendChild(ring);
-    var now = document.createElement('div'); now.className = 'hz-now'; now.innerHTML = '<b></b><span></span>'; stageEl.appendChild(now);
-    var nowN = now.firstChild, nowT = now.lastChild, STEPS = 5;
-    var fTargets = [], fPad = 8, fRaf = 0, fUntil = 0;
-    function place(){
-      if (!fTargets || !fTargets.length || !ring) return;
-      var st = stageEl.getBoundingClientRect(), k = st.width / (root.classList.contains('is-phone') ? 420 : 1200) || 1, x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9, any = false;
-      fTargets.forEach(function(el){ var r = el.getBoundingClientRect(); if (!r.width && !r.height) return; if (getComputedStyle(el).opacity === '0') return; any = true;
-        x0 = Math.min(x0, (r.left - st.left) / k); y0 = Math.min(y0, (r.top - st.top) / k); x1 = Math.max(x1, (r.right - st.left) / k); y1 = Math.max(y1, (r.bottom - st.top) / k); });
-      if (!any) return;
-      ring.style.left = (x0 - fPad) + 'px'; ring.style.top = (y0 - fPad) + 'px'; ring.style.width = (x1 - x0 + 2 * fPad) + 'px'; ring.style.height = (y1 - y0 + 2 * fPad) + 'px';
-    }
-    function follow(){ place(); if (performance.now() < fUntil) fRaf = requestAnimationFrame(follow); }
-    function focus(els, pad){ fTargets = [].concat(els).filter(Boolean); fPad = pad == null ? 8 : pad; ring.classList.add('is-on'); cancelAnimationFrame(fRaf); if (instant){ place(); return; } fUntil = performance.now() + 1100; follow(); }
-    function step(n, label){ nowN.textContent = n + ' of ' + STEPS; nowT.textContent = label; }
-    // on phones the reading panel hides once the letter starts, so the lit region is the letter's group
-    function group(a, b){ return function(){ var els = INS.slice(a, b + 1); if (root.classList.contains('is-phone')) return els; return els; }; }
     var nums = [$('n0'), $('n1'), $('n2')];
 
     // build the flow cards, the "what it read" list and the card lines once
@@ -411,7 +378,6 @@
       var SW = phone ? 420 : 1200, SH = phone ? 740 : 750, s = w / SW;
       root.style.setProperty('--s', s.toFixed(5));
       if (!(window.CSS && CSS.supports && CSS.supports('aspect-ratio', '1 / 1'))) frame.style.height = (SH * s) + 'px';
-      if (typeof place === 'function') place();
     }
     fit();
     if (window.ResizeObserver) new ResizeObserver(fit).observe(root); else window.addEventListener('resize', fit);
@@ -442,21 +408,18 @@
     }
 
     /* ---- state setters ---- */
-    function startReading(off){ left.classList.add('is-reading'); root.classList.add('is-reading'); step(1, 'Reading the shop'); focus(left, 10); $('dlabel').textContent = 'Reading'; $('when').textContent = 'draft'; tween(READ_MS, off, setProgress); }
+    function startReading(off){ left.classList.add('is-reading'); root.classList.add('is-reading'); $('dlabel').textContent = 'Reading'; $('when').textContent = 'draft'; tween(READ_MS, off, setProgress); }
     function doneReading(){ left.classList.remove('is-reading'); root.classList.remove('is-reading'); $('dlabel').textContent = 'Read'; $('when').textContent = 'Mon 7:02 am'; setProgress(1); }
     var rules = root.querySelector('.' + SLUG + '-rules');
-    var GROUPS = [[0, 2, 2, 'Your shop'], [3, 5, 3, 'How you work'], [6, 10, 4, 'Your rules'], [11, 12, 5, 'What comes to you']];
-    function show(i){ return function(){ INS[i].classList.add('is-on'); if (INS[i] === $('eb2')) rules.classList.add('is-on');
-      GROUPS.forEach(function(g){ if (i >= g[0] && i <= g[1]) { step(g[2], g[3]); focus(INS.slice(g[0], i + 1), 8); } }); }; }
+    function show(i){ return function(){ INS[i].classList.add('is-on'); if (INS[i] === $('eb2')) rules.classList.add('is-on'); }; }
     function softReset(){ root.classList.add('is-reset'); }
     function resolved(){
       root.classList.remove('is-reset');
       doneReading();
       INS.forEach(function(e){ e.classList.add('is-on'); }); rules.classList.add('is-on');
-      step(5, 'What comes to you'); focus(right, 10);
     }
     function clear(){
-      stopAll(); step(1, 'Reading the shop'); focus(left, 10);
+      stopAll();
       root.classList.remove('is-reset');
       left.classList.remove('is-reading', 'is-day'); root.classList.remove('is-reading');
       $('dlabel').textContent = 'Reading'; $('when').textContent = 'draft'; setProgress(0);
@@ -489,7 +452,6 @@
     function seek(at){
       instant = true; root.classList.add('is-noanim'); stopAll(); clear();
       TL.forEach(function(b){ if (b.t <= at) b.fn(at - b.t); });
-      place();
       void root.offsetWidth; root.classList.remove('is-noanim'); instant = false;
     }
     var pos0 = 0, t0 = 0, playing = false;
@@ -535,7 +497,7 @@
     /* ---- boot ---- */
     var q = {}; try { q = Object.fromEntries(new URLSearchParams(window.location.search)); } catch (e) {}
     var reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    if (q.still || reduced){ seek(0); if (document.fonts && document.fonts.ready) document.fonts.ready.then(place); }
+    if (q.still || reduced){ seek(0); }
     else if (q.at !== undefined){ root.classList.add('is-seek'); seek(((parseFloat(q.at) || 0) % LOOP + LOOP) % LOOP); }
     else { seek(0); play(0, false); enableGating(); }
   }

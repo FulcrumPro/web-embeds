@@ -11,9 +11,6 @@
   stage header with the big figure and the 4-segment RFQ Quote PO Sales Order bar, stage details card, Quoted Items with
   3 rows + All 10), the thread in the center (no right column), composer. One canvas caption under the window.
 
-  Focus pass (Nov 10): one lit region at a time (ring #3840EA, the rest dims to ~45%), the ring follows the thread scroll, and the
-  now-line in the title bar counts 8 steps: RFQ, estimate, quote drafted, sent, discount decision, sent at $54,501, PO checked, sales order.
-  The rail updates 0.4s after each item under the dim (a quiet crossfade outside the focus).
   Beats (seconds; every new thread item rises 6px / 350ms, the thread scrolls 600ms, rail and pill update 0.4s after):
     0.0  resolved: the whole thread, ending on "Passed contract review" and "Created sales order SO3318 in Fulcrum";
          rail "Sales Order · $54,501.00 · SO3318 · PO 77812-R1", all four segments lit, pill Ordered (hold 3.0s)
@@ -241,18 +238,6 @@
   .hz-conversation-ribbon *, .hz-conversation-ribbon *::before, .hz-conversation-ribbon *::after { transition: none !important; animation: none !important; }
 }
 
-
-/* ---------- focus system (Nov 10): one lit region, the rest dims; the now-line in the title bar names the step ---------- */
-.hz-conversation-ribbon { --hz-dim: rgba(19,20,24,.55); --hz-ease: cubic-bezier(.45,0,.55,1); }
-.hz-conversation-ribbon .hz-focus { position: absolute; left: 0; top: 0; width: 0; height: 0; border: 2px solid #3840EA; border-radius: 10px; box-shadow: 0 0 14px 4000px var(--hz-dim); opacity: 0; z-index: 40; pointer-events: none;
-  transition: left .3s var(--hz-ease), top .3s var(--hz-ease), width .3s var(--hz-ease), height .3s var(--hz-ease), opacity .3s ease; }
-.hz-conversation-ribbon .hz-focus.is-on { opacity: 1; }
-.hz-conversation-ribbon .hz-now { position: absolute; right: 14px; top: 6px; height: 24px; z-index: 60; display: inline-flex; align-items: center; gap: 8px; padding: 0 10px 0 9px; border-radius: 6px; background: #292932; border: 1px solid #3840EA; color: #fff; font-size: 13px; line-height: 1; white-space: nowrap; pointer-events: none; font-family: var(--font); }
-.hz-conversation-ribbon .hz-now b { font-family: 'Gilroy', 'Inter', sans-serif; font-weight: 600; font-variant-numeric: tabular-nums; }
-.hz-conversation-ribbon .hz-now b::after { content: ''; display: inline-block; width: 1px; height: 12px; background: #3840EA; margin: 0 0 -2px 8px; }
-.hz-conversation-ribbon.is-phone .hz-now { left: 0; right: 0; top: 36px; height: 26px; border-radius: 0; border-width: 0 0 1px; justify-content: center; font-size: 16px; }
-.hz-conversation-ribbon.is-phone .hzk-app { padding-top: 26px; }
-
 /* ---------- phone: a 420x720 stage. The thread fills the width; the sales-order panel is hidden. ---------- */
 .hz-conversation-ribbon.is-phone .hz-conversation-ribbon-stage,
 .hz-conversation-ribbon.is-phone .cr-win { width: 420px; height: 720px; }
@@ -421,24 +406,6 @@
   function init(root) {
     var $ = function (id) { return root.querySelector('#' + SLUG + '-' + id); };
     var list = $('list'), view = list.parentNode, rail = $('rail'), pill = $('pill');
-    var stageEl = root.querySelector('.' + SLUG + '-stage');
-    var ring = document.createElement('div'); ring.className = 'hz-focus'; ring.setAttribute('aria-hidden', 'true'); stageEl.appendChild(ring);
-    var now = document.createElement('div'); now.className = 'hz-now'; now.innerHTML = '<b></b><span></span>'; stageEl.appendChild(now);
-    var nowN = now.firstChild, nowT = now.lastChild, STEPS = 8;
-    var fTargets = [], fPad = 8, fRaf = 0, fUntil = 0;
-    function place() {
-      if (!fTargets || !fTargets.length || !ring) return;
-      var st = stageEl.getBoundingClientRect(), k = st.width / (root.classList.contains('is-phone') ? 420 : 1200) || 1, x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9, any = false;
-      fTargets.forEach(function (el) { var r = el.getBoundingClientRect(); if (!r.width && !r.height) return; any = true;
-        x0 = Math.min(x0, (r.left - st.left) / k); y0 = Math.min(y0, (r.top - st.top) / k); x1 = Math.max(x1, (r.right - st.left) / k); y1 = Math.max(y1, (r.bottom - st.top) / k); });
-      if (!any) return;
-      ring.style.left = (x0 - fPad) + 'px'; ring.style.top = (y0 - fPad) + 'px'; ring.style.width = (x1 - x0 + 2 * fPad) + 'px'; ring.style.height = (y1 - y0 + 2 * fPad) + 'px';
-    }
-    function follow() { place(); if (performance.now() < fUntil) fRaf = requestAnimationFrame(follow); }
-    function focus(els, pad) { fTargets = [].concat(els).filter(Boolean); fPad = pad == null ? 8 : pad; ring.classList.add('is-on'); cancelAnimationFrame(fRaf); if (instant) { place(); return; } fUntil = performance.now() + 1100; follow(); }
-    function step(n, label) { nowN.textContent = n + ' of ' + STEPS; nowT.textContent = label; }
-    function last() { return list.lastElementChild; }
-    function item(key) { return $(key); }
 
     function fit() {
       var w = root.clientWidth || 1200;
@@ -447,7 +414,6 @@
       var SW = phone ? 420 : 1200, SH = phone ? 720 : 750, s = w / SW;
       root.style.setProperty('--s', String(s));
       root.style.height = Math.round(SH * s) + 'px';
-      if (typeof place === 'function') place();
     }
     fit();
     if (window.ResizeObserver) new ResizeObserver(fit).observe(root); else window.addEventListener('resize', fit);
@@ -499,29 +465,28 @@
       ['rfq', 'fold', 'parts', 'quote', 'reply', 'margin', 'decision', 'po', 'pocheck', 'ask', 'r1', 'review', 'so'].forEach(add);
       sent('quote'); sent('decision'); sent('ask'); setRail('so'); scrollToEnd();
       instant = was;
-      step(8, 'Sales order created'); focus(last(), 8);
     }
 
     /* ---------- timeline ---------- */
     var TL = [
       { t: 0.0,  fn: resolved },
-      { t: 3.0,  fn: function () { clearThread(); step(1, 'The RFQ arrives'); focus(root.querySelector('.cr-head'), 6); } },
-      { t: 3.5,  fn: function () { add('rfq'); focus(last(), 8); } },
-      { t: 6.2,  fn: function () { add('fold'); step(2, 'Estimated all 10 parts'); focus(last(), 8); } },
-      { t: 6.9,  fn: function () { add('parts'); later(400, function () { setRail('rfq1'); }); focus(last(), 8); } },
-      { t: 9.6,  fn: function () { add('quote'); later(400, function () { setRail('quote0'); }); step(3, 'Quote drafted'); focus(item('quote'), 8); } },
-      { t: 12.3, fn: function () { sent('quote'); later(400, function () { setRail('quote1'); }); step(4, 'A person sent it'); focus(item('quote'), 8); } },
-      { t: 15.0, fn: function () { add('reply'); step(5, 'Tessa asks for $54,500'); focus(last(), 8); } },
-      { t: 17.7, fn: function () { add('margin'); focus(last(), 8); } },
-      { t: 18.2, fn: function () { add('decision'); step(5, 'A discount: needs you'); focus(item('decision'), 8); } },
-      { t: 20.9, fn: function () { sent('decision'); later(400, function () { setRail('quote2'); }); step(6, 'Sent at $54,501'); focus(item('decision'), 8); } },
-      { t: 23.6, fn: function () { add('po'); later(400, function () { setRail('po'); }); step(7, 'The PO arrives'); focus(last(), 8); } },
-      { t: 26.3, fn: function () { add('pocheck'); step(7, 'PO vs quote: 1 line missing'); focus(last(), 8); } },
-      { t: 29.0, fn: function () { add('ask'); step(7, 'Asks for a revised PO'); focus(item('ask'), 8); } },
-      { t: 31.7, fn: function () { sent('ask'); focus(item('ask'), 8); } },
-      { t: 32.5, fn: function () { add('r1'); step(8, 'Revised PO arrives'); focus(last(), 8); } },
-      { t: 35.2, fn: function () { add('review'); step(8, 'Passed contract review'); focus(last(), 8); } },
-      { t: 36.5, fn: function () { add('so'); later(400, function () { setRail('so'); }); step(8, 'Sales order created'); focus(last(), 8); } }
+      { t: 3.0,  fn: clearThread },
+      { t: 3.5,  fn: function () { add('rfq'); } },
+      { t: 6.2,  fn: function () { add('fold'); } },
+      { t: 6.9,  fn: function () { add('parts'); later(400, function () { setRail('rfq1'); }); } },
+      { t: 9.6,  fn: function () { add('quote'); later(400, function () { setRail('quote0'); }); } },
+      { t: 12.3, fn: function () { sent('quote'); later(400, function () { setRail('quote1'); }); } },
+      { t: 15.0, fn: function () { add('reply'); } },
+      { t: 17.7, fn: function () { add('margin'); } },
+      { t: 18.2, fn: function () { add('decision'); } },
+      { t: 20.9, fn: function () { sent('decision'); later(400, function () { setRail('quote2'); }); } },
+      { t: 23.6, fn: function () { add('po'); later(400, function () { setRail('po'); }); } },
+      { t: 26.3, fn: function () { add('pocheck'); } },
+      { t: 29.0, fn: function () { add('ask'); } },
+      { t: 31.7, fn: function () { sent('ask'); } },
+      { t: 32.5, fn: function () { add('r1'); } },
+      { t: 35.2, fn: function () { add('review'); } },
+      { t: 36.5, fn: function () { add('so'); later(400, function () { setRail('so'); }); } }
     ];
 
     var q = (typeof location !== 'undefined' && location.search) || '';
@@ -532,11 +497,10 @@
       var at = parseFloat(mAt[1]) % LOOP_END;
       root.classList.add('is-seek'); instant = true; seekAt = at;
       TL.forEach(function (b) { if (b.t <= at) { curT = b.t; b.fn(); } });
-      scrollToEnd(); place();
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { scrollToEnd(); place(); });
+      scrollToEnd();
       return;
     }
-    if (mStill || reduced) { root.classList.add('is-seek'); resolved(); place(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { scrollToEnd(); place(); }); return; }
+    if (mStill || reduced) { root.classList.add('is-seek'); resolved(); return; }
 
     /* ---------- play, with in-view gating (pause keeps the elapsed time) ---------- */
     var elapsed = 0, startedAt = 0, running = false;
