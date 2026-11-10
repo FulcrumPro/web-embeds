@@ -8,9 +8,8 @@
   Beats (seconds) after the focus pass (Nov 10). One region is lit at a time (focus ring #3840EA, the rest dims to ~45%);
   the now-line in the title bar names the step: 1 The email lands, 2 Reading the drawing, 3 Finding the last job,
   4 Checking the schedule / asking two vendors, 5 Drafting the quote, 6 Pat reviews.
-   0.0  resolved (the sent state): Larkspur project open, thread at the bottom: Horizon's draft with "Sent · 8:19 AM" under it, Pat's sent
-        message "Quote 2207: LA-400 lift arm parts" with Quote-2207.pdf, header "Quote 2207 · sent to Tessa, 8:19 AM", pill Sent.
-        Focus on Pat's message. Now-line "6 of 6 · Pat sends the quote". Hold 3s.
+   0.0  resolved (the sent state): Larkspur project open, thread at the bottom: the quote as Pat's sent message (his avatar, Pat to
+        Tessa Brandvold, Quote-2207.pdf, "Sent · 8:19 AM"), header "Quote 2207 · sent to Tessa, 8:19 AM", pill Sent. Focus on it. Now-line "6 of 6 · Pat sends the quote". Hold 3s.
    3.0  reset: Horizon drops back; Outlook comes forward (500ms). Now-line "1 of 6 · The email lands".
    3.3  Tessa's email lands at the top of the list; the row is lit. Hold 1.2s so the sender and subject read.
    4.5  "Horizon · reading" tag + sweep on the row. Hold 0.8s.   5.3 "Horizon · read".
@@ -42,7 +41,8 @@
   35.4  Quote-2207.pdf + Send + Not Now rise in. Now-line "6 of 6 · Pat sends the quote".
   36.0  stage header "Quote · $59,241.00 · Quote 2207 · not sent"; 36.6 pill Ready.
   37.2  Pat's cursor arrives from below-right and parks on the Send button's corner (37.6); 37.8 click (the button presses).
-  38.0  sent: the draft's buttons become "Sent · 8:19 AM"; Pat's message lands under the draft with Quote-2207.pdf; header
+  38.0  sent: the draft card becomes Pat's sent message (his avatar, "Pat to Tessa Brandvold", the body as drafted, Quote-2207.pdf,
+        "Sent · 8:19 AM" under it); header
         "Quote 2207 · sent to Tessa, 8:19 AM"; pill Sent. 38.3 toast "You sent quote 2207 · Larkspur Implement Co." (Larkspur mark) to 40.6.
         Resolved. Hold.
   42.5  loop -> 0
@@ -546,6 +546,10 @@
 .hz-hero-email-lands .hz-pfoot .hzk-result { display: none; align-items: center; gap: 8px; font-size: 13px; color: var(--ok-fg); min-height: 28px; }
 .hz-hero-email-lands .hz-pfoot.is-sent .hzk-actions { display: none; }
 .hz-hero-email-lands .hz-pfoot.is-sent .hzk-result { display: flex; }
+.hz-hero-email-lands .hzk-post .av.pat, .hz-hero-email-lands .hzk-post .hd.sentline { display: none; }
+.hz-hero-email-lands .hzk-post.is-sent .av.spark, .hz-hero-email-lands .hzk-post.is-sent .hd.draft { display: none; }
+.hz-hero-email-lands .hzk-post.is-sent .av.pat { display: grid; }
+.hz-hero-email-lands .hzk-post.is-sent .hd.sentline { display: flex; }
 .hz-hero-email-lands .hz-check { width: 16px; height: 16px; border-radius: 50%; background: var(--ok-bg); display: grid; place-items: center; }
 .hz-hero-email-lands .hz-check svg { width: 10px; height: 10px; fill: none; stroke: var(--ok-fg); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .hz-hero-email-lands .hzk-btn.is-pressed { transform: scale(.95); filter: brightness(.85); }
@@ -828,10 +832,10 @@
                         <div class="tr"><span class="p"><b>LI-2162</b> <span>· Chain Tensioner Guide Block</span></span><span class="r">200</span><span><span class="hzk-pill info">New Part</span></span><span class="r">$32.98</span><span class="r">5.5 wk · Dec 7</span></div>
                         <div class="tr"><span class="p"><b>LI-2171</b> <span>· 1-1/4 Pivot Shaft Bearing Cap</span></span><span class="r">200</span><span><span class="hzk-pill">Repeat</span></span><span class="r">$58.18</span><span class="r">5.5 wk · Dec 7</span></div>
                       </div>
-                      <div class="hzk-post hz-item is-on" data-post>
-                        <span class="av">✦</span>
+                      <div class="hzk-post hz-item is-on is-sent" data-post>
+                        <span class="av spark">✦</span><span class="av pat has-photo"><img class="hz-photo" src="../shared/people/pat/square-160.webp" srcset="../shared/people/pat/square-320.webp 2x" alt="Pat" width="28" height="28" decoding="async"></span>
                         <div class="box">
-                          <div class="hd"><b>To Tessa Brandvold</b><span>Quote 2207: LA-400 lift arm parts</span><small>8:16 AM</small></div>
+                          <div class="hd draft"><b>To Tessa Brandvold</b><span>Quote 2207: LA-400 lift arm parts</span><small>8:16 AM</small></div><div class="hd sentline"><b>Pat</b><span>to Tessa Brandvold · Quote 2207: LA-400 lift arm parts</span><small>8:19 AM</small></div>
                           <div class="body" data-type>Hi Tessa, attached is quote 2207 for the LA-400 lift arm parts. 100 kits come to $59,241.00. 9 of 10 parts make Dec 7; the pivot lug (LI-2140) needs until Dec 11.
 
 Thanks,
@@ -843,14 +847,6 @@ Pat</div>
                           </div>
                         </div>
                       </div>
-                      <div class="hzk-mail hz-item is-on" data-sentmail>
-                        <span class="av has-photo"><img class="hz-photo" src="../shared/people/pat/square-160.webp" srcset="../shared/people/pat/square-320.webp 2x" alt="Pat" width="28" height="28" decoding="async"></span>
-                        <div class="hz-card">
-                          <div class="hd"><b>Pat</b><span>to Tessa Brandvold</span><small>8:19 AM</small></div>
-                          <div class="sub">Quote 2207: LA-400 lift arm parts</div>
-                          <div class="body">Hi Tessa, quote 2207 attached. 100 kits come to $59,241.00; 9 of 10 parts make Dec 7 and the pivot lug ships Dec 11. Let me know if purchasing needs anything else.</div>
-                          <div class="atts"><span class="att"><i></i>Quote-2207.pdf <small>· 1 page</small></span></div>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -917,7 +913,7 @@ Pat</div>
     var tcol = $('[data-tcol]'), sched = $('[data-sched]'), schedCard = $('[data-schedcard]'), slot = $('[data-slot]'), schedRows = $$('.hz-sched-row');
     var srcFinish = $('[data-src="finish"]'), stepFinish = $('[data-step="finish"]'), link = $('[data-link]'), linkPath = $('[data-linkpath]');
     var mailCard = root.querySelector('.hzk-mail .hz-card'), postBox = post.querySelector('.box'), orows = root.querySelector('.o-rows');
-    var sendBtn = $('[data-sendbtn]'), sentMail = $('[data-sentmail]');
+    var sendBtn = $('[data-sendbtn]');
     var cursor = document.createElement('div'); cursor.className = 'hz-cursor'; cursor.setAttribute('aria-hidden', 'true');
     cursor.innerHTML = '<svg viewBox="0 0 24 24"><path d="M5 3l14 9-6.5 1.2L16 20l-2.6 1.2-3.3-6.8L5 19z" fill="#fff" stroke="#292932" stroke-width="1.5" stroke-linejoin="round"/></svg>';
     stageEl.appendChild(cursor);
@@ -932,10 +928,9 @@ Pat</div>
       cursor.style.left = x + 'px'; cursor.style.top = y + 'px';
       if (jump) { reflow(cursor); cursor.style.transition = ''; }
     }
-    function sent(on) {
-      pfoot.classList.toggle('is-sent', on);
-      if (on) { sentMail.classList.add('is-on'); if (!instant) { sentMail.classList.remove('hzk-in'); reflow(sentMail); sentMail.classList.add('hzk-in'); } }
-      else sentMail.classList.remove('is-on', 'hzk-in');
+    function sent(on) {   // the draft card becomes Pat's sent message: his avatar, "Pat to Tessa Brandvold", the body as drafted, the Sent line
+      post.classList.toggle('is-sent', on); pfoot.classList.toggle('is-sent', on);
+      if (on && !instant) { postBox.classList.remove('hzk-in'); reflow(postBox); postBox.classList.add('hzk-in'); }
       scrollThread();
     }
 
@@ -1059,7 +1054,7 @@ Pat</div>
     // ----- timeline: one array of {t, fn}; t in seconds from the resolved first frame -----
     var PHONE = function () { return root.classList.contains('is-phone'); };
     var timeline = [
-      { t: 0.0, fn: function () { holdTop = false; outlook(false); schedPanel('out'); sourceLit(false); cursor.classList.remove('is-on', 'is-click'); sendBtn.classList.remove('is-pressed'); toast2.classList.remove('is-on'); sent(true); setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · sent to Tessa, 8:19 AM', true); ppill.textContent = 'Sent'; ppill.className = 'hzk-pill sent'; step(6, 'Pat sends the quote'); focus(sentMail.querySelector('.hz-card'), 10); } },
+      { t: 0.0, fn: function () { holdTop = false; outlook(false); schedPanel('out'); sourceLit(false); cursor.classList.remove('is-on', 'is-click'); sendBtn.classList.remove('is-pressed'); toast2.classList.remove('is-on'); sent(true); setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · sent to Tessa, 8:19 AM', true); ppill.textContent = 'Sent'; ppill.className = 'hzk-pill sent'; step(6, 'Pat sends the quote'); focus(postBox, 10); } },
       { t: 3.0, fn: function () {           // reset everything, then Outlook comes forward
         onew.classList.remove('is-in', 'is-scan'); ocat.classList.remove('is-on', 'is-read'); fly.classList.remove('is-up', 'is-go'); toast.classList.remove('is-on');
         newrow.classList.remove('is-on', 'hzk-in');
@@ -1117,7 +1112,7 @@ Pat</div>
       { t: 37.8, fn: function () { if (instant) return; cursor.classList.add('is-click'); sendBtn.classList.add('is-pressed'); later(140, function () { cursor.classList.remove('is-click'); sendBtn.classList.remove('is-pressed'); }); } },   // click
       { t: 38.0, fn: function () {                                                                                 // sent: the draft's buttons become the sent line, Pat's message lands, header and pill update
         sent(true); setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · sent to Tessa, 8:19 AM', true); ppill.textContent = 'Sent'; ppill.className = 'hzk-pill sent';
-        focus(sentMail.querySelector('.hz-card'), 10); later(600, function () { cursor.classList.remove('is-on'); });
+        focus(postBox, 10); later(600, function () { cursor.classList.remove('is-on'); });
       } },
       { t: 38.3, fn: function () { toast2.classList.add('is-on'); } },                                             // "You sent quote 2207 · Larkspur Implement Co."
       { t: 40.6, fn: function () { toast2.classList.remove('is-on'); } }
