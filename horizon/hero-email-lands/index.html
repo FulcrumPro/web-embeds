@@ -27,7 +27,7 @@
         joined by a dashed connector. Hold 1.8s.
   20.3  release; ticker "Estimating · LI-2123, LI-2140, LI-2155, LI-2162". Focus on the ticker.
   21.9  ticker "Checking the schedule". Now-line "4 of 6 · Checking the schedule". The thread slides left (350ms) and the
-        Fulcrum schedule panel slides in: work centers Saw, CNC mill, Deburr, Mask, Powder coat; weeks of Nov 10 to Dec 1.
+        Fulcrum schedule panel slides in and fills the column: 11 work centers (Saw to Ship; 9 on phones), weeks of Nov 10 to Dec 1, status legend.
   22.4  scan: a vertical sweep crosses the weeks (1.4s); rows light as they are read.
   24.0  it lands on the CNC mill row: booked through Nov 19; the open slot the week of Nov 24 lights with "Room the week of Nov 24".
         Hold 2.0s.
@@ -480,19 +480,20 @@
 /* the schedule panel (Fulcrum's scheduler, light surface, product tokens) slides in from the right of the thread column */
 .hz-hero-email-lands .hz-tvp { transition: transform .35s var(--hz-ease); }
 .hz-hero-email-lands .hz-tcol.is-sched .hz-tvp { transform: translateX(-100%); }
-.hz-hero-email-lands .hz-sched { position: absolute; inset: 0; transform: translateX(100%); transition: transform .35s var(--hz-ease); background: #f0f1f3; padding: 16px 40px; }
+.hz-hero-email-lands .hz-sched { position: absolute; inset: 0; transform: translateX(100%); transition: transform .35s var(--hz-ease); background: #f0f1f3; padding: 16px 24px; display: flex; }
 .hz-hero-email-lands .hz-tcol.is-sched .hz-sched { transform: none; }
-.hz-hero-email-lands .hz-sched-card { position: relative; max-width: 672px; margin: 0 auto; background: #fff; border: 1px solid #e2e2e2; border-radius: 8px; box-shadow: 0 .25rem 1.25rem rgba(0,0,0,.1); color: rgba(27,31,59,1); font-family: 'Inter', sans-serif; overflow: hidden; }
+.hz-hero-email-lands .hz-sched-card { position: relative; flex: 1 1 auto; min-width: 0; min-height: 0; display: flex; flex-direction: column; background: #fff; border: 1px solid #e2e2e2; border-radius: 8px; box-shadow: 0 .25rem 1.25rem rgba(0,0,0,.1); color: rgba(27,31,59,1); font-family: 'Inter', sans-serif; overflow: hidden; }
 .hz-hero-email-lands .hz-sched-h { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #e2e2e2; font-size: 13px; color: rgba(27,31,59,.65); }
 .hz-hero-email-lands .hz-sched-h b { font-size: 15px; font-weight: 600; color: rgba(27,31,59,1); }
 .hz-hero-email-lands .hz-sched-h .fl { width: 22px; height: 22px; border-radius: 6px; background: #292932; display: grid; place-items: center; }
 .hz-hero-email-lands .hz-sched-h .fl svg { width: 14px; height: 14px; }
 .hz-hero-email-lands .hz-sched-h em { margin-left: auto; font-style: normal; font-size: 12.5px; font-weight: 600; color: #3840EA; background: #D7D9FB; padding: 0 9px; line-height: 24px; border-radius: 6px; opacity: 0; transform: translateX(6px); transition: opacity .3s ease, transform .3s var(--hz-ease); }
 .hz-hero-email-lands .hz-sched.is-found .hz-sched-h em { opacity: 1; transform: none; }
-.hz-hero-email-lands .hz-sched-grid { position: relative; padding: 0 16px 14px; }
-.hz-hero-email-lands .hz-sched-wk { display: grid; grid-template-columns: 112px repeat(4, 1fr); font-size: 11.5px; font-weight: 600; color: rgba(27,31,59,.65); padding: 10px 0 6px; }
+.hz-hero-email-lands .hz-sched-grid { position: relative; padding: 0 16px 4px; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.hz-hero-email-lands .hz-sched-wk { flex: none; display: grid; grid-template-columns: 112px repeat(4, 1fr); font-size: 11.5px; font-weight: 600; color: rgba(27,31,59,.65); padding: 10px 0 6px; }
+.hz-hero-email-lands .hz-sched-wk i { font-style: normal; font-weight: 500; color: rgba(27,31,59,.4); }
 .hz-hero-email-lands .hz-sched-wk span { padding-left: 8px; border-left: 1px solid #e2e2e2; }
-.hz-hero-email-lands .hz-sched-row { display: grid; grid-template-columns: 112px 1fr; align-items: center; height: 46px; border-top: 1px solid #eef0f3; opacity: .55; transition: opacity .35s ease; }
+.hz-hero-email-lands .hz-sched-row { display: grid; grid-template-columns: 112px 1fr; align-items: center; flex: 1 1 0; min-height: 36px; border-top: 1px solid #eef0f3; opacity: .55; transition: opacity .35s ease; }
 .hz-hero-email-lands .hz-sched-row.is-read { opacity: 1; }
 .hz-hero-email-lands .hz-sched-row i { font-style: normal; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
 .hz-hero-email-lands .hz-sched-row i::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #a9a9ad; flex: none; transition: background .3s ease; }
@@ -502,10 +503,18 @@
 .hz-hero-email-lands .hz-sched-lane b.ip { background: #78d62e; } .hz-hero-email-lands .hz-sched-lane b.pd { background: #9a87e4; color: #fff; } .hz-hero-email-lands .hz-sched-lane b.ng { background: #69c9ff; } .hz-hero-email-lands .hz-sched-lane b.wn { background: #ff8a1d; color: #fff; }
 .hz-hero-email-lands .hz-sched-slot { position: absolute; top: 2px; height: 26px; border-radius: 5px; border: 1.5px dashed transparent; font-size: 11px; color: #3840EA; display: flex; align-items: center; justify-content: center; transition: border-color .3s ease, background .3s ease; }
 .hz-hero-email-lands .hz-sched.is-found .hz-sched-slot.is-lit { border-color: #3840EA; border-style: solid; background: rgba(56,64,234,.14); }
+.hz-hero-email-lands .hz-sched-foot { flex: none; display: flex; align-items: center; gap: 16px; padding: 8px 16px 10px; border-top: 1px solid #e2e2e2; font-size: 11.5px; color: rgba(27,31,59,.65); }
+.hz-hero-email-lands .hz-sched-foot span { display: inline-flex; align-items: center; gap: 6px; }
+.hz-hero-email-lands .hz-sched-foot i { width: 10px; height: 10px; border-radius: 3px; }
+.hz-hero-email-lands .hz-sched-foot i.ip { background: #78d62e; } .hz-hero-email-lands .hz-sched-foot i.pd { background: #9a87e4; } .hz-hero-email-lands .hz-sched-foot i.ng { background: #69c9ff; } .hz-hero-email-lands .hz-sched-foot i.wn { background: #ff8a1d; }
+.hz-hero-email-lands .hz-sched-foot em { margin-left: auto; font-style: normal; }
 .hz-hero-email-lands .hz-sched-scan { position: absolute; top: 0; bottom: 0; left: -14%; width: 12%; background: linear-gradient(90deg, rgba(56,64,234,0) 0%, rgba(56,64,234,.16) 50%, rgba(56,64,234,0) 100%); opacity: 0; transition: left 1.4s linear, opacity .2s ease; pointer-events: none; }
 .hz-hero-email-lands .hz-sched.is-scan .hz-sched-scan { left: 100%; opacity: 1; }
 .hz-hero-email-lands .hz-sched.is-found .hz-sched-scan { opacity: 0; }
-.hz-hero-email-lands.is-phone .hz-sched { padding: 14px; }
+.hz-hero-email-lands.is-phone .hz-sched { padding: 10px; }
+.hz-hero-email-lands.is-phone .hz-sched-row.opt, .hz-hero-email-lands.is-phone .hz-sched-foot em { display: none; }
+.hz-hero-email-lands.is-phone .hz-sched-foot { gap: 10px; padding: 6px 12px 8px; }
+.hz-hero-email-lands.is-phone .hz-sched-lane b, .hz-hero-email-lands.is-phone .hz-sched-foot, .hz-hero-email-lands.is-phone .hz-sched-wk, .hz-hero-email-lands.is-phone .hz-sched-row i, .hz-hero-email-lands.is-phone .hz-sched-slot, .hz-hero-email-lands.is-phone .hz-sched-h em { font-size: 16px; }   /* phone type floor: 13 CSS px at the 342px frame */
 .hz-hero-email-lands.is-phone .hz-sched-wk { grid-template-columns: 78px repeat(3, 1fr); }
 .hz-hero-email-lands.is-phone .hz-sched-wk span:nth-child(5) { display: none; }
 .hz-hero-email-lands.is-phone .hz-sched-row { grid-template-columns: 78px 1fr; }
@@ -714,14 +723,21 @@
                   <div class="hz-sched-card" data-schedcard>
                     <div class="hz-sched-h"><span class="fl"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16M4 12h10M4 6h16"/></svg></span><b>Schedule</b><span>Fulcrum · by work center · Nov 10 to Dec 5</span><em>Room the week of Nov 24</em></div>
                     <div class="hz-sched-grid">
-                      <div class="hz-sched-wk"><i></i><span>Nov 10</span><span>Nov 17</span><span>Nov 24</span><span>Dec 1</span></div>
-                      <div class="hz-sched-row"><i>Saw</i><div class="hz-sched-lane"><b class="ip" style="left:0%;width:14%">Job 5218</b><b class="pd" style="left:16%;width:9%">5290</b><b class="ng" style="left:30%;width:14%">5311</b><b class="pd" style="left:55%;width:9%">5320</b></div></div>
+                      <div class="hz-sched-wk"><i>Work center</i><span>Nov 10</span><span>Nov 17</span><span>Nov 24</span><span>Dec 1</span></div>
+                      <div class="hz-sched-row"><i>Saw</i><div class="hz-sched-lane"><b class="ip" style="left:0%;width:14%">Job 5218</b><b class="pd" style="left:16%;width:9%">5290</b><b class="ng" style="left:30%;width:14%">5311</b><b class="pd" style="left:55%;width:9%">5320</b><b class="ng" style="left:80%;width:14%">5338</b></div></div>
+                      <div class="hz-sched-row"><i>Laser</i><div class="hz-sched-lane"><b class="ip" style="left:0%;width:9%">5302</b><b class="ip" style="left:10%;width:14%">5311 · Pinecrest</b><b class="pd" style="left:35%;width:9%">5320</b><b class="ng" style="left:50%;width:19%">5331 · Westbrook</b><b class="pd" style="left:75%;width:9%">5338</b></div></div>
+                      <div class="hz-sched-row"><i>Press brake</i><div class="hz-sched-lane"><b class="ip" style="left:5%;width:14%">5311</b><b class="wn" style="left:20%;width:9%">5276 late</b><b class="pd" style="left:40%;width:9%">5320</b><b class="ng" style="left:60%;width:14%">5331</b></div></div>
                       <div class="hz-sched-row"><i>CNC mill</i><div class="hz-sched-lane"><b class="ip" style="left:0%;width:19%">Job 5290 · Kestrel</b><b class="pd" style="left:20%;width:19%">5302 · Marlin</b><b class="wn" style="left:40%;width:9%">5276 late</b><span class="hz-sched-slot" data-slot style="left:50.5%;width:24%">open</span><b class="ng" style="left:76%;width:14%">5331</b></div></div>
-                      <div class="hz-sched-row"><i>Deburr</i><div class="hz-sched-lane"><b class="ip" style="left:5%;width:9%">5218</b><b class="pd" style="left:25%;width:9%">5302</b><b class="ng" style="left:40%;width:9%">5311</b></div></div>
-                      <div class="hz-sched-row"><i>Mask</i><div class="hz-sched-lane"><b class="pd" style="left:10%;width:9%">5290</b><b class="ng" style="left:45%;width:9%">5311</b></div></div>
+                      <div class="hz-sched-row"><i>CNC lathe</i><div class="hz-sched-lane"><b class="ip" style="left:0%;width:9%">5290</b><b class="pd" style="left:25%;width:14%">5302</b><b class="ng" style="left:55%;width:9%">5331</b><b class="pd" style="left:80%;width:9%">5344</b></div></div>
+                      <div class="hz-sched-row"><i>Deburr</i><div class="hz-sched-lane"><b class="ip" style="left:5%;width:9%">5218</b><b class="pd" style="left:25%;width:9%">5302</b><b class="ng" style="left:40%;width:9%">5311</b><b class="pd" style="left:65%;width:9%">5320</b></div></div>
+                      <div class="hz-sched-row"><i>Mask</i><div class="hz-sched-lane"><b class="pd" style="left:10%;width:9%">5290</b><b class="ng" style="left:45%;width:9%">5311</b><b class="pd" style="left:70%;width:9%">5331</b></div></div>
                       <div class="hz-sched-row"><i>Powder coat</i><div class="hz-sched-lane"><b class="ip" style="left:0%;width:9%">Job 5304</b><b class="pd" style="left:15%;width:9%">5290</b><b class="ng" style="left:50%;width:9%">5311</b><b class="pd" style="left:70%;width:9%">5320</b></div></div>
+                      <div class="hz-sched-row opt"><i>Assembly</i><div class="hz-sched-lane"><b class="pd" style="left:20%;width:14%">5290 · Kestrel</b><b class="ng" style="left:55%;width:14%">5311</b></div></div>
+                      <div class="hz-sched-row"><i>Inspection</i><div class="hz-sched-lane"><b class="ip" style="left:5%;width:5%">5218</b><b class="pd" style="left:30%;width:5%">5290</b><b class="ng" style="left:50%;width:5%">5302</b><b class="pd" style="left:70%;width:5%">5311</b></div></div>
+                      <div class="hz-sched-row opt"><i>Ship</i><div class="hz-sched-lane"><b class="ip" style="left:9%;width:5%">5218</b><b class="pd" style="left:34%;width:5%">5290</b><b class="ng" style="left:54%;width:5%">5302</b><b class="pd" style="left:79%;width:5%">5311</b></div></div>
                       <div class="hz-sched-scan"></div>
                     </div>
+                    <div class="hz-sched-foot"><span><i class="ip"></i>In progress</span><span><i class="pd"></i>Scheduled</span><span><i class="ng"></i>Ready</span><span><i class="wn"></i>Late</span><em>11 work centers · updated 8:15 AM</em></div>
                   </div>
                 </div>
                 <div class="hz-tvp" data-tvp>
