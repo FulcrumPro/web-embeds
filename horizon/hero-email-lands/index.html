@@ -1,44 +1,44 @@
 <!doctype html>
 <!--
   Horizon - hero-email-lands - "The email lands and it starts"
-  Design 1200x750, scales to width. Loop 41.0s. The RFQ lands in Outlook first, then the Horizon window (the shipped dark
+  Design 1200x750, scales to width. Loop 40.0s. The RFQ lands in Outlook first, then the Horizon window (the shipped dark
   "Projects" UI) comes forward and replays the Larkspur RFQ walkthrough: list row, project opens, live ticker, run fold,
   Parts table, alert, drafted quote with Send + Not Now. Nobody clicks. No libraries, no images, no audio.
 
-  Beats (seconds):
-   0.0  resolved: Larkspur project open, thread scrolled to the bottom: Parts table (lower rows), the LI-2140 alert and
-        Horizon's post with the drafted email "Quote 2207: LA-400 lift arm parts", Quote-2207.pdf, Send (blue) + Not Now.
-        Stage header "Quote · $59,241.00 · Quote 2207 · not sent", header pill "Ready". Hold 3s.
-   3.0  reset: Horizon drops back; Outlook (quotes@haldenmetal.com) comes forward with this morning's mail. Nobody is in it.
-        (Nov 10: the Outlook beat runs about 1.3 s; windows crossfade in 300 ms; the email card flies to the toast slot, bottom right.)
-   4.0  Tessa Brandvold's email lands at the top of the Outlook list: "Request for quote - LA-400 lift arm parts", 8:12 AM,
-        attachments (26-1187_parts.xlsx, LI-2140_REV-B.pdf and drawings).
-   4.8  Horizon reads it: a sweep crosses the row twice and the category tag lands as "Horizon · reading" (pulsing dot).
-   6.5  the tag flips to "Horizon · read" (green dot).
-   6.9  a card with the email (sender, subject, the three attachment chips) lifts out of the row and flies into Horizon.
-   7.5  the Horizon window comes forward: All Projects home (rail, Projects list, Needs You cards, All Activity).
-   7.9  Horizon toast, bottom right: "Picked up from Outlook · Tessa Brandvold, 8:12 AM · email and attachments read" (to 10.5).
-    8.3  a new row rises to the top of the Projects list: Larkspur Implement Co. · 10 parts · Tessa Brandvold · Processing ·
-        ✦ Reading 10 parts.
-  10.9  the project opens: project rail (stage header "RFQ · Reading 10 parts", 4-segment bar with RFQ lit, details card,
-        customer), thread with Tessa's RFQ email card.
-  11.7  ✦ live ticker: "Reading the RFQ and its attachments" · Horizon · 8:12 AM
-  13.7  ticker: "Matching parts · LI-2140 Lift Arm Pivot Lug" · 8:13 AM; the Part match card rises in the thread and the
-        part from the drawing draws itself (a sweep crosses it twice).
-  14.9  what it read off the drawing: 0.50 in plate, 2 bores, 1 slot.
-  15.8  "Searching 1,847 past jobs": a dashed candidate pulses on the right while part numbers flick past.
-  17.0  the match locks: LI-2096 Pivot Lug, "Closest match" link, Same plate / Same bores / 0.75 in longer.
-  18.3  Suggested routing rises in step by step: Saw, CNC mill, Deburr, Mask, Powder coat.
-  20.2  ticker: "Estimating · LI-2123, LI-2140, LI-2155, LI-2162" · 8:14 AM
-  22.2  ticker: "Checking the schedule" · 8:15 AM
-  24.2  the Part match card fades out and the ticker folds: "Read the RFQ and estimated all 10 parts"
-  26.8  Parts table card rises in; thread scrolls.
-  29.6  alert: "10 parts estimated. 9 make Dec 7. LI-2140 has 2 issues:"; thread scrolls.
-  32.2  Horizon's post; the body types (25ms/char, 4.4s).
-  36.8  Quote-2207.pdf attachment + Send (blue) + Not Now rise in. Nobody clicks.
-  37.4  stage header becomes "Quote · $59,241.00 · Quote 2207 · not sent"; second bar segment lights.
-  38.0  header pill Processing -> Ready. Resolved. Hold.
-  41.0  loop -> 0
+  Beats (seconds) after the focus pass (Nov 10). One region is lit at a time (focus ring #3840EA, the rest dims to ~45%);
+  the now-line in the title bar names the step: 1 The email lands, 2 Reading the drawing, 3 Finding the last job,
+  4 Checking the schedule / asking two vendors, 5 Drafting the quote, 6 Pat reviews.
+   0.0  resolved: Larkspur project open, thread at the bottom: Parts table, Horizon's post with the drafted quote, Send + Not Now.
+        Focus on the post. Now-line "6 of 6 · Pat reviews the quote". Hold 3s.
+   3.0  reset: Horizon drops back; Outlook comes forward (500ms). Now-line "1 of 6 · The email lands".
+   3.3  Tessa's email lands at the top of the list; the row is lit. Hold 1.2s so the sender and subject read.
+   4.5  "Horizon · reading" tag + sweep on the row. Hold 0.8s.   5.3 "Horizon · read".
+   5.4  the email card lifts; 5.6 it travels to Horizon's toast slot over 1.0s (ease-in-out); the focus ring travels with it;
+   6.1  the windows crossfade (500ms) while the card is in flight, following it.
+   6.6  toast "Picked up from Outlook · Tessa Brandvold, 8:12 AM". Focus on the toast. Hold 1.7s.
+   8.3  (desktop) toast off; a new row rises to the top of the Projects list: Larkspur Implement Co. · Processing. Focus on the row.
+        (phone) the list is hidden, so the toast stays lit to 9.9.
+  10.0  the project opens. Now-line "2 of 6 · Reading the drawing". Focus on Tessa's RFQ email card.
+  10.6  ticker "Reading the RFQ and its attachments".
+  12.4  ticker "Matching parts · LI-2140"; the Part match card rises; the part from the drawing draws itself (reference beat, unchanged).
+  13.6  what it read off the drawing.   14.8 "Searching 1,847 past jobs" (now-line "3 of 6 · Finding the last job").
+  16.0  the match locks: LI-2096.   17.3 Suggested routing rises step by step: Saw, CNC mill, Deburr, Mask, Powder coat.
+  18.5  source highlight: "powder coat black RAL 9005 fine texture" in Tessa's email and the Powder coat step light together,
+        joined by a dashed connector. Hold 1.8s.
+  20.3  release; ticker "Estimating · LI-2123, LI-2140, LI-2155, LI-2162". Focus on the ticker.
+  21.9  ticker "Checking the schedule". Now-line "4 of 6 · Checking the schedule". The thread slides left (350ms) and the
+        Fulcrum schedule panel slides in: work centers Saw, CNC mill, Deburr, Mask, Powder coat; weeks of Nov 10 to Dec 1.
+  22.4  scan: a vertical sweep crosses the weeks (1.4s); rows light as they are read.
+  24.0  it lands on the CNC mill row: booked through Nov 19; the open slot the week of Nov 24 lights with "Room the week of Nov 24".
+        Hold 2.0s.
+  26.0  slide back; the Part match card fades; the ticker folds to "Read the RFQ and estimated all 10 parts".
+  26.6  alert "10 parts estimated. 9 make Dec 7. LI-2140 has 2 issues" (Misses Dec 7; Stale price, price request to Summit Powder
+        Coating and Apex Coatings). Now-line "4 of 6 · Asking two vendors". Focus on the alert. Hold 2.0s.
+  28.6  Parts table rises. Now-line "5 of 6 · Drafting the quote". Focus on the table. Hold 2.0s.
+  30.6  Horizon's post; the body types (25ms/char, 4.4s). Focus on the post.
+  35.4  Quote-2207.pdf + Send + Not Now rise in. Now-line "6 of 6 · Pat reviews the quote". Nobody clicks.
+  36.0  stage header "Quote · $59,241.00 · Quote 2207 · not sent"; 36.6 pill Ready. Resolved. Hold.
+  40.0  loop -> 0
 
   ?still=1  jumps to the resolved state and stops.   ?at=<sec>  seeks to that time and stops.
   prefers-reduced-motion: resolved state only. The timeline pauses when the root is <10% visible or the tab is hidden.
@@ -74,7 +74,7 @@
 .hz-hero-email-lands .h-win { position: absolute; left: 0; top: 0; width: 1200px; height: 750px; background: #131418;
      overflow: hidden;
   display: flex; flex-direction: column; z-index: 2; transform-origin: 50% 60%;
-  transition: opacity .3s cubic-bezier(.2,.7,.2,1), transform .3s cubic-bezier(.2,.7,.2,1); }
+  transition: opacity .5s cubic-bezier(.45,0,.55,1), transform .5s cubic-bezier(.45,0,.55,1); }
 .hz-hero-email-lands .h-win.is-back { opacity: 0; transform: translateY(22px) scale(.965); z-index: 1; }
 .hz-hero-email-lands .h-title { flex: 0 0 36px; position: relative; display: flex; align-items: center; justify-content: center;
   background: #1b1d23; border-bottom: 1px solid #2b2d33; font-size: 12.5px; color: #a9abae; font-weight: 400; }
@@ -87,7 +87,7 @@
   border: 1px solid #d6d6d6;   overflow: hidden;
   display: flex; flex-direction: column; z-index: 3; opacity: 0; transform: translateY(16px) scale(.97); transform-origin: 50% 50%;
   font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #242424;
-  transition: opacity .3s cubic-bezier(.2,.7,.2,1), transform .3s cubic-bezier(.2,.7,.2,1); }
+  transition: opacity .5s cubic-bezier(.45,0,.55,1), transform .5s cubic-bezier(.45,0,.55,1); }
 .hz-hero-email-lands .o-win.is-on { opacity: 1; transform: none; }
 .hz-hero-email-lands .o-win.is-away { opacity: 0; transform: translate(-90px, 70px) scale(.86); z-index: 1; }
 .hz-hero-email-lands .o-top { flex: 0 0 48px; display: flex; align-items: center; gap: 14px; padding: 0 16px; background: #0f6cbd; color: #fff; }
@@ -158,7 +158,7 @@
   box-shadow: 0 18px 50px rgba(0,0,0,.30), 0 2px 6px rgba(0,0,0,.12); font-size: 12.5px; line-height: 1.35; opacity: 0; pointer-events: none;
   transform: translate(var(--fx, 0px), var(--fy, 0px)); transition: transform 1.35s cubic-bezier(.3,.7,.2,1), opacity .3s ease-out; }
 .hz-hero-email-lands .o-fly.is-up { opacity: 1; transform: translate(var(--fx, 0px), calc(var(--fy, 0px) - 6px)); }
-.hz-hero-email-lands .o-fly.is-go { opacity: 0; transform: translate(var(--tx, 0px), var(--ty, 0px)) scale(.84); transition: transform 1.35s cubic-bezier(.3,.7,.2,1), opacity .45s ease-in .9s; }
+.hz-hero-email-lands .o-fly.is-go { opacity: 0; transform: translate(var(--tx, 0px), var(--ty, 0px)) scale(.84); transition: transform 1s cubic-bezier(.45,0,.55,1), opacity .4s ease-in .75s; }
 .hz-hero-email-lands .o-fly b { font-weight: 700; }
 .hz-hero-email-lands .o-fly .o-fly-h { display: flex; justify-content: space-between; gap: 8px; }
 .hz-hero-email-lands .o-fly .o-fly-h small { color: #616161; }
@@ -449,6 +449,70 @@
 .hz-hero-email-lands .hz-pfoot .att small { font-weight: 400; color: var(--mute3); font-size: 11px; }
 .hz-hero-email-lands .hz-pfoot .hzk-actions { margin-top: 2px; }
 
+
+/* ---------- focus system (Nov 10): one lit region, the rest dims; the ring travels between beats ---------- */
+.hz-hero-email-lands { --hz-dim: rgba(19,20,24,.55); --hz-ease: cubic-bezier(.45,0,.55,1); }
+.hz-hero-email-lands.is-outlook { --hz-dim: rgba(255,255,255,.6); }
+.hz-hero-email-lands .hz-focus { position: absolute; left: 0; top: 0; width: 0; height: 0; border: 2px solid #3840EA; border-radius: 10px; box-shadow: 0 0 14px 4000px var(--hz-dim); opacity: 0; z-index: 40; pointer-events: none;
+  transition: left .3s var(--hz-ease), top .3s var(--hz-ease), width .3s var(--hz-ease), height .3s var(--hz-ease), opacity .3s ease, box-shadow .3s ease; }
+.hz-hero-email-lands .hz-focus.is-on { opacity: 1; }
+.hz-hero-email-lands .hz-focus.is-slow { transition-duration: 1s, 1s, 1s, 1s, .3s, .3s; }
+.hz-hero-email-lands .o-fly { z-index: 50; }
+.hz-hero-email-lands .hz-now { position: absolute; right: 14px; top: 6px; height: 24px; z-index: 60; display: inline-flex; align-items: center; gap: 8px; padding: 0 10px 0 9px; border-radius: 6px; background: #292932; border: 1px solid #3840EA; color: #fff; font-size: 13px; line-height: 1; white-space: nowrap; pointer-events: none; }
+.hz-hero-email-lands .hz-now b { font-family: 'Gilroy', 'Inter', sans-serif; font-weight: 600; font-variant-numeric: tabular-nums; }
+.hz-hero-email-lands .hz-now b::after { content: ''; display: inline-block; width: 1px; height: 12px; background: #3840EA; margin: 0 0 -2px 8px; }
+.hz-hero-email-lands.is-outlook .hz-now { top: 12px; }
+.hz-hero-email-lands.is-outlook .o-topr { opacity: 0; }
+.hz-hero-email-lands.is-phone .hz-now { left: 0; right: 0; top: 36px; height: 26px; border-radius: 0; border-width: 0 0 1px; justify-content: center; font-size: 16px; }
+.hz-hero-email-lands.is-phone.is-outlook .hz-now { top: 48px; }
+.hz-hero-email-lands.is-phone .h-appwrap { padding-top: 26px; }
+.hz-hero-email-lands.is-phone .o-bar { padding-top: 26px; height: auto; }
+/* source highlight: a fact that came straight from the email lights with the new UI that used it (the part match's language: accent ring + sweep) */
+.hz-hero-email-lands .hz-src { border-radius: 4px; padding: 0 2px; margin: 0 -2px; -webkit-box-decoration-break: clone; box-decoration-break: clone; transition: background-color .3s ease, box-shadow .3s ease; }
+.hz-hero-email-lands .hz-src.is-lit { background: rgba(56,64,234,.22); box-shadow: 0 0 0 1.5px #3840EA; color: #fff; }
+.hz-hero-email-lands .hz-match .steps span.is-lit { box-shadow: 0 0 0 1.5px #3840EA; position: relative; overflow: hidden; }
+.hz-hero-email-lands .hz-match .steps span.is-lit::after { content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 40%; background: linear-gradient(90deg, rgba(56,64,234,0) 0%, rgba(56,64,234,.35) 50%, rgba(56,64,234,0) 100%); animation: hz-sweep 1.05s ease-in-out 2; }
+@keyframes hz-sweep { from { left: -40%; } to { left: 100%; } }
+.hz-hero-email-lands .hz-link { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 5; }
+.hz-hero-email-lands .hz-link path { fill: none; stroke: #3840EA; stroke-width: 1.5; stroke-dasharray: 4 4; opacity: 0; transition: opacity .3s ease; }
+.hz-hero-email-lands .hz-link.is-on path { opacity: 1; }
+.hz-hero-email-lands.is-phone .hz-link { display: none; }
+/* the schedule panel (Fulcrum's scheduler, light surface, product tokens) slides in from the right of the thread column */
+.hz-hero-email-lands .hz-tvp { transition: transform .35s var(--hz-ease); }
+.hz-hero-email-lands .hz-tcol.is-sched .hz-tvp { transform: translateX(-100%); }
+.hz-hero-email-lands .hz-sched { position: absolute; inset: 0; transform: translateX(100%); transition: transform .35s var(--hz-ease); background: #f0f1f3; padding: 16px 40px; }
+.hz-hero-email-lands .hz-tcol.is-sched .hz-sched { transform: none; }
+.hz-hero-email-lands .hz-sched-card { position: relative; max-width: 672px; margin: 0 auto; background: #fff; border: 1px solid #e2e2e2; border-radius: 8px; box-shadow: 0 .25rem 1.25rem rgba(0,0,0,.1); color: rgba(27,31,59,1); font-family: 'Inter', sans-serif; overflow: hidden; }
+.hz-hero-email-lands .hz-sched-h { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #e2e2e2; font-size: 13px; color: rgba(27,31,59,.65); }
+.hz-hero-email-lands .hz-sched-h b { font-size: 15px; font-weight: 600; color: rgba(27,31,59,1); }
+.hz-hero-email-lands .hz-sched-h .fl { width: 22px; height: 22px; border-radius: 6px; background: #292932; display: grid; place-items: center; }
+.hz-hero-email-lands .hz-sched-h .fl svg { width: 14px; height: 14px; }
+.hz-hero-email-lands .hz-sched-h em { margin-left: auto; font-style: normal; font-size: 12.5px; font-weight: 600; color: #3840EA; background: #D7D9FB; padding: 0 9px; line-height: 24px; border-radius: 6px; opacity: 0; transform: translateX(6px); transition: opacity .3s ease, transform .3s var(--hz-ease); }
+.hz-hero-email-lands .hz-sched.is-found .hz-sched-h em { opacity: 1; transform: none; }
+.hz-hero-email-lands .hz-sched-grid { position: relative; padding: 0 16px 14px; }
+.hz-hero-email-lands .hz-sched-wk { display: grid; grid-template-columns: 112px repeat(4, 1fr); font-size: 11.5px; font-weight: 600; color: rgba(27,31,59,.65); padding: 10px 0 6px; }
+.hz-hero-email-lands .hz-sched-wk span { padding-left: 8px; border-left: 1px solid #e2e2e2; }
+.hz-hero-email-lands .hz-sched-row { display: grid; grid-template-columns: 112px 1fr; align-items: center; height: 46px; border-top: 1px solid #eef0f3; opacity: .55; transition: opacity .35s ease; }
+.hz-hero-email-lands .hz-sched-row.is-read { opacity: 1; }
+.hz-hero-email-lands .hz-sched-row i { font-style: normal; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+.hz-hero-email-lands .hz-sched-row i::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #a9a9ad; flex: none; transition: background .3s ease; }
+.hz-hero-email-lands .hz-sched-row.is-read i::before { background: #008455; }
+.hz-hero-email-lands .hz-sched-lane { position: relative; height: 30px; background-image: linear-gradient(90deg, #e2e2e2 1px, transparent 1px); background-size: 25% 100%; }
+.hz-hero-email-lands .hz-sched-lane b { position: absolute; top: 4px; height: 22px; border-radius: 4px; font-size: 11px; font-weight: 500; line-height: 22px; padding: 0 7px; color: rgba(27,31,59,1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hz-hero-email-lands .hz-sched-lane b.ip { background: #78d62e; } .hz-hero-email-lands .hz-sched-lane b.pd { background: #9a87e4; color: #fff; } .hz-hero-email-lands .hz-sched-lane b.ng { background: #69c9ff; } .hz-hero-email-lands .hz-sched-lane b.wn { background: #ff8a1d; color: #fff; }
+.hz-hero-email-lands .hz-sched-slot { position: absolute; top: 2px; height: 26px; border-radius: 5px; border: 1.5px dashed transparent; font-size: 11px; color: #3840EA; display: flex; align-items: center; justify-content: center; transition: border-color .3s ease, background .3s ease; }
+.hz-hero-email-lands .hz-sched.is-found .hz-sched-slot.is-lit { border-color: #3840EA; border-style: solid; background: rgba(56,64,234,.14); }
+.hz-hero-email-lands .hz-sched-scan { position: absolute; top: 0; bottom: 0; left: -14%; width: 12%; background: linear-gradient(90deg, rgba(56,64,234,0) 0%, rgba(56,64,234,.16) 50%, rgba(56,64,234,0) 100%); opacity: 0; transition: left 1.4s linear, opacity .2s ease; pointer-events: none; }
+.hz-hero-email-lands .hz-sched.is-scan .hz-sched-scan { left: 100%; opacity: 1; }
+.hz-hero-email-lands .hz-sched.is-found .hz-sched-scan { opacity: 0; }
+.hz-hero-email-lands.is-phone .hz-sched { padding: 14px; }
+.hz-hero-email-lands.is-phone .hz-sched-wk { grid-template-columns: 78px repeat(3, 1fr); }
+.hz-hero-email-lands.is-phone .hz-sched-wk span:nth-child(5) { display: none; }
+.hz-hero-email-lands.is-phone .hz-sched-row { grid-template-columns: 78px 1fr; }
+.hz-hero-email-lands.is-phone .hz-sched-row { overflow: hidden; }
+.hz-hero-email-lands.is-phone .hz-sched-lane { width: 133.333%; }
+.hz-hero-email-lands.is-phone .hz-sched-h span { display: none; }
+
 /* seek / still: no motion */
 .hz-hero-email-lands.is-seek *, .hz-hero-email-lands.is-seek *::before, .hz-hero-email-lands.is-seek *::after { transition: none !important; animation: none !important; }
 @media (prefers-reduced-motion: reduce) {
@@ -645,9 +709,24 @@
                   <div class="hzk-tiles"><div><b>6</b><span>Orders / yr</span></div><div><b>$38,400</b><span>Avg order</span></div><div><b>Apr 14</b><span>Last order</span></div></div>
                 </div>
               </aside>
-              <section class="hz-tcol">
+              <section class="hz-tcol" data-tcol>
+                <div class="hz-sched" data-sched aria-hidden="true">
+                  <div class="hz-sched-card" data-schedcard>
+                    <div class="hz-sched-h"><span class="fl"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16M4 12h10M4 6h16"/></svg></span><b>Schedule</b><span>Fulcrum · by work center · Nov 10 to Dec 5</span><em>Room the week of Nov 24</em></div>
+                    <div class="hz-sched-grid">
+                      <div class="hz-sched-wk"><i></i><span>Nov 10</span><span>Nov 17</span><span>Nov 24</span><span>Dec 1</span></div>
+                      <div class="hz-sched-row"><i>Saw</i><div class="hz-sched-lane"><b class="ip" style="left:0%;width:14%">Job 5218</b><b class="pd" style="left:16%;width:9%">5290</b><b class="ng" style="left:30%;width:14%">5311</b><b class="pd" style="left:55%;width:9%">5320</b></div></div>
+                      <div class="hz-sched-row"><i>CNC mill</i><div class="hz-sched-lane"><b class="ip" style="left:0%;width:19%">Job 5290 · Kestrel</b><b class="pd" style="left:20%;width:19%">5302 · Marlin</b><b class="wn" style="left:40%;width:9%">5276 late</b><span class="hz-sched-slot" data-slot style="left:50.5%;width:24%">open</span><b class="ng" style="left:76%;width:14%">5331</b></div></div>
+                      <div class="hz-sched-row"><i>Deburr</i><div class="hz-sched-lane"><b class="ip" style="left:5%;width:9%">5218</b><b class="pd" style="left:25%;width:9%">5302</b><b class="ng" style="left:40%;width:9%">5311</b></div></div>
+                      <div class="hz-sched-row"><i>Mask</i><div class="hz-sched-lane"><b class="pd" style="left:10%;width:9%">5290</b><b class="ng" style="left:45%;width:9%">5311</b></div></div>
+                      <div class="hz-sched-row"><i>Powder coat</i><div class="hz-sched-lane"><b class="ip" style="left:0%;width:9%">Job 5304</b><b class="pd" style="left:15%;width:9%">5290</b><b class="ng" style="left:50%;width:9%">5311</b><b class="pd" style="left:70%;width:9%">5320</b></div></div>
+                      <div class="hz-sched-scan"></div>
+                    </div>
+                  </div>
+                </div>
                 <div class="hz-tvp" data-tvp>
                   <div class="hz-tin" data-tin>
+                    <svg class="hz-link" data-link aria-hidden="true"><path d="" data-linkpath/></svg>
                     <div class="hzk-thread">
                       <div class="hz-day">Thu Oct 29</div>
                       <div class="hzk-mail">
@@ -655,7 +734,7 @@
                         <div class="hz-card">
                           <div class="hd"><b>Tessa Brandvold</b><span>to quotes@haldenmetal.com</span><span class="hzk-tag mute">RFQ</span><small>8:12 AM</small></div>
                           <div class="sub">Request for quote - LA-400 lift arm parts</div>
-                          <div class="body clamp">Good morning Pat, please quote the parts below at 25, 100, and 250 kits. Drawings and models attached, a couple are model only for now. All parts powder coat black RAL 9005 fine texture, same as last time. LI-2171 gets line bored with our LI-2170 base, we'll send the castings over. Hoping to have the first 25 kits by Dec 7, let me know if that won't work.</div>
+                          <div class="body clamp">Good morning Pat, please quote the parts below at 25, 100, and 250 kits. Drawings and models attached, a couple are model only for now. All parts <span class="hz-src" data-src="finish">powder coat black RAL 9005 fine texture</span>, same as last time. LI-2171 gets line bored with our LI-2170 base, we'll send the castings over. Hoping to have the first 25 kits by Dec 7, let me know if that won't work.</div>
                           <div class="more">Show More</div>
                           <div class="atts"><span class="att"><i class="xls"></i>26-1187_parts.xlsx</span><span class="att"><i></i>LI-2140_REV-B.pdf <small>· 1 page</small></span><em>+ 14 drawings and models</em></div>
                         </div>
@@ -674,7 +753,12 @@
                           <div class="mlink"><i></i><span>Closest match</span><i></i></div>
                           <div class="mp old"><span class="ml">From your history</span><svg viewBox="0 0 200 90" fill="none" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M48 20H140A25 25 0 0 1 140 70H48Z"/><circle cx="140" cy="45" r="11"/><circle cx="68" cy="45" r="7"/><rect x="90" y="40" width="22" height="10" rx="5"/></svg><b data-mname>LI-2096 · Pivot Lug</b><div class="mf"><span class="ok">Same plate</span><span class="ok">Same bores</span><span class="df">0.75 in longer</span></div></div>
                         </div>
-                        <div class="mr"><span class="ml">Suggested routing</span><div class="steps"><span>Saw</span><span>CNC mill</span><span>Deburr</span><span>Mask</span><span>Powder coat</span></div><small>From LI-2096, job 4418. Mill time adjusted for the longer arm.</small></div>
+                        <div class="mr"><span class="ml">Suggested routing</span><div class="steps"><span>Saw</span><span>CNC mill</span><span>Deburr</span><span>Mask</span><span data-step="finish">Powder coat</span></div><small>From LI-2096, job 4418. Mill time adjusted for the longer arm.</small></div>
+                      </div>
+                      <div class="hzk-alert hz-item blk is-on" data-alert>
+                        <b>10 parts estimated. 9 make Dec 7. LI-2140 has 2 issues:</b>
+                        <div class="it"><i>Misses Dec 7</i><span>The CNC mill is booked through Nov 19. Earliest is Dec 11, so the quote offers a split ship.</span></div>
+                        <div class="it"><i>Stale Price</i><span>The last powder coat price for a masked lug is 14 months old. Price request to Summit Powder Coating and Apex Coatings drafted.</span></div>
                       </div>
                       <div class="hzk-table hz-item blk is-on" data-table>
                         <div class="th"><b>Parts</b><small>10 lines · 100 kits · Due Dec 7</small></div>
@@ -689,11 +773,6 @@
                         <div class="tr"><span class="p"><b>LI-2155</b> <span>· Hitch Mount Clamp Plate</span></span><span class="r">100</span><span><span class="hzk-pill info">New Part</span></span><span class="r">$108.31</span><span class="r">5.5 wk · Dec 7</span></div>
                         <div class="tr"><span class="p"><b>LI-2162</b> <span>· Chain Tensioner Guide Block</span></span><span class="r">200</span><span><span class="hzk-pill info">New Part</span></span><span class="r">$32.98</span><span class="r">5.5 wk · Dec 7</span></div>
                         <div class="tr"><span class="p"><b>LI-2171</b> <span>· 1-1/4 Pivot Shaft Bearing Cap</span></span><span class="r">200</span><span><span class="hzk-pill">Repeat</span></span><span class="r">$58.18</span><span class="r">5.5 wk · Dec 7</span></div>
-                      </div>
-                      <div class="hzk-alert hz-item blk is-on" data-alert>
-                        <b>10 parts estimated. 9 make Dec 7. LI-2140 has 2 issues:</b>
-                        <div class="it"><i>Misses Dec 7</i><span>The CNC mill is booked through Nov 19. Earliest is Dec 11, so the quote offers a split ship.</span></div>
-                        <div class="it"><i>Stale Price</i><span>The last powder coat price for a masked lug is 14 months old. Price request to Summit Powder Coating and Apex Coatings drafted.</span></div>
                       </div>
                       <div class="hzk-post hz-item is-on" data-post>
                         <span class="av">✦</span>
@@ -725,7 +804,7 @@ Pat</div>
 <script>
 (function () {
   'use strict';
-  var LOOP_END = 37.8;       // seconds; loop wraps to t=0 (resolved) here
+  var LOOP_END = 40.0;       // seconds; loop wraps to t=0 (resolved) here
   var TYPE_MS = 25;          // ms per character (the drafted email body, once per loop)
 
   function init(root) {
@@ -741,6 +820,7 @@ Pat</div>
       var s = w / SW;
       root.style.setProperty('--s', String(s));
       root.style.height = Math.round(SH * s) + 'px';
+      if (typeof place === 'function') place();
     }
     fit();
     if (window.ResizeObserver) new ResizeObserver(fit).observe(root);
@@ -768,6 +848,56 @@ Pat</div>
     var run = $('[data-run]'), runav = $('[data-runav]'), rt = $('[data-rt]'), tickT = $('[data-tickt]'), tickM = $('[data-tickm]');
     var table = $('[data-table]'), alert = $('[data-alert]'), post = $('[data-post]'), pfoot = $('[data-pfoot]');
     var match = $('[data-match]'), mstat = $('[data-mstat]'), mname = $('[data-mname]');
+    var tcol = $('[data-tcol]'), sched = $('[data-sched]'), schedCard = $('[data-schedcard]'), slot = $('[data-slot]'), schedRows = $$('.hz-sched-row');
+    var srcFinish = $('[data-src="finish"]'), stepFinish = $('[data-step="finish"]'), link = $('[data-link]'), linkPath = $('[data-linkpath]');
+    var mailCard = root.querySelector('.hzk-mail .hz-card'), postBox = post.querySelector('.box'), orows = root.querySelector('.o-rows');
+
+    /* ---------- focus system (Nov 10): one lit region; the ring travels; the now-line names the step ---------- */
+    var ring = document.createElement('div'); ring.className = 'hz-focus'; ring.setAttribute('aria-hidden', 'true'); stageEl.appendChild(ring);
+    var now = document.createElement('div'); now.className = 'hz-now'; now.innerHTML = '<b></b><span></span>'; stageEl.appendChild(now);
+    var nowN = now.firstChild, nowT = now.lastChild;
+    var fTargets = [], fPad = 8, fRaf = 0, fUntil = 0;
+    function stageK() { var st = stageEl.getBoundingClientRect(); return [st, st.width / (root.classList.contains('is-phone') ? 420 : 1200) || 1]; }
+    function place() {
+      if (!fTargets || !fTargets.length || !ring) return;   // fit() runs before the ring exists
+      var sk = stageK(), st = sk[0], k = sk[1], x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9, any = false;
+      fTargets.forEach(function (el) {
+        var r = el.getBoundingClientRect(); if (!r.width && !r.height) return; any = true;
+        x0 = Math.min(x0, (r.left - st.left) / k); y0 = Math.min(y0, (r.top - st.top) / k); x1 = Math.max(x1, (r.right - st.left) / k); y1 = Math.max(y1, (r.bottom - st.top) / k);
+      });
+      if (!any) return;
+      ring.style.left = (x0 - fPad) + 'px'; ring.style.top = (y0 - fPad) + 'px'; ring.style.width = (x1 - x0 + 2 * fPad) + 'px'; ring.style.height = (y1 - y0 + 2 * fPad) + 'px';
+    }
+    function follow() { place(); if (performance.now() < fUntil) fRaf = requestAnimationFrame(follow); }
+    // focus(el | [els], pad, slow): the ring moves to the element(s) over 300ms (1s when slow) and follows them while the thread scrolls
+    function focus(els, pad, slow) {
+      fTargets = [].concat(els).filter(Boolean); fPad = pad == null ? 8 : pad;
+      ring.classList.toggle('is-slow', !!slow); ring.classList.add('is-on');
+      cancelAnimationFrame(fRaf);
+      if (instant) { place(); return; }
+      fUntil = performance.now() + (slow ? 1400 : 1100); follow();
+    }
+    function step(n, label) { nowN.textContent = n + ' of 6'; nowT.textContent = label; }
+    function outlook(on) { root.classList.toggle('is-outlook', !!on); }
+    // the source highlight: an email phrase and the UI that used it light together, joined by a dashed connector drawn inside the thread
+    function drawLink(a, b) {
+      var sk = stageK(), st = sk[0], k = sk[1], base = tin.getBoundingClientRect(), ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+      var card = mailCard.getBoundingClientRect(), gx = (card.right - base.left) / k - 7;   // a lane down the cards' right padding
+      var ax = (ra.right - base.left) / k + 4, ay = (ra.top + ra.height / 2 - base.top) / k, bx = (rb.right - base.left) / k + 4, by = (rb.top + rb.height / 2 - base.top) / k;
+      linkPath.setAttribute('d', 'M' + ax + ' ' + ay + ' H' + (gx - 8) + ' Q' + gx + ' ' + ay + ' ' + gx + ' ' + (ay + 8) + ' V' + (by - 8) + ' Q' + gx + ' ' + by + ' ' + (gx - 8) + ' ' + by + ' H' + bx);
+      link.setAttribute('width', tin.offsetWidth); link.setAttribute('height', tin.offsetHeight);
+    }
+    var mailBody = root.querySelector('.hzk-mail .body');
+    function sourceLit(on) {
+      srcFinish.classList.toggle('is-lit', on); stepFinish.classList.toggle('is-lit', on);
+      mailBody.classList.toggle('clamp', !on); if (on) scrollThread();
+      if (on) { drawLink(srcFinish, stepFinish); link.classList.add('is-on'); } else link.classList.remove('is-on');
+    }
+    function schedPanel(state) {   // 'in' (slide + scan), 'found' (the open slot lights), 'out' (slide back and clear)
+      if (state === 'in') { tcol.classList.add('is-sched'); sched.classList.remove('is-found'); sched.classList.add('is-scan'); schedRows.forEach(function (r, i) { r.classList.remove('is-read'); r.style.transitionDelay = instant ? '0s' : (0.35 + i * 0.22) + 's'; }); later(instant ? 0 : 420, function () { schedRows.forEach(function (r) { r.classList.add('is-read'); }); }); slot.classList.add('is-lit'); }
+      else if (state === 'found') { sched.classList.add('is-found'); }
+      else { tcol.classList.remove('is-sched'); sched.classList.remove('is-scan', 'is-found'); schedRows.forEach(function (r) { r.classList.remove('is-read'); r.style.transitionDelay = ''; }); slot.classList.remove('is-lit'); }
+    }
     function mstate(n, stat, name) {
       for (var i = 1; i <= 4; i++) match.classList.toggle('s' + i, i <= n);
       if (stat) mstat.textContent = stat;
@@ -791,7 +921,9 @@ Pat</div>
     function reflow(el) { void el.offsetWidth; }
 
     // the thread: only the content moves (transform), 600ms eased
+    var holdTop = false;   // phone source beat: the thread stays scrolled to the email phrase
     function scrollThread() {
+      if (holdTop) { tin.style.transform = 'translateY(0)'; return; }
       var y = Math.max(0, tin.offsetHeight - tvp.clientHeight);
       tin.style.transform = 'translateY(-' + y + 'px)';
     }
@@ -838,8 +970,9 @@ Pat</div>
     }
 
     // ----- timeline: one array of {t, fn}; t in seconds from the resolved first frame -----
+    var PHONE = function () { return root.classList.contains('is-phone'); };
     var timeline = [
-      { t: 0.0, fn: function () { /* resolved state is authored in the DOM */ } },
+      { t: 0.0, fn: function () { holdTop = false; outlook(false); schedPanel('out'); sourceLit(false); step(6, 'Pat reviews the quote'); focus([postBox, pfoot], 10); } },
       { t: 3.0, fn: function () {           // reset everything, then Outlook comes forward
         onew.classList.remove('is-in', 'is-scan'); ocat.classList.remove('is-on', 'is-read'); fly.classList.remove('is-up', 'is-go'); toast.classList.remove('is-on');
         newrow.classList.remove('is-on', 'hzk-in');
@@ -851,41 +984,48 @@ Pat</div>
         run.classList.remove('is-fold'); runav.classList.remove('is-live');
         body.textContent = ''; body.style.minHeight = '';
         tin.style.transform = 'translateY(0)';
+        holdTop = false; schedPanel('out'); sourceLit(false);
         hwin.classList.add('is-back'); owin.classList.remove('is-away'); owin.classList.add('is-on');
+        outlook(true); step(1, 'The email lands'); focus(orows.querySelector('.o-row:not(.o-new)'), 6);   // the top of the list, where it will land
       } },
-      { t: 3.25, fn: function () { onew.classList.add('is-in'); } },                          // Tessa's email lands in Outlook
-      { t: 3.45, fn: function () { onew.classList.add('is-scan'); ocat.classList.add('is-on'); } },   // Horizon is reading it: sweep + "Horizon · reading"
-      { t: 3.95, fn: function () { ocat.classList.add('is-read'); } },                        // "Horizon · read"
-      { t: 4.0, fn: function () { if (!instant) flyFrom(); } },                              // the email lifts out of Outlook
-      { t: 4.15, fn: function () { if (!instant) fly.classList.add('is-go'); } },             // and flies into Horizon
-      { t: 4.3, fn: function () {                                                             // Horizon comes forward
-        owin.classList.remove('is-on'); owin.classList.add('is-away'); hwin.classList.remove('is-back');
+      { t: 3.3, fn: function () { onew.classList.add('is-in'); focus(onew, 6); } },                       // Tessa's email lands; hold 1.2s
+      { t: 4.5, fn: function () { onew.classList.add('is-scan'); ocat.classList.add('is-on'); focus(onew, 6); } },   // "Horizon · reading": sweep + tag; hold 0.8s
+      { t: 5.3, fn: function () { ocat.classList.add('is-read'); } },                                       // "Horizon · read"
+      { t: 5.4, fn: function () { if (!instant) flyFrom(); } },                                            // the email card lifts
+      { t: 5.6, fn: function () { if (!instant) fly.classList.add('is-go'); focus(toast, 8, true); } },    // and travels to Horizon's toast slot over 1s; the ring travels with it
+      { t: 6.1, fn: function () {                                                                           // the windows crossfade behind the card
+        owin.classList.remove('is-on'); owin.classList.add('is-away'); hwin.classList.remove('is-back'); outlook(false);
       } },
-      { t: 5.2, fn: function () { toast.classList.add('is-on'); } },                         // Horizon confirms the pickup
-      { t: 7.3, fn: function () { toast.classList.remove('is-on'); } },
-      { t: 5.1, fn: function () { newrow.classList.add('is-on'); if (!instant) newrow.classList.add('hzk-in'); } },  // new list row
-      { t: 7.7, fn: function () { home.classList.remove('is-on'); proj.classList.add('is-on'); } },  // the project opens
-      { t: 8.5, fn: function () { tick('Reading the RFQ and its attachments', 'Horizon · 8:12 AM'); } },
-      { t: 10.5, fn: function () {                                                            // part match: the part from the drawing draws in
+      { t: 6.6, fn: function () { toast.classList.add('is-on'); focus(toast, 8); } },                     // "Picked up from Outlook"; hold 1.7s
+      { t: 8.3, fn: function () { if (PHONE()) return; toast.classList.remove('is-on'); newrow.classList.add('is-on'); if (!instant) newrow.classList.add('hzk-in'); focus(newrow, 4); } },  // new list row (desktop)
+      { t: 9.9, fn: function () { if (PHONE()) { toast.classList.remove('is-on'); newrow.classList.add('is-on'); } } },
+      { t: 10.0, fn: function () { home.classList.remove('is-on'); proj.classList.add('is-on'); step(2, 'Reading the drawing'); focus(mailCard, 8); } },  // the project opens
+      { t: 10.6, fn: function () { tick('Reading the RFQ and its attachments', 'Horizon · 8:12 AM'); focus(mailCard, 8); } },
+      { t: 12.4, fn: function () {                                                                          // part match: the part from the drawing draws in (reference beat)
         tick('Matching parts · LI-2140 Lift Arm Pivot Lug', 'Horizon · 8:13 AM');
-        match.classList.remove('is-out'); mstate(0, 'Reading LI-2140_REV-B.pdf', 'LI-1988'); show(match);
+        match.classList.remove('is-out'); mstate(0, 'Reading LI-2140_REV-B.pdf', 'LI-1988'); show(match); focus(match, 8);
       } },
-      { t: 11.7, fn: function () { mstate(1, 'Read: 0.50 in plate, 2 bores, 1 slot'); } },    // what it read off the drawing
-      { t: 12.6, fn: function () {                                                            // searching past jobs
+      { t: 13.6, fn: function () { mstate(1, 'Read: 0.50 in plate, 2 bores, 1 slot'); } },                  // what it read off the drawing
+      { t: 14.8, fn: function () {                                                                          // searching past jobs
+        step(3, 'Finding the last job');
         mstate(2, 'Searching 1,847 past jobs', 'LI-1988');
         later(400, function () { mname.textContent = 'LI-2031'; }); later(800, function () { mname.textContent = 'LI-2077'; });
       } },
-      { t: 13.8, fn: function () { mstate(3, 'Closest match: LI-2096, ran Mar 2026', 'LI-2096 · Pivot Lug'); } },
-      { t: 15.1, fn: function () { mstate(4, 'Routing suggested from LI-2096'); } },          // routing steps rise in
-      { t: 17.0, fn: function () { tick('Estimating · LI-2123, LI-2140, LI-2155, LI-2162', 'Horizon · 8:14 AM'); } },
-      { t: 19.0, fn: function () { tick('Checking the schedule', 'Horizon · 8:15 AM'); } },
-      { t: 21.0, fn: function () { match.classList.add('is-out'); later(200, function () { match.classList.remove('is-on', 'hzk-in'); }); fold(); } },
-      { t: 23.6, fn: function () { show(table); } },
-      { t: 26.4, fn: function () { show(alert); } },
-      { t: 29.0, fn: function () { show(post); typeInto(body); scrollThread(); } },
-      { t: 33.6, fn: function () { show(pfoot); } },
-      { t: 34.2, fn: function () { setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · not sent', true); } },
-      { t: 34.8, fn: function () { ppill.textContent = 'Ready'; ppill.className = 'hzk-pill ready'; } }
+      { t: 16.0, fn: function () { mstate(3, 'Closest match: LI-2096, ran Mar 2026', 'LI-2096 · Pivot Lug'); } },
+      { t: 17.3, fn: function () { mstate(4, 'Routing suggested from LI-2096'); focus(match, 8); } },        // routing steps rise in
+      { t: 18.5, fn: function () { sourceLit(true); if (PHONE()) { holdTop = true; scrollThread(); focus(srcFinish, 6); } else focus([mailCard, match], 10); } },   // phone: the phrase first (the thread scrolls up to it), then the step
+      { t: 19.5, fn: function () { if (PHONE()) { holdTop = false; scrollThread(); focus(stepFinish, 6); } } },                 // the finish came from the email: both light, joined; hold 1.8s
+      { t: 20.3, fn: function () { sourceLit(false); tick('Estimating · LI-2123, LI-2140, LI-2155, LI-2162', 'Horizon · 8:14 AM'); focus(run, 8); } },
+      { t: 21.9, fn: function () { tick('Checking the schedule', 'Horizon · 8:15 AM'); step(4, 'Checking the schedule'); schedPanel('in'); focus(schedCard, 10); } },  // the thread slides left, the schedule slides in
+      { t: 22.4, fn: function () { focus(schedCard, 10); } },                                               // the scan runs across the weeks (CSS, 1.4s)
+      { t: 24.0, fn: function () { schedPanel('found'); focus(slot, 8); } },   // the open slot on the CNC mill lights: Room the week of Nov 24; hold 2s
+      { t: 26.0, fn: function () { schedPanel('out'); match.classList.add('is-out'); later(200, function () { match.classList.remove('is-on', 'hzk-in'); }); fold(); step(4, 'Asking two vendors'); focus(run, 8); } },
+      { t: 26.6, fn: function () { show(alert); focus(alert, 8); } },                                        // the two issues, vendors asked; hold 2s
+      { t: 28.6, fn: function () { show(table); step(5, 'Drafting the quote'); focus(table, 8); } },
+      { t: 30.6, fn: function () { show(post); typeInto(body); scrollThread(); focus(postBox, 10); } },
+      { t: 35.4, fn: function () { show(pfoot); step(6, 'Pat reviews the quote'); focus([postBox, pfoot], 10); } },
+      { t: 36.0, fn: function () { setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · not sent', true); } },
+      { t: 36.6, fn: function () { ppill.textContent = 'Ready'; ppill.className = 'hzk-pill ready'; } }
     ];
 
     // ----- runner -----
@@ -899,15 +1039,15 @@ Pat</div>
       timeline.forEach(function (b) { if (b.t <= at) { curT = b.t; b.fn(); } });
       scrollThread();
       instant = false;
-      reflow(root);
+      reflow(root); place();
     }
-    function settle() { root.classList.add('is-seek'); scrollThread(); reflow(root); root.classList.remove('is-seek'); }
+    function settle() { root.classList.add('is-seek'); scrollThread(); reflow(root); place(); root.classList.remove('is-seek'); }
 
     if (mAt) { frozen = true; seekTo(parseFloat(mAt[1])); return; }
-    if (mStill || reduced) { root.classList.add('is-seek'); scrollThread(); return; }
+    if (mStill || reduced) { root.classList.add('is-seek'); instant = true; timeline[0].fn(); instant = false; scrollThread(); place(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { scrollThread(); place(); }); return; }
 
     settle();
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { scrollThread(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { scrollThread(); place(); if (link.classList.contains('is-on')) drawLink(srcFinish, stepFinish); });
 
     // play/pause with the elapsed time kept; pause when <10% visible or the tab is hidden
     var running = false, t0 = 0, elapsed = 0;
