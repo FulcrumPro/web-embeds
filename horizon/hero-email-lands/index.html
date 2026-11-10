@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   Horizon - hero-email-lands - "The email lands and it starts"
-  Design 1200x750, scales to width. Loop 40.0s. The RFQ lands in Outlook first, then the Horizon window (the shipped dark
+  Design 1200x750, scales to width. Loop 41.0s. The RFQ lands in Outlook first, then the Horizon window (the shipped dark
   "Projects" UI) comes forward and replays the Larkspur RFQ walkthrough: list row, project opens, live ticker, run fold,
   Parts table, alert, drafted quote with Send + Not Now. Nobody clicks. No libraries, no images, no audio.
 
@@ -22,17 +22,22 @@
   10.9  the project opens: project rail (stage header "RFQ · Reading 10 parts", 4-segment bar with RFQ lit, details card,
         customer), thread with Tessa's RFQ email card.
   11.7  ✦ live ticker: "Reading the RFQ and its attachments" · Horizon · 8:12 AM
-  14.2  ticker: "Matching parts · LI-2104, LI-2110, LI-2118…" · 8:13 AM
-  16.7  ticker: "Estimating · LI-2123, LI-2140, LI-2155, LI-2162" · 8:14 AM
-  19.2  ticker: "Checking the schedule" · 8:15 AM
-  21.7  the ticker folds: "Read the RFQ and estimated all 10 parts" / "3 steps · all automated · 8:12 AM to 8:15 AM · Show Reasoning"
-  24.3  Parts table card rises in (Parts · 10 lines · 100 kits · Due Dec 7; LI-2140 unit and lead time in red); thread scrolls.
-  27.1  alert: "10 parts estimated. 9 make Dec 7. LI-2140 has 2 issues:" Misses Dec 7 / Stale Price; thread scrolls.
-  29.7  Horizon's post: "To Tessa Brandvold · Quote 2207: LA-400 lift arm parts"; the body types (25ms/char, 4.4s).
-  34.3  Quote-2207.pdf attachment + Send (blue) + Not Now rise in. Nobody clicks.
-  34.9  stage header becomes "Quote · $59,241.00 · Quote 2207 · not sent"; second bar segment lights.
-  35.5  header pill Processing -> Ready. Resolved. Hold.
-  38.5  loop -> 0 (resolved holds 37.0 -> 43.0 across the wrap, about 6s)
+  13.7  ticker: "Matching parts · LI-2140 Lift Arm Pivot Lug" · 8:13 AM; the Part match card rises in the thread and the
+        part from the drawing draws itself (a sweep crosses it twice).
+  14.9  what it read off the drawing: 0.50 in plate, 2 bores, 1 slot.
+  15.8  "Searching 1,847 past jobs": a dashed candidate pulses on the right while part numbers flick past.
+  17.0  the match locks: LI-2096 Pivot Lug, "Closest match" link, Same plate / Same bores / 0.75 in longer.
+  18.3  Suggested routing rises in step by step: Saw, CNC mill, Deburr, Mask, Powder coat.
+  20.2  ticker: "Estimating · LI-2123, LI-2140, LI-2155, LI-2162" · 8:14 AM
+  22.2  ticker: "Checking the schedule" · 8:15 AM
+  24.2  the Part match card fades out and the ticker folds: "Read the RFQ and estimated all 10 parts"
+  26.8  Parts table card rises in; thread scrolls.
+  29.6  alert: "10 parts estimated. 9 make Dec 7. LI-2140 has 2 issues:"; thread scrolls.
+  32.2  Horizon's post; the body types (25ms/char, 4.4s).
+  36.8  Quote-2207.pdf attachment + Send (blue) + Not Now rise in. Nobody clicks.
+  37.4  stage header becomes "Quote · $59,241.00 · Quote 2207 · not sent"; second bar segment lights.
+  38.0  header pill Processing -> Ready. Resolved. Hold.
+  41.0  loop -> 0
 
   ?still=1  jumps to the resolved state and stops.   ?at=<sec>  seeks to that time and stops.
   prefers-reduced-motion: resolved state only. The timeline pauses when the root is <10% visible or the tab is hidden.
@@ -372,6 +377,56 @@
 .hz-hero-email-lands .hzk-mail .atts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .hz-hero-email-lands .hzk-mail .atts em { font-style: normal; font-size: 12px; color: var(--mute); margin-top: 8px; }
 /* thread items are hidden until their beat, then rise in */
+/* part match card (Nov 9): the part from the drawing, the search through past jobs, the match, the routing */
+.hz-hero-email-lands .hz-match { border: 1px solid var(--line2); border-radius: 10px; background: var(--card); padding: 10px 14px 12px; transition: opacity .2s ease; }
+.hz-hero-email-lands .hz-match.is-out { opacity: 0; }
+.hz-hero-email-lands .hz-match .mh { display: flex; align-items: baseline; gap: 10px; }
+.hz-hero-email-lands .hz-match .mh b { font-size: 14px; font-weight: 600; color: var(--fg-strong); flex: 1 1 auto; }
+.hz-hero-email-lands .hz-match .mh small { font-size: 12px; color: var(--working); }
+.hz-hero-email-lands .hz-match .ml { display: block; font-size: 11px; color: var(--mute); }
+.hz-hero-email-lands .hz-match .mg { display: grid; grid-template-columns: minmax(0,1fr) 92px minmax(0,1fr); align-items: center; margin-top: 8px; }
+.hz-hero-email-lands .hz-match .mp { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px 9px; background: var(--app); }
+.hz-hero-email-lands .hz-match .mp svg { display: block; width: 100%; max-width: 190px; height: auto; margin: 2px auto 4px; stroke: var(--fg); }
+.hz-hero-email-lands .hz-match .mp b { display: block; font-size: 12.5px; font-weight: 500; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hz-hero-email-lands .hz-match .mf { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; min-height: 20px; }
+.hz-hero-email-lands .hz-match .mf span { font-size: 11px; line-height: 20px; padding: 0 7px; border-radius: 10px; background: var(--card2); color: var(--mute2); white-space: nowrap; opacity: 0; transform: translateY(4px); transition: opacity .3s ease, transform .3s ease; }
+.hz-hero-email-lands .hz-match .mf span:nth-child(2) { transition-delay: .2s; }
+.hz-hero-email-lands .hz-match .mf span:nth-child(3) { transition-delay: .4s; }
+.hz-hero-email-lands .hz-match .mf .ok { background: var(--ok-bg); color: var(--ok-fg); }
+.hz-hero-email-lands .hz-match .mf .df { background: var(--warn-bg); color: var(--warn-fg); }
+.hz-hero-email-lands .hz-match.s1 .new .mf span, .hz-hero-email-lands .hz-match.s3 .old .mf span { opacity: 1; transform: none; }
+.hz-hero-email-lands .hz-match .new svg > * { stroke-dasharray: 100; animation: hz-mdraw 1.1s ease-out both; }
+.hz-hero-email-lands .hz-match .new::after { content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 40%; pointer-events: none; background: linear-gradient(90deg, rgba(103,136,255,0) 0%, rgba(103,136,255,.18) 50%, rgba(103,136,255,0) 100%); animation: hz-mscan 1.1s ease-in-out 2 both; }
+@keyframes hz-mdraw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+@keyframes hz-mscan { from { left: -40%; } to { left: 100%; } }
+.hz-hero-email-lands .hz-match .old { opacity: 0; transition: opacity .35s ease, border-color .35s ease; }
+.hz-hero-email-lands .hz-match .old svg { stroke: var(--mute3); stroke-dasharray: 4 4; transition: stroke .35s ease; }
+.hz-hero-email-lands .hz-match .old b { color: var(--mute); }
+.hz-hero-email-lands .hz-match.s2 .old { opacity: 1; }
+.hz-hero-email-lands .hz-match.s2:not(.s3) .old svg { animation: hzk-pulse .7s ease-in-out infinite; }
+.hz-hero-email-lands .hz-match.s3 .old { border-color: var(--link); }
+.hz-hero-email-lands .hz-match.s3 .old svg { stroke: var(--link); stroke-dasharray: none; }
+.hz-hero-email-lands .hz-match.s3 .old b { color: var(--fg); }
+.hz-hero-email-lands .hz-match .mlink { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; color: var(--link); text-align: center; opacity: 0; transition: opacity .35s ease; }
+.hz-hero-email-lands .hz-match .mlink i { display: block; width: 100%; height: 0; border-top: 1.5px dashed var(--link); }
+.hz-hero-email-lands .hz-match.s3 .mlink { opacity: 1; }
+.hz-hero-email-lands .hz-match .mr { margin-top: 10px; opacity: 0; transition: opacity .3s ease; }
+.hz-hero-email-lands .hz-match .mr small { display: block; font-size: 11.5px; color: var(--mute); margin-top: 5px; }
+.hz-hero-email-lands .hz-match .steps { display: flex; flex-wrap: wrap; gap: 4px 0; margin-top: 5px; }
+.hz-hero-email-lands .hz-match .steps span { display: inline-flex; align-items: center; font-size: 12px; font-weight: 500; line-height: 24px; padding: 0 10px; border-radius: 6px; background: var(--info-bg); color: var(--info-fg); opacity: 0; transform: translateX(-6px); transition: opacity .3s ease, transform .3s ease; }
+.hz-hero-email-lands .hz-match .steps span + span { margin-left: 22px; position: relative; }
+.hz-hero-email-lands .hz-match .steps span + span::before { content: "\203A"; position: absolute; left: -15px; color: var(--mute3); font-weight: 400; }
+.hz-hero-email-lands .hz-match .steps span:nth-child(2) { transition-delay: .18s; }
+.hz-hero-email-lands .hz-match .steps span:nth-child(3) { transition-delay: .36s; }
+.hz-hero-email-lands .hz-match .steps span:nth-child(4) { transition-delay: .54s; }
+.hz-hero-email-lands .hz-match .steps span:nth-child(5) { transition-delay: .72s; }
+.hz-hero-email-lands .hz-match.s4 .mr, .hz-hero-email-lands .hz-match.s4 .steps span { opacity: 1; transform: none; }
+.hz-hero-email-lands.is-phone .hz-match .mg { grid-template-columns: minmax(0,1fr) 14px minmax(0,1fr); }
+.hz-hero-email-lands.is-phone .hz-match .mlink span, .hz-hero-email-lands.is-phone .hz-match .mlink i + span + i { display: none; }
+.hz-hero-email-lands.is-phone .hz-match .mh { flex-direction: column; gap: 2px; }
+.hz-hero-email-lands.is-phone .hz-match .steps span { padding: 0 7px; font-size: 11.5px; }
+.hz-hero-email-lands.is-phone .hz-match .steps span + span { margin-left: 16px; }
+.hz-hero-email-lands.is-phone .hz-match .steps span + span::before { left: -11px; }
 .hz-hero-email-lands .hz-item { display: none; }
 .hz-hero-email-lands .hz-item.is-on { display: grid; }
 .hz-hero-email-lands .hz-item.is-on.blk { display: block; }
@@ -593,6 +648,15 @@
                           <div class="fold">Read the RFQ and estimated all 10 parts<small>3 steps · all automated · 8:12 AM to 8:15 AM · <a>Show Reasoning</a></small></div>
                         </div>
                       </div>
+                      <div class="hz-match hz-item blk" data-match>
+                        <div class="mh"><b>Part match</b><small data-mstat>Reading LI-2140_REV-B.pdf</small></div>
+                        <div class="mg">
+                          <div class="mp new"><span class="ml">From the drawing</span><svg viewBox="0 0 200 90" fill="none" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path pathLength="100" d="M30 20H140A25 25 0 0 1 140 70H30Z"/><circle pathLength="100" cx="140" cy="45" r="11"/><circle pathLength="100" cx="52" cy="45" r="7"/><rect pathLength="100" x="78" y="40" width="30" height="10" rx="5"/></svg><b>LI-2140 · Lift Arm Pivot Lug</b><div class="mf"><span>0.50 in plate</span><span>2 bores</span><span>1 slot</span></div></div>
+                          <div class="mlink"><i></i><span>Closest match</span><i></i></div>
+                          <div class="mp old"><span class="ml">From your history</span><svg viewBox="0 0 200 90" fill="none" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M48 20H140A25 25 0 0 1 140 70H48Z"/><circle cx="140" cy="45" r="11"/><circle cx="68" cy="45" r="7"/><rect x="90" y="40" width="22" height="10" rx="5"/></svg><b data-mname>LI-2096 · Pivot Lug</b><div class="mf"><span class="ok">Same plate</span><span class="ok">Same bores</span><span class="df">0.75 in longer</span></div></div>
+                        </div>
+                        <div class="mr"><span class="ml">Suggested routing</span><div class="steps"><span>Saw</span><span>CNC mill</span><span>Deburr</span><span>Mask</span><span>Powder coat</span></div><small>From LI-2096, job 4418. Mill time adjusted for the longer arm.</small></div>
+                      </div>
                       <div class="hzk-table hz-item blk is-on" data-table>
                         <div class="th"><b>Parts</b><small>10 lines · 100 kits · Due Dec 7</small></div>
                         <div class="tr head"><span>Part</span><span class="r">Qty</span><span>Kind</span><span class="r">Unit</span><span class="r">Lead Time</span></div>
@@ -642,7 +706,7 @@ Pat</div>
 <script>
 (function () {
   'use strict';
-  var LOOP_END = 38.5;       // seconds; loop wraps to t=0 (resolved) here
+  var LOOP_END = 41.0;       // seconds; loop wraps to t=0 (resolved) here
   var TYPE_MS = 25;          // ms per character (the drafted email body, once per loop)
 
   function init(root) {
@@ -683,6 +747,12 @@ Pat</div>
     var tvp = $('[data-tvp]'), tin = $('[data-tin]');
     var run = $('[data-run]'), runav = $('[data-runav]'), rt = $('[data-rt]'), tickT = $('[data-tickt]'), tickM = $('[data-tickm]');
     var table = $('[data-table]'), alert = $('[data-alert]'), post = $('[data-post]'), pfoot = $('[data-pfoot]');
+    var match = $('[data-match]'), mstat = $('[data-mstat]'), mname = $('[data-mname]');
+    function mstate(n, stat, name) {
+      for (var i = 1; i <= 4; i++) match.classList.toggle('s' + i, i <= n);
+      if (stat) mstat.textContent = stat;
+      if (name) mname.textContent = name;
+    }
     var body = $('[data-type]');
     body.setAttribute('data-text', body.textContent);
 
@@ -756,7 +826,8 @@ Pat</div>
         proj.classList.remove('is-on'); home.classList.add('is-on');
         ppill.textContent = 'Processing'; ppill.className = 'hzk-pill processing';
         setStage('RFQ', 'Reading 10 parts', 'RFQ 26-1187 · Thu Oct 29, 8:12 AM', false);
-        [run, table, alert, post, pfoot].forEach(function (el) { el.classList.remove('is-on', 'hzk-in'); });
+        match.classList.remove('is-out'); mstate(0, 'Reading LI-2140_REV-B.pdf', 'LI-1988');
+        [run, match, table, alert, post, pfoot].forEach(function (el) { el.classList.remove('is-on', 'hzk-in'); });
         run.classList.remove('is-fold'); runav.classList.remove('is-live');
         body.textContent = ''; body.style.minHeight = '';
         tin.style.transform = 'translateY(0)';
@@ -775,16 +846,26 @@ Pat</div>
       { t: 8.3, fn: function () { newrow.classList.add('is-on'); if (!instant) newrow.classList.add('hzk-in'); } },  // new list row
       { t: 10.9, fn: function () { home.classList.remove('is-on'); proj.classList.add('is-on'); } },  // the project opens
       { t: 11.7, fn: function () { tick('Reading the RFQ and its attachments', 'Horizon · 8:12 AM'); } },
-      { t: 14.2, fn: function () { tick('Matching parts · LI-2104, LI-2110, LI-2118…', 'Horizon · 8:13 AM'); } },
-      { t: 16.7, fn: function () { tick('Estimating · LI-2123, LI-2140, LI-2155, LI-2162', 'Horizon · 8:14 AM'); } },
-      { t: 19.2, fn: function () { tick('Checking the schedule', 'Horizon · 8:15 AM'); } },
-      { t: 21.7, fn: function () { fold(); } },
-      { t: 24.3, fn: function () { show(table); } },
-      { t: 27.1, fn: function () { show(alert); } },
-      { t: 29.7, fn: function () { show(post); typeInto(body); scrollThread(); } },
-      { t: 34.3, fn: function () { show(pfoot); } },
-      { t: 34.9, fn: function () { setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · not sent', true); } },
-      { t: 35.5, fn: function () { ppill.textContent = 'Ready'; ppill.className = 'hzk-pill ready'; } }
+      { t: 13.7, fn: function () {                                                            // part match: the part from the drawing draws in
+        tick('Matching parts · LI-2140 Lift Arm Pivot Lug', 'Horizon · 8:13 AM');
+        match.classList.remove('is-out'); mstate(0, 'Reading LI-2140_REV-B.pdf', 'LI-1988'); show(match);
+      } },
+      { t: 14.9, fn: function () { mstate(1, 'Read: 0.50 in plate, 2 bores, 1 slot'); } },    // what it read off the drawing
+      { t: 15.8, fn: function () {                                                            // searching past jobs
+        mstate(2, 'Searching 1,847 past jobs', 'LI-1988');
+        later(400, function () { mname.textContent = 'LI-2031'; }); later(800, function () { mname.textContent = 'LI-2077'; });
+      } },
+      { t: 17.0, fn: function () { mstate(3, 'Closest match: LI-2096, ran Mar 2026', 'LI-2096 · Pivot Lug'); } },
+      { t: 18.3, fn: function () { mstate(4, 'Routing suggested from LI-2096'); } },          // routing steps rise in
+      { t: 20.2, fn: function () { tick('Estimating · LI-2123, LI-2140, LI-2155, LI-2162', 'Horizon · 8:14 AM'); } },
+      { t: 22.2, fn: function () { tick('Checking the schedule', 'Horizon · 8:15 AM'); } },
+      { t: 24.2, fn: function () { match.classList.add('is-out'); later(200, function () { match.classList.remove('is-on', 'hzk-in'); }); fold(); } },
+      { t: 26.8, fn: function () { show(table); } },
+      { t: 29.6, fn: function () { show(alert); } },
+      { t: 32.2, fn: function () { show(post); typeInto(body); scrollThread(); } },
+      { t: 36.8, fn: function () { show(pfoot); } },
+      { t: 37.4, fn: function () { setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · not sent', true); } },
+      { t: 38.0, fn: function () { ppill.textContent = 'Ready'; ppill.className = 'hzk-pill ready'; } }
     ];
 
     // ----- runner -----
