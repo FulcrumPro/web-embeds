@@ -257,6 +257,9 @@
 .hz-hero-email-lands .hzk-side h2 { margin: 0 0 4px; font-size: 19px; font-weight: 500; color: var(--fg-strong); }
 .hz-hero-email-lands .hzk-side .day { font-size: 14px; font-weight: 600; color: var(--fg); margin-top: 8px; }
 .hz-hero-email-lands .hzk-act { display: grid; grid-template-columns: 28px minmax(0,1fr) auto; gap: 10px; align-items: center; }
+/* marks (Nov 10): one SVG mark per company, one person glyph; the span keeps its slot, the SVG fills it */
+.hz-hero-email-lands .has-mark { background: none !important; padding: 0; overflow: hidden; }
+.hz-hero-email-lands .has-mark svg.hz-mark { display: block; width: 100%; height: 100%; }
 .hz-hero-email-lands .hzk-act .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: #2a2d36; color: #fff; }
 .hz-hero-email-lands .hzk-act .av.spark { background: var(--spark-bg); color: var(--spark-fg); font-size: 12px; }
 .hz-hero-email-lands .hzk-act .av.me { background: #2a2d36; color: #fff; }
@@ -588,7 +591,7 @@
               </div>
             </aside>
             <main class="hzk-main">
-              <h1 class="hzk-h1">All Projects <span class="hz-presence">P</span></h1>
+              <h1 class="hzk-h1">All Projects <span class="hz-presence has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Any person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.1" fill="#fff"/><path fill="#fff" d="M6 19.5c0-3.6 2.7-6 6-6s6 2.4 6 6z"/></svg></span></h1>
               <div class="hzk-opener">Here's where things stand: 3 need you.</div>
               <div class="hz-needs">
               <div class="hzk-need"><span class="hzk-dot"></span><span><span class="t"><b>Marlin Marine</b><em>Approve the Expedite Fee</em></span><div class="x">Dev needs SO3301 by Nov 2. 3 of 4 lines make it with a Saturday shift; the brackets follow Nov 5 after anodize. Reply drafted with a $980 fee.</div></span><small>7:48 AM</small><span class="chev"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></span></div>
@@ -601,22 +604,22 @@
               <h2>All Activity</h2>
               <div class="day">Thu Oct 29</div>
               <div class="hzk-act"><span class="av spark">✦</span><div><b>Horizon drafted a reply</b><span>Marlin Marine</span></div><small>7:52 AM</small></div>
-              <div class="hzk-act"><span class="av">DC</span><div><b>Dev asked for an earlier date</b><span>Marlin Marine</span></div><small>7:48 AM</small></div>
+              <div class="hzk-act"><span class="av has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Any person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.1" fill="#fff"/><path fill="#fff" d="M6 19.5c0-3.6 2.7-6 6-6s6 2.4 6 6z"/></svg></span><div><b>Dev asked for an earlier date</b><span>Marlin Marine</span></div><small>7:48 AM</small></div>
               <div class="hzk-act"><span class="av spark">✦</span><div><b>Horizon priced the repeat order</b><span>Westbrook Sensors</span></div><small>7:41 AM</small></div>
-              <div class="hzk-act"><span class="av">HS</span><div><b>Hana sent a repeat order</b><span>Westbrook Sensors</span></div><small>7:40 AM</small></div>
-              <div class="hzk-act"><span class="av">TR</span><div><b>Tom sent an RFQ</b><span>Harbor Fluid Systems</span></div><small>7:20 AM</small></div>
+              <div class="hzk-act"><span class="av has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Any person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.1" fill="#fff"/><path fill="#fff" d="M6 19.5c0-3.6 2.7-6 6-6s6 2.4 6 6z"/></svg></span><div><b>Hana sent a repeat order</b><span>Westbrook Sensors</span></div><small>7:40 AM</small></div>
+              <div class="hzk-act"><span class="av has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Any person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.1" fill="#fff"/><path fill="#fff" d="M6 19.5c0-3.6 2.7-6 6-6s6 2.4 6 6z"/></svg></span><div><b>Tom sent an RFQ</b><span>Harbor Fluid Systems</span></div><small>7:20 AM</small></div>
               <div class="day">Wed Oct 28</div>
-              <div class="hzk-act"><span class="av me">P</span><div><b>You sent quote 1041</b><span>Tri-County Trailer</span></div><small>3:30 PM</small></div>
-              <div class="hzk-act"><span class="av me">P</span><div><b>You sent quote 1039</b><span>Pinecrest Controls</span></div><small>10:05 AM</small></div>
+              <div class="hzk-act"><span class="av me has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Any person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.1" fill="#fff"/><path fill="#fff" d="M6 19.5c0-3.6 2.7-6 6-6s6 2.4 6 6z"/></svg></span><div><b>You sent quote 1041</b><span>Tri-County Trailer</span></div><small>3:30 PM</small></div>
+              <div class="hzk-act"><span class="av me has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Any person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.1" fill="#fff"/><path fill="#fff" d="M6 19.5c0-3.6 2.7-6 6-6s6 2.4 6 6z"/></svg></span><div><b>You sent quote 1039</b><span>Pinecrest Controls</span></div><small>10:05 AM</small></div>
             </aside>
           </div>
 
           <!-- ---- the Larkspur project ---- -->
           <div class="hz-page hz-proj is-on" data-proj>
             <div class="hz-phead">
-              <span class="logo">L</span><b>Larkspur Implement Co.</b><span class="sep">·</span><span>10 Parts</span><span class="sep">·</span><span>Tessa Brandvold</span>
+              <span class="logo has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Larkspur Implement Co."><rect width="24" height="24" rx="6" fill="#3DC975"/><path fill="#fff" d="M5 19C5 10.8 10.6 5.4 19 5c.4 8.4-5.2 14-14 14z"/><path d="M6 18 13.5 10.5" fill="none" stroke="#3DC975" stroke-width="2" stroke-linecap="round"/></svg></span><b>Larkspur Implement Co.</b><span class="sep">·</span><span>10 Parts</span><span class="sep">·</span><span>Tessa Brandvold</span>
               <span class="hzk-pill ready" data-ppill>Ready</span>
-              <span class="more">···</span><span class="hz-presence">P</span>
+              <span class="more">···</span><span class="hz-presence has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Any person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.1" fill="#fff"/><path fill="#fff" d="M6 19.5c0-3.6 2.7-6 6-6s6 2.4 6 6z"/></svg></span>
             </div>
             <div class="hz-pcols">
               <aside class="hz-prail">
@@ -636,7 +639,7 @@
                 </div>
                 <div class="hz-sect">
                   <h4>Customer</h4>
-                  <div class="hz-contact"><span class="av">TB</span><div><b>Tessa Brandvold</b><span>Purchasing · Cedar Falls, IA</span></div></div>
+                  <div class="hz-contact"><span class="av has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Any person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.1" fill="#fff"/><path fill="#fff" d="M6 19.5c0-3.6 2.7-6 6-6s6 2.4 6 6z"/></svg></span><div><b>Tessa Brandvold</b><span>Purchasing · Cedar Falls, IA</span></div></div>
                   <div class="hzk-tiles"><div><b>6</b><span>Orders / yr</span></div><div><b>$38,400</b><span>Avg order</span></div><div><b>Apr 14</b><span>Last order</span></div></div>
                 </div>
               </aside>
@@ -646,7 +649,7 @@
                     <div class="hzk-thread">
                       <div class="hz-day">Thu Oct 29</div>
                       <div class="hzk-mail">
-                        <span class="av">TB</span>
+                        <span class="av has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Any person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.1" fill="#fff"/><path fill="#fff" d="M6 19.5c0-3.6 2.7-6 6-6s6 2.4 6 6z"/></svg></span>
                         <div class="hz-card">
                           <div class="hd"><b>Tessa Brandvold</b><span>to quotes@haldenmetal.com</span><span class="hzk-tag mute">RFQ</span><small>8:12 AM</small></div>
                           <div class="sub">Request for quote - LA-400 lift arm parts</div>

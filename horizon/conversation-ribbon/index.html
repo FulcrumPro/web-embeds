@@ -114,6 +114,9 @@
 .hz-conversation-ribbon .hzk-detail b.warn { color: var(--warn); }
 .hz-conversation-ribbon .hzk-detail b a { color: var(--link); }
 .hz-conversation-ribbon .hzk-run { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
+/* marks (Nov 10): one SVG mark per company, one person glyph; the span keeps its slot, the SVG fills it */
+.hz-conversation-ribbon .has-mark { background: none !important; padding: 0; overflow: hidden; }
+.hz-conversation-ribbon .has-mark svg.hz-mark { display: block; width: 100%; height: 100%; }
 .hz-conversation-ribbon .hzk-run .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
 .hz-conversation-ribbon .hzk-run .fold { font-size: 14px; font-weight: 500; color: var(--fg); }
 .hz-conversation-ribbon .hzk-run .fold small { display: block; font-size: 12px; font-weight: 300; color: var(--mute); margin-top: 2px; }
@@ -263,11 +266,11 @@
         </nav>
         <div class="cr-body">
           <div class="cr-head">
-            <span class="cr-logo">LI</span>
+            <span class="cr-logo has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Larkspur Implement Co."><rect width="24" height="24" rx="6" fill="#3DC975"/><path fill="#fff" d="M5 19C5 10.8 10.6 5.4 19 5c.4 8.4-5.2 14-14 14z"/><path d="M6 18 13.5 10.5" fill="none" stroke="#3DC975" stroke-width="2" stroke-linecap="round"/></svg></span>
             <h1>Larkspur Implement Co.</h1>
             <span class="meta">10 Parts · Tessa Brandvold</span>
             <span class="cr-pillwrap" id="hz-conversation-ribbon-pill"><span class="hzk-pill ordered">Ordered</span></span>
-            <span class="right"><span class="more">···</span><span class="cr-me">P</span></span>
+            <span class="right"><span class="more">···</span><span class="cr-me has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Any person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.1" fill="#fff"/><path fill="#fff" d="M6 19.5c0-3.6 2.7-6 6-6s6 2.4 6 6z"/></svg></span></span>
           </div>
           <div class="cr-cols">
             <aside class="cr-rail">
@@ -295,8 +298,9 @@
   /* ---------- content: WALKTHROUGHS.md sections 5, 6, 7 with the brief's sample data ---------- */
   var CK = '<span class="cr-check"><svg viewBox="0 0 10 10"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span>';
   var SPARK = '<span class="av">✦</span>';
+  var PERSON = '<span class="av has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Any person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.1" fill="#fff"/><path fill="#fff" d="M6 19.5c0-3.6 2.7-6 6-6s6 2.4 6 6z"/></svg></span>'; // every mail in this thread is from a person (Tessa)
   function mail(o) {
-    return '<div class="hzk-mail"' + (o.id ? ' id="' + SLUG + '-' + o.id + '"' : '') + '><span class="av">' + o.av + '</span><div class="card">' +
+    return '<div class="hzk-mail"' + (o.id ? ' id="' + SLUG + '-' + o.id + '"' : '') + '>' + PERSON + '<div class="card">' +
       '<div class="hd"><b>' + o.from + '</b><span>to Pat</span>' + (o.tag ? '<span class="hzk-tag mute">' + o.tag + '</span>' : '') + '<small>' + o.when + '</small></div>' +
       '<div class="sub">' + o.subject + '</div><div class="body">' + o.body + '</div>' +
       (o.atts ? '<div class="atts">' + o.atts.map(function (a) { return '<span class="att"><i></i>' + a[0] + '<small>' + a[1] + '</small></span>'; }).join('') + '</div>' : '') +
