@@ -118,7 +118,8 @@
 }
 .hz-overnight-reveal-fc svg{ width:16px; height:16px; flex:0 0 auto; }
 .hz-overnight-reveal-fc b{ font-weight:600; }
-.hz-overnight-reveal-fc span{ color:var(--muted); overflow:hidden; text-overflow:ellipsis; }
+.hz-overnight-reveal-fc span{ color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.hz-overnight-reveal-fc svg.hz-mark{ width:16px; height:16px; margin-left:auto; flex:0 0 auto; }
 
 .hz-overnight-reveal-read{ position:absolute; left:24px; right:24px; top:220px; opacity:0; transition:opacity .5s var(--ease) .2s; }
 .hz-overnight-reveal-left:not(.is-reading) .hz-overnight-reveal-read{ opacity:1; }
@@ -323,14 +324,22 @@
   };
   // what flows into the drawer: history from the shop's inbox and files (Halden Metalworks sample set)
   var FLOW = [
-    ['mail',  'RFQ · Larkspur Implement Co.', 'Tessa Brandvold'],
-    ['pdf',   'WS-610.pdf', 'Westbrook Sensors · repeat'],
-    ['timer', 'Job 5218 · Bend', '14 min'],
-    ['quote', 'Quote · Kestrel Medical', 'KM-140 @ $9.85'],
-    ['mail',  'PO · Marlin Marine', 'Dev Castillo'],
-    ['pdf',   'HF-330_REV-A.pdf', 'Harbor Fluid Systems'],
-    ['timer', 'Job 5304 · Powder Coat', '9 min']
+    ['mail',  'RFQ · Larkspur Implement Co.', 'Tessa Brandvold', 'larkspur'],
+    ['pdf',   'WS-610.pdf', 'Westbrook Sensors · repeat', 'westbrook'],
+    ['timer', 'Job 5218 · Bend', '14 min', ''],
+    ['quote', 'Quote · Kestrel Medical', 'KM-140 @ $9.85', 'kestrel'],
+    ['mail',  'PO · Marlin Marine', 'Dev Castillo', 'marlin'],
+    ['pdf',   'HF-330_REV-A.pdf', 'Harbor Fluid Systems', 'harbor'],
+    ['timer', 'Job 5304 · Powder Coat', '9 min', '']
   ];
+  // company marks (shared/marks, the same SVG as the hero and thread loops and the Webflow band)
+  var MARKS = {
+    larkspur: '<svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Larkspur Implement Co."><rect width="24" height="24" rx="6" fill="#3DC975"/><path fill="#fff" d="M5 19C5 10.8 10.6 5.4 19 5c.4 8.4-5.2 14-14 14z"/><path d="M6 18 13.5 10.5" fill="none" stroke="#3DC975" stroke-width="2" stroke-linecap="round"/></svg>',
+    westbrook: '<svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Westbrook Sensors"><rect width="24" height="24" rx="6" fill="#292932"/><circle cx="12" cy="12" r="7" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2.6" fill="#fff"/></svg>',
+    kestrel: '<svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Kestrel Medical"><rect width="24" height="24" rx="6" fill="#D58BE1"/><path fill="#fff" d="M10 4.5h4V10h5.5v4H14v5.5h-4V14H4.5v-4H10z"/></svg>',
+    marlin: '<svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Marlin Marine"><rect width="24" height="24" rx="6" fill="#3840EA"/><path fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" d="M3.5 9.5c2.1 0 2.1-2.5 4.25-2.5s2.1 2.5 4.25 2.5 2.1-2.5 4.25-2.5 2.1 2.5 4.25 2.5M3.5 16.5c2.1 0 2.1-2.5 4.25-2.5s2.1 2.5 4.25 2.5 2.1-2.5 4.25-2.5 2.1 2.5 4.25 2.5"/></svg>',
+    harbor: '<svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Harbor Fluid Systems"><rect width="24" height="24" rx="6" fill="#3840EA"/><circle cx="12" cy="5.5" r="2" fill="none" stroke="#fff" stroke-width="2"/><path fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" d="M12 7.5v13M8.5 11h7M5 13.5c0 4 3 7 7 7s7-3 7-7"/></svg>'
+  };
   var READ = [
     ['mail',  'Inbox', 'Outlook · quotes@haldenmetal.com, 2024-2026'],
     ['pdf',   'Drawings', 'every PDF on the RFQs'],
@@ -346,7 +355,7 @@
     var nums = [$('n0'), $('n1'), $('n2')];
 
     // build the flow cards, the "what it read" list and the card lines once
-    $('flow').innerHTML = FLOW.map(function(f){ return '<div class="' + SLUG + '-fc">' + ICONS[f[0]] + '<b>' + f[1] + '</b><span>' + f[2] + '</span></div>'; }).join('');
+    $('flow').innerHTML = FLOW.map(function(f){ return '<div class="' + SLUG + '-fc">' + ICONS[f[0]] + '<b>' + f[1] + '</b><span>' + f[2] + '</span>' + (f[3] ? MARKS[f[3]] : '') + '</div>'; }).join('');
     $('read').innerHTML = READ.map(function(r){ return '<div class="' + SLUG + '-rr">' + ICONS[r[0]] + '<b>' + r[1] + '</b><span>' + r[2] + '</span>' + CHECK + '</div>'; }).join('');
     $('lines').innerHTML = FACTS.map(function(g){
       return '<span class="' + SLUG + '-eb ' + SLUG + '-in">' + g[0] + '</span>' +
