@@ -114,12 +114,12 @@
 .hz-conversation-ribbon .hzk-detail b.warn { color: var(--warn); }
 .hz-conversation-ribbon .hzk-detail b a { color: var(--link); }
 .hz-conversation-ribbon .hzk-run { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
-.hz-conversation-ribbon .hzk-run .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-conversation-ribbon .hzk-run .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
 .hz-conversation-ribbon .hzk-run .fold { font-size: 14px; font-weight: 500; color: var(--fg); }
 .hz-conversation-ribbon .hzk-run .fold small { display: block; font-size: 12px; font-weight: 300; color: var(--mute); margin-top: 2px; }
 .hz-conversation-ribbon .hzk-run .fold small a { color: var(--link); }
 .hz-conversation-ribbon .hzk-post { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
-.hz-conversation-ribbon .hzk-post .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-conversation-ribbon .hzk-post .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
 .hz-conversation-ribbon .hzk-post .box { border: 1px solid var(--line2); border-radius: 8px; background: var(--card); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
 .hz-conversation-ribbon .hzk-post .box .hd { display: flex; align-items: baseline; gap: 8px; font-size: 12.5px; color: var(--mute2); }
 .hz-conversation-ribbon .hzk-post .box .hd b { font-size: 14px; font-weight: 500; color: var(--fg-strong); }
@@ -131,7 +131,7 @@
 .hz-conversation-ribbon .hzk-result { font-size: 13px; color: var(--good-fg); display: flex; align-items: center; gap: 8px; min-height: 28px; }
 .hz-conversation-ribbon .hzk-result small { font-size: 12px; color: var(--mute3); }
 .hz-conversation-ribbon .hzk-mail { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
-.hz-conversation-ribbon .hzk-mail .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: #323335; color: #a9abae; }
+.hz-conversation-ribbon .hzk-mail .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: #2a2d36; color: #fff; }
 .hz-conversation-ribbon .hzk-mail .card { border: 1px solid var(--line2); border-radius: 8px; background: var(--card); padding: 12px 14px; }
 .hz-conversation-ribbon .hzk-mail .hd { display: flex; gap: 8px; align-items: center; font-size: 12.5px; color: var(--mute2); }
 .hz-conversation-ribbon .hzk-mail .hd b { color: var(--fg-strong); font-weight: 500; font-size: 13.5px; }
@@ -145,7 +145,7 @@
 .hz-conversation-ribbon .att i::before { content: ''; position: absolute; left: 5px; right: 5px; top: 4px; height: 3px; background: #2a2d33; border-radius: 1px; box-shadow: 0 5px 0 -1px #c9cac4, 0 10px 0 -1px #c9cac4, 0 15px 0 -1px #c9cac4; }
 .hz-conversation-ribbon .att small { font-weight: 400; color: var(--mute3); font-size: 11.5px; margin-left: 4px; }
 .hz-conversation-ribbon .hzk-step { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
-.hz-conversation-ribbon .hzk-step .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-conversation-ribbon .hzk-step .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
 .hz-conversation-ribbon .hzk-step .t { font-size: 13.5px; font-weight: 500; }
 .hz-conversation-ribbon .hzk-step .d { font-size: 13px; color: rgba(230,230,240,.75); }
 .hz-conversation-ribbon .hzk-step .m { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 2px; font-size: 11.5px; color: rgba(230,230,240,.58); }
@@ -243,6 +243,10 @@
 .hz-conversation-ribbon.is-phone .cr-head h1 { font-size: 16px; white-space: normal; }
 .hz-conversation-ribbon.is-phone .cr-head .meta { display: none; }
 .hz-conversation-ribbon.is-phone .cr-head .right { display: none; }
+
+/* phone type floor (Nov 10): nothing under 13px; 15px stage-px on frames narrower than 420px (renders at about 13px) */
+.hz-conversation-ribbon.is-phone .hzk-rail-item, .hz-conversation-ribbon.is-phone .hzk-app .hzk-rail-item, .hz-conversation-ribbon.is-phone .hzk-pill, .hz-conversation-ribbon.is-phone .hzk-tag, .hz-conversation-ribbon.is-phone .hzk-stagehead .k a, .hz-conversation-ribbon.is-phone .hzk-stagehead .sub, .hz-conversation-ribbon.is-phone .hzk-detail, .hz-conversation-ribbon.is-phone .hzk-run .av, .hz-conversation-ribbon.is-phone .hzk-run .fold small, .hz-conversation-ribbon.is-phone .hzk-post .av, .hz-conversation-ribbon.is-phone .hzk-post .box .hd, .hz-conversation-ribbon.is-phone .hzk-post .box .hd small, .hz-conversation-ribbon.is-phone .hzk-btn, .hz-conversation-ribbon.is-phone .hzk-result small, .hz-conversation-ribbon.is-phone .hzk-mail .av, .hz-conversation-ribbon.is-phone .hzk-mail .hd, .hz-conversation-ribbon.is-phone .hzk-mail .hd small, .hz-conversation-ribbon.is-phone .hzk-mail .att, .hz-conversation-ribbon.is-phone .hzk-post .att, .hz-conversation-ribbon.is-phone .att small, .hz-conversation-ribbon.is-phone .hzk-step .av, .hz-conversation-ribbon.is-phone .hzk-step .m, .hz-conversation-ribbon.is-phone .hzk-table .th small, .hz-conversation-ribbon.is-phone .hzk-table .th .hzk-pill, .hz-conversation-ribbon.is-phone .hzk-table .tr, .hz-conversation-ribbon.is-phone .hzk-table .tr.head, .hz-conversation-ribbon.is-phone .hzk-table .tr .sub, .hz-conversation-ribbon.is-phone .hzk-table .foot, .hz-conversation-ribbon.is-phone .hzk-decision .hd .sub, .hz-conversation-ribbon.is-phone .hzk-decision .hd small, .hz-conversation-ribbon.is-phone .hzk-fact small, .hz-conversation-ribbon.is-phone .hzk-fact em, .hz-conversation-ribbon.is-phone .hzk-limit, .hz-conversation-ribbon.is-phone .cr-logo, .hz-conversation-ribbon.is-phone .cr-me, .hz-conversation-ribbon.is-phone .cr-sec .t small, .hz-conversation-ribbon.is-phone .cr-item .l1, .hz-conversation-ribbon.is-phone .cr-item .l2, .hz-conversation-ribbon.is-phone .cr-all, .hz-conversation-ribbon.is-phone .cr-day, .hz-conversation-ribbon.is-phone .cr-os { font-size: 13px; }
+.hz-conversation-ribbon.is-phone.is-narrow .hzk-rail-item, .hz-conversation-ribbon.is-phone.is-narrow .hzk-app .hzk-rail-item, .hz-conversation-ribbon.is-phone.is-narrow .hzk-pill, .hz-conversation-ribbon.is-phone.is-narrow .hzk-tag, .hz-conversation-ribbon.is-phone.is-narrow .hzk-stagehead .k a, .hz-conversation-ribbon.is-phone.is-narrow .hzk-stagehead .sub, .hz-conversation-ribbon.is-phone.is-narrow .hzk-detail, .hz-conversation-ribbon.is-phone.is-narrow .hzk-run .av, .hz-conversation-ribbon.is-phone.is-narrow .hzk-run .fold small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-post .av, .hz-conversation-ribbon.is-phone.is-narrow .hzk-post .box .hd, .hz-conversation-ribbon.is-phone.is-narrow .hzk-post .box .hd small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-btn, .hz-conversation-ribbon.is-phone.is-narrow .hzk-result small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-mail .av, .hz-conversation-ribbon.is-phone.is-narrow .hzk-mail .hd, .hz-conversation-ribbon.is-phone.is-narrow .hzk-mail .hd small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-mail .att, .hz-conversation-ribbon.is-phone.is-narrow .hzk-post .att, .hz-conversation-ribbon.is-phone.is-narrow .att small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-step .av, .hz-conversation-ribbon.is-phone.is-narrow .hzk-step .m, .hz-conversation-ribbon.is-phone.is-narrow .hzk-table .th small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-table .th .hzk-pill, .hz-conversation-ribbon.is-phone.is-narrow .hzk-table .tr, .hz-conversation-ribbon.is-phone.is-narrow .hzk-table .tr.head, .hz-conversation-ribbon.is-phone.is-narrow .hzk-table .tr .sub, .hz-conversation-ribbon.is-phone.is-narrow .hzk-table .foot, .hz-conversation-ribbon.is-phone.is-narrow .hzk-decision .hd .sub, .hz-conversation-ribbon.is-phone.is-narrow .hzk-decision .hd small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-fact small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-fact em, .hz-conversation-ribbon.is-phone.is-narrow .hzk-limit, .hz-conversation-ribbon.is-phone.is-narrow .cr-logo, .hz-conversation-ribbon.is-phone.is-narrow .cr-me, .hz-conversation-ribbon.is-phone.is-narrow .cr-sec .t small, .hz-conversation-ribbon.is-phone.is-narrow .cr-item .l1, .hz-conversation-ribbon.is-phone.is-narrow .cr-item .l2, .hz-conversation-ribbon.is-phone.is-narrow .cr-all, .hz-conversation-ribbon.is-phone.is-narrow .cr-day, .hz-conversation-ribbon.is-phone.is-narrow .cr-os { font-size: 15px; }
 </style>
 
 <div class="hz-conversation-ribbon">
@@ -400,7 +404,7 @@
     function fit() {
       var w = root.clientWidth || 1200;
       var phone = w < 600 || /[?&]phone=1/.test(location.search);
-      root.classList.toggle('is-phone', phone);
+      root.classList.toggle('is-phone', phone); root.classList.toggle('is-narrow', phone && (root.getBoundingClientRect().width || 420) < 420);
       var SW = phone ? 420 : 1200, SH = phone ? 720 : 750, s = w / SW;
       root.style.setProperty('--s', String(s));
       root.style.height = Math.round(SH * s) + 'px';

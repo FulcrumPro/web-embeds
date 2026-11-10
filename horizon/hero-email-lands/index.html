@@ -10,6 +10,7 @@
         Horizon's post with the drafted email "Quote 2207: LA-400 lift arm parts", Quote-2207.pdf, Send (blue) + Not Now.
         Stage header "Quote · $59,241.00 · Quote 2207 · not sent", header pill "Ready". Hold 3s.
    3.0  reset: Horizon drops back; Outlook (quotes@haldenmetal.com) comes forward with this morning's mail. Nobody is in it.
+        (Nov 10: the Outlook beat runs about 1.3 s; windows crossfade in 300 ms; the email card flies to the toast slot, bottom right.)
    4.0  Tessa Brandvold's email lands at the top of the Outlook list: "Request for quote - LA-400 lift arm parts", 8:12 AM,
         attachments (26-1187_parts.xlsx, LI-2140_REV-B.pdf and drawings).
    4.8  Horizon reads it: a sweep crosses the row twice and the category tag lands as "Horizon · reading" (pulsing dot).
@@ -73,7 +74,7 @@
 .hz-hero-email-lands .h-win { position: absolute; left: 0; top: 0; width: 1200px; height: 750px; background: #131418;
      overflow: hidden;
   display: flex; flex-direction: column; z-index: 2; transform-origin: 50% 60%;
-  transition: opacity .6s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  transition: opacity .3s cubic-bezier(.2,.7,.2,1), transform .3s cubic-bezier(.2,.7,.2,1); }
 .hz-hero-email-lands .h-win.is-back { opacity: 0; transform: translateY(22px) scale(.965); z-index: 1; }
 .hz-hero-email-lands .h-title { flex: 0 0 36px; position: relative; display: flex; align-items: center; justify-content: center;
   background: #1b1d23; border-bottom: 1px solid #2b2d33; font-size: 12.5px; color: #a9abae; font-weight: 400; }
@@ -86,7 +87,7 @@
   border: 1px solid #d6d6d6;   overflow: hidden;
   display: flex; flex-direction: column; z-index: 3; opacity: 0; transform: translateY(16px) scale(.97); transform-origin: 50% 50%;
   font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #242424;
-  transition: opacity .6s cubic-bezier(.2,.7,.2,1), transform .75s cubic-bezier(.2,.7,.2,1); }
+  transition: opacity .3s cubic-bezier(.2,.7,.2,1), transform .3s cubic-bezier(.2,.7,.2,1); }
 .hz-hero-email-lands .o-win.is-on { opacity: 1; transform: none; }
 .hz-hero-email-lands .o-win.is-away { opacity: 0; transform: translate(-90px, 70px) scale(.86); z-index: 1; }
 .hz-hero-email-lands .o-top { flex: 0 0 48px; display: flex; align-items: center; gap: 14px; padding: 0 16px; background: #0f6cbd; color: #fff; }
@@ -256,9 +257,9 @@
 .hz-hero-email-lands .hzk-side h2 { margin: 0 0 4px; font-size: 19px; font-weight: 500; color: var(--fg-strong); }
 .hz-hero-email-lands .hzk-side .day { font-size: 14px; font-weight: 600; color: var(--fg); margin-top: 8px; }
 .hz-hero-email-lands .hzk-act { display: grid; grid-template-columns: 28px minmax(0,1fr) auto; gap: 10px; align-items: center; }
-.hz-hero-email-lands .hzk-act .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: #323335; color: #a9abae; }
+.hz-hero-email-lands .hzk-act .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: #2a2d36; color: #fff; }
 .hz-hero-email-lands .hzk-act .av.spark { background: var(--spark-bg); color: var(--spark-fg); font-size: 12px; }
-.hz-hero-email-lands .hzk-act .av.me { background: #3b3f1f; color: #c7c98a; }
+.hz-hero-email-lands .hzk-act .av.me { background: #2a2d36; color: #fff; }
 .hz-hero-email-lands .hzk-act b { display: block; font-size: 14px; font-weight: 500; color: var(--fg); }
 .hz-hero-email-lands .hzk-act span { display: block; font-size: 12.5px; color: var(--mute); }
 .hz-hero-email-lands .hzk-act small { font-size: 12px; color: var(--mute3); white-space: nowrap; }
@@ -282,7 +283,7 @@
 .hz-hero-email-lands .hzk-detail span { color: var(--mute); }
 .hz-hero-email-lands .hzk-detail b { font-weight: 500; color: var(--fg); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hz-hero-email-lands .hzk-run { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
-.hz-hero-email-lands .hzk-run .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-hero-email-lands .hzk-run .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
 .hz-hero-email-lands .hzk-run .av.is-live { animation: hzk-pulse 1.2s ease-in-out infinite; }
 .hz-hero-email-lands .hzk-run .tick { font-size: 14px; color: var(--fg); min-height: 20px; }
 .hz-hero-email-lands .hzk-run .tick small { display: block; font-size: 11.5px; color: var(--mute3); margin-top: 2px; }
@@ -290,7 +291,7 @@
 .hz-hero-email-lands .hzk-run .fold small { display: block; font-size: 12px; font-weight: 300; color: var(--mute); margin-top: 2px; }
 .hz-hero-email-lands .hzk-run .fold small a { color: var(--link); }
 .hz-hero-email-lands .hzk-post { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
-.hz-hero-email-lands .hzk-post .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-hero-email-lands .hzk-post .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
 .hz-hero-email-lands .hzk-post .box { border: 1px solid var(--line2); border-radius: 8px; background: var(--card); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
 .hz-hero-email-lands .hzk-post .box .hd { display: flex; align-items: baseline; gap: 8px; font-size: 12.5px; color: var(--mute2); }
 .hz-hero-email-lands .hzk-post .box .hd b { font-size: 14px; font-weight: 500; color: var(--fg-strong); }
@@ -301,7 +302,7 @@
 .hz-hero-email-lands .hzk-btn.primary { background: var(--send); border-color: var(--send); color: #fff; }
 .hz-hero-email-lands .hzk-thread { display: flex; flex-direction: column; gap: 14px; }
 .hz-hero-email-lands .hzk-mail { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
-.hz-hero-email-lands .hzk-mail .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: #323335; color: #a9abae; }
+.hz-hero-email-lands .hzk-mail .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: #2a2d36; color: #fff; }
 .hz-hero-email-lands .hzk-mail .hd { display: flex; gap: 8px; align-items: baseline; font-size: 12.5px; color: var(--mute2); }
 .hz-hero-email-lands .hzk-mail .hd b { color: var(--fg-strong); font-weight: 500; font-size: 13.5px; }
 .hz-hero-email-lands .hzk-mail .hd small { margin-left: auto; font-size: 11.5px; color: var(--mute3); white-space: nowrap; }
@@ -359,7 +360,7 @@
 .hz-hero-email-lands .hz-sect { padding: 4px 16px 12px; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--line); margin-top: 4px; }
 .hz-hero-email-lands .hz-sect h4 { margin: 10px 0 0; font-size: 12px; font-weight: 500; color: var(--mute2); }
 .hz-hero-email-lands .hz-contact { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; align-items: center; }
-.hz-hero-email-lands .hz-contact .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: #2b3a3b; color: #7fc6cb; }
+.hz-hero-email-lands .hz-contact .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: #2a2d36; color: #fff; }
 .hz-hero-email-lands .hz-contact b { display: block; font-size: 13.5px; font-weight: 500; color: var(--fg); }
 .hz-hero-email-lands .hz-contact span { display: block; font-size: 12px; color: var(--mute); }
 /* thread viewport: only the content scrolls, via transform */
@@ -478,6 +479,18 @@
 .hz-hero-email-lands.is-phone .hz-phead b { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .hz-hero-email-lands.is-phone .hz-phead .hzk-pill { margin-left: auto; }
 .hz-hero-email-lands.is-phone .hz-tin { padding: 14px 14px 16px; }
+
+/* phone type floor (Nov 10): nothing under 13px; on frames narrower than 420px the stage renders at about .81, so the floor is 15px stage-px */
+.hz-hero-email-lands.is-phone .o-navh, .hz-hero-email-lands.is-phone .o-navi b, .hz-hero-email-lands.is-phone .o-day, .hz-hero-email-lands.is-phone .o-fly .o-fly-f span, .hz-hero-email-lands.is-phone .hz-toast, .hz-hero-email-lands.is-phone .hz-toast small,
+.hz-hero-email-lands.is-phone .hzk-app .hzk-rail-item, .hz-hero-email-lands.is-phone .hzk-nav .usd, .hz-hero-email-lands.is-phone .hzk-pill, .hz-hero-email-lands.is-phone .hzk-tag, .hz-hero-email-lands.is-phone .hzk-act .av, .hz-hero-email-lands.is-phone .hzk-act span, .hz-hero-email-lands.is-phone .hzk-act small,
+.hz-hero-email-lands.is-phone .hzk-tiles span, .hz-hero-email-lands.is-phone .hzk-stagehead .k a, .hz-hero-email-lands.is-phone .hzk-stagehead .sub, .hz-hero-email-lands.is-phone .hzk-run .tick small, .hz-hero-email-lands.is-phone .hzk-run .fold small,
+.hz-hero-email-lands.is-phone .hzk-post .box .hd, .hz-hero-email-lands.is-phone .hzk-post .box .hd small, .hz-hero-email-lands.is-phone .hzk-mail .av, .hz-hero-email-lands.is-phone .hzk-mail .hd, .hz-hero-email-lands.is-phone .hzk-mail .hd small, .hz-hero-email-lands.is-phone .hzk-mail .att small,
+.hz-hero-email-lands.is-phone .hzk-table .th small, .hz-hero-email-lands.is-phone .hzk-table .tr.head, .hz-hero-email-lands.is-phone .hz-contact .av, .hz-hero-email-lands.is-phone .hz-contact span, .hz-hero-email-lands.is-phone .hz-day, .hz-hero-email-lands.is-phone .hz-match .steps span, .hz-hero-email-lands.is-phone .h-title, .hz-hero-email-lands.is-phone .o-row { font-size: 13px; }
+.hz-hero-email-lands.is-phone.is-narrow .o-navh, .hz-hero-email-lands.is-phone.is-narrow .o-navi b, .hz-hero-email-lands.is-phone.is-narrow .o-day, .hz-hero-email-lands.is-phone.is-narrow .o-fly .o-fly-f span, .hz-hero-email-lands.is-phone.is-narrow .hz-toast, .hz-hero-email-lands.is-phone.is-narrow .hz-toast small,
+.hz-hero-email-lands.is-phone.is-narrow .hzk-app .hzk-rail-item, .hz-hero-email-lands.is-phone.is-narrow .hzk-nav .usd, .hz-hero-email-lands.is-phone.is-narrow .hzk-pill, .hz-hero-email-lands.is-phone.is-narrow .hzk-tag, .hz-hero-email-lands.is-phone.is-narrow .hzk-act .av, .hz-hero-email-lands.is-phone.is-narrow .hzk-act span, .hz-hero-email-lands.is-phone.is-narrow .hzk-act small,
+.hz-hero-email-lands.is-phone.is-narrow .hzk-tiles span, .hz-hero-email-lands.is-phone.is-narrow .hzk-stagehead .k a, .hz-hero-email-lands.is-phone.is-narrow .hzk-stagehead .sub, .hz-hero-email-lands.is-phone.is-narrow .hzk-run .tick small, .hz-hero-email-lands.is-phone.is-narrow .hzk-run .fold small,
+.hz-hero-email-lands.is-phone.is-narrow .hzk-post .box .hd, .hz-hero-email-lands.is-phone.is-narrow .hzk-post .box .hd small, .hz-hero-email-lands.is-phone.is-narrow .hzk-mail .av, .hz-hero-email-lands.is-phone.is-narrow .hzk-mail .hd, .hz-hero-email-lands.is-phone.is-narrow .hzk-mail .hd small, .hz-hero-email-lands.is-phone.is-narrow .hzk-mail .att small,
+.hz-hero-email-lands.is-phone.is-narrow .hzk-table .th small, .hz-hero-email-lands.is-phone.is-narrow .hzk-table .tr.head, .hz-hero-email-lands.is-phone.is-narrow .hz-contact .av, .hz-hero-email-lands.is-phone.is-narrow .hz-contact span, .hz-hero-email-lands.is-phone.is-narrow .hz-day, .hz-hero-email-lands.is-phone.is-narrow .hz-match .steps span, .hz-hero-email-lands.is-phone.is-narrow .h-title, .hz-hero-email-lands.is-phone.is-narrow .o-row { font-size: 15px; }
 </style>
 
 <div class="hz-hero-email-lands">
@@ -707,7 +720,7 @@ Pat</div>
 <script>
 (function () {
   'use strict';
-  var LOOP_END = 41.0;       // seconds; loop wraps to t=0 (resolved) here
+  var LOOP_END = 37.8;       // seconds; loop wraps to t=0 (resolved) here
   var TYPE_MS = 25;          // ms per character (the drafted email body, once per loop)
 
   function init(root) {
@@ -718,7 +731,7 @@ Pat</div>
     function fit() {
       var w = root.clientWidth || 1200;
       var phone = w < 600 || /[?&]phone=1/.test(location.search);
-      root.classList.toggle('is-phone', phone);
+      root.classList.toggle('is-phone', phone); root.classList.toggle('is-narrow', phone && (root.getBoundingClientRect().width || 420) < 420);
       var SW = phone ? 420 : 1200, SH = phone ? 720 : 750;
       var s = w / SW;
       root.style.setProperty('--s', String(s));
@@ -741,7 +754,8 @@ Pat</div>
     function flyFrom() {
       var phone = root.classList.contains('is-phone'); var r = onew.getBoundingClientRect(), st = stageEl.getBoundingClientRect(), k = st.width / (phone ? 420 : 1200) || 1;
       fly.style.setProperty('--fx', ((r.left - st.left) / k + 10) + 'px'); fly.style.setProperty('--fy', ((r.top - st.top) / k + 4) + 'px');
-      fly.style.setProperty('--tx', phone ? '18px' : '92px'); fly.style.setProperty('--ty', phone ? '60px' : '128px');
+      var SW = phone ? 420 : 1200, SH = phone ? 720 : 750, fw = fly.offsetWidth || 332, fh = fly.offsetHeight || 80;
+      fly.style.setProperty('--tx', (SW - 18 - fw + fw * .08) + 'px'); fly.style.setProperty('--ty', (SH - 18 - fh + fh * .08) + 'px');
       fly.style.transition = 'none'; fly.classList.remove('is-go', 'is-up'); reflow(fly); fly.style.transition = ''; fly.classList.add('is-up');
     }
     var ppill = $('[data-ppill]'), sh = $('[data-sh]'), stage = $('[data-stage]'), fig = $('[data-fig]'), sub = $('[data-sub]'), seg2 = $('[data-seg2]');
@@ -834,39 +848,39 @@ Pat</div>
         tin.style.transform = 'translateY(0)';
         hwin.classList.add('is-back'); owin.classList.remove('is-away'); owin.classList.add('is-on');
       } },
-      { t: 4.0, fn: function () { onew.classList.add('is-in'); } },                          // Tessa's email lands in Outlook
-      { t: 4.35, fn: function () { onew.classList.add('is-scan'); ocat.classList.add('is-on'); } },   // Horizon is reading it: sweep + "Horizon · reading"
-      { t: 6.5, fn: function () { ocat.classList.add('is-read'); } },                        // "Horizon · read"
-      { t: 6.9, fn: function () { if (!instant) flyFrom(); } },                              // the email lifts out of Outlook
-      { t: 7.2, fn: function () { if (!instant) fly.classList.add('is-go'); } },             // and flies into Horizon
-      { t: 7.5, fn: function () {                                                             // Horizon comes forward
+      { t: 3.25, fn: function () { onew.classList.add('is-in'); } },                          // Tessa's email lands in Outlook
+      { t: 3.45, fn: function () { onew.classList.add('is-scan'); ocat.classList.add('is-on'); } },   // Horizon is reading it: sweep + "Horizon · reading"
+      { t: 3.95, fn: function () { ocat.classList.add('is-read'); } },                        // "Horizon · read"
+      { t: 4.0, fn: function () { if (!instant) flyFrom(); } },                              // the email lifts out of Outlook
+      { t: 4.15, fn: function () { if (!instant) fly.classList.add('is-go'); } },             // and flies into Horizon
+      { t: 4.3, fn: function () {                                                             // Horizon comes forward
         owin.classList.remove('is-on'); owin.classList.add('is-away'); hwin.classList.remove('is-back');
       } },
-      { t: 7.9, fn: function () { toast.classList.add('is-on'); } },                         // Horizon confirms the pickup
-      { t: 10.5, fn: function () { toast.classList.remove('is-on'); } },
-      { t: 8.3, fn: function () { newrow.classList.add('is-on'); if (!instant) newrow.classList.add('hzk-in'); } },  // new list row
-      { t: 10.9, fn: function () { home.classList.remove('is-on'); proj.classList.add('is-on'); } },  // the project opens
-      { t: 11.7, fn: function () { tick('Reading the RFQ and its attachments', 'Horizon · 8:12 AM'); } },
-      { t: 13.7, fn: function () {                                                            // part match: the part from the drawing draws in
+      { t: 5.2, fn: function () { toast.classList.add('is-on'); } },                         // Horizon confirms the pickup
+      { t: 7.3, fn: function () { toast.classList.remove('is-on'); } },
+      { t: 5.1, fn: function () { newrow.classList.add('is-on'); if (!instant) newrow.classList.add('hzk-in'); } },  // new list row
+      { t: 7.7, fn: function () { home.classList.remove('is-on'); proj.classList.add('is-on'); } },  // the project opens
+      { t: 8.5, fn: function () { tick('Reading the RFQ and its attachments', 'Horizon · 8:12 AM'); } },
+      { t: 10.5, fn: function () {                                                            // part match: the part from the drawing draws in
         tick('Matching parts · LI-2140 Lift Arm Pivot Lug', 'Horizon · 8:13 AM');
         match.classList.remove('is-out'); mstate(0, 'Reading LI-2140_REV-B.pdf', 'LI-1988'); show(match);
       } },
-      { t: 14.9, fn: function () { mstate(1, 'Read: 0.50 in plate, 2 bores, 1 slot'); } },    // what it read off the drawing
-      { t: 15.8, fn: function () {                                                            // searching past jobs
+      { t: 11.7, fn: function () { mstate(1, 'Read: 0.50 in plate, 2 bores, 1 slot'); } },    // what it read off the drawing
+      { t: 12.6, fn: function () {                                                            // searching past jobs
         mstate(2, 'Searching 1,847 past jobs', 'LI-1988');
         later(400, function () { mname.textContent = 'LI-2031'; }); later(800, function () { mname.textContent = 'LI-2077'; });
       } },
-      { t: 17.0, fn: function () { mstate(3, 'Closest match: LI-2096, ran Mar 2026', 'LI-2096 · Pivot Lug'); } },
-      { t: 18.3, fn: function () { mstate(4, 'Routing suggested from LI-2096'); } },          // routing steps rise in
-      { t: 20.2, fn: function () { tick('Estimating · LI-2123, LI-2140, LI-2155, LI-2162', 'Horizon · 8:14 AM'); } },
-      { t: 22.2, fn: function () { tick('Checking the schedule', 'Horizon · 8:15 AM'); } },
-      { t: 24.2, fn: function () { match.classList.add('is-out'); later(200, function () { match.classList.remove('is-on', 'hzk-in'); }); fold(); } },
-      { t: 26.8, fn: function () { show(table); } },
-      { t: 29.6, fn: function () { show(alert); } },
-      { t: 32.2, fn: function () { show(post); typeInto(body); scrollThread(); } },
-      { t: 36.8, fn: function () { show(pfoot); } },
-      { t: 37.4, fn: function () { setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · not sent', true); } },
-      { t: 38.0, fn: function () { ppill.textContent = 'Ready'; ppill.className = 'hzk-pill ready'; } }
+      { t: 13.8, fn: function () { mstate(3, 'Closest match: LI-2096, ran Mar 2026', 'LI-2096 · Pivot Lug'); } },
+      { t: 15.1, fn: function () { mstate(4, 'Routing suggested from LI-2096'); } },          // routing steps rise in
+      { t: 17.0, fn: function () { tick('Estimating · LI-2123, LI-2140, LI-2155, LI-2162', 'Horizon · 8:14 AM'); } },
+      { t: 19.0, fn: function () { tick('Checking the schedule', 'Horizon · 8:15 AM'); } },
+      { t: 21.0, fn: function () { match.classList.add('is-out'); later(200, function () { match.classList.remove('is-on', 'hzk-in'); }); fold(); } },
+      { t: 23.6, fn: function () { show(table); } },
+      { t: 26.4, fn: function () { show(alert); } },
+      { t: 29.0, fn: function () { show(post); typeInto(body); scrollThread(); } },
+      { t: 33.6, fn: function () { show(pfoot); } },
+      { t: 34.2, fn: function () { setStage('Quote', '$59,241.00', '<a>Quote 2207</a> · not sent', true); } },
+      { t: 34.8, fn: function () { ppill.textContent = 'Ready'; ppill.className = 'hzk-pill ready'; } }
     ];
 
     // ----- runner -----

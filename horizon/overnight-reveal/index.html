@@ -66,19 +66,19 @@
 }
 .hz-overnight-reveal *,.hz-overnight-reveal *::before,.hz-overnight-reveal *::after{ box-sizing:border-box; }
 .hz-overnight-reveal-frame{ position:relative; width:100%; aspect-ratio:1200/750; overflow:hidden; background:#fff; }
-.hz-overnight-reveal-stage{ position:absolute; left:0; top:0; width:1200px; height:750px; overflow:hidden; background:#fff;
+.hz-overnight-reveal-stage{ position:absolute; left:0; top:0; width:1200px; height:750px; overflow:hidden; background:#fff; border-top:36px solid #1b1d23;
   transform-origin:0 0; transform:scale(var(--s)); pointer-events:none; user-select:none; }
 .hz-overnight-reveal.is-noanim *,.hz-overnight-reveal.is-noanim *::before,.hz-overnight-reveal.is-noanim *::after{ transition:none !important; animation:none !important; }
 
 /* title row, on the canvas, outside any product window: Gilroy. The lime dot is the one marketing accent. */
-.hz-overnight-reveal-title{ position:absolute; left:40px; top:40px; display:flex; align-items:center; gap:10px; font-size:14px;
+.hz-overnight-reveal-title{ position:absolute; left:40px; top:24px; display:flex; align-items:center; gap:10px; font-size:14px;
   font-family:'Gilroy','Inter',Arial,sans-serif; font-weight:500; }
 .hz-overnight-reveal-title b{ font-weight:600; }
 .hz-overnight-reveal-title span{ color:var(--muted); }
 .hz-overnight-reveal-title i{ font-style:normal; color:var(--line); }
 
 /* ---- left: reading panel (product content: Inter) ---- */
-.hz-overnight-reveal-left{ position:absolute; left:40px; top:90px; width:520px; height:600px; border-radius:10px; background:var(--pane);
+.hz-overnight-reveal-left{ position:absolute; left:40px; top:72px; width:520px; height:600px; border-radius:10px; background:var(--pane);
   border:1px solid var(--line); overflow:hidden; }
 .hz-overnight-reveal-clock{ position:absolute; left:24px; right:24px; top:24px; height:58px; transition:opacity .4s var(--ease); }
 .hz-overnight-reveal-clock .hz-overnight-reveal-cl{ position:absolute; top:46px; font-size:12px; font-weight:600; color:var(--muted); transition:color .4s var(--ease); }
@@ -145,10 +145,10 @@
 .hz-overnight-reveal-dbox span{ font-size:12.5px; color:#c9c9d1; font-variant-numeric:tabular-nums; }
 
 /* ---- right: the result card (product content: Inter) ---- */
-.hz-overnight-reveal-right{ position:absolute; left:600px; top:90px; width:560px; height:600px; border-radius:10px; background:#fff; border:1px solid var(--line);
+.hz-overnight-reveal-right{ position:absolute; left:600px; top:72px; width:560px; height:600px; border-radius:10px; background:#fff; border:1px solid var(--line);
   box-shadow:0 4px 18px rgba(0,0,0,.15); padding:24px; }
 .hz-overnight-reveal-rhead{ display:flex; align-items:center; gap:10px; }
-.hz-overnight-reveal-av{ width:30px; height:30px; border-radius:50%; background:var(--spark-bg); color:var(--spark); display:grid; place-items:center; font-size:15px; line-height:1; }
+.hz-overnight-reveal-av{ width:30px; height:30px; border-radius:6px; background:var(--spark-bg); color:var(--spark); display:grid; place-items:center; font-size:15px; line-height:1; }
 .hz-overnight-reveal.is-reading .hz-overnight-reveal-av{ animation:hz-overnight-reveal-pulse 1.2s ease-in-out infinite; }
 .hz-overnight-reveal.is-paused .hz-overnight-reveal-av{ animation-play-state:paused; }
 .hz-overnight-reveal-rhead b{ display:block; font-size:13.5px; font-weight:600; }
@@ -162,7 +162,7 @@
 .hz-overnight-reveal-eb{ display:block; margin:14px 0 2px; font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); line-height:1.3; }
 .hz-overnight-reveal-line{ display:flex; gap:10px; align-items:flex-start; padding:6px 0; font-size:14px; line-height:1.45; min-height:32px; }
 .hz-overnight-reveal-line > div{ flex:1 1 auto; }
-.hz-overnight-reveal-line i{ flex:0 0 auto; width:18px; height:18px; margin-top:1px; border-radius:50%; background:var(--ok-bg); border:1px solid var(--ok); display:grid; place-items:center; }
+.hz-overnight-reveal-line i{ flex:0 0 auto; width:18px; height:18px; margin-top:1px; border-radius:50%; background:#1d63ed; border:0; display:grid; place-items:center; }
 .hz-overnight-reveal-line i svg{ width:10px; height:10px; }
 /* the real "Evaluating" flag on a learned rule: dot + text, no chip */
 .hz-overnight-reveal-flag{ flex:0 0 auto; display:inline-flex; align-items:center; gap:6px; margin-top:3px; margin-left:4px; font-size:11.5px; font-weight:500; color:var(--muted); white-space:nowrap; line-height:1.3; }
@@ -190,18 +190,38 @@
 /* ---------- phone: a 420x700 stage showing the shop letter. The reading panel is hidden. ---------- */
 .hz-overnight-reveal.is-phone .hz-overnight-reveal-frame { aspect-ratio: 420/740; }
 .hz-overnight-reveal.is-phone .hz-overnight-reveal-stage { width: 420px; height: 740px; }
-.hz-overnight-reveal.is-phone .hz-overnight-reveal-title { left: 20px; top: 20px; font-size: 13px; }
-.hz-overnight-reveal.is-phone .hz-overnight-reveal-left { left: 20px; top: 56px; width: 380px; height: 664px; transition: opacity .5s var(--ease); }
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-title { left: 20px; top: 16px; font-size: 13px; }
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-left { left: 20px; top: 52px; width: 380px; height: 640px; transition: opacity .5s var(--ease); }
 .hz-overnight-reveal.is-phone .hz-overnight-reveal-right { opacity: 0; transition: opacity .6s var(--ease); }
 .hz-overnight-reveal.is-phone:has(.hz-overnight-reveal-lines .is-on) .hz-overnight-reveal-left { opacity: 0; }
 .hz-overnight-reveal.is-phone:has(.hz-overnight-reveal-lines .is-on) .hz-overnight-reveal-right { opacity: 1; }
 .hz-overnight-reveal.is-phone .hz-overnight-reveal-glow { left: -120px; top: -60px; width: 660px; height: 660px; }
-.hz-overnight-reveal.is-phone .hz-overnight-reveal-right { left: 20px; top: 56px; width: 380px; height: 664px; padding: 18px; }
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-right { left: 20px; top: 52px; width: 380px; height: 640px; padding: 18px; }
+
+/* the same dark chrome as the hero and thread windows (Nov 10): a 36px title bar with traffic lights; the light letter is the content */
+.hz-overnight-reveal-os{ position:absolute; left:0; top:-36px; width:100%; height:36px; background:#1b1d23; border-bottom:1px solid #2b2d33; display:flex; align-items:center; justify-content:center; font-family:Inter,system-ui,sans-serif; font-size:12.5px; color:#a9abae; }
+.hz-overnight-reveal-os i{ position:absolute; left:14px; top:12.5px; width:11px; height:11px; border-radius:50%; background:#4b4d53; }
+.hz-overnight-reveal-os i + i{ left:31px; } .hz-overnight-reveal-os i + i + i{ left:48px; }
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-os{ font-size:13px; }
+.hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-os{ font-size:15px; }
+
+.hz-overnight-reveal-rr i{ width:16px; height:16px; border-radius:50%; background:#1d63ed; display:grid; place-items:center; flex:0 0 auto; margin-left:auto; } .hz-overnight-reveal-rr i svg{ width:9px; height:9px; }
+
+/* phone type floor (Nov 10): nothing under 13px; 15px stage-px on frames narrower than 420px */
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-cl, .hz-overnight-reveal.is-phone .hz-overnight-reveal-now, .hz-overnight-reveal.is-phone .hz-overnight-reveal-stat small, .hz-overnight-reveal.is-phone .hz-overnight-reveal-dbox span, .hz-overnight-reveal.is-phone .hz-overnight-reveal-rhead span, .hz-overnight-reveal.is-phone .hz-overnight-reveal-rhead .hz-overnight-reveal-when, .hz-overnight-reveal.is-phone .hz-overnight-reveal-eb, .hz-overnight-reveal.is-phone .hz-overnight-reveal-flag, .hz-overnight-reveal.is-phone .hz-overnight-reveal-foot, .hz-overnight-reveal.is-phone .hz-overnight-reveal-fc, .hz-overnight-reveal.is-phone .hz-overnight-reveal-rr, .hz-overnight-reveal.is-phone .hz-overnight-reveal-title { font-size: 13px; }
+.hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-cl, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-now, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-stat small, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-dbox span, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-rhead span, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-rhead .hz-overnight-reveal-when, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-eb, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-flag, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-foot, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-fc, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-rr, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-title { font-size: 15px; }
+
+/* phone: tighter letter so the type floor still fits the 640px panel */
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-line{ padding:4px 0; min-height:28px; }
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-foot{ margin-top:10px; }
+.hz-overnight-reveal.is-phone .hz-overnight-reveal-rules{ margin-top:10px; padding-top:8px; }
+.hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-eb, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-foot, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-flag{ font-size:13px; }
 </style>
 
 <div class="hz-overnight-reveal">
   <div class="hz-overnight-reveal-frame">
     <div class="hz-overnight-reveal-stage">
+      <div class="hz-overnight-reveal-os"><i></i><i></i><i></i>Horizon</div>
 
       <div class="hz-overnight-reveal-title">
         <b>Horizon</b><i>|</i><span>First weekend on the shop's inbox and files</span>
@@ -307,7 +327,7 @@
     ['timer', 'Job timers', 'laser, brake, powder coat, VF-4'],
     ['quote', 'Old quotes', 'won and lost']
   ];
-  var CHECK = '<i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#1f8a4c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></i>';
+  var CHECK = '<i><svg viewBox="0 0 10 10" fill="none"><path d="M2 5.2l2.2 2.2L8 3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i>';
 
   function init(root){
     var $ = function(id){ return root.querySelector('#' + SLUG + '-' + id); };
@@ -335,7 +355,7 @@
     function fit(){
       var w = root.clientWidth || 1200;
       var phone = w < 600 || /[?&]phone=1/.test(location.search);
-      root.classList.toggle('is-phone', phone);
+      root.classList.toggle('is-phone', phone); root.classList.toggle('is-narrow', phone && (root.getBoundingClientRect().width || 420) < 420);
       var SW = phone ? 420 : 1200, SH = phone ? 740 : 750, s = w / SW;
       root.style.setProperty('--s', s.toFixed(5));
       if (!(window.CSS && CSS.supports && CSS.supports('aspect-ratio', '1 / 1'))) frame.style.height = (SH * s) + 'px';
