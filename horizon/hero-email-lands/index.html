@@ -338,7 +338,7 @@
 .hz-hero-email-lands .hz-pages { flex: 1 1 auto; min-width: 0; position: relative; }
 .hz-hero-email-lands .hz-page { position: absolute; inset: 0; display: flex; opacity: 0; transition: opacity .4s ease-out; }
 .hz-hero-email-lands .hz-page.is-on { opacity: 1; z-index: 2; }
-.hz-hero-email-lands .hz-presence { width: 28px; height: 28px; border-radius: 50%; background: #3b3f1f; color: #c7c98a; font-size: 12px; font-weight: 600; display: grid; place-items: center; flex: none; }
+.hz-hero-email-lands .hz-presence { width: 28px; height: 28px; border-radius: 6px; background: #2a2d36; color: #fff; font-size: 12px; font-weight: 600; display: grid; place-items: center; flex: none; }
 .hz-hero-email-lands .hzk-h1 .hz-presence { margin-left: auto; }
 /* list: the new row */
 .hz-hero-email-lands .hz-newrow { display: none; }
@@ -731,7 +731,7 @@ Pat</div>
     function fit() {
       var w = root.clientWidth || 1200;
       var phone = w < 600 || /[?&]phone=1/.test(location.search);
-      root.classList.toggle('is-phone', phone); root.classList.toggle('is-narrow', phone && (root.getBoundingClientRect().width || 420) < 420);
+      root.classList.toggle('is-phone', phone); root.classList.toggle('is-narrow', phone && (root.getBoundingClientRect().width || 420) < 420); /* phone type floor (Nov 10): every text node renders at 13 CSS px or more */ if(!root.__hzFloor){root.__hzFloor=function(){var st=root.querySelector('.hz-hero-email-lands-stage')||root;var narrow=root.classList.contains('is-narrow');var k=(st.getBoundingClientRect().width/420)||1,f=narrow?Math.ceil(13/k):0;var els=st.querySelectorAll('*');for(var i=0;i<els.length;i++){var e=els[i];if(e.namespaceURI&&e.namespaceURI.indexOf('svg')>-1)continue;if(!narrow){if(e.getAttribute('data-hz-floor')){e.style.fontSize='';e.removeAttribute('data-hz-floor');}continue;}var fs=parseFloat(getComputedStyle(e).fontSize);if(fs&&fs<f){e.style.fontSize=f+'px';e.setAttribute('data-hz-floor','1');}}};new MutationObserver(function(){root.__hzFloor();}).observe(root,{childList:true,subtree:true});}root.__hzFloor();
       var SW = phone ? 420 : 1200, SH = phone ? 720 : 750;
       var s = w / SW;
       root.style.setProperty('--s', String(s));

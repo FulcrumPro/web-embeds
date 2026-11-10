@@ -199,13 +199,13 @@
 .hz-overnight-reveal.is-phone .hz-overnight-reveal-right { left: 20px; top: 52px; width: 380px; height: 640px; padding: 18px; }
 
 /* the same dark chrome as the hero and thread windows (Nov 10): a 36px title bar with traffic lights; the light letter is the content */
-.hz-overnight-reveal-os{ position:absolute; left:0; top:-36px; width:100%; height:36px; background:#1b1d23; border-bottom:1px solid #2b2d33; display:flex; align-items:center; justify-content:center; font-family:Inter,system-ui,sans-serif; font-size:12.5px; color:#a9abae; }
+.hz-overnight-reveal-os{ position:absolute; left:0; top:-36px; width:100%; height:36px; z-index:2; background:#1b1d23; border-bottom:1px solid #2b2d33; display:flex; align-items:center; justify-content:center; font-family:Inter,system-ui,sans-serif; font-size:12.5px; color:#a9abae; }
 .hz-overnight-reveal-os i{ position:absolute; left:14px; top:12.5px; width:11px; height:11px; border-radius:50%; background:#4b4d53; }
 .hz-overnight-reveal-os i + i{ left:31px; } .hz-overnight-reveal-os i + i + i{ left:48px; }
 .hz-overnight-reveal.is-phone .hz-overnight-reveal-os{ font-size:13px; }
 .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-os{ font-size:15px; }
 
-.hz-overnight-reveal-rr i{ width:16px; height:16px; border-radius:50%; background:#1d63ed; display:grid; place-items:center; flex:0 0 auto; margin-left:auto; } .hz-overnight-reveal-rr i svg{ width:9px; height:9px; }
+.hz-overnight-reveal-rr i{ width:16px; height:16px; border-radius:50%; border:0; background:#1d63ed; display:grid; place-items:center; flex:0 0 auto; margin-left:auto; } .hz-overnight-reveal-rr i svg{ width:9px; height:9px; }
 
 /* phone type floor (Nov 10): nothing under 13px; 15px stage-px on frames narrower than 420px */
 .hz-overnight-reveal.is-phone .hz-overnight-reveal-cl, .hz-overnight-reveal.is-phone .hz-overnight-reveal-now, .hz-overnight-reveal.is-phone .hz-overnight-reveal-stat small, .hz-overnight-reveal.is-phone .hz-overnight-reveal-dbox span, .hz-overnight-reveal.is-phone .hz-overnight-reveal-rhead span, .hz-overnight-reveal.is-phone .hz-overnight-reveal-rhead .hz-overnight-reveal-when, .hz-overnight-reveal.is-phone .hz-overnight-reveal-eb, .hz-overnight-reveal.is-phone .hz-overnight-reveal-flag, .hz-overnight-reveal.is-phone .hz-overnight-reveal-foot, .hz-overnight-reveal.is-phone .hz-overnight-reveal-fc, .hz-overnight-reveal.is-phone .hz-overnight-reveal-rr, .hz-overnight-reveal.is-phone .hz-overnight-reveal-title { font-size: 13px; }
@@ -216,6 +216,15 @@
 .hz-overnight-reveal.is-phone .hz-overnight-reveal-foot{ margin-top:10px; }
 .hz-overnight-reveal.is-phone .hz-overnight-reveal-rules{ margin-top:10px; padding-top:8px; }
 .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-eb, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-foot, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-flag{ font-size:13px; }
+
+/* narrow phones: the 13px floor grows the letter, so the panel runs taller and tighter (top 48, height 648; 2px line padding; 8px eyebrow gaps) */
+.hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-line{ padding:2px 0; min-height:24px; line-height:1.3; }
+.hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-right, .hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-left{ top:48px; height:648px; }
+.hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-right{ padding:14px 16px; }
+.hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-eb{ margin:8px 0 0; }
+.hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-rules{ margin-top:6px; padding-top:4px; }
+.hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-foot{ margin-top:6px; line-height:1.3; }
+.hz-overnight-reveal.is-phone.is-narrow .hz-overnight-reveal-h{ margin-bottom:4px; }
 </style>
 
 <div class="hz-overnight-reveal">
@@ -355,7 +364,7 @@
     function fit(){
       var w = root.clientWidth || 1200;
       var phone = w < 600 || /[?&]phone=1/.test(location.search);
-      root.classList.toggle('is-phone', phone); root.classList.toggle('is-narrow', phone && (root.getBoundingClientRect().width || 420) < 420);
+      root.classList.toggle('is-phone', phone); root.classList.toggle('is-narrow', phone && (root.getBoundingClientRect().width || 420) < 420); /* phone type floor (Nov 10): every text node renders at 13 CSS px or more */ if(!root.__hzFloor){root.__hzFloor=function(){var st=root.querySelector('.hz-overnight-reveal-stage')||root;var narrow=root.classList.contains('is-narrow');var k=(st.getBoundingClientRect().width/420)||1,f=narrow?Math.ceil(13/k):0;var els=st.querySelectorAll('*');for(var i=0;i<els.length;i++){var e=els[i];if(e.namespaceURI&&e.namespaceURI.indexOf('svg')>-1)continue;if(!narrow){if(e.getAttribute('data-hz-floor')){e.style.fontSize='';e.removeAttribute('data-hz-floor');}continue;}var fs=parseFloat(getComputedStyle(e).fontSize);if(fs&&fs<f){e.style.fontSize=f+'px';e.setAttribute('data-hz-floor','1');}}};new MutationObserver(function(){root.__hzFloor();}).observe(root,{childList:true,subtree:true});}root.__hzFloor();
       var SW = phone ? 420 : 1200, SH = phone ? 740 : 750, s = w / SW;
       root.style.setProperty('--s', s.toFixed(5));
       if (!(window.CSS && CSS.supports && CSS.supports('aspect-ratio', '1 / 1'))) frame.style.height = (SH * s) + 'px';

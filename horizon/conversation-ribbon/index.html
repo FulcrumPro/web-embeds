@@ -196,7 +196,7 @@
 .hz-conversation-ribbon .cr-head .cr-pillwrap { display: inline-flex; margin-left: 4px; }
 .hz-conversation-ribbon .cr-head .right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
 .hz-conversation-ribbon .cr-head .more { width: 28px; height: 28px; border-radius: 7px; display: grid; place-items: center; color: var(--mute2); font-size: 16px; letter-spacing: 1px; font-weight: 600; }
-.hz-conversation-ribbon .cr-me { width: 28px; height: 28px; border-radius: 50%; background: var(--avatar); color: #fff; font-size: 12px; font-weight: 600; display: grid; place-items: center; }
+.hz-conversation-ribbon .cr-me { width: 28px; height: 28px; border-radius: 6px; background: #2a2d36; color: #fff; font-size: 12px; font-weight: 600; display: grid; place-items: center; }
 .hz-conversation-ribbon .cr-cols { flex: 1 1 auto; min-height: 0; display: flex; }
 .hz-conversation-ribbon .cr-rail { width: 300px; flex: none; background: var(--list); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
 .hz-conversation-ribbon .cr-back { flex: none; display: flex; align-items: center; gap: 6px; padding: 12px 16px 6px; font-size: 13px; color: var(--link); font-weight: 400; }
@@ -404,7 +404,7 @@
     function fit() {
       var w = root.clientWidth || 1200;
       var phone = w < 600 || /[?&]phone=1/.test(location.search);
-      root.classList.toggle('is-phone', phone); root.classList.toggle('is-narrow', phone && (root.getBoundingClientRect().width || 420) < 420);
+      root.classList.toggle('is-phone', phone); root.classList.toggle('is-narrow', phone && (root.getBoundingClientRect().width || 420) < 420); /* phone type floor (Nov 10): every text node renders at 13 CSS px or more */ if(!root.__hzFloor){root.__hzFloor=function(){var st=root.querySelector('.hz-conversation-ribbon-stage')||root;var narrow=root.classList.contains('is-narrow');var k=(st.getBoundingClientRect().width/420)||1,f=narrow?Math.ceil(13/k):0;var els=st.querySelectorAll('*');for(var i=0;i<els.length;i++){var e=els[i];if(e.namespaceURI&&e.namespaceURI.indexOf('svg')>-1)continue;if(!narrow){if(e.getAttribute('data-hz-floor')){e.style.fontSize='';e.removeAttribute('data-hz-floor');}continue;}var fs=parseFloat(getComputedStyle(e).fontSize);if(fs&&fs<f){e.style.fontSize=f+'px';e.setAttribute('data-hz-floor','1');}}};new MutationObserver(function(){root.__hzFloor();}).observe(root,{childList:true,subtree:true});}root.__hzFloor();
       var SW = phone ? 420 : 1200, SH = phone ? 720 : 750, s = w / SW;
       root.style.setProperty('--s', String(s));
       root.style.height = Math.round(SH * s) + 'px';
