@@ -453,7 +453,8 @@
 .hz-hero-email-lands.is-phone .hz-hero-email-lands-stage,
 .hz-hero-email-lands.is-phone .o-win,
 .hz-hero-email-lands.is-phone .h-win { width: 420px; height: 720px; }
-.hz-hero-email-lands.is-phone .o-body { grid-template-columns: 1fr; }
+.hz-hero-email-lands.is-phone .o-body { grid-template-columns: minmax(0, 1fr); }
+.hz-hero-email-lands.is-phone .o-list { min-width: 0; max-width: 100%; }
 .hz-hero-email-lands.is-phone .o-nav,
 .hz-hero-email-lands.is-phone .o-read { display: none; }
 .hz-hero-email-lands.is-phone .o-list { border-right: 0; }
