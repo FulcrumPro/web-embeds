@@ -1,0 +1,292 @@
+<!doctype html>
+<!--
+  Horizon - shop-knowledge - "What Horizon learned at Halden Metalworks"
+  A still, not a loop: the Knowledge screen of the shipped dark Horizon UI (rail Projects / Knowledge / Insights / Settings),
+  Shop Profile tab as merged Nov 16 (PR 20413): header, five KPI tiles, Your typical work, Your customers, Fees table,
+  How the shop's quote emails read. Filled with the Halden Metalworks sample set (Pat, Larkspur, Marlin Marine, Westbrook,
+  Kestrel, Harbor Fluid, Pinecrest, Tri-County; vendors Summit, Prairie, Apex). Tabs Rules 17 and Library 6 follow Alex's
+  Nov 15 Knowledge design. Design 1200x750, scales to width; under 700px the stage reflows to one column at 640 wide.
+  No libraries, no images, no audio. Simulated on sample data; every number is invented.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Horizon: what it learned at Halden Metalworks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+html, body { margin: 0; padding: 0; background: #fff; }
+body { display: flex; justify-content: center; }
+.hz-shop-knowledge { --s: 1; position: relative; width: 100%; max-width: 1200px; overflow: hidden; }
+.hz-shop-knowledge-stage { position: absolute; top: 0; left: 0; width: 1200px; height: 750px; transform: scale(var(--s)); transform-origin: 0 0; overflow: hidden; background: #131418; }
+
+/* ---- kit tokens (horizon/_kit/horizon-ui.css, prefixed) ---- */
+.hz-shop-knowledge { --app: #131418; --list: #191a1f; --panel: #191a1f; --card: #191a1f; --card2: #27292e; --line: #2b2d33;
+  --line2: #3b3d43; --edge: #3b3d43; --edge2: #4b4d53; --fg: #e6e6f0; --fg-strong: #f2f2f8; --mute: rgba(230,230,240,.6);
+  --mute2: rgba(230,230,240,.72); --mute3: rgba(230,230,240,.55); --hover: rgba(255,255,255,.06);
+  --link: #6788ff; --dot: #6788ff; --count: #6788ff; --send: #3f6fe0; --avatar: #8a8f3a; --active-bg: #162d55;
+  --spark-bg: #2a2740; --spark-fg: #c4baf5; --warn: #cf976a; --good: #3f8c63; --good-fg: #6da885;
+  --info-bg: #1f2a3a; --info-fg: #8fa8ff; --warn-bg: #452c17; --warn-fg: #c18b5e; --tag-bg: #323335; --tag-fg: #a9abae;
+  --ok-bg: #1d3a2a; --ok-fg: #6da885; --pend-bg: #242038; --pend-fg: #8e89b2;
+  --font: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+.hz-shop-knowledge .hzk-app { display: flex; width: 100%; height: 100%; background: var(--app); color: var(--fg); font-family: var(--font);
+  font-weight: 300; font-size: 14px; line-height: 1.5; overflow: hidden; -webkit-font-smoothing: antialiased; }
+.hz-shop-knowledge .hzk-app * { box-sizing: border-box; }
+.hz-shop-knowledge .hzk-app button { font: inherit; color: inherit; cursor: default; }
+.hz-shop-knowledge .hzk-rail { width: 72px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 4px; border-right: 1px solid var(--line); }
+.hz-shop-knowledge .hzk-rail-item { width: 64px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 0; border: 0; border-radius: 8px; background: none; color: var(--mute2); font-size: 10.5px; letter-spacing: -.01em; }
+.hz-shop-knowledge .hzk-rail-item.is-on { background: var(--active-bg); color: var(--link); }
+.hz-shop-knowledge .hzk-rail-item svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hz-shop-knowledge .hzk-rail-spacer { flex: 1 1 auto; }
+.hz-shop-knowledge .hzk-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--avatar); color: #fff; font-size: 13px; font-weight: 600; display: grid; place-items: center; margin-bottom: 4px; }
+.hz-shop-knowledge .hzk-pill { flex: none; padding: 0 8px; border-radius: 12px; line-height: 20px; font-size: 11px; font-weight: 600; background: var(--tag-bg); color: var(--tag-fg); white-space: nowrap; }
+.hz-shop-knowledge .hzk-pill.warn { background: var(--warn-bg); color: var(--warn-fg); }
+.hz-shop-knowledge .hzk-pill.info { background: var(--info-bg); color: var(--info-fg); }
+.hz-shop-knowledge .hzk-pill.pend { background: var(--pend-bg); color: var(--pend-fg); }
+.hz-shop-knowledge .hzk-tag { display: inline-block; padding: 0 8px; border-radius: 10px; line-height: 19px; font-size: 11px; font-weight: 600; background: var(--tag-bg); color: var(--tag-fg); white-space: nowrap; }
+.hz-shop-knowledge .hzk-tag.warn { background: var(--warn-bg); color: var(--warn-fg); }
+
+/* ---- the Knowledge page (Shop Profile tab) ---- */
+.hz-shop-knowledge .sk-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.hz-shop-knowledge .sk-head { padding: 16px 22px 0; border-bottom: 1px solid var(--line); }
+.hz-shop-knowledge .sk-head-row { display: flex; align-items: flex-start; gap: 16px; }
+.hz-shop-knowledge .sk-title { flex: 1 1 auto; min-width: 0; }
+.hz-shop-knowledge .sk-title h1 { margin: 0; font-size: 20px; font-weight: 600; color: var(--fg-strong); line-height: 1.2; }
+.hz-shop-knowledge .sk-title p { margin: 4px 0 0; font-size: 13px; color: var(--mute2); }
+.hz-shop-knowledge .sk-meta { flex: none; text-align: right; font-size: 12px; color: var(--mute2); line-height: 1.5; padding-top: 2px; }
+.hz-shop-knowledge .sk-meta b { display: block; font-weight: 500; color: var(--fg); }
+.hz-shop-knowledge .sk-meta .where { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; padding: 0 8px; border-radius: 10px; line-height: 20px; font-size: 11px; font-weight: 600; background: var(--ok-bg); color: var(--ok-fg); }
+.hz-shop-knowledge .sk-meta .where svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.hz-shop-knowledge .sk-tabs { display: flex; gap: 22px; margin-top: 12px; }
+.hz-shop-knowledge .sk-tab { padding: 0 0 9px; border: 0; background: none; font-size: 13.5px; font-weight: 500; color: var(--mute2); border-bottom: 2px solid transparent; display: flex; gap: 6px; align-items: baseline; }
+.hz-shop-knowledge .sk-tab i { font-style: normal; font-size: 12px; color: var(--mute3); font-weight: 500; }
+.hz-shop-knowledge .sk-tab.is-on { color: var(--fg-strong); border-bottom-color: var(--link); }
+.hz-shop-knowledge .sk-tab.is-on i { color: var(--count); }
+.hz-shop-knowledge .sk-body { flex: 1 1 auto; min-height: 0; padding: 14px 22px 0; display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
+
+/* KPI tiles */
+.hz-shop-knowledge .sk-kpis { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; }
+.hz-shop-knowledge .sk-kpi { border: 1px solid var(--line2); border-radius: 10px; background: var(--card); padding: 10px 12px 9px; display: flex; flex-direction: column; gap: 1px; }
+.hz-shop-knowledge .sk-kpi b { font-size: 20px; font-weight: 600; color: var(--fg-strong); line-height: 1.15; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.hz-shop-knowledge .sk-kpi span { font-size: 11.5px; color: var(--mute2); }
+.hz-shop-knowledge .sk-kpi small { font-size: 11px; color: var(--mute3); }
+
+/* groups */
+.hz-shop-knowledge .sk-row { display: grid; grid-template-columns: 1.05fr 1fr 1.15fr; gap: 10px; align-items: stretch; }
+.hz-shop-knowledge .sk-group { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.hz-shop-knowledge .sk-gh { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.hz-shop-knowledge .sk-gh h2 { margin: 0; font-size: 13px; font-weight: 600; color: var(--fg-strong); white-space: nowrap; }
+.hz-shop-knowledge .sk-gh span { font-size: 11.5px; color: var(--mute3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hz-shop-knowledge .sk-card { flex: 1 1 auto; border: 1px solid var(--line2); border-radius: 10px; background: var(--card); padding: 11px 13px 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.hz-shop-knowledge .sk-stat { display: flex; align-items: baseline; gap: 6px; }
+.hz-shop-knowledge .sk-stat b { font-size: 22px; font-weight: 600; color: var(--fg-strong); line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.hz-shop-knowledge .sk-stat span { font-size: 12px; color: var(--mute2); }
+.hz-shop-knowledge .sk-card h3 { margin: 0; font-size: 13px; font-weight: 500; color: var(--fg); line-height: 1.4; }
+.hz-shop-knowledge .sk-detail { margin: 0; font-size: 12px; line-height: 1.5; color: var(--mute2); }
+.hz-shop-knowledge .sk-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; gap: 2px; }
+.hz-shop-knowledge .sk-bar i { display: block; height: 100%; }
+.hz-shop-knowledge .sk-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0; padding: 0; list-style: none; font-size: 11.5px; color: var(--mute2); }
+.hz-shop-knowledge .sk-legend li { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+.hz-shop-knowledge .sk-legend i { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+.hz-shop-knowledge .sk-cites { display: flex; gap: 6px; align-items: baseline; font-size: 11px; color: var(--mute3); margin-top: auto; line-height: 1.45; }
+.hz-shop-knowledge .sk-cites b { font-weight: 500; white-space: nowrap; }
+.hz-shop-knowledge .sk-cites span { color: var(--mute); }
+.hz-shop-knowledge .sk-split { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.hz-shop-knowledge .sk-split .sk-stat b { font-size: 19px; }
+.hz-shop-knowledge .sk-split .sk-mini { display: flex; flex-direction: column; gap: 6px; }
+.hz-shop-knowledge .sk-split .sk-mini .sk-bar { height: 6px; }
+
+/* slot colors: the kit's muted palette */
+.hz-shop-knowledge [data-slot="0"] { background: #6788ff; }
+.hz-shop-knowledge [data-slot="1"] { background: #8a7fe0; }
+.hz-shop-knowledge [data-slot="2"] { background: #3f8c63; }
+.hz-shop-knowledge [data-slot="3"] { background: #cf976a; }
+.hz-shop-knowledge [data-slot="other"] { background: #3b3d43; }
+.hz-shop-knowledge .sk-legend li[data-slot] { background: none; }
+.hz-shop-knowledge .sk-legend li[data-slot="0"] i { background: #6788ff; }
+.hz-shop-knowledge .sk-legend li[data-slot="1"] i { background: #8a7fe0; }
+.hz-shop-knowledge .sk-legend li[data-slot="2"] i { background: #3f8c63; }
+.hz-shop-knowledge .sk-legend li[data-slot="3"] i { background: #cf976a; }
+.hz-shop-knowledge .sk-legend li[data-slot="other"] i { background: #4b4d53; }
+
+/* quote-email tone panel */
+.hz-shop-knowledge .sk-tone { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; }
+.hz-shop-knowledge .sk-tone div { display: flex; flex-direction: column; gap: 0; min-width: 0; }
+.hz-shop-knowledge .sk-tone dt { font-size: 11px; color: var(--mute3); }
+.hz-shop-knowledge .sk-tone dd { margin: 0; font-size: 12.5px; font-weight: 500; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hz-shop-knowledge .sk-rests { display: grid; grid-template-columns: 92px minmax(0,1fr); gap: 5px 10px; margin: 0; padding-top: 8px; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.45; }
+.hz-shop-knowledge .sk-rests dt { color: var(--mute3); }
+.hz-shop-knowledge .sk-rests dd { margin: 0; color: rgba(230,230,240,.86); }
+.hz-shop-knowledge .sk-rests dd q { quotes: "\201C" "\201D"; color: var(--fg); }
+
+/* fees table */
+.hz-shop-knowledge .sk-fees { display: grid; grid-template-columns: 220px minmax(0,1fr); gap: 14px; align-items: start; }
+.hz-shop-knowledge .sk-fees .sk-stat { flex-direction: column; align-items: flex-start; gap: 2px; }
+.hz-shop-knowledge .sk-fees .sk-stat b { font-size: 24px; }
+.hz-shop-knowledge .sk-fees h3 { margin-top: 2px; }
+.hz-shop-knowledge .sk-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.hz-shop-knowledge .sk-table th, .hz-shop-knowledge .sk-table td { text-align: left; padding: 6px 10px 6px 0; border-top: 1px solid var(--line); vertical-align: top; }
+.hz-shop-knowledge .sk-table thead th { border-top: 0; padding-top: 0; padding-bottom: 5px; font-size: 11px; font-weight: 500; color: var(--mute3); }
+.hz-shop-knowledge .sk-table th[scope="row"] { font-weight: 500; color: var(--fg); }
+.hz-shop-knowledge .sk-table .num { text-align: right; font-variant-numeric: tabular-nums; padding-right: 18px; }
+.hz-shop-knowledge .sk-table .strong { font-weight: 500; color: var(--fg); }
+.hz-shop-knowledge .sk-table .sub { display: block; font-size: 11px; color: var(--mute3); }
+.hz-shop-knowledge .sk-table .chips { display: flex; gap: 5px; flex-wrap: nowrap; }
+.hz-shop-knowledge .sk-table .chips .hzk-tag { font-weight: 500; }
+
+/* phone: one column at 640 wide, rail hidden */
+@media (max-width: 699px) {
+  .hz-shop-knowledge-stage { width: 640px; height: 1120px; }
+  .hz-shop-knowledge .hzk-rail { display: none; }
+  .hz-shop-knowledge .sk-meta { display: none; }
+  .hz-shop-knowledge .sk-kpis { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .hz-shop-knowledge .sk-kpi:nth-child(n+4) { display: none; }
+  .hz-shop-knowledge .sk-row { grid-template-columns: 1fr; }
+  .hz-shop-knowledge .sk-group--tone { display: none; }
+  .hz-shop-knowledge .sk-fees { grid-template-columns: 1fr; }
+  .hz-shop-knowledge .sk-table th:nth-child(4), .hz-shop-knowledge .sk-table td:nth-child(4) { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="hz-shop-knowledge" data-still="1">
+  <div class="hz-shop-knowledge-stage">
+    <div class="hzk-app">
+      <nav class="hzk-rail">
+        <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/></svg>Projects</button>
+        <button class="hzk-rail-item is-on"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Knowledge</button>
+        <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>Insights</button>
+        <span class="hzk-rail-spacer"></span>
+        <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
+        <span class="hzk-avatar">P</span>
+      </nav>
+
+      <main class="sk-main">
+        <header class="sk-head">
+          <div class="sk-head-row">
+            <div class="sk-title">
+              <h1>Knowledge</h1>
+              <p>What Horizon has learned about Halden Metalworks: how you quote, who you quote for, and what you charge.</p>
+            </div>
+            <div class="sk-meta">
+              <b>Learned from 1,847 jobs, 2,310 quotes, and 6,120 emails</b>
+              Updated this morning, 6:10 AM
+              <br /><span class="where"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Stored on this Mac</span>
+            </div>
+          </div>
+          <div class="sk-tabs">
+            <button class="sk-tab is-on">Profile</button>
+            <button class="sk-tab">Rules <i>17</i></button>
+            <button class="sk-tab">Library <i>6</i></button>
+          </div>
+        </header>
+
+        <div class="sk-body">
+          <div class="sk-kpis">
+            <div class="sk-kpi"><b>1,847</b><span>completed jobs</span><small>Fulcrum, 2023 to today</small></div>
+            <div class="sk-kpi"><b>2,310</b><span>quotes read</span><small>412 sent by you</small></div>
+            <div class="sk-kpi"><b>212</b><span>customers</span><small>38 vendors</small></div>
+            <div class="sk-kpi"><b>61%</b><span>repeat parts</span><small>priced from the last job</small></div>
+            <div class="sk-kpi"><b>1.4 days</b><span>RFQ to quote</span><small>your median, last 12 months</small></div>
+          </div>
+
+          <div class="sk-row">
+            <section class="sk-group">
+              <div class="sk-gh"><h2>Your typical work</h2><span>What kind of work comes through</span></div>
+              <div class="sk-card">
+                <div class="sk-stat"><b>1,847</b><span>completed jobs</span></div>
+                <h3>Milled parts are 34% of the work.</h3>
+                <p class="sk-detail">Brackets, mounts, and housings in 6061 and 304. Weldments follow, most of them for Larkspur and Tri-County.</p>
+                <div class="sk-bar"><i data-slot="0" style="width:34%"></i><i data-slot="1" style="width:24%"></i><i data-slot="2" style="width:19%"></i><i data-slot="3" style="width:14%"></i><i data-slot="other" style="width:9%"></i></div>
+                <ul class="sk-legend"><li data-slot="0"><i></i>Milled parts 34%</li><li data-slot="1"><i></i>Weldments 24%</li><li data-slot="2"><i></i>Sheet metal 19%</li><li data-slot="3"><i></i>Turned 14%</li><li data-slot="other"><i></i>Other 9%</li></ul>
+                <div class="sk-cites"><b>Based on</b><span>Fulcrum jobs, 2023 to today · routings on 1,847 jobs</span></div>
+              </div>
+            </section>
+
+            <section class="sk-group">
+              <div class="sk-gh"><h2>Your customers</h2><span>Who you quote for</span></div>
+              <div class="sk-card">
+                <div class="sk-stat"><b>212</b><span>customers</span></div>
+                <h3>The largest customer asks for 18% of quotes.</h3>
+                <p class="sk-detail">Larkspur Implement Co. Then Marlin Marine, Westbrook Sensors, Kestrel Medical, and Harbor Fluid Systems.</p>
+                <div class="sk-split">
+                  <div class="sk-mini">
+                    <div class="sk-bar"><i data-slot="0" style="width:18%"></i><i data-slot="1" style="width:31%"></i><i data-slot="other" style="width:51%"></i></div>
+                    <ul class="sk-legend"><li data-slot="0"><i></i>Largest 18%</li><li data-slot="1"><i></i>Next four 31%</li><li data-slot="other"><i></i>The other 207 51%</li></ul>
+                  </div>
+                  <div class="sk-mini">
+                    <div class="sk-bar"><i data-slot="2" style="width:64%"></i><i data-slot="other" style="width:36%"></i></div>
+                    <ul class="sk-legend"><li data-slot="2"><i></i>Came back 64%</li><li data-slot="other"><i></i>Quoted once 36%</li></ul>
+                  </div>
+                </div>
+                <div class="sk-cites"><b>Based on</b><span>2,310 quotes in Outlook and Fulcrum · 212 customers</span></div>
+              </div>
+            </section>
+
+            <section class="sk-group sk-group--tone">
+              <div class="sk-gh"><h2>How your quote emails read</h2><span>Learned from what you sent</span></div>
+              <div class="sk-card">
+                <dl class="sk-tone">
+                  <div><dt>Length</dt><dd>Short, 4 to 6 lines</dd></div>
+                  <div><dt>Learned from</dt><dd>412 sent quotes</dd></div>
+                  <div><dt>Learned</dt><dd>Nov 3, 2026</dd></div>
+                </dl>
+                <dl class="sk-rests">
+                  <dt>Prices</dt><dd>Per piece, with the lot total on the last line</dd>
+                  <dt>Lead times</dt><dd>In working days, counted from the PO</dd>
+                  <dt>Common phrases</dt><dd><q>Thanks for thinking of us.</q> <q>Let me know if the quantity moves.</q></dd>
+                  <dt>Habit</dt><dd>Powder coat is called out by RAL number, never by name</dd>
+                  <dt>Habit</dt><dd>Signs as Pat. No signature block.</dd>
+                </dl>
+              </div>
+            </section>
+          </div>
+
+          <section class="sk-group">
+            <div class="sk-gh"><h2>Fees</h2><span>What you charge on top of parts</span></div>
+            <div class="sk-card">
+              <div class="sk-fees">
+                <div>
+                  <div class="sk-stat"><b>38%</b><span>of 2,310 quotes carry a fee</span></div>
+                  <h3>Expedites are almost always on short lead times.</h3>
+                  <div class="sk-cites" style="margin-top:8px"><b>Based on</b><span>quote lines in Fulcrum · 2023 to today</span></div>
+                </div>
+                <table class="sk-table" aria-label="Fee kinds">
+                  <thead><tr><th scope="col">Fee</th><th scope="col">Quotes</th><th scope="col" class="num">Typical</th><th scope="col">Latest</th><th scope="col">Charged on</th></tr></thead>
+                  <tbody>
+                    <tr><th scope="row">Expedite<span class="sub">Also: rush, hot</span></th><td>412<span class="sub">96 customers</span></td><td class="num strong">$980</td><td><span class="strong">$980</span><span class="sub">Marlin Marine · Nov 2</span></td><td><span class="chips"><span class="hzk-tag">New part 12%</span><span class="hzk-tag warn">Short lead 84%</span><span class="hzk-tag">First quote 9%</span></span></td></tr>
+                    <tr><th scope="row">Setup<span class="sub">Also: lot charge, minimum</span></th><td>288<span class="sub">140 customers</span></td><td class="num strong">$150</td><td><span class="strong">$150</span><span class="sub">Pinecrest Controls · Oct 28</span></td><td><span class="chips"><span class="hzk-tag">New part 71%</span><span class="hzk-tag">Short lead 10%</span><span class="hzk-tag">First quote 44%</span></span></td></tr>
+                    <tr><th scope="row">Certs<span class="sub">Also: material cert, CoC</span></th><td>176<span class="sub">31 customers</span></td><td class="num strong">$45</td><td><span class="strong">$45</span><span class="sub">Kestrel Medical · Oct 30</span></td><td><span class="chips"><span class="hzk-tag">New part 22%</span><span class="hzk-tag">Short lead 6%</span><span class="hzk-tag">First quote 18%</span></span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  document.querySelectorAll('.hz-shop-knowledge').forEach(function (root) {
+    var stage = root.querySelector('.hz-shop-knowledge-stage');
+    function fit() {
+      var phone = window.matchMedia('(max-width: 699px)').matches;
+      var SW = phone ? 640 : 1200, SH = phone ? 1120 : 750;
+      var w = root.clientWidth || SW;
+      var s = w / SW;
+      root.style.setProperty('--s', String(s));
+      root.style.height = Math.round(SH * s) + 'px';
+    }
+    fit();
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(root);
+    else window.addEventListener('resize', fit);
+    window.matchMedia('(max-width: 699px)').addEventListener('change', fit);
+  });
+})();
+</script>
+</body>
+</html>
