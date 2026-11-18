@@ -78,12 +78,14 @@
 .hz-conversation-ribbon .hzk-app { display: flex; flex: 1 1 auto; min-height: 0; width: 100%; background: var(--app); color: var(--fg); font-family: var(--font);
   font-weight: 300; font-size: 14px; line-height: 1.5; overflow: hidden; }
 .hz-conversation-ribbon .hzk-app button { font: inherit; color: inherit; cursor: default; }
-.hz-conversation-ribbon .hzk-rail { width: 72px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 4px; border-right: 1px solid var(--line); }
-.hz-conversation-ribbon .hzk-rail-item { width: 64px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 2px; border: 0; border-radius: 8px; background: none; color: var(--mute2); font-size: 11px; letter-spacing: -.02em; white-space: nowrap; }
+.hz-conversation-ribbon .hzk-rail { width: 80px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 4px; border-right: 1px solid var(--line); }
+.hz-conversation-ribbon .hzk-rail-item { width: 72px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 6px; border: 0; border-radius: 8px; background: none; color: var(--mute2); font-size: 11px; letter-spacing: -.02em; white-space: nowrap; }
 .hz-conversation-ribbon .hzk-rail-item.is-on { background: var(--active-bg); color: var(--link); }
 .hz-conversation-ribbon .hzk-app .hzk-rail-item { font-size: 11px; font-weight: 500; letter-spacing: -.01em; line-height: 1.2; white-space: nowrap; }
 .hz-conversation-ribbon .hzk-rail-item svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .hz-conversation-ribbon .hzk-rail-spacer { flex: 1 1 auto; }
+.hz-conversation-ribbon .hzk-avatar { width: 32px; height: 32px; border-radius: 8px; overflow: hidden; display: block; margin: 0 0 4px; flex: none; }
+.hz-conversation-ribbon .hzk-avatar img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .hz-conversation-ribbon .hzk-pill { flex: none; padding: 0 8px; border-radius: 12px; line-height: 20px; font-size: 11px; font-weight: 600; background: var(--tag-bg); color: var(--tag-fg); white-space: nowrap; }
 .hz-conversation-ribbon .hzk-pill.ready { background: #0d2d3b; color: #78a6bd; }
 .hz-conversation-ribbon .hzk-pill.sent { background: var(--ok-bg); color: var(--ok-fg); }
@@ -265,6 +267,7 @@
           <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>Insights</button>
           <span class="hzk-rail-spacer"></span>
           <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
+          <span class="hzk-avatar"><img src="../shared/people/pat/square-160.webp" srcset="../shared/people/pat/square-320.webp 2x" alt="Pat" width="32" height="32" decoding="async"></span>
         </nav>
         <div class="cr-body">
           <div class="cr-head">
@@ -272,7 +275,7 @@
             <h1>Larkspur Implement Co.</h1>
             <span class="meta">10 Parts · Tessa Brandvold</span>
             <span class="cr-pillwrap" id="hz-conversation-ribbon-pill"><span class="hzk-pill ordered">Ordered</span></span>
-            <span class="right"><span class="more">···</span><span class="cr-me has-photo"><img class="hz-photo" src="../shared/people/pat/square-160.webp" srcset="../shared/people/pat/square-320.webp 2x" alt="Pat" width="28" height="28" decoding="async"></span></span>
+            <span class="right"><span class="more">···</span></span>
           </div>
           <div class="cr-cols">
             <aside class="cr-rail">

@@ -1,3 +1,4 @@
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 /* ---------- root + stage ---------- */
@@ -24,12 +25,14 @@
 .hz-conversation-ribbon .hzk-app { display: flex; flex: 1 1 auto; min-height: 0; width: 100%; background: var(--app); color: var(--fg); font-family: var(--font);
   font-weight: 300; font-size: 14px; line-height: 1.5; overflow: hidden; }
 .hz-conversation-ribbon .hzk-app button { font: inherit; color: inherit; cursor: default; }
-.hz-conversation-ribbon .hzk-rail { width: 72px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 4px; border-right: 1px solid var(--line); }
-.hz-conversation-ribbon .hzk-rail-item { width: 64px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 2px; border: 0; border-radius: 8px; background: none; color: var(--mute2); font-size: 11px; letter-spacing: -.02em; white-space: nowrap; }
+.hz-conversation-ribbon .hzk-rail { width: 80px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 4px; border-right: 1px solid var(--line); }
+.hz-conversation-ribbon .hzk-rail-item { width: 72px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 6px; border: 0; border-radius: 8px; background: none; color: var(--mute2); font-size: 11px; letter-spacing: -.02em; white-space: nowrap; }
 .hz-conversation-ribbon .hzk-rail-item.is-on { background: var(--active-bg); color: var(--link); }
 .hz-conversation-ribbon .hzk-app .hzk-rail-item { font-size: 11px; font-weight: 500; letter-spacing: -.01em; line-height: 1.2; white-space: nowrap; }
 .hz-conversation-ribbon .hzk-rail-item svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .hz-conversation-ribbon .hzk-rail-spacer { flex: 1 1 auto; }
+.hz-conversation-ribbon .hzk-avatar { width: 32px; height: 32px; border-radius: 8px; overflow: hidden; display: block; margin: 0 0 4px; flex: none; }
+.hz-conversation-ribbon .hzk-avatar img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .hz-conversation-ribbon .hzk-pill { flex: none; padding: 0 8px; border-radius: 12px; line-height: 20px; font-size: 11px; font-weight: 600; background: var(--tag-bg); color: var(--tag-fg); white-space: nowrap; }
 .hz-conversation-ribbon .hzk-pill.ready { background: #0d2d3b; color: #78a6bd; }
 .hz-conversation-ribbon .hzk-pill.sent { background: var(--ok-bg); color: var(--ok-fg); }
@@ -60,12 +63,17 @@
 .hz-conversation-ribbon .hzk-detail b.warn { color: var(--warn); }
 .hz-conversation-ribbon .hzk-detail b a { color: var(--link); }
 .hz-conversation-ribbon .hzk-run { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
-.hz-conversation-ribbon .hzk-run .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+/* marks (Nov 10): one SVG mark per company, one person glyph; the span keeps its slot, the SVG fills it */
+.hz-conversation-ribbon .has-mark { background: none !important; padding: 0; overflow: hidden; }
+.hz-conversation-ribbon .has-mark svg.hz-mark { display: block; width: 100%; height: 100%; }
+.hz-conversation-ribbon .has-photo { background: #2a2d36; overflow: hidden; }
+.hz-conversation-ribbon .has-photo img.hz-photo { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hz-conversation-ribbon .hzk-run .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
 .hz-conversation-ribbon .hzk-run .fold { font-size: 14px; font-weight: 500; color: var(--fg); }
 .hz-conversation-ribbon .hzk-run .fold small { display: block; font-size: 12px; font-weight: 300; color: var(--mute); margin-top: 2px; }
 .hz-conversation-ribbon .hzk-run .fold small a { color: var(--link); }
 .hz-conversation-ribbon .hzk-post { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
-.hz-conversation-ribbon .hzk-post .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-conversation-ribbon .hzk-post .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
 .hz-conversation-ribbon .hzk-post .box { border: 1px solid var(--line2); border-radius: 8px; background: var(--card); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
 .hz-conversation-ribbon .hzk-post .box .hd { display: flex; align-items: baseline; gap: 8px; font-size: 12.5px; color: var(--mute2); }
 .hz-conversation-ribbon .hzk-post .box .hd b { font-size: 14px; font-weight: 500; color: var(--fg-strong); }
@@ -77,7 +85,7 @@
 .hz-conversation-ribbon .hzk-result { font-size: 13px; color: var(--good-fg); display: flex; align-items: center; gap: 8px; min-height: 28px; }
 .hz-conversation-ribbon .hzk-result small { font-size: 12px; color: var(--mute3); }
 .hz-conversation-ribbon .hzk-mail { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
-.hz-conversation-ribbon .hzk-mail .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: #323335; color: #a9abae; }
+.hz-conversation-ribbon .hzk-mail .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 600; background: #2a2d36; color: #fff; }
 .hz-conversation-ribbon .hzk-mail .card { border: 1px solid var(--line2); border-radius: 8px; background: var(--card); padding: 12px 14px; }
 .hz-conversation-ribbon .hzk-mail .hd { display: flex; gap: 8px; align-items: center; font-size: 12.5px; color: var(--mute2); }
 .hz-conversation-ribbon .hzk-mail .hd b { color: var(--fg-strong); font-weight: 500; font-size: 13.5px; }
@@ -91,7 +99,7 @@
 .hz-conversation-ribbon .att i::before { content: ''; position: absolute; left: 5px; right: 5px; top: 4px; height: 3px; background: #2a2d33; border-radius: 1px; box-shadow: 0 5px 0 -1px #c9cac4, 0 10px 0 -1px #c9cac4, 0 15px 0 -1px #c9cac4; }
 .hz-conversation-ribbon .att small { font-weight: 400; color: var(--mute3); font-size: 11.5px; margin-left: 4px; }
 .hz-conversation-ribbon .hzk-step { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
-.hz-conversation-ribbon .hzk-step .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-conversation-ribbon .hzk-step .av { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
 .hz-conversation-ribbon .hzk-step .t { font-size: 13.5px; font-weight: 500; }
 .hz-conversation-ribbon .hzk-step .d { font-size: 13px; color: rgba(230,230,240,.75); }
 .hz-conversation-ribbon .hzk-step .m { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 2px; font-size: 11.5px; color: rgba(230,230,240,.58); }
@@ -142,7 +150,7 @@
 .hz-conversation-ribbon .cr-head .cr-pillwrap { display: inline-flex; margin-left: 4px; }
 .hz-conversation-ribbon .cr-head .right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
 .hz-conversation-ribbon .cr-head .more { width: 28px; height: 28px; border-radius: 7px; display: grid; place-items: center; color: var(--mute2); font-size: 16px; letter-spacing: 1px; font-weight: 600; }
-.hz-conversation-ribbon .cr-me { width: 28px; height: 28px; border-radius: 50%; background: var(--avatar); color: #fff; font-size: 12px; font-weight: 600; display: grid; place-items: center; }
+.hz-conversation-ribbon .cr-me { width: 28px; height: 28px; border-radius: 6px; background: #2a2d36; color: #fff; font-size: 12px; font-weight: 600; display: grid; place-items: center; }
 .hz-conversation-ribbon .cr-cols { flex: 1 1 auto; min-height: 0; display: flex; }
 .hz-conversation-ribbon .cr-rail { width: 300px; flex: none; background: var(--list); border-right: 1px solid var(--line); display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
 .hz-conversation-ribbon .cr-back { flex: none; display: flex; align-items: center; gap: 6px; padding: 12px 16px 6px; font-size: 13px; color: var(--link); font-weight: 400; }
@@ -178,6 +186,21 @@
 @media (prefers-reduced-motion: reduce) {
   .hz-conversation-ribbon *, .hz-conversation-ribbon *::before, .hz-conversation-ribbon *::after { transition: none !important; animation: none !important; }
 }
+
+/* ---------- phone: a 420x720 stage. The thread fills the width; the sales-order panel is hidden. ---------- */
+.hz-conversation-ribbon.is-phone .hz-conversation-ribbon-stage,
+.hz-conversation-ribbon.is-phone .cr-win { width: 420px; height: 720px; }
+.hz-conversation-ribbon.is-phone .hzk-rail,
+.hz-conversation-ribbon.is-phone .cr-rail { display: none; }
+.hz-conversation-ribbon.is-phone .cr-main { padding: 0 14px 14px; }
+.hz-conversation-ribbon.is-phone .cr-head { padding: 0 14px; gap: 8px; }
+.hz-conversation-ribbon.is-phone .cr-head h1 { font-size: 16px; white-space: normal; }
+.hz-conversation-ribbon.is-phone .cr-head .meta { display: none; }
+.hz-conversation-ribbon.is-phone .cr-head .right { display: none; }
+
+/* phone type floor (Nov 10): nothing under 13px; 15px stage-px on frames narrower than 420px (renders at about 13px) */
+.hz-conversation-ribbon.is-phone .hzk-rail-item, .hz-conversation-ribbon.is-phone .hzk-app .hzk-rail-item, .hz-conversation-ribbon.is-phone .hzk-pill, .hz-conversation-ribbon.is-phone .hzk-tag, .hz-conversation-ribbon.is-phone .hzk-stagehead .k a, .hz-conversation-ribbon.is-phone .hzk-stagehead .sub, .hz-conversation-ribbon.is-phone .hzk-detail, .hz-conversation-ribbon.is-phone .hzk-run .av, .hz-conversation-ribbon.is-phone .hzk-run .fold small, .hz-conversation-ribbon.is-phone .hzk-post .av, .hz-conversation-ribbon.is-phone .hzk-post .box .hd, .hz-conversation-ribbon.is-phone .hzk-post .box .hd small, .hz-conversation-ribbon.is-phone .hzk-btn, .hz-conversation-ribbon.is-phone .hzk-result small, .hz-conversation-ribbon.is-phone .hzk-mail .av, .hz-conversation-ribbon.is-phone .hzk-mail .hd, .hz-conversation-ribbon.is-phone .hzk-mail .hd small, .hz-conversation-ribbon.is-phone .hzk-mail .att, .hz-conversation-ribbon.is-phone .hzk-post .att, .hz-conversation-ribbon.is-phone .att small, .hz-conversation-ribbon.is-phone .hzk-step .av, .hz-conversation-ribbon.is-phone .hzk-step .m, .hz-conversation-ribbon.is-phone .hzk-table .th small, .hz-conversation-ribbon.is-phone .hzk-table .th .hzk-pill, .hz-conversation-ribbon.is-phone .hzk-table .tr, .hz-conversation-ribbon.is-phone .hzk-table .tr.head, .hz-conversation-ribbon.is-phone .hzk-table .tr .sub, .hz-conversation-ribbon.is-phone .hzk-table .foot, .hz-conversation-ribbon.is-phone .hzk-decision .hd .sub, .hz-conversation-ribbon.is-phone .hzk-decision .hd small, .hz-conversation-ribbon.is-phone .hzk-fact small, .hz-conversation-ribbon.is-phone .hzk-fact em, .hz-conversation-ribbon.is-phone .hzk-limit, .hz-conversation-ribbon.is-phone .cr-logo, .hz-conversation-ribbon.is-phone .cr-me, .hz-conversation-ribbon.is-phone .cr-sec .t small, .hz-conversation-ribbon.is-phone .cr-item .l1, .hz-conversation-ribbon.is-phone .cr-item .l2, .hz-conversation-ribbon.is-phone .cr-all, .hz-conversation-ribbon.is-phone .cr-day, .hz-conversation-ribbon.is-phone .cr-os { font-size: 13px; }
+.hz-conversation-ribbon.is-phone.is-narrow .hzk-rail-item, .hz-conversation-ribbon.is-phone.is-narrow .hzk-app .hzk-rail-item, .hz-conversation-ribbon.is-phone.is-narrow .hzk-pill, .hz-conversation-ribbon.is-phone.is-narrow .hzk-tag, .hz-conversation-ribbon.is-phone.is-narrow .hzk-stagehead .k a, .hz-conversation-ribbon.is-phone.is-narrow .hzk-stagehead .sub, .hz-conversation-ribbon.is-phone.is-narrow .hzk-detail, .hz-conversation-ribbon.is-phone.is-narrow .hzk-run .av, .hz-conversation-ribbon.is-phone.is-narrow .hzk-run .fold small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-post .av, .hz-conversation-ribbon.is-phone.is-narrow .hzk-post .box .hd, .hz-conversation-ribbon.is-phone.is-narrow .hzk-post .box .hd small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-btn, .hz-conversation-ribbon.is-phone.is-narrow .hzk-result small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-mail .av, .hz-conversation-ribbon.is-phone.is-narrow .hzk-mail .hd, .hz-conversation-ribbon.is-phone.is-narrow .hzk-mail .hd small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-mail .att, .hz-conversation-ribbon.is-phone.is-narrow .hzk-post .att, .hz-conversation-ribbon.is-phone.is-narrow .att small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-step .av, .hz-conversation-ribbon.is-phone.is-narrow .hzk-step .m, .hz-conversation-ribbon.is-phone.is-narrow .hzk-table .th small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-table .th .hzk-pill, .hz-conversation-ribbon.is-phone.is-narrow .hzk-table .tr, .hz-conversation-ribbon.is-phone.is-narrow .hzk-table .tr.head, .hz-conversation-ribbon.is-phone.is-narrow .hzk-table .tr .sub, .hz-conversation-ribbon.is-phone.is-narrow .hzk-table .foot, .hz-conversation-ribbon.is-phone.is-narrow .hzk-decision .hd .sub, .hz-conversation-ribbon.is-phone.is-narrow .hzk-decision .hd small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-fact small, .hz-conversation-ribbon.is-phone.is-narrow .hzk-fact em, .hz-conversation-ribbon.is-phone.is-narrow .hzk-limit, .hz-conversation-ribbon.is-phone.is-narrow .cr-logo, .hz-conversation-ribbon.is-phone.is-narrow .cr-me, .hz-conversation-ribbon.is-phone.is-narrow .cr-sec .t small, .hz-conversation-ribbon.is-phone.is-narrow .cr-item .l1, .hz-conversation-ribbon.is-phone.is-narrow .cr-item .l2, .hz-conversation-ribbon.is-phone.is-narrow .cr-all, .hz-conversation-ribbon.is-phone.is-narrow .cr-day, .hz-conversation-ribbon.is-phone.is-narrow .cr-os { font-size: 15px; }
 </style>
 
 <div class="hz-conversation-ribbon">
@@ -191,14 +214,15 @@
           <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>Insights</button>
           <span class="hzk-rail-spacer"></span>
           <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
+          <span class="hzk-avatar"><img src="../shared/people/pat/square-160.webp" srcset="../shared/people/pat/square-320.webp 2x" alt="Pat" width="32" height="32" decoding="async"></span>
         </nav>
         <div class="cr-body">
           <div class="cr-head">
-            <span class="cr-logo">LI</span>
+            <span class="cr-logo has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Larkspur Implement Co."><rect width="24" height="24" rx="6" fill="#3DC975"/><path fill="#fff" d="M5 19C5 10.8 10.6 5.4 19 5c.4 8.4-5.2 14-14 14z"/><path d="M6 18 13.5 10.5" fill="none" stroke="#3DC975" stroke-width="2" stroke-linecap="round"/></svg></span>
             <h1>Larkspur Implement Co.</h1>
             <span class="meta">10 Parts · Tessa Brandvold</span>
             <span class="cr-pillwrap" id="hz-conversation-ribbon-pill"><span class="hzk-pill ordered">Ordered</span></span>
-            <span class="right"><span class="more">···</span><span class="cr-me">P</span></span>
+            <span class="right"><span class="more">···</span></span>
           </div>
           <div class="cr-cols">
             <aside class="cr-rail">
@@ -226,8 +250,9 @@
   /* ---------- content: WALKTHROUGHS.md sections 5, 6, 7 with the brief's sample data ---------- */
   var CK = '<span class="cr-check"><svg viewBox="0 0 10 10"><path d="M2 5.2 4.2 7.4 8 3"/></svg></span>';
   var SPARK = '<span class="av">✦</span>';
+  var PERSON = '<span class="av has-mark"><svg class="hz-mark" viewBox="0 0 24 24" role="img" aria-label="Any person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.1" fill="#fff"/><path fill="#fff" d="M6 19.5c0-3.6 2.7-6 6-6s6 2.4 6 6z"/></svg></span>'; // every mail in this thread is from a person (Tessa)
   function mail(o) {
-    return '<div class="hzk-mail"' + (o.id ? ' id="' + SLUG + '-' + o.id + '"' : '') + '><span class="av">' + o.av + '</span><div class="card">' +
+    return '<div class="hzk-mail"' + (o.id ? ' id="' + SLUG + '-' + o.id + '"' : '') + '>' + PERSON + '<div class="card">' +
       '<div class="hd"><b>' + o.from + '</b><span>to Pat</span>' + (o.tag ? '<span class="hzk-tag mute">' + o.tag + '</span>' : '') + '<small>' + o.when + '</small></div>' +
       '<div class="sub">' + o.subject + '</div><div class="body">' + o.body + '</div>' +
       (o.atts ? '<div class="atts">' + o.atts.map(function (a) { return '<span class="att"><i></i>' + a[0] + '<small>' + a[1] + '</small></span>'; }).join('') + '</div>' : '') +
@@ -333,9 +358,12 @@
     var list = $('list'), view = list.parentNode, rail = $('rail'), pill = $('pill');
 
     function fit() {
-      var w = root.clientWidth || 1200, s = w / 1200;
+      var w = root.clientWidth || 1200;
+      var phone = w < 600 || /[?&]phone=1/.test(location.search);
+      root.classList.toggle('is-phone', phone); root.classList.toggle('is-narrow', phone && (root.getBoundingClientRect().width || 420) < 420); /* phone type floor (Nov 10): every text node renders at 13 CSS px or more */ if(!root.__hzFloor){root.__hzFloor=function(){var st=root.querySelector('.hz-conversation-ribbon-stage')||root;var narrow=root.classList.contains('is-narrow');var m=getComputedStyle(st).transform.match(/matrix\(([^,]+),/),k=m?parseFloat(m[1]):1;if(!(k>0.3&&k<=1))k=1;var f=narrow?Math.min(18,Math.max(13,Math.ceil(13/k))):0;var els=st.querySelectorAll('*');for(var i=0;i<els.length;i++){var e=els[i];if(e.namespaceURI&&e.namespaceURI.indexOf('svg')>-1)continue;if(!narrow){if(e.getAttribute('data-hz-floor')){e.style.fontSize='';e.removeAttribute('data-hz-floor');}continue;}var fs=parseFloat(getComputedStyle(e).fontSize);if(fs&&fs<f){e.style.fontSize=f+'px';e.setAttribute('data-hz-floor','1');}}};new MutationObserver(function(){root.__hzFloor();}).observe(root,{childList:true,subtree:true});}root.__hzFloor();
+      var SW = phone ? 420 : 1200, SH = phone ? 720 : 750, s = w / SW;
       root.style.setProperty('--s', String(s));
-      root.style.height = Math.round(750 * s) + 'px';
+      root.style.height = Math.round(SH * s) + 'px';
     }
     fit();
     if (window.ResizeObserver) new ResizeObserver(fit).observe(root); else window.addEventListener('resize', fit);
