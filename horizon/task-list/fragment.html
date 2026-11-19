@@ -1,0 +1,397 @@
+<style>
+.hz-task-list { --s: 1; position: relative; width: 100%; max-width: 1200px; overflow: hidden; }
+.hz-task-list-stage { position: absolute; top: 0; left: 0; width: 1200px; height: 750px; transform: scale(var(--s)); transform-origin: 0 0; overflow: hidden; background: #131418; }
+
+/* ---- kit tokens (horizon/_kit/horizon-ui.css, prefixed) ---- */
+.hz-task-list { --app: #131418; --list: #191a1f; --panel: #191a1f; --card: #191a1f; --card2: #27292e; --line: #2b2d33;
+  --line2: #3b3d43; --edge: #3b3d43; --edge2: #4b4d53; --fg: #e6e6f0; --fg-strong: #f2f2f8; --mute: rgba(230,230,240,.6);
+  --mute2: rgba(230,230,240,.72); --mute3: rgba(230,230,240,.55); --hover: rgba(255,255,255,.06);
+  --link: #6788ff; --dot: #6788ff; --count: #6788ff; --send: #3f6fe0; --active-bg: #162d55; --needs-card: #171a26; --needs-edge: #2a3756;
+  --spark-bg: #2a2740; --spark-fg: #c4baf5; --working: #a9a2dc; --why: #7a68d6; --warn: #cf976a; --bad: #e0948a;
+  --good: #3f8c63; --good-fg: #6da885; --info-bg: #1f2a3a; --info-fg: #8fa8ff; --warn-bg: #452c17; --warn-fg: #c18b5e;
+  --tag-bg: #323335; --tag-fg: #a9abae; --ok-bg: #1d3a2a; --ok-fg: #6da885; --bad-bg: #3c1713; --bad-fg: #c07a70;
+  --font: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+.hz-task-list .hzk-app { display: flex; width: 100%; height: 100%; background: var(--app); color: var(--fg); font-family: var(--font);
+  font-weight: 300; font-size: 14px; line-height: 1.5; overflow: hidden; -webkit-font-smoothing: antialiased; }
+.hz-task-list .hzk-app * { box-sizing: border-box; }
+.hz-task-list .hzk-app button { font: inherit; color: inherit; cursor: default; }
+.hz-task-list .hzk-rail { width: 80px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 4px; border-right: 1px solid var(--line); }
+.hz-task-list .hzk-rail-item { width: 72px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 6px; border: 0; border-radius: 8px; background: none; color: var(--mute2); font-size: 11px; font-weight: 500; letter-spacing: -.01em; line-height: 1.2; white-space: nowrap; }
+.hz-task-list .hzk-rail-item.is-on { background: var(--active-bg); color: var(--link); }
+.hz-task-list .hzk-rail-item svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hz-task-list .hzk-rail-spacer { flex: 1 1 auto; }
+.hz-task-list .hzk-avatar { width: 32px; height: 32px; border-radius: 8px; overflow: hidden; display: block; margin: 0 0 4px; }
+.hz-task-list .hzk-avatar img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* project list */
+.hz-task-list .hzk-list { width: 372px; flex: none; display: flex; flex-direction: column; background: var(--list); border-right: 1px solid var(--line); min-height: 0; }
+.hz-task-list .hzk-list-head { padding: 14px 12px 6px 16px; min-height: 28px; display: flex; align-items: center; gap: 8px; }
+.hz-task-list .hzk-list-head b { font-size: 15px; font-weight: 500; flex: 1 1 auto; }
+.hz-task-list .hzk-iconbtn { width: 28px; height: 28px; flex: none; border-radius: 7px; border: 0; background: none; display: grid; place-items: center; color: rgba(230,230,240,.75); }
+.hz-task-list .hzk-iconbtn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hz-task-list .hzk-list-body { flex: 1 1 auto; overflow: hidden; padding: 0 8px 12px; display: flex; flex-direction: column; gap: 2px; }
+.hz-task-list .hzk-nav { display: flex; align-items: center; gap: 10px; width: 100%; height: 34px; padding: 0 10px; border: 0; border-radius: 8px; background: none; color: var(--mute2); text-align: left; font-size: 14px; font-weight: 400; }
+.hz-task-list .hzk-nav.is-on { color: var(--link); font-weight: 500; }
+.hz-task-list .hzk-nav svg { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hz-task-list .hzk-nav span { flex: 1 1 auto; }
+.hz-task-list .hzk-nav i { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; display: grid; place-items: center; font-style: normal; font-size: 12px; font-weight: 600; background: rgba(103,136,255,.22); color: var(--count); }
+.hz-task-list .hzk-nav i:empty { display: none; }
+.hz-task-list .hzk-list-title { display: flex; align-items: center; gap: 6px; margin-top: 14px; padding: 4px 10px; font-size: 13px; font-weight: 500; color: var(--mute2); }
+.hz-task-list .hzk-row { position: relative; display: flex; gap: 10px; width: 100%; padding: 9px 10px; border: 1px solid transparent; border-radius: 8px; color: var(--fg); background: none; text-align: left; }
+.hz-task-list .hzk-row.is-on { background: rgba(255,255,255,.06); }
+.hz-task-list .hzk-row.needs { border-color: var(--needs-edge); }
+.hz-task-list .hzk-row.is-new { animation: hzk-ring 1s ease-out 2; }
+.hz-task-list .hzk-row .mk { width: 26px; height: 26px; flex: none; border-radius: 6px; overflow: hidden; margin-top: 1px; }
+.hz-task-list .hzk-row .mk svg { display: block; width: 100%; height: 100%; }
+.hz-task-list .hzk-row > span { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.hz-task-list .hzk-row .r1 { display: flex; gap: 6px; align-items: baseline; }
+.hz-task-list .hzk-row .r1 b { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hz-task-list .hzk-row .r1 small { margin-left: auto; font-size: 11px; color: var(--mute); white-space: nowrap; }
+.hz-task-list .hzk-row .r2 { display: flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--mute2); min-width: 0; }
+.hz-task-list .hzk-row .r2 span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; }
+.hz-task-list .hzk-row .r3 { display: flex; gap: 6px; align-items: center; font-size: 11.5px; min-width: 0; color: var(--mute2); margin-top: 2px; }
+.hz-task-list .hzk-row .r3 .spark { color: #8a7fe0; font-size: 13px; width: 16px; text-align: center; flex: none; }
+.hz-task-list .hzk-row .r3 > em { flex: 1 1 auto; font-style: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hz-task-list .hzk-row .r3.live > em { color: var(--working); animation: hzk-pulse 1.2s ease-in-out infinite; }
+
+/* pills */
+.hz-task-list .hzk-pill { flex: none; padding: 0 8px; border-radius: 12px; line-height: 20px; font-size: 11px; font-weight: 600; background: var(--tag-bg); color: var(--tag-fg); white-space: nowrap; }
+.hz-task-list .hzk-pill.ready { background: #0d2d3b; color: #78a6bd; }
+.hz-task-list .hzk-pill.sent { background: var(--ok-bg); color: var(--ok-fg); }
+.hz-task-list .hzk-pill.review { background: var(--warn-bg); color: var(--warn-fg); }
+.hz-task-list .hzk-pill.po { background: #202f6a; color: #8493c1; }
+.hz-task-list .hzk-pill.processing { background: var(--tag-bg); color: var(--tag-fg); }
+.hz-task-list .hzk-pill.info { background: var(--info-bg); color: var(--info-fg); }
+.hz-task-list .hzk-pill.good { background: rgba(16,163,116,.18); color: var(--good-fg); }
+.hz-task-list .hzk-pill.bad { background: rgba(192,57,43,.22); color: var(--bad); }
+.hz-task-list .hzk-tag { display: inline-block; padding: 0 8px; border-radius: 10px; line-height: 19px; font-size: 11px; font-weight: 600; background: var(--info-bg); color: var(--info-fg); white-space: nowrap; }
+.hz-task-list .hzk-tag.mute { background: var(--tag-bg); color: var(--tag-fg); }
+
+/* main: the expanded project */
+.hz-task-list .hzk-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; min-height: 0; padding: 14px 20px 16px; gap: 12px; overflow: hidden; }
+.hz-task-list .tl-head { display: flex; align-items: center; gap: 12px; min-height: 32px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.hz-task-list .tl-head .mk { width: 28px; height: 28px; flex: none; border-radius: 7px; overflow: hidden; }
+.hz-task-list .tl-head .mk svg { display: block; width: 100%; height: 100%; }
+.hz-task-list .tl-head .t { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+.hz-task-list .tl-head .t b { font-size: 16px; font-weight: 500; color: var(--fg-strong); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hz-task-list .tl-head .t span { font-size: 12.5px; color: var(--mute2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hz-task-list .tl-head .hzk-stages { display: flex; gap: 6px; align-items: center; font-size: 11.5px; color: var(--mute3); }
+.hz-task-list .tl-head .hzk-stages span { display: inline-flex; align-items: center; gap: 6px; }
+.hz-task-list .tl-head .hzk-stages span::after { content: ''; width: 12px; height: 1px; background: var(--line2); }
+.hz-task-list .tl-head .hzk-stages span:last-child::after { display: none; }
+.hz-task-list .tl-head .hzk-stages span.done { color: var(--fg); }
+.hz-task-list .tl-head .hzk-stages span.now { color: var(--link); font-weight: 600; }
+.hz-task-list .tl-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
+.hz-task-list .tl-eye { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--mute3); display: flex; align-items: center; gap: 8px; }
+.hz-task-list .tl-eye small { font-weight: 400; letter-spacing: 0; text-transform: none; font-size: 11.5px; color: var(--mute3); }
+.hz-task-list .tl-eye.live { color: var(--working); }
+.hz-task-list .tl-eye.live::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--working); animation: hzk-pulse 1.2s ease-in-out infinite; }
+
+.hz-task-list .hzk-mail { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
+.hz-task-list .hzk-mail .av { width: 28px; height: 28px; border-radius: 6px; overflow: hidden; background: #323335; }
+.hz-task-list .hzk-mail .av img, .hz-task-list .hzk-mail .av svg { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hz-task-list .hzk-mail .card { border: 1px solid var(--line2); border-radius: 8px; background: var(--card); padding: 10px 14px; display: flex; flex-direction: column; gap: 2px; }
+.hz-task-list .hzk-mail .hd { display: flex; gap: 8px; align-items: baseline; font-size: 12.5px; color: var(--mute2); }
+.hz-task-list .hzk-mail .hd b { color: var(--fg-strong); font-weight: 500; font-size: 13.5px; }
+.hz-task-list .hzk-mail .hd small { margin-left: auto; font-size: 11.5px; color: var(--mute3); white-space: nowrap; }
+.hz-task-list .hzk-mail .sub { font-size: 14px; font-weight: 500; color: var(--fg-strong); }
+.hz-task-list .hzk-mail .body { margin-top: 2px; font-size: 13.5px; line-height: 1.5; color: rgba(230,230,240,.85); white-space: pre-line; }
+.hz-task-list .hzk-mail .body mark { background: rgba(103,136,255,.22); color: var(--fg-strong); border-radius: 3px; padding: 0 3px; line-height: 1; }
+.hz-task-list .hzk-mail .att { display: inline-flex; align-self: flex-start; align-items: center; gap: 8px; margin-top: 8px; padding: 5px 10px 5px 6px; border-radius: 8px; border: 1px solid var(--line2); background: var(--app); font-size: 12px; font-weight: 600; }
+.hz-task-list .hzk-mail .att i { width: 30px; height: 24px; border-radius: 3px; background: #fbfbf8; display: block; position: relative; overflow: hidden; }
+.hz-task-list .hzk-mail .att i::before { content: ''; position: absolute; left: 5px; right: 5px; top: 4px; height: 3px; background: #2a2d33; border-radius: 1px; box-shadow: 0 5px 0 -1px #c9cac4, 0 10px 0 -1px #c9cac4, 0 15px 0 -1px #c9cac4; }
+.hz-task-list .hzk-mail .att.none { border-style: dashed; color: var(--warn-fg); font-weight: 500; }
+.hz-task-list .hzk-mail .att.none i { display: none; }
+
+.hz-task-list .tl-steps { display: flex; flex-direction: column; gap: 8px; }
+.hz-task-list .hzk-step { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; align-items: start; }
+.hz-task-list .hzk-step .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-task-list .hzk-step .t { font-size: 13.5px; font-weight: 500; color: var(--fg); line-height: 1.35; padding-top: 3px; }
+.hz-task-list .hzk-step .t b { font-weight: 600; color: var(--fg-strong); }
+.hz-task-list .hzk-step .t b.warn { color: var(--warn); }
+.hz-task-list .hzk-step .d { font-size: 12.5px; color: rgba(230,230,240,.62); line-height: 1.4; }
+
+.hz-task-list .hzk-post { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
+.hz-task-list .hzk-post .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); }
+.hz-task-list .hzk-post .box { border: 1px solid var(--line2); border-radius: 8px; background: var(--card); padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 6px; }
+.hz-task-list .hzk-post .box.needs { border-color: var(--needs-edge); background: var(--needs-card); }
+.hz-task-list .hzk-post .hd { display: flex; align-items: baseline; gap: 8px; font-size: 12.5px; color: var(--mute2); }
+.hz-task-list .hzk-post .hd b { font-size: 13.5px; font-weight: 500; color: var(--fg-strong); }
+.hz-task-list .hzk-post .hd small { margin-left: auto; font-size: 11.5px; color: var(--mute3); }
+.hz-task-list .hzk-post .body { font-size: 13.5px; line-height: 1.5; color: rgba(230,230,240,.88); white-space: pre-line; }
+.hz-task-list .hzk-post .body mark { background: rgba(103,136,255,.22); color: var(--fg-strong); border-radius: 3px; padding: 0 3px; line-height: 1; }
+.hz-task-list .hzk-why-needs { display: flex; gap: 6px; align-items: baseline; font-size: 12px; line-height: 1.5; color: var(--warn); }
+.hz-task-list .hzk-why-needs b { font-weight: 600; }
+.hz-task-list .hzk-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
+.hz-task-list .hzk-btn { height: 28px; padding: 0 12px; border-radius: 7px; border: 1px solid var(--edge2); background: transparent; color: var(--fg); font-size: 12.5px; font-weight: 500; display: inline-flex; align-items: center; transition: transform .15s, filter .15s; }
+.hz-task-list .hzk-btn.primary { background: var(--send); border-color: var(--send); color: #fff; }
+.hz-task-list .hzk-btn.is-pressed { transform: translateY(1px); filter: brightness(.85); }
+.hz-task-list .hzk-actions .who { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--mute3); }
+.hz-task-list .hzk-actions .who i { width: 18px; height: 18px; border-radius: 5px; overflow: hidden; display: block; }
+.hz-task-list .hzk-actions .who i img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hz-task-list .hzk-result { font-size: 13px; color: var(--good-fg); display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.hz-task-list .hzk-result svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.hz-task-list .hzk-result small { color: var(--mute3); }
+
+/* motion */
+@keyframes hzk-rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes hzk-pulse { 50% { opacity: .35; } }
+@keyframes hzk-ring { 0% { box-shadow: 0 0 0 0 rgba(103,136,255,.6); } 100% { box-shadow: 0 0 0 12px rgba(103,136,255,0); } }
+.hz-task-list .hzk-in { animation: hzk-rise .35s ease-out both; }
+.hz-task-list .tl-body.is-out { opacity: 0; transition: opacity .25s; }
+.hz-task-list .hzk-list-body.is-out .hzk-row { opacity: 0; transition: opacity .3s; }
+
+/* phone: list hidden, the open item only, 420 wide */
+.hz-task-list.is-phone .hz-task-list-stage { width: 420px; height: 720px; }
+.hz-task-list.is-phone .hzk-rail, .hz-task-list.is-phone .hzk-list { display: none; }
+.hz-task-list.is-phone .hzk-main { padding: 12px 14px 14px; }
+.hz-task-list.is-phone .tl-head .hzk-stages { display: none; }
+.hz-task-list.is-phone .hzk-step .d { display: none; }
+</style>
+<div class="hz-task-list" data-loop="task-list">
+  <div class="hz-task-list-stage">
+    <div class="hzk-app">
+      <nav class="hzk-rail">
+        <button class="hzk-rail-item is-on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/></svg>Projects</button>
+        <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Knowledge</button>
+        <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>Insights</button>
+        <span class="hzk-rail-spacer"></span>
+        <button class="hzk-rail-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
+        <span class="hzk-avatar"><img src="../shared/people/pat/square-160.webp" srcset="../shared/people/pat/square-320.webp 2x" alt="Pat" width="32" height="32" decoding="async"></span>
+      </nav>
+
+      <aside class="hzk-list">
+        <div class="hzk-list-head"><b>Projects</b><button class="hzk-iconbtn" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><button class="hzk-iconbtn" aria-label="New"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div>
+        <div class="hzk-list-body" id="hz-task-list-listbody">
+          <button class="hzk-nav"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg><span>Needs you</span><i id="hz-task-list-needs"></i></button>
+          <button class="hzk-nav is-on"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>All projects</span></button>
+          <div class="hzk-list-title">Today</div>
+          <div id="hz-task-list-rows" style="display:flex;flex-direction:column;gap:2px"></div>
+        </div>
+      </aside>
+
+      <main class="hzk-main">
+        <div class="tl-head" id="hz-task-list-head"></div>
+        <div class="tl-body" id="hz-task-list-body"></div>
+      </main>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var SLUG = 'hz-task-list';
+  var PEOPLE = '../shared/people/';
+  var SPARK = '<span class="av">✦</span>';
+  var CK = '<svg viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></svg>';
+  var M = {
+    marlin: '<svg viewBox="0 0 24 24" role="img" aria-label="Marlin Marine"><rect width="24" height="24" rx="6" fill="#3840EA"/><path fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" d="M3.5 9.5c2.1 0 2.1-2.5 4.25-2.5s2.1 2.5 4.25 2.5 2.1-2.5 4.25-2.5 2.1 2.5 4.25 2.5M3.5 16.5c2.1 0 2.1-2.5 4.25-2.5s2.1 2.5 4.25 2.5 2.1-2.5 4.25-2.5 2.1 2.5 4.25 2.5"/></svg>',
+    westbrook: '<svg viewBox="0 0 24 24" role="img" aria-label="Westbrook Sensors"><rect width="24" height="24" rx="6" fill="#292932"/><circle cx="12" cy="12" r="7" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2.6" fill="#fff"/></svg>',
+    kestrel: '<svg viewBox="0 0 24 24" role="img" aria-label="Kestrel Medical"><rect width="24" height="24" rx="6" fill="#D58BE1"/><path fill="#fff" d="M10 4.5h4V10h5.5v4H14v5.5h-4V14H4.5v-4H10z"/></svg>',
+    harbor: '<svg viewBox="0 0 24 24" role="img" aria-label="Harbor Fluid Systems"><rect width="24" height="24" rx="6" fill="#3840EA"/><circle cx="12" cy="6" r="2" fill="none" stroke="#fff" stroke-width="2"/><path fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" d="M12 8v12M7 12h10M5 15c1 3.5 4 5 7 5s6-1.5 7-5"/></svg>',
+    larkspur: '<svg viewBox="0 0 24 24" role="img" aria-label="Larkspur Implement Co."><rect width="24" height="24" rx="6" fill="#3DC975"/><path fill="#fff" d="M5 19C5 10.8 10.6 5.4 19 5c.4 8.4-5.2 14-14 14z"/><path d="M6 18 13.5 10.5" fill="none" stroke="#3DC975" stroke-width="2" stroke-linecap="round"/></svg>',
+    person: '<svg viewBox="0 0 24 24" role="img" aria-label="Person"><rect width="24" height="24" rx="6" fill="#2a2d36"/><circle cx="12" cy="9" r="3.6" fill="#fff"/><path fill="#fff" d="M5 20c.6-3.9 3.5-6 7-6s6.4 2.1 7 6z"/></svg>'
+  };
+  function photo(slug) { return '<img src="' + PEOPLE + slug + '/square-160.webp" srcset="' + PEOPLE + slug + '/square-320.webp 2x" alt="" width="28" height="28" decoding="async">'; }
+  var PAT = '<span class="who"><i>' + photo('pat') + '</i>Pat</span>';
+
+  /* ---------- the five things that came in ---------- */
+  var ITEMS = [
+    { id: 'marlin', co: 'Marlin Marine', mark: M.marlin, subject: 'SO3301: can we get it sooner?', time: '7:48 AM', sentAt: '8:02 AM',
+      stage: 'so', from: 'Dev Castillo', av: photo('dev-castillo'), sub: 'SO3301: can we get it sooner?',
+      body: 'Hi Pat, our boat show build moved up. Can we get <mark>SO3301 by Nov 2</mark> instead of Nov 9? Let me know what it takes.',
+      steps: [['Checked the schedule', '3 of 4 lines make Nov 2 with the Saturday shift.'],
+              ['The brackets wait on anodize', 'Back from Summit Nov 5. Horizon will not promise them.'],
+              ['Drafted the reply', 'Yes to three, the brackets Nov 5, and the $980 expedite fee.']],
+      needs: 'Expedite fees come to you.', pillNeeds: true,
+      reply: 'Dev, we can do it. Three of the four lines ship Nov 2 with a Saturday shift. The brackets are out at anodize until Nov 5, so those follow. The rush adds <mark>$980</mark>; new confirmation attached. Want me to lock it in?\nPat',
+      actions: [['primary', 'Send with the fee'], ['', 'Send without it']],
+      sentLine: 'Sent with the fee' },
+    { id: 'westbrook', co: 'Westbrook Sensors', mark: M.westbrook, subject: 'Quote request: 118-B mounts', time: '8:15 AM', sentAt: '8:21 AM',
+      stage: 'rfq', from: 'Hana Sato', av: photo('hana-sato'), sub: 'Quote request: 118-B mounts',
+      body: 'Pat, can you quote <mark>200 of the 118-B mounts</mark>? Need them by Dec 12. Thanks.',
+      noatt: 'No drawing attached',
+      steps: [['Looked for the drawing', 'Not on the email. Not on the drive. 118-A ran in March; 118-B is new.'],
+              ['Set the project up anyway', 'Westbrook, 200 pcs, due Dec 12, waiting on the Rev B drawing.'],
+              ['Drafted the reply', 'Asked Hana for the drawing, in your voice.']],
+      reply: 'Hi Hana, happy to. The email came through without the drawing. Can you send the <mark>118-B print</mark>, or the Rev B change if it is close to the 118-A we ran in March? I will turn it around the same day.\nPat',
+      actions: [['primary', 'Send']],
+      sentLine: 'Sent' },
+    { id: 'kestrel', co: 'Kestrel Medical', mark: M.kestrel, subject: 'RFQ: Housing 3310, qty 50', time: '9:05 AM', sentAt: '9:14 AM',
+      stage: 'quote', from: 'Priya Natarajan', av: photo('priya-natarajan'), sub: 'RFQ: Housing 3310, qty 50',
+      body: 'Hi Pat, please quote <mark>50 of the Housing 3310</mark>, same as last time. Certs as usual.',
+      att: 'Housing-3310-RevC.pdf',
+      steps: [['Repeat part', 'Same rev as the August run. 50 pcs, cert fee on every Kestrel lot.'],
+              ['Priced from the last job', '$212.40 each, 3 weeks. Quote 2214 created in Fulcrum.'],
+              ['Drafted the reply', 'Quote attached, lead time and certs called out.']],
+      reply: 'Hi Priya, quote 2214 is attached: 50 pcs at <mark>$212.40</mark>, ships in 3 weeks, material certs included as always. Let me know if the quantity moves.\nPat',
+      actions: [['primary', 'Send']],
+      sentLine: 'Sent · Quote 2214' },
+    { id: 'harbor', co: 'Harbor Fluid Systems', mark: M.harbor, subject: 'PO 7731 for quote 2188', time: '10:20 AM', sentAt: '10:31 AM',
+      stage: 'po', from: 'Tom Reyes', av: photo('tom-reyes'), sub: 'PO 7731 for quote 2188',
+      body: 'Pat, PO 7731 attached for the manifold plates, <mark>6 lines</mark> per your quote 2188.',
+      att: 'PO-7731.pdf',
+      steps: [['Matched the PO to the quote', '6 lines. Quantities, prices, and dates agree.'],
+              ['<b class="warn">The drawing on the PO is Rev C.</b> You quoted Rev D.', 'Rev D moved two holes. Different program, different fixture.'],
+              ['Drafted the reply', 'Asked Tom for a revised PO or a note that Rev D is what they want.']],
+      needs: 'A revision mismatch comes to you.', pillNeeds: true,
+      reply: 'Tom, thanks for the PO. One catch before I enter it: the PO calls out <mark>Rev C</mark> and we quoted Rev D (two holes moved). Can you send a revised PO, or confirm Rev D is what you want? I will hold the order so nothing runs on the wrong print.\nPat',
+      actions: [['primary', 'Send'], ['', 'Edit']],
+      sentLine: 'Sent · order held' },
+    { id: 'larkspur', co: 'Larkspur Implement Co.', mark: M.larkspur, subject: 'Re: Quote 2207, LA-400 lift arm parts', time: '11:40 AM', sentAt: '11:55 AM',
+      stage: 'quote', from: 'Tessa Brandvold', av: M.person, sub: 'Re: Quote 2207, LA-400 lift arm parts',
+      body: 'Thanks Pat. Purchasing is pushing me on this one. Can you take <mark>8% off</mark> the quote? That puts us at about $54,500, and I can get the PO cut today.',
+      steps: [['Checked the margin', 'At 8% off the job runs at 29.1%. Your floor is 28%, so it holds.'],
+              ['Pulled the history', 'Larkspur pays in 18 days and took a split shipment in August.'],
+              ['Drafted the acceptance', 'In your voice. Discounts always come to you first.']],
+      needs: 'Discounts come to you.', pillNeeds: true,
+      reply: 'Hi Tessa, we can do 8%. That is <mark>$54,501.00</mark> for the 100 kits, first 25 still shipping Dec 7. Revised quote attached so purchasing has it today.\nPat',
+      actions: [['primary', 'Send acceptance'], ['', 'Counter at 5%']],
+      sentLine: 'Sent at $54,501.00' }
+  ];
+  var STAGES = { rfq: ['RFQ', 'Quote', 'PO', 'Sales Order'], quote: ['RFQ', 'Quote', 'PO', 'Sales Order'], po: ['RFQ', 'Quote', 'PO', 'Sales Order'], so: ['RFQ', 'Quote', 'PO', 'Sales Order'] };
+  var NOW = { rfq: 0, quote: 1, po: 2, so: 3 };
+
+  function rowHtml(it) {
+    return '<div class="hzk-row" id="' + SLUG + '-row-' + it.id + '"><span class="mk">' + it.mark + '</span><span>' +
+      '<span class="r1"><b>' + it.co + '</b><small>' + it.time + '</small></span>' +
+      '<span class="r2"><span>' + it.subject + '</span></span>' +
+      '<span class="r3 live"><span class="spark">✦</span><em>Reading the email</em><span class="hzk-pill processing" data-pill>Working</span></span></span></div>';
+  }
+  function setRow(it, verb, pill, cls, live) {
+    var row = document.getElementById(SLUG + '-row-' + it.id); if (!row) return;
+    var r3 = row.querySelector('.r3'); r3.classList.toggle('live', !!live);
+    r3.querySelector('em').textContent = verb;
+    var p = r3.querySelector('[data-pill]'); p.className = 'hzk-pill ' + cls; p.textContent = pill;
+    row.classList.toggle('needs', cls === 'review');
+  }
+  function headHtml(it) {
+    var st = STAGES[it.stage], now = NOW[it.stage];
+    return '<span class="mk">' + it.mark + '</span><div class="t"><b>' + it.co + '</b><span>' + it.subject + ' · via Outlook</span></div>' +
+      '<div class="hzk-stages">' + st.map(function (s, i) { return '<span class="' + (i < now ? 'done' : i === now ? 'now' : '') + '">' + s + '</span>'; }).join('') + '</div>';
+  }
+  function mailHtml(it) {
+    var att = it.att ? '<span class="att"><i></i>' + it.att + '</span>' : it.noatt ? '<span class="att none">' + it.noatt + '</span>' : '';
+    return '<div class="tl-eye">Came in <small>' + it.time + '</small></div><div class="hzk-mail"><span class="av">' + it.av + '</span><div class="card">' +
+      '<div class="hd"><b>' + it.from + '</b><span>to Pat</span><small>' + it.time + '</small></div><div class="sub">' + it.sub + '</div><div class="body">' + it.body + '</div>' + att + '</div></div>';
+  }
+  function stepHtml(s) { return '<div class="hzk-step">' + SPARK + '<div><div class="t">' + s[0] + '</div><div class="d">' + s[1] + '</div></div></div>'; }
+  function replyHtml(it) {
+    var needs = it.needs ? '<div class="hzk-why-needs"><b>Needs you.</b> ' + it.needs + '</div>' : '';
+    var acts = it.actions.map(function (a) { return '<span class="hzk-btn ' + a[0] + '">' + a[1] + '</span>'; }).join('');
+    return '<div class="tl-eye">The reply</div><div class="hzk-post" id="' + SLUG + '-post">' + SPARK + '<div class="box' + (it.needs ? ' needs' : '') + '">' +
+      '<div class="hd"><b>Horizon</b><span>draft to ' + it.from.split(' ')[0] + '</span><small>in your voice</small></div><div class="body">' + it.reply + '</div>' + needs +
+      '<div class="hzk-actions" data-actions>' + acts + PAT + '</div></div></div>';
+  }
+  function sentHtml(it) { return '<div class="hzk-result">' + CK + it.sentLine + '<small>· Pat · ' + it.sentAt + '</small></div>'; }
+
+  function init(root) {
+    var $ = function (id) { return document.getElementById(SLUG + '-' + id); };
+    var rows = $('rows'), head = $('head'), body = $('body'), needsCount = $('needs'), listBody = $('listbody');
+    var needsN = 0;
+
+    function fit() {
+      var w = root.clientWidth || 1200;
+      var phone = w < 600 || /[?&]phone=1/.test(location.search);
+      root.classList.toggle('is-phone', phone); root.classList.toggle('is-narrow', phone && (root.getBoundingClientRect().width || 420) < 420);
+      if (!root.__hzFloor) { root.__hzFloor = function () { var st = root.querySelector('.' + SLUG + '-stage') || root; var narrow = root.classList.contains('is-narrow'); var m = getComputedStyle(st).transform.match(/matrix\(([^,]+),/), k = m ? parseFloat(m[1]) : 1; if (!(k > 0.3 && k <= 1)) k = 1; var f = narrow ? Math.min(18, Math.max(13, Math.ceil(13 / k))) : 0; var els = st.querySelectorAll('*'); for (var i = 0; i < els.length; i++) { var e = els[i]; if (e.namespaceURI && e.namespaceURI.indexOf('svg') > -1) continue; if (!narrow) { if (e.getAttribute('data-hz-floor')) { e.style.fontSize = ''; e.removeAttribute('data-hz-floor'); } continue; } var fs = parseFloat(getComputedStyle(e).fontSize); if (fs && fs < f) { e.style.fontSize = f + 'px'; e.setAttribute('data-hz-floor', '1'); } } }; new MutationObserver(function () { root.__hzFloor(); }).observe(root, { childList: true, subtree: true }); }
+      root.__hzFloor();
+      var SW = phone ? 420 : 1200, SH = phone ? 720 : 750, s = w / SW;
+      root.style.setProperty('--s', String(s));
+      root.style.height = Math.round(SH * s) + 'px';
+    }
+    fit();
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(root); else window.addEventListener('resize', fit);
+
+    /* ---------- DOM ops ---------- */
+    var instant = false;
+    function add(parent, html) {
+      var wrap = document.createElement('div'); wrap.innerHTML = html;
+      var nodes = Array.prototype.slice.call(wrap.childNodes), last = null;
+      nodes.forEach(function (n) { if (!instant && n.classList) n.classList.add('hzk-in'); parent.appendChild(n); last = n; });
+      return last;
+    }
+    function setNeeds(n) { needsN = n; needsCount.textContent = n ? String(n) : ''; }
+    function open(it) {
+      rows.querySelectorAll('.hzk-row').forEach(function (r) { r.classList.remove('is-on'); });
+      var r = document.getElementById(SLUG + '-row-' + it.id); if (r) r.classList.add('is-on');
+      head.innerHTML = headHtml(it); body.innerHTML = ''; body.classList.remove('is-out');
+      add(body, mailHtml(it));
+      body.__steps = null;
+    }
+    function step(it, i) {
+      if (!body.__steps) { add(body, '<div class="tl-eye live" id="' + SLUG + '-eye">Horizon</div>'); body.__steps = add(body, '<div class="tl-steps"></div>'); }
+      add(body.__steps, stepHtml(it.steps[i]));
+    }
+    function reply(it) {
+      var eye = $('eye'); if (eye) { eye.classList.remove('live'); eye.innerHTML = 'Horizon <small>3 steps · ' + it.time + '</small>'; }
+      add(body, replyHtml(it));
+      if (it.needs) { setRow(it, 'Needs you: ' + it.needs.replace(/ come to you\.$/, '').replace(/ comes to you\.$/, '').toLowerCase(), 'Needs you', 'review', false); setNeeds(needsN + 1); }
+      else setRow(it, 'Reply drafted, ready for Pat', 'Ready', 'ready', false);
+    }
+    function press(it) {
+      var b = body.querySelector('[data-actions] .hzk-btn.primary'); if (b) b.classList.add('is-pressed');
+    }
+    function sent(it) {
+      var acts = body.querySelector('[data-actions]');
+      if (acts) { var wrap = document.createElement('div'); wrap.innerHTML = sentHtml(it); var el = wrap.firstChild; if (!instant) el.classList.add('hzk-in'); acts.parentNode.replaceChild(el, acts); }
+      var box = body.querySelector('.hzk-post .box'); if (box) box.classList.remove('needs');
+      var why = body.querySelector('.hzk-why-needs'); if (why) why.remove();
+      setRow(it, 'Sent by Pat · ' + it.sentAt, 'Sent', 'sent', false);
+      if (it.needs) setNeeds(Math.max(0, needsN - 1));
+    }
+    function arrive(it) {
+      var r = add(rows, rowHtml(it)); if (!instant && r) r.classList.add('is-new');
+      open(it);
+    }
+    function clearAll() {
+      rows.innerHTML = ''; head.innerHTML = ''; body.innerHTML = ''; setNeeds(0);
+      listBody.classList.remove('is-out'); body.classList.remove('is-out');
+    }
+    function resolved() {
+      var was = instant; instant = true; clearAll();
+      ITEMS.forEach(function (it) { arrive(it); for (var i = 0; i < it.steps.length; i++) step(it, i); reply(it); sent(it); });
+      instant = was;
+    }
+
+    /* ---------- timeline ---------- */
+    var EV = [], DUR = 41;
+    function at(t, fn) { EV.push({ t: t, fn: fn }); }
+    at(0, function () { resolved(); });
+    at(2.6, function () { listBody.classList.add('is-out'); body.classList.add('is-out'); });
+    at(3.0, function () { clearAll(); });
+    ITEMS.forEach(function (it, k) {
+      var T = 3.2 + k * 7.0;
+      at(T, function () { arrive(it); });
+      at(T + 1.0, function () { step(it, 0); });
+      at(T + 1.9, function () { step(it, 1); });
+      at(T + 2.8, function () { step(it, 2); });
+      at(T + 3.7, function () { reply(it); });
+      at(T + 5.4, function () { press(it); });
+      at(T + 5.8, function () { sent(it); });
+    });
+    EV.sort(function (a, b) { return a.t - b.t; });
+
+    var q = location.search, still = /[?&]still=1/.test(q), atM = q.match(/[?&]at=([\d.]+)/);
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function seek(sec) { instant = true; EV.forEach(function (e) { if (e.t <= sec) e.fn(); }); instant = false; }
+    if (still || reduce) { resolved(); return; }
+    if (atM) { seek(parseFloat(atM[1])); return; }
+
+    var t0 = performance.now(), fired = 0, paused = false, pausedAt = 0;
+    function frame(now) {
+      if (!paused) {
+        var el = (now - t0) / 1000;
+        while (fired < EV.length && EV[fired].t <= el) { EV[fired].fn(); fired++; }
+        if (el >= DUR) { t0 = now; fired = 0; }
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    window.addEventListener('message', function (e) {
+      var d = e && e.data; if (d === 'hz:pause' && !paused) { paused = true; pausedAt = performance.now(); }
+      if (d === 'hz:play' && paused) { t0 += performance.now() - pausedAt; paused = false; }
+    });
+  }
+  document.querySelectorAll('.' + SLUG).forEach(init);
+})();
+</script>
