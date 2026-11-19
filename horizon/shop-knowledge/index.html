@@ -5,7 +5,7 @@
   Shop Profile tab as merged Nov 16 (PR 20413): header, five KPI tiles, Your typical work, Your customers, Fees table,
   How the shop's quote emails read. Filled with the Halden Metalworks sample set (Pat, Larkspur, Marlin Marine, Westbrook,
   Kestrel, Harbor Fluid, Pinecrest, Tri-County; vendors Summit, Prairie, Apex). Tabs Rules 17 and Library 6 follow Alex's
-  Nov 15 Knowledge design. Design 1200x750, scales to width; under 700px the stage reflows to one column at 640 wide.
+  Nov 15 Knowledge design. Design 1200x750, scales to width; under 700px the stage reflows to one column at 420 wide.
   No libraries, no images, no audio. Simulated on sample data; every number is invented.
 -->
 <html lang="en">
@@ -137,17 +137,25 @@ body { display: flex; justify-content: center; }
 .hz-shop-knowledge .sk-table .chips { display: flex; gap: 5px; flex-wrap: nowrap; }
 .hz-shop-knowledge .sk-table .chips .hzk-tag { font-weight: 500; }
 
-/* phone: one column at 640 wide, rail hidden */
+/* phone: one column at 420 wide (Nov 19: was 640, which scaled 11px type to 6px on a 390 phone), rail hidden */
 @media (max-width: 699px) {
-  .hz-shop-knowledge-stage { width: 640px; height: 1120px; }
+  .hz-shop-knowledge-stage { width: 420px; height: 1102px; }
   .hz-shop-knowledge .hzk-rail { display: none; }
   .hz-shop-knowledge .sk-meta { display: none; }
-  .hz-shop-knowledge .sk-kpis { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .hz-shop-knowledge .sk-head { padding: 14px 16px 0; }
+  .hz-shop-knowledge .sk-title p { font-size: 12.5px; }
+  .hz-shop-knowledge .sk-body { padding: 12px 16px 0; gap: 12px; }
+  .hz-shop-knowledge .sk-kpis { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; }
+  .hz-shop-knowledge .sk-kpi { padding: 10px 12px; }
   .hz-shop-knowledge .sk-kpi:nth-child(n+4) { display: none; }
+  .hz-shop-knowledge .sk-kpi small { display: none; }
   .hz-shop-knowledge .sk-row { grid-template-columns: 1fr; }
   .hz-shop-knowledge .sk-group--tone { display: none; }
-  .hz-shop-knowledge .sk-fees { grid-template-columns: 1fr; }
+  .hz-shop-knowledge .sk-legend { gap: 4px 10px; }
+  .hz-shop-knowledge .sk-fees { grid-template-columns: 1fr; gap: 8px; }
+  .hz-shop-knowledge .sk-table th:nth-child(2), .hz-shop-knowledge .sk-table td:nth-child(2),
   .hz-shop-knowledge .sk-table th:nth-child(4), .hz-shop-knowledge .sk-table td:nth-child(4) { display: none; }
+  .hz-shop-knowledge .sk-table .chips { flex-wrap: wrap; gap: 4px; }
 }
 </style>
 </head>
@@ -276,7 +284,7 @@ body { display: flex; justify-content: center; }
     var stage = root.querySelector('.hz-shop-knowledge-stage');
     function fit() {
       var phone = window.matchMedia('(max-width: 699px)').matches;
-      var SW = phone ? 640 : 1200, SH = phone ? 1120 : 750;
+      var SW = phone ? 420 : 1200, SH = phone ? 1102 : 750;
       var w = root.clientWidth || SW;
       var s = w / SW;
       root.style.setProperty('--s', String(s));
