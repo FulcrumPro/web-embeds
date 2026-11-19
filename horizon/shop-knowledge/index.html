@@ -5,7 +5,7 @@
   Shop Profile tab as merged Nov 16 (PR 20413): header, five KPI tiles, Your typical work, Your customers, Fees table,
   How the shop's quote emails read. Filled with the Halden Metalworks sample set (Pat, Larkspur, Marlin Marine, Westbrook,
   Kestrel, Harbor Fluid, Pinecrest, Tri-County; vendors Summit, Prairie, Apex). Tabs Rules 17 and Library 6 follow Alex's
-  Nov 15 Knowledge design. Design 1200x750, scales to width; under 700px the stage reflows to one column at 420 wide.
+  Nov 15 Knowledge design. Design 1200x750, scales to width; under 700px the stage reflows to one column at 340 wide.
   No libraries, no images, no audio. Simulated on sample data; every number is invented.
 -->
 <html lang="en">
@@ -137,9 +137,9 @@ body { display: flex; justify-content: center; }
 .hz-shop-knowledge .sk-table .chips { display: flex; gap: 5px; flex-wrap: nowrap; }
 .hz-shop-knowledge .sk-table .chips .hzk-tag { font-weight: 500; }
 
-/* phone: one column at 420 wide (Nov 19: was 640, which scaled 11px type to 6px on a 390 phone), rail hidden */
+/* phone: one column at 340 wide (Nov 19: was 640, which scaled 11px type to 6px on a 390 phone), rail hidden */
 @media (max-width: 699px) {
-  .hz-shop-knowledge-stage { width: 420px; height: 1102px; }
+  .hz-shop-knowledge-stage { width: 340px; height: 1275px; }
   .hz-shop-knowledge .hzk-rail { display: none; }
   .hz-shop-knowledge .sk-meta { display: none; }
   .hz-shop-knowledge .sk-head { padding: 14px 16px 0; }
@@ -284,7 +284,7 @@ body { display: flex; justify-content: center; }
     var stage = root.querySelector('.hz-shop-knowledge-stage');
     function fit() {
       var phone = window.matchMedia('(max-width: 699px)').matches;
-      var SW = phone ? 420 : 1200, SH = phone ? 1102 : 750;
+      var SW = phone ? 340 : 1200, SH = phone ? 1275 : 750;
       var w = root.clientWidth || SW;
       var s = w / SW;
       root.style.setProperty('--s', String(s));
