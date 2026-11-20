@@ -111,10 +111,20 @@ body { display: flex; justify-content: center; }
 .hz-task-list .tl-head .hzk-stages span.done { color: var(--fg); }
 .hz-task-list .tl-head .hzk-stages span.now { color: var(--link); font-weight: 600; }
 .hz-task-list .tl-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
-.hz-task-list .tl-eye { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--mute3); display: flex; align-items: center; gap: 8px; }
-.hz-task-list .tl-eye small { font-weight: 400; letter-spacing: 0; text-transform: none; font-size: 11.5px; color: var(--mute3); }
-.hz-task-list .tl-eye.live { color: var(--working); }
-.hz-task-list .tl-eye.live::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--working); animation: hzk-pulse 1.2s ease-in-out infinite; }
+.hz-task-list .tl-run { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 0 10px; align-items: center; }
+.hz-task-list .tl-run .av { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: var(--spark-bg); color: var(--spark-fg); grid-row: 1 / 3; }
+.hz-task-list .tl-run b { font-size: 13.5px; font-weight: 500; color: var(--fg); }
+.hz-task-list .tl-run small { display: block; font-size: 11.5px; color: var(--mute3); }
+.hz-task-list .tl-run small a { color: var(--link); }
+.hz-task-list .tl-run.live b { color: var(--working); animation: hzk-pulse 1.2s ease-in-out infinite; }
+.hz-task-list .tl-run.live .av { animation: hzk-pulse 1.2s ease-in-out infinite; }
+.hz-task-list .tl-steps { padding-left: 38px; }
+.hz-task-list .tl-steps .hzk-step { grid-template-columns: 14px minmax(0,1fr); }
+.hz-task-list .tl-steps .hzk-step .av { width: 14px; height: 14px; font-size: 8px; margin-top: 5px; }
+.hz-task-list .hzk-send { font-size: 13px; color: var(--fg); display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.hz-task-list .hzk-send svg { width: 14px; height: 14px; fill: none; stroke: var(--working); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; animation: hzk-pulse 1.2s ease-in-out infinite; }
+.hz-task-list .hzk-send small { color: var(--mute3); }
+.hz-task-list .hzk-btn.small { height: 24px; padding: 0 10px; font-size: 12px; margin-left: 4px; }
 
 .hz-task-list .hzk-mail { display: grid; grid-template-columns: 28px minmax(0,1fr); gap: 10px; }
 .hz-task-list .hzk-mail .av { width: 28px; height: 28px; border-radius: 6px; overflow: hidden; background: #323335; }
@@ -219,6 +229,7 @@ body { display: flex; justify-content: center; }
   var PEOPLE = '../shared/people/';
   var SPARK = '<span class="av">✦</span>';
   var CK = '<svg viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></svg>';
+  var CLOCK = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
   var M = {
     marlin: '<svg viewBox="0 0 24 24" role="img" aria-label="Marlin Marine"><rect width="24" height="24" rx="6" fill="#3840EA"/><path fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" d="M3.5 9.5c2.1 0 2.1-2.5 4.25-2.5s2.1 2.5 4.25 2.5 2.1-2.5 4.25-2.5 2.1 2.5 4.25 2.5M3.5 16.5c2.1 0 2.1-2.5 4.25-2.5s2.1 2.5 4.25 2.5 2.1-2.5 4.25-2.5 2.1 2.5 4.25 2.5"/></svg>',
     westbrook: '<svg viewBox="0 0 24 24" role="img" aria-label="Westbrook Sensors"><rect width="24" height="24" rx="6" fill="#292932"/><circle cx="12" cy="12" r="7" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2.6" fill="#fff"/></svg>',
@@ -232,7 +243,7 @@ body { display: flex; justify-content: center; }
 
   /* ---------- the five things that came in ---------- */
   var ITEMS = [
-    { id: 'marlin', co: 'Marlin Marine', mark: M.marlin, subject: 'SO3301: can we get it sooner?', time: '7:48 AM', sentAt: '8:02 AM',
+    { id: 'marlin', runTitle: "Read the request and checked the schedule", co: 'Marlin Marine', mark: M.marlin, subject: 'SO3301: can we get it sooner?', time: '7:48 AM', sentAt: '8:02 AM',
       stage: 'so', from: 'Dev Castillo', av: photo('dev-castillo'), sub: 'SO3301: can we get it sooner?',
       body: 'Hi Pat, our boat show build moved up. Can we get <mark>SO3301 by Nov 2</mark> instead of Nov 9? Let me know what it takes.',
       steps: [['Checked the schedule', '3 of 4 lines make Nov 2 with the Saturday shift.'],
@@ -242,7 +253,7 @@ body { display: flex; justify-content: center; }
       reply: 'Dev, we can do it. Three of the four lines ship Nov 2 with a Saturday shift. The brackets are out at anodize until Nov 5, so those follow. The rush adds <mark>$980</mark>; new confirmation attached. Want me to lock it in?\nPat',
       actions: [['primary', 'Send Reply'], ['', 'Edit']],
       sentLine: 'Approve expedite fee', sentRow: 'Sales order SO3301 · ships Nov 2', sentPill: 'Ordered', sentCls: 'ordered' },
-    { id: 'westbrook', co: 'Westbrook Sensors', mark: M.westbrook, subject: 'Quote request: 118-B mounts', time: '8:15 AM', sentAt: '8:21 AM',
+    { id: 'westbrook', runTitle: "Read the RFQ and set the project up", co: 'Westbrook Sensors', mark: M.westbrook, subject: 'Quote request: 118-B mounts', time: '8:15 AM', sentAt: '8:21 AM',
       stage: 'rfq', from: 'Hana Sato', av: photo('hana-sato'), sub: 'Quote request: 118-B mounts',
       body: 'Pat, can you quote <mark>200 of the 118-B mounts</mark>? Need them by Dec 12. Thanks.',
       parts: '1 part', noatt: 'No drawing attached', readyLine: 'Asked Hana for the drawing',
@@ -252,7 +263,7 @@ body { display: flex; justify-content: center; }
       reply: 'Hi Hana, happy to. The email came through without the drawing. Can you send the <mark>118-B print</mark>, or the Rev B change if it is close to the 118-A we ran in March? I will turn it around the same day.\nPat',
       actions: [['primary', 'Send Request'], ['', 'Edit']],
       sentLine: 'Asked for drawings', sentRow: 'Waiting on Hana · the Rev B drawing', sentPill: 'Processing…', sentCls: 'processing' },
-    { id: 'kestrel', co: 'Kestrel Medical', mark: M.kestrel, subject: 'RFQ: Housing 3310, qty 50', time: '9:05 AM', sentAt: '9:14 AM',
+    { id: 'kestrel', runTitle: "Read the RFQ and priced 1 repeat part", co: 'Kestrel Medical', mark: M.kestrel, subject: 'RFQ: Housing 3310, qty 50', time: '9:05 AM', sentAt: '9:14 AM',
       stage: 'quote', from: 'Priya Natarajan', av: photo('priya-natarajan'), sub: 'RFQ: Housing 3310, qty 50',
       body: 'Hi Pat, please quote <mark>50 of the Housing 3310</mark>, same as last time. Certs as usual.',
       parts: '1 part', att: 'Housing-3310-RevC.pdf', readyLine: 'Quote 2214 ready to send',
@@ -262,7 +273,7 @@ body { display: flex; justify-content: center; }
       reply: 'Hi Priya, quote 2214 is attached: 50 pcs at <mark>$212.40</mark>, ships in 3 weeks, material certs included as always. Let me know if the quantity moves.\nPat',
       actions: [['primary', 'Send Quote'], ['', 'Review Quote']],
       sentLine: 'Quote 2214', sentRow: 'Quote 2214 sent' },
-    { id: 'harbor', co: 'Harbor Fluid Systems', mark: M.harbor, subject: 'PO 7731 for quote 2188', time: '10:20 AM', sentAt: '10:31 AM',
+    { id: 'harbor', runTitle: "Read PO 7731 against quote 2188", co: 'Harbor Fluid Systems', mark: M.harbor, subject: 'PO 7731 for quote 2188', time: '10:20 AM', sentAt: '10:31 AM',
       stage: 'po', from: 'Tom Reyes', av: photo('tom-reyes'), sub: 'PO 7731 for quote 2188',
       body: 'Pat, PO 7731 attached for the manifold plates, <mark>6 lines</mark> per your quote 2188.',
       parts: '6 parts', att: 'PO-7731.pdf',
@@ -273,7 +284,7 @@ body { display: flex; justify-content: center; }
       reply: 'Tom, thanks for the PO. One catch before I enter it: the PO calls out <mark>Rev C</mark> and we quoted Rev D (two holes moved). Can you send a revised PO, or confirm Rev D is what you want? I will hold the order so nothing runs on the wrong print.\nPat',
       actions: [['primary', 'Send Reply'], ['', 'Edit']],
       sentLine: 'Confirm the rev', sentRow: 'PO 7731 received · waiting on Tom', sentPill: 'PO Received', sentCls: 'po' },
-    { id: 'larkspur', co: 'Larkspur Implement Co.', mark: M.larkspur, subject: 'Re: Quote 2207, LA-400 lift arm parts', time: '11:40 AM', sentAt: '11:55 AM',
+    { id: 'larkspur', runTitle: "Read Tessa's reply and checked the margin", co: 'Larkspur Implement Co.', mark: M.larkspur, subject: 'Re: Quote 2207, LA-400 lift arm parts', time: '11:40 AM', sentAt: '11:55 AM',
       stage: 'quote', from: 'Tessa Brandvold', av: M.person, sub: 'Re: Quote 2207, LA-400 lift arm parts',
       body: 'Thanks Pat. Purchasing is pushing me on this one. Can you take <mark>8% off</mark> the quote? That puts us at about $54,500, and I can get the PO cut today.',
       steps: [['Checked the margin', 'At 8% off the job runs at 29.1%. Your floor is 28%, so it holds.'],
@@ -307,14 +318,14 @@ body { display: flex; justify-content: center; }
   }
   function mailHtml(it) {
     var att = it.att ? '<span class="att"><i></i>' + it.att + '</span>' : it.noatt ? '<span class="att none">' + it.noatt + '</span>' : '';
-    return '<div class="tl-eye">Came in <small>' + it.time + '</small></div><div class="hzk-mail"><span class="av">' + it.av + '</span><div class="card">' +
+    return '<div class="hzk-mail"><span class="av">' + it.av + '</span><div class="card">' +
       '<div class="hd"><b>' + it.from + '</b><span>to Pat</span><small>' + it.time + '</small></div><div class="sub">' + it.sub + '</div><div class="body">' + it.body + '</div>' + att + '</div></div>';
   }
   function stepHtml(s) { return '<div class="hzk-step">' + SPARK + '<div><div class="t">' + s[0] + '</div><div class="d">' + s[1] + '</div></div></div>'; }
   function replyHtml(it) {
     var needs = it.needs ? '<div class="hzk-ask"><i></i><b>' + it.ask + '</b><span>' + it.needs + '</span></div>' + (it.rec ? '<div class="hzk-rec">Recommend: ' + it.rec + '</div>' : '') : '';
     var acts = it.actions.map(function (a) { return '<span class="hzk-btn ' + a[0] + '">' + a[1] + '</span>'; }).join('');
-    return '<div class="tl-eye">The reply</div><div class="hzk-post" id="' + SLUG + '-post">' + SPARK + '<div class="box' + (it.needs ? ' needs' : '') + '">' +
+    return '<div class="hzk-post" id="' + SLUG + '-post">' + SPARK + '<div class="box' + (it.needs ? ' needs' : '') + '">' +
       '<div class="hd"><b>Horizon</b><span>draft to ' + it.from.split(' ')[0] + '</span><small>in your voice</small></div><div class="body">' + it.reply + '</div>' + needs +
       '<div class="hzk-actions" data-actions>' + acts + PAT + '</div></div></div>';
   }
@@ -355,17 +366,23 @@ body { display: flex; justify-content: center; }
       body.__steps = null;
     }
     function step(it, i) {
-      if (!body.__steps) { add(body, '<div class="tl-eye live" id="' + SLUG + '-eye">Horizon</div>'); body.__steps = add(body, '<div class="tl-steps"></div>'); }
+      if (!body.__steps) { add(body, '<div class="tl-run live" id="' + SLUG + '-eye"><span class="av">✦</span><b>Working on it</b></div>'); body.__steps = add(body, '<div class="tl-steps"></div>'); }
       add(body.__steps, stepHtml(it.steps[i]));
     }
     function reply(it) {
-      var eye = $('eye'); if (eye) { eye.classList.remove('live'); eye.innerHTML = 'Horizon <small>3 steps · ' + it.time + '</small>'; }
+      var eye = $('eye'); if (eye) { eye.classList.remove('live'); eye.innerHTML = '<span class="av">✦</span><b>' + it.runTitle + '</b><small>3 steps · all automated · <a>Show Reasoning</a></small>'; }
       add(body, replyHtml(it));
       if (it.needs) { setRow(it, it.ask, 'Needs Review', 'review', false); setNeeds(needsN + 1); }
       else setRow(it, it.readyLine || 'Quote ready to send', 'Ready', 'ready', false);
     }
     function press(it) {
       var b = body.querySelector('[data-actions] .hzk-btn.primary'); if (b) b.classList.add('is-pressed');
+    }
+    function sending(it) {
+      var acts = body.querySelector('[data-actions]'); if (!acts) return;
+      var wrap = document.createElement('div'); wrap.innerHTML = '<div class="hzk-send">' + CLOCK + 'Sending to ' + it.from.split(' ')[0] + ' in 2s<small>· ' + it.sentLine + '</small><span class="hzk-btn small">Undo</span></div>';
+      var el = wrap.firstChild; if (!instant) el.classList.add('hzk-in'); acts.parentNode.replaceChild(el, acts); el.setAttribute('data-actions', '');
+      setRow(it, 'Sending to ' + it.from.split(' ')[0], 'Ready', 'ready', true);
     }
     function sent(it) {
       var acts = body.querySelector('[data-actions]');
@@ -390,20 +407,21 @@ body { display: flex; justify-content: center; }
     }
 
     /* ---------- timeline ---------- */
-    var EV = [], DUR = 41;
+    var EV = [], DUR = 44;
     function at(t, fn) { EV.push({ t: t, fn: fn }); }
     at(0, function () { resolved(); });
     at(2.6, function () { listBody.classList.add('is-out'); body.classList.add('is-out'); });
     at(3.0, function () { clearAll(); });
     ITEMS.forEach(function (it, k) {
-      var T = 3.2 + k * 7.0;
+      var T = 3.2 + k * 7.5;
       at(T, function () { arrive(it); });
       at(T + 1.0, function () { step(it, 0); });
       at(T + 1.9, function () { step(it, 1); });
       at(T + 2.8, function () { step(it, 2); });
       at(T + 3.7, function () { reply(it); });
-      at(T + 5.4, function () { press(it); });
-      at(T + 5.8, function () { sent(it); });
+      at(T + 5.2, function () { press(it); });
+      at(T + 5.45, function () { sending(it); });
+      at(T + 6.9, function () { sent(it); });
     });
     EV.sort(function (a, b) { return a.t - b.t; });
 
